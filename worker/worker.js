@@ -239,6 +239,14 @@ function json(obj, status = 200) {
 export default {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') return withCors(new Response(null, { status: 204 }));
+    // Diagnostic: open the Worker URL in a browser (GET) to see whether the
+    // ANTHROPIC_API_KEY secret is actually bound to the running deployment.
+    if (request.method === 'GET') return withCors(json({
+      ok: true,
+      hasKey: !!env.ANTHROPIC_API_KEY,
+      keyLength: (env.ANTHROPIC_API_KEY || '').length,
+      keyPrefix: (env.ANTHROPIC_API_KEY || '').slice(0, 8),
+    }));
     if (request.method !== 'POST') return withCors(json({ error: 'POST only' }, 405));
     if (!env.ANTHROPIC_API_KEY) return withCors(json({ error: 'Worker missing ANTHROPIC_API_KEY secret' }, 500));
 
