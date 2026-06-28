@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prospector</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #030308; --bg2: #080810; --panel: #0a0a18;
+  --border: #1a1a2e; --border2: #2a2a4e;
+  --accent: #00aaff; --accent-dim: rgba(0,170,255,.12);
+  --green: #00ff88; --warn: #ffaa00; --red: #ff4455;
+  --text: #e0e8ff; --dim: #6070a0; --mid: #9090b8;
+  --head: 'Orbitron',monospace; --body: 'Rajdhani',sans-serif;
+  --r: 6px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--body); font-size: 15px; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+/* Header */
+.hdr { display:flex; align-items:center; justify-content:space-between; padding:13px 22px; border-bottom:1px solid var(--border); background:var(--bg2); flex-shrink:0; }
+.logo { font-family:var(--head); font-size:17px; letter-spacing:4px; color:var(--accent); }
+.logo span { font-size:10px; color:var(--dim); letter-spacing:2px; margin-left:10px; }
+
+/* Buttons */
+.btn { font-family:var(--body); font-size:13px; font-weight:600; letter-spacing:1px; padding:7px 15px; border-radius:var(--r); border:none; cursor:pointer; transition:.15s; text-transform:uppercase; }
+.btn-p { background:var(--accent); color:#000; }
+.btn-p:hover { background:#33bbff; }
+.btn-p:disabled { opacity:.4; cursor:default; }
+.btn-g { background:transparent; color:var(--accent); border:1px solid var(--accent); }
+.btn-g:hover { background:var(--accent-dim); }
+.btn-s { padding:4px 11px; font-size:11px; }
+.btn-d { background:transparent; color:var(--red); border:1px solid var(--red); }
+.btn-d:hover { background:rgba(255,68,85,.1); }
+.btn-close { background:none; border:none; color:var(--dim); font-size:20px; cursor:pointer; padding:2px 6px; }
+.btn-close:hover { color:var(--text); }
+
+/* Layout */
+.main { display:flex; flex:1; overflow:hidden; }
+.left { width:340px; flex-shrink:0; border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
+.right { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+
+/* Panel sections */
+.psec { padding:15px; border-bottom:1px solid var(--border); }
+.plbl { font-family:var(--head); font-size:10px; letter-spacing:2px; color:var(--dim); text-transform:uppercase; margin-bottom:11px; }
+.fg { margin-bottom:9px; }
+.fg label { display:block; font-size:11px; color:var(--dim); margin-bottom:3px; letter-spacing:1px; text-transform:uppercase; }
+.fi { width:100%; background:var(--bg2); border:1px solid var(--border); color:var(--text); font-family:var(--body); font-size:14px; padding:7px 11px; border-radius:var(--r); outline:none; transition:.15s; }
+.fi:focus { border-color:var(--accent); }
+.fi::placeholder { color:var(--dim); }
+input[type=range] { -webkit-appearance:none; width:100%; height:4px; background:var(--border2); border-radius:2px; outline:none; }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:13px; height:13px; background:var(--accent); border-radius:50%; cursor:pointer; }
+.rdsp { text-align:right; font-size:11px; color:var(--accent); margin-top:3px; }
+
+/* Chips */
+.chips { display:flex; flex-wrap:wrap; gap:5px; margin-top:3px; }
+.chip { background:var(--bg2); border:1px solid var(--border2); color:var(--mid); font-size:11px; padding:3px 9px; border-radius:20px; cursor:pointer; transition:.15s; font-family:var(--body); }
+.chip:hover { border-color:var(--accent); color:var(--accent); }
+
+/* Results list */
+.rlist { flex:1; overflow-y:auto; padding:10px; }
+.rhdr { font-size:11px; color:var(--dim); letter-spacing:1px; text-transform:uppercase; padding:7px 4px; border-bottom:1px solid var(--border); margin-bottom:7px; }
+.rcard { background:var(--panel); border:1px solid var(--border); border-radius:var(--r); padding:11px; margin-bottom:7px; transition:.15s; }
+.rcard:hover { border-color:var(--border2); }
+.rcard.saved { opacity:.55; }
+.rname { font-weight:700; font-size:14px; margin-bottom:3px; }
+.rcat { font-size:11px; color:var(--accent); letter-spacing:1px; text-transform:uppercase; margin-bottom:5px; }
+.rmeta { font-size:12px; color:var(--mid); line-height:1.65; }
+.rmeta a { color:var(--accent); text-decoration:none; }
+.rmeta a:hover { text-decoration:underline; }
+.rstar { color:var(--warn); }
+.rnoweb { color:var(--red); font-size:11px; }
+.ract { display:flex; gap:5px; margin-top:9px; align-items:center; }
+.saved-badge { font-size:11px; color:var(--green); letter-spacing:.5px; }
+
+/* Tabs */
+.tabs { display:flex; border-bottom:1px solid var(--border); background:var(--bg2); flex-shrink:0; }
+.tab { padding:13px 22px; font-family:var(--head); font-size:10px; letter-spacing:2px; color:var(--dim); cursor:pointer; border-bottom:2px solid transparent; transition:.15s; text-transform:uppercase; }
+.tab:hover { color:var(--text); }
+.tab.on { color:var(--accent); border-bottom-color:var(--accent); }
+.tcontent { flex:1; overflow-y:auto; padding:15px; }
+.tcontent.hide { display:none; }
+
+/* Pipeline */
+.pgrid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; min-height:100%; }
+.pcol { background:var(--panel); border:1px solid var(--border); border-radius:var(--r); padding:11px; min-height:180px; }
+.pcolhdr { font-family:var(--head); font-size:9px; letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; padding-bottom:7px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+.ccount { background:var(--border2); color:var(--mid); font-size:10px; padding:1px 6px; border-radius:9px; }
+.s-not_contacted .pcolhdr { color:var(--dim); }
+.s-contacted .pcolhdr { color:var(--accent); }
+.s-in_negotiation .pcolhdr { color:var(--warn); }
+.s-won .pcolhdr { color:var(--green); }
+.s-lost .pcolhdr { color:var(--red); }
+
+/* Prospect cards */
+.pcard { background:var(--bg2); border:1px solid var(--border); border-radius:var(--r); padding:9px; margin-bottom:7px; font-size:13px; }
+.pname { font-weight:700; font-size:13px; margin-bottom:2px; }
+.ptype { font-size:11px; color:var(--dim); margin-bottom:5px; }
+.pdet { font-size:11px; color:var(--mid); line-height:1.5; margin-bottom:7px; }
+.pdet a { color:var(--accent); text-decoration:none; }
+.ssel { width:100%; background:var(--bg); border:1px solid var(--border2); color:var(--text); font-family:var(--body); font-size:12px; padding:4px 7px; border-radius:var(--r); margin-bottom:5px; cursor:pointer; outline:none; }
+.pact { display:flex; gap:4px; flex-wrap:wrap; }
+
+/* Footer */
+.foot { display:flex; gap:18px; align-items:center; padding:9px 22px; border-top:1px solid var(--border); background:var(--bg2); font-size:12px; color:var(--dim); flex-shrink:0; letter-spacing:.5px; }
+.foot .gn { color:var(--green); }
+.foot .am { color:var(--warn); }
+.foot .bl { color:var(--accent); }
+
+/* Modal */
+.mover { position:fixed; inset:0; background:rgba(3,3,8,.92); display:flex; align-items:center; justify-content:center; z-index:100; opacity:0; pointer-events:none; transition:.2s; }
+.mover.show { opacity:1; pointer-events:all; }
+.modal { background:var(--panel); border:1px solid var(--border2); border-radius:var(--r); width:min(660px,93vw); max-height:82vh; display:flex; flex-direction:column; box-shadow:0 0 50px rgba(0,170,255,.08); }
+.mhdr { display:flex; justify-content:space-between; align-items:center; padding:15px 18px; border-bottom:1px solid var(--border); }
+.mtitle { font-family:var(--head); font-size:11px; letter-spacing:2px; color:var(--accent); }
+.msub { font-size:12px; color:var(--dim); margin-top:2px; }
+.mbody { flex:1; padding:18px; overflow-y:auto; }
+.mfoot { display:flex; gap:8px; justify-content:flex-end; align-items:center; padding:13px 18px; border-top:1px solid var(--border); }
+.etarea { width:100%; height:270px; background:var(--bg2); border:1px solid var(--border); color:var(--text); font-family:var(--body); font-size:14px; line-height:1.6; padding:13px; border-radius:var(--r); resize:vertical; outline:none; }
+.etarea:focus { border-color:var(--accent); }
+.cpfb { font-size:11px; color:var(--green); opacity:0; transition:.3s; }
+.cpfb.show { opacity:1; }
+
+/* Spinner */
+.spin-w { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:36px; color:var(--dim); font-size:12px; letter-spacing:1px; }
+.spin { width:28px; height:28px; border:2px solid var(--border2); border-top-color:var(--accent); border-radius:50%; animation:sp .8s linear infinite; }
+@keyframes sp { to { transform:rotate(360deg); } }
+
+/* Toasts */
+.tcon { position:fixed; bottom:22px; right:22px; z-index:200; display:flex; flex-direction:column; gap:7px; }
+.toast { background:var(--panel); border:1px solid var(--border2); color:var(--text); font-size:13px; padding:9px 15px; border-radius:var(--r); animation:tin .2s ease; max-width:280px; }
+.toast.ok { border-left:3px solid var(--green); }
+.toast.err { border-left:3px solid var(--red); }
+.toast.inf { border-left:3px solid var(--accent); }
+@keyframes tin { from { transform:translateX(15px); opacity:0; } to { transform:translateX(0); opacity:1; } }
+
+/* Empty */
+.empty { text-align:center; padding:36px 16px; color:var(--dim); font-size:13px; line-height:1.6; }
+.eico { font-size:26px; margin-bottom:10px; opacity:.35; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+/* Setup warning */
+.setup-msg { background:rgba(255,170,0,.07); border:1px solid rgba(255,170,0,.3); border-radius:var(--r); padding:10px 14px; font-size:12px; color:var(--warn); margin-bottom:12px; line-height:1.5; }
+
+/* Mockup button */
+.btn-m { background:transparent; color:#a78bfa; border:1px solid #a78bfa; }
+.btn-m:hover { background:rgba(167,139,250,.12); }
+.btn-m:disabled { opacity:.4; cursor:default; }
+
+/* Settings modal */
+.sfield { margin-bottom:12px; }
+.sfield label { display:block; font-size:11px; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
+.sfield input { width:100%; background:var(--bg2); border:1px solid var(--border); color:var(--text); font-family:monospace; font-size:12px; padding:8px 10px; border-radius:var(--r); outline:none; transition:.15s; }
+.sfield input:focus { border-color:var(--accent); }
+.sfield .hint { font-size:11px; color:var(--dim); margin-top:4px; line-height:1.4; }
+.gh-dot { width:7px; height:7px; border-radius:50%; display:inline-block; margin-right:6px; }
+.gh-ok { background:var(--green); }
+.gh-miss { background:var(--red); }
+
+/* Mockup review modal */
+.rev-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media (max-width:700px) { .rev-grid { grid-template-columns:1fr; } }
+.rev-preview { background:var(--bg2); border:1px solid var(--border); border-radius:var(--r); overflow:hidden; display:flex; flex-direction:column; }
+.rev-preview-top { flex:1; display:flex; align-items:center; justify-content:center; padding:20px; }
+.rev-url-bar { display:flex; align-items:center; gap:8px; padding:10px 12px; border-top:1px solid var(--border); font-size:11px; background:var(--bg); }
+.rev-url-bar a { color:var(--accent); text-decoration:none; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-family:monospace; }
+.rev-email-wrap { display:flex; flex-direction:column; gap:8px; }
+.rev-email-wrap label { font-family:var(--head); font-size:10px; letter-spacing:2px; color:var(--dim); text-transform:uppercase; }
+.rev-etarea { flex:1; min-height:220px; background:var(--bg2); border:1px solid var(--border); color:var(--text); font-family:var(--body); font-size:13px; line-height:1.6; padding:12px; border-radius:var(--r); resize:none; outline:none; }
+.rev-etarea:focus { border-color:var(--accent); }
+.building-state { display:flex; flex-direction:column; align-items:center; gap:12px; padding:30px; color:var(--dim); font-size:12px; letter-spacing:1px; text-align:center; }
+.building-bar { width:200px; height:3px; background:var(--border); border-radius:2px; overflow:hidden; }
+.building-bar::after { content:''; display:block; height:100%; width:40%; background:var(--accent); border-radius:2px; animation:barpulse 1.2s ease-in-out infinite; }
+@keyframes barpulse { 0%,100%{transform:translateX(-100%)} 50%{transform:translateX(250%)} }
+.mockup-ready-icon { font-size:36px; margin-bottom:4px; }
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="logo">PROSPECTOR <span>LOCAL BUSINESS OUTREACH</span></div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <span id="ghDot" style="width:7px;height:7px;border-radius:50%;display:inline-block;background:var(--red)" title="GitHub not configured"></span>
+    <button class="btn btn-g btn-s" onclick="Settings.open()">⚙ GitHub</button>
+    <button class="btn btn-g btn-s" id="exportBtn">↓ Export CSV</button>
+  </div>
+</header>
+
+<div class="main">
+  <!-- Left panel -->
+  <aside class="left">
+    <div class="psec">
+      <div class="plbl">Find Businesses</div>
+      <div id="apiWarning" class="setup-msg" style="display:none">
+        ⚠ Enable <strong>Maps JavaScript API</strong> in Google Cloud Console for search to work.
+      </div>
+      <form id="searchForm">
+        <div class="fg">
+          <label>Location</label>
+          <input class="fi" id="loc" type="text" placeholder="e.g. Ghent, Belgium" required>
+        </div>
+        <div class="fg">
+          <label>Industry / Keyword</label>
+          <input class="fi" id="kw" type="text" placeholder="e.g. dentist, restaurant..." required>
+        </div>
+        <div class="fg">
+          <label>Quick Filters</label>
+          <div class="chips" id="chips"></div>
+        </div>
+        <button type="submit" class="btn btn-p" id="searchBtn" style="width:100%;margin-top:4px">SEARCH</button>
+      </form>
+    </div>
+    <div style="padding:7px 15px;border-bottom:1px solid var(--border)">
+      <div class="rhdr" id="rhdr">Search to find businesses</div>
+    </div>
+    <div class="rlist" id="rlist">
+      <div class="empty"><div class="eico">◎</div>Enter a location and keyword,<br>or pick a quick filter to start.</div>
+    </div>
+  </aside>
+
+  <!-- Right panel -->
+  <div class="right">
+    <div class="tabs">
+      <div class="tab on" data-tab="info">How It Works</div>
+      <div class="tab" data-tab="pipeline">Pipeline</div>
+    </div>
+    <div class="tcontent" data-content="info">
+      <div style="max-width:520px;margin:30px auto;line-height:1.8;color:var(--mid);font-size:14px">
+        <div style="font-family:var(--head);font-size:12px;letter-spacing:2px;color:var(--accent);margin-bottom:16px">HOW TO USE THIS TOOL</div>
+        <p style="margin-bottom:12px">1. <strong style="color:var(--text)">Search</strong> — Enter a city and pick an industry (or type any keyword). Hit Search to find local businesses.</p>
+        <p style="margin-bottom:12px">2. <strong style="color:var(--text)">Review</strong> — Results show name, rating, address, phone, and whether they have a website. <span style="color:var(--red)">No website = your best lead.</span></p>
+        <p style="margin-bottom:12px">3. <strong style="color:var(--text)">Save</strong> — Click "Save to Pipeline" on any business you want to target.</p>
+        <p style="margin-bottom:12px">4. <strong style="color:var(--text)">Email</strong> — Click "Generate Email" to get a ready-to-send cold pitch tailored to their industry.</p>
+        <p style="margin-bottom:12px">5. <strong style="color:var(--text)">Track</strong> — Switch to the Pipeline tab to see your leads by status and update as you make contact.</p>
+        <p>6. <strong style="color:var(--text)">Export</strong> — Download your full prospect list as CSV anytime.</p>
+        <div style="margin-top:24px;padding:12px;background:var(--panel);border:1px solid var(--border);border-radius:var(--r);font-size:12px;color:var(--dim)">
+          <strong style="color:var(--warn)">First time?</strong> Make sure <strong>Maps JavaScript API</strong> is enabled in your Google Cloud Console alongside the Places API. Your API key is already saved in this file.
+        </div>
+      </div>
+    </div>
+    <div class="tcontent hide" data-content="pipeline">
+      <div class="pgrid" id="pgrid">
+        <div class="empty" style="grid-column:1/-1;margin-top:40px">
+          <div class="eico">◈</div>No prospects yet.<br>Search and save businesses to start your pipeline.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="foot">
+  <span>Total: <span id="ftotal">0</span></span>
+  <span>Contacted: <span class="bl" id="fcont">0</span></span>
+  <span>Negotiating: <span class="am" id="fneg">0</span></span>
+  <span>Won: <span class="gn" id="fwon">0</span></span>
+</footer>
+
+<!-- Email modal -->
+<div class="mover" id="modal">
+  <div class="modal">
+    <div class="mhdr">
+      <div><div class="mtitle">Cold Email</div><div class="msub" id="mname"></div></div>
+      <button class="btn-close" onclick="Modal.close()">×</button>
+    </div>
+    <div class="mbody" id="mbody"></div>
+    <div class="mfoot">
+      <span class="cpfb" id="cpfb">Copied!</span>
+      <button class="btn btn-g btn-s" onclick="Modal.copy()">Copy</button>
+      <button class="btn btn-p btn-s" onclick="Modal.save()">Save & Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings modal -->
+<div class="mover" id="settingsModal">
+  <div class="modal" style="max-width:460px">
+    <div class="mhdr">
+      <div><div class="mtitle">GitHub Setup</div><div class="msub">Needed to host mockup links</div></div>
+      <button class="btn-close" onclick="Settings.close()">×</button>
+    </div>
+    <div class="mbody">
+      <div class="sfield">
+        <label>Personal Access Token</label>
+        <input type="password" id="sToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+        <div class="hint" style="font-size:11px;color:var(--dim);margin-top:4px">
+          GitHub → Settings → Developer Settings → Personal access tokens → Fine-grained → New token.<br>
+          Give it <strong style="color:var(--text)">Contents: Read & Write</strong> permission on your Webservebe repo.
+        </div>
+      </div>
+      <div class="sfield">
+        <label>GitHub Username</label>
+        <input type="text" id="sOwner" placeholder="Are-coder13">
+      </div>
+      <div class="sfield">
+        <label>Repository Name</label>
+        <input type="text" id="sRepo" placeholder="Webservebe">
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px;font-size:12px;color:var(--dim);line-height:1.6;margin-top:4px">
+        <strong style="color:var(--warn)">One-time GitHub Pages setup:</strong><br>
+        In your Webservebe repo → Settings → Pages → Source: <strong style="color:var(--text)">Deploy from branch → main → / (root)</strong>. Save. Takes ~2 min to activate.
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="btn btn-g btn-s" onclick="Settings.close()">Cancel</button>
+      <button class="btn btn-p btn-s" onclick="Settings.save()">Save & Connect</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mockup review modal -->
+<div class="mover" id="revModal">
+  <div class="modal" style="max-width:820px;width:95vw">
+    <div class="mhdr">
+      <div><div class="mtitle">Mockup Ready</div><div class="msub" id="revName"></div></div>
+      <button class="btn-close" onclick="RevModal.close()">×</button>
+    </div>
+    <div class="mbody" id="revBody">
+      <div class="building-state">
+        <div class="spin"></div>
+        <div class="building-bar"></div>
+        <span>BUILDING MOCKUP...</span>
+      </div>
+    </div>
+    <div class="mfoot" id="revFoot" style="display:none">
+      <span class="cpfb" id="revCpfb">Copied!</span>
+      <button class="btn btn-g btn-s" id="revPreviewBtn" onclick="RevModal.openPreview()">Open Preview</button>
+      <button class="btn btn-g btn-s" onclick="RevModal.copyEmail()">Copy Email</button>
+      <button class="btn btn-p btn-s" onclick="RevModal.send()">Send Email</button>
+    </div>
+  </div>
+</div>
+
+<div class="tcon" id="tcon"></div>
+
+<script>
+// ── Config ────────────────────────────────────────────────────────────────
+const API_KEY = 'AIzaSyBYfznnHvdN0CYnk5b9wMwYOJILVJtZPAE';
+
+// ── Storage ───────────────────────────────────────────────────────────────
+const Store = {
+  key: 'prospector_v1',
+  load() { try { return JSON.parse(localStorage.getItem(this.key)) || []; } catch { return []; } },
+  save(p) { localStorage.setItem(this.key, JSON.stringify(p)); },
+  getAll() { return this.load(); },
+  upsert(p) {
+    const all = this.load();
+    const i = all.findIndex(x => x.place_id === p.place_id);
+    if (i >= 0) { all[i] = { ...all[i], ...p, updated_at: now() }; }
+    else { all.push({ ...p, id: uid(), status: 'not_contacted', notes: '', added_at: now(), updated_at: now() }); }
+    this.save(all); return i >= 0 ? all[i] : all[all.length - 1];
+  },
+  patch(id, fields) {
+    const all = this.load();
+    const p = all.find(x => x.id === id);
+    if (p) { Object.assign(p, fields, { updated_at: now() }); this.save(all); }
+    return p;
+  },
+  remove(id) { const all = this.load().filter(x => x.id !== id); this.save(all); },
+  counts() {
+    const all = this.load();
+    const c = { not_contacted:0, contacted:0, in_negotiation:0, won:0, lost:0, total: all.length };
+    all.forEach(p => { if (c[p.status] !== undefined) c[p.status]++; });
+    return c;
+  }
+};
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+function now() { return new Date().toISOString(); }
+
+// ── Toast ─────────────────────────────────────────────────────────────────
+function toast(msg, type = 'inf') {
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.textContent = msg;
+  document.getElementById('tcon').appendChild(el);
+  setTimeout(() => el.remove(), 3200);
+}
+
+// ── Email templates ───────────────────────────────────────────────────────
+const TEMPLATES = {
+  dentist: {
+    y: `Hi {name},\n\nI came across your practice on Google — {rating}. That kind of reputation deserves a website that matches it.\n\nA lot of dental practices in {city} still have outdated sites that don't do much to convert visitors into bookings. I build clean, modern websites specifically designed to get patients to pick up the phone or book online — with clear service pages, easy contact forms, and a design that builds trust before they even walk through the door.\n\nWould you be open to a quick chat? I'd be happy to put together a free mockup based on your practice. Just reply to this email.\n\nBest,\n[Your name]`,
+    n: `Hi {name},\n\nI noticed your practice doesn't have a website yet — which means every time someone searches "dentist in {city}", they're landing on your competitors instead of you.\n\nI build professional websites for dental practices: clean design, online booking integration, service pages, and Google-optimised so new patients can actually find you. {rating} — those reviews deserve to be seen.\n\nI'd love to show you what I have in mind. Reply here and I'll put together a free concept for your practice.\n\nBest,\n[Your name]`
+  },
+  restaurant: {
+    y: `Hi {name},\n\nI found your restaurant on Google {rating} — clearly people enjoy coming in. I help local restaurants turn their online presence into more covers.\n\nA well-built restaurant website — with your menu, photos, opening hours, and a reservation option — makes a real difference when someone is deciding where to eat tonight. Most people check the website before they call.\n\nI'd love to help you get more out of your online presence. Reply here if you'd like to see a quick concept — no strings attached.\n\nBest,\n[Your name]`,
+    n: `Hi {name},\n\nI found your restaurant on Google {rating} — but noticed you don't have a website yet.\n\nIn {city}, people decide where to eat by checking online first. Without a website, you're losing potential customers who can't see your menu, your vibe, or your opening hours before visiting.\n\nI build fast, beautiful restaurant websites with menus, photo galleries, and reservation links — all designed to get people through your door. I'd love to put a free concept together for you.\n\nInterested? Just reply to this email.\n\nBest,\n[Your name]`
+  },
+  'law firm': {
+    y: `Hi {name},\n\nI came across your firm while researching legal practices in {city}. In the legal space, your website is often a potential client's first impression — and it needs to communicate credibility immediately.\n\nI specialise in building websites for law firms: professional design, clear practice area pages, attorney profiles, and contact forms that make it easy for clients to reach you. {rating}\n\nI'd be glad to show you what a refreshed site could look like for your firm — free of charge. Would you have 15 minutes for a quick call?\n\nBest,\n[Your name]`,
+    n: `Hi {name},\n\nI noticed your firm in {city} doesn't have a website — which means potential clients searching for legal help online aren't finding you.\n\nI build professional websites for law firms: clear practice areas, attorney profiles, client intake forms, and a design that signals trustworthiness from the first click. {rating}\n\nThis is a real opportunity to capture clients your competitors are getting by default. I'd love to put a free concept together — reply here if you're interested.\n\nBest,\n[Your name]`
+  },
+  salon: {
+    y: `Hi {name},\n\nI found your salon on Google {rating} — clearly you're doing great work. I help beauty businesses turn that reputation into more bookings online.\n\nA modern salon website with a gallery, service menu, pricing, and an online booking button can make a huge difference — people want to see your work before they call. Instagram is great, but a proper website builds the kind of trust that converts.\n\nI'd love to put a free mockup together for you. Just reply and we can take it from there.\n\nBest,\n[Your name]`,
+    n: `Hi {name},\n\nI found your salon on Google {rating} but noticed you don't have a website yet.\n\nIn {city}, clients look for salons online before booking — and without a website, they'll often go with whoever shows up first. A clean site with your services, prices, photos, and a booking link can change that quickly.\n\nI'd love to show you a free concept. Reply here if you're curious.\n\nBest,\n[Your name]`
+  },
+  auto: {
+    y: `Hi {name},\n\nI came across your garage in {city} {rating}. Auto repair is one of those industries where a professional website pays for itself quickly — people search online for a trustworthy mechanic and pick whoever looks most credible.\n\nI build websites for garages and repair shops: services listed clearly, easy contact/booking, customer reviews front and centre, and optimised so you show up when people search locally.\n\nHappy to put together a free mockup. Interested? Just shoot me a reply.\n\nBest,\n[Your name]`,
+    n: `Hi {name},\n\nI found your garage on Google {rating} — but noticed you don't have a website.\n\nWhen someone's car breaks down in {city} and they search for a mechanic, they click the first result that looks trustworthy. Without a website, that's never going to be you.\n\nI build straightforward, professional websites for garages: services, pricing, contact, and reviews — everything a potential customer needs to pick up the phone.\n\nI'd love to put a free concept together. Just reply here.\n\nBest,\n[Your name]`
+  },
+  physio: {
+    y: `Hi {name},\n\nI came across your practice in {city} {rating}. In healthcare, patients spend a lot of time researching online before booking — your website needs to build confidence before they even call.\n\nI build websites for physiotherapy practices: clear service descriptions, practitioner profiles, online appointment requests, and a professional look that makes patients feel in safe hands.\n\nI'd be happy to put a free concept together. Would you be open to a quick chat?\n\nBest,\n[Your name]`,
+    n: `Hi {name},\n\nI found your practice on Google {rating} but noticed you don't have a website yet.\n\nPatients in {city} searching for physiotherapy will almost always check online first — and without a website, they'll book with whoever shows up. A professional site with your services, team, and a contact form changes that entirely.\n\nI'd love to put a free concept together for you. Just reply here.\n\nBest,\n[Your name]`
+  },
+  accountant: {
+    y: `Hi {name},\n\nI found your firm in {city} {rating}. For accounting and financial services, trust is everything — and a professional website is often what tips a potential client in your favour.\n\nI build websites for accountants: clear service pages, credentials front and centre, easy contact forms, and a design that communicates reliability.\n\nHappy to put together a free mockup. Would you have 15 minutes to take a look?\n\nBest,\n[Your name]`,
+    n: `Hi {name},\n\nI noticed your firm in {city} doesn't have a website — in a trust-based business like accounting, that's leaving potential clients on the table.\n\nPeople looking for an accountant will research online before making contact. Without a website, you're simply not in the running. I build clean, professional sites for accounting firms — services, credentials, contact — everything clients need to say yes.\n\n{rating} Those reviews deserve a home. I'd love to show you a free concept.\n\nBest,\n[Your name]`
+  },
+  'real estate': {
+    y: `Hi {name},\n\nI found your agency in {city} {rating}. In real estate, your website is a 24/7 lead generator — or it should be.\n\nI build websites for real estate agencies that are designed to convert: property listings, clear agent profiles, neighbourhood guides, and lead capture forms that work while you sleep.\n\nI'd love to show you what a modernised site could look like for your agency. Free concept, no obligation. Just reply here.\n\nBest,\n[Your name]`,
+    n: `Hi {name},\n\nI came across your agency in {city} {rating} — but noticed you don't have a website yet.\n\nIn real estate, buyers and sellers research online before they ever contact an agent. Without a website, you're invisible to that audience entirely.\n\nI build real estate websites with listings, agent profiles, and lead forms — built to generate enquiries. I'd love to put a free concept together for you. Reply here.\n\nBest,\n[Your name]`
+  }
+};
+
+const DEFAULT_T = {
+  y: `Hi {name},\n\nI found your business on Google {rating} and wanted to reach out.\n\nI build professional websites for local businesses in {city}. A well-built site that clearly shows what you do, how to contact you, and why customers should choose you can make a real difference — especially when people are comparing options online.\n\nI'd love to put a free concept together for you, no strings attached. Just reply here if you're curious.\n\nBest,\n[Your name]`,
+  n: `Hi {name},\n\nI found your business on Google {rating} but noticed you don't have a website yet.\n\nIn {city}, customers research businesses online before they call or visit — without a website you're missing a big slice of that audience.\n\nI build professional, affordable websites for local businesses: clean design, mobile-friendly, easy to find on Google. I'd love to put a free concept together for you. Just reply here.\n\nBest,\n[Your name]`
+};
+
+function getTemplate(category, hasWebsite) {
+  const c = (category || '').toLowerCase();
+  const key = hasWebsite ? 'y' : 'n';
+  const match = Object.keys(TEMPLATES).find(k => c.includes(k));
+  return (match ? TEMPLATES[match] : DEFAULT_T)[key];
+}
+
+function extractCity(address) {
+  if (!address) return 'your area';
+  const parts = address.split(',').map(s => s.trim());
+  return parts.length >= 2 ? parts[parts.length - 2] : parts[0];
+}
+
+function buildEmail(p) {
+  const city = extractCity(p.address);
+  const rating = p.rating ? `(★ ${p.rating}${p.total_ratings ? ` from ${p.total_ratings} reviews` : ''})` : '';
+  const tmpl = getTemplate(p.category, !!(p.website && p.website.trim()));
+  return tmpl.replace(/{name}/g, p.name).replace(/{city}/g, city).replace(/{rating}/g, rating).trim();
+}
+
+// ── Maps search ───────────────────────────────────────────────────────────
+let mapsReady = false;
+let placesService;
+
+window.mapsInit = function() {
+  mapsReady = true;
+  placesService = new google.maps.places.PlacesService(document.createElement('div'));
+  document.getElementById('searchBtn').disabled = false;
+};
+
+function textSearch(query) {
+  return new Promise((res, rej) => {
+    placesService.textSearch({ query }, (results, status) => {
+      if (status === 'OK' || status === 'ZERO_RESULTS') res(results || []);
+      else rej(new Error('Search failed (' + status + '). Make sure Maps JavaScript API is enabled in Google Cloud Console.'));
+    });
+  });
+}
+
+function getDetails(placeId) {
+  return new Promise((res, rej) => {
+    placesService.getDetails({
+      placeId,
+      fields: ['name', 'formatted_address', 'formatted_phone_number', 'website', 'rating', 'user_ratings_total', 'types', 'url']
+    }, (result, status) => {
+      if (status === 'OK') res(result);
+      else rej(new Error('Details failed: ' + status));
+    });
+  });
+}
+
+function formatType(types) {
+  if (!types || !types.length) return 'Business';
+  const skip = ['point_of_interest', 'establishment', 'health', 'food'];
+  const t = types.find(x => !skip.includes(x)) || types[0];
+  return t.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+// ── State ─────────────────────────────────────────────────────────────────
+let searchResults = [];
+let lastQuery = '';
+
+// ── UI: Search ────────────────────────────────────────────────────────────
+const CHIPS = [
+  { label: 'Dentist', kw: 'dentist' }, { label: 'Restaurant', kw: 'restaurant' },
+  { label: 'Law Firm', kw: 'law firm' }, { label: 'Beauty Salon', kw: 'beauty salon' },
+  { label: 'Auto Repair', kw: 'auto repair' }, { label: 'Physio', kw: 'physiotherapist' },
+  { label: 'Accountant', kw: 'accountant' }, { label: 'Real Estate', kw: 'real estate agent' },
+];
+
+function initChips() {
+  const el = document.getElementById('chips');
+  CHIPS.forEach(({ label, kw }) => {
+    const c = document.createElement('button');
+    c.type = 'button';
+    c.className = 'chip';
+    c.textContent = label;
+    c.onclick = () => document.getElementById('kw').value = kw;
+    el.appendChild(c);
+  });
+}
+
+
+document.getElementById('searchForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!mapsReady) { toast('Maps API not loaded yet', 'err'); return; }
+  const kw = document.getElementById('kw').value.trim();
+  const loc = document.getElementById('loc').value.trim();
+  if (!kw || !loc) return;
+
+  const btn = document.getElementById('searchBtn');
+  btn.disabled = true; btn.textContent = 'SEARCHING...';
+
+  try {
+    const results = await textSearch(`${kw} in ${loc}`);
+    searchResults = results;
+    lastQuery = kw;
+
+    const savedIds = new Set(Store.getAll().map(p => p.place_id));
+    renderResults(results, savedIds);
+    toast(`Found ${results.length} businesses`, 'ok');
+  } catch (err) {
+    toast(err.message, 'err');
+  } finally {
+    btn.disabled = false; btn.textContent = 'SEARCH';
+  }
+});
+
+function renderResults(results, savedIds) {
+  const list = document.getElementById('rlist');
+  const hdr = document.getElementById('rhdr');
+
+  if (!results.length) {
+    hdr.textContent = 'No results found';
+    list.innerHTML = '<div class="empty"><div class="eico">◎</div>No businesses found. Try a wider radius or different keyword.</div>';
+    return;
+  }
+
+  hdr.textContent = `${results.length} results`;
+  list.innerHTML = '';
+
+  results.forEach(place => {
+    const isSaved = savedIds.has(place.place_id);
+    const div = document.createElement('div');
+    div.className = 'rcard' + (isSaved ? ' saved' : '');
+    div.dataset.pid = place.place_id;
+
+    const rating = place.rating ? `<span class="rstar">★ ${place.rating}</span> (${place.user_ratings_total || 0})` : '<span style="color:var(--dim)">No rating</span>';
+    const cat = formatType(place.types);
+
+    div.innerHTML = `
+      <div class="rname">${place.name}</div>
+      <div class="rcat">${cat}</div>
+      <div class="rmeta">${rating}<br>${place.vicinity || ''}</div>
+      <div class="ract" id="ra-${place.place_id}">
+        ${isSaved
+          ? '<span class="saved-badge">✓ In Pipeline</span>'
+          : `<button class="btn btn-p btn-s" onclick="saveProspect('${place.place_id}')">Save to Pipeline</button>`
+        }
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+async function saveProspect(placeId) {
+  const place = searchResults.find(r => r.place_id === placeId);
+  if (!place) return;
+
+  const actEl = document.getElementById('ra-' + placeId);
+  const btn = actEl && actEl.querySelector('button');
+  if (btn) { btn.disabled = true; btn.textContent = 'LOADING...'; }
+
+  try {
+    // Fetch full details (phone, website) now
+    const details = await getDetails(placeId);
+    const prospect = {
+      place_id: placeId,
+      name: details.name || place.name,
+      address: details.formatted_address || place.vicinity || '',
+      phone: details.formatted_phone_number || '',
+      website: details.website || '',
+      rating: details.rating || place.rating || 0,
+      total_ratings: details.user_ratings_total || place.user_ratings_total || 0,
+      category: formatType(details.types || place.types),
+      maps_url: details.url || '',
+      search_query: lastQuery,
+    };
+
+    Store.upsert(prospect);
+    toast(`${prospect.name} added to pipeline`, 'ok');
+
+    if (actEl) actEl.innerHTML = '<span class="saved-badge">✓ In Pipeline</span>';
+    const card = document.querySelector(`[data-pid="${placeId}"]`);
+    if (card) card.classList.add('saved');
+
+    updateFooter();
+  } catch (err) {
+    toast('Failed to save: ' + err.message, 'err');
+    if (btn) { btn.disabled = false; btn.textContent = 'Save to Pipeline'; }
+  }
+}
+
+// ── UI: Pipeline ──────────────────────────────────────────────────────────
+const STATUS_LABELS = {
+  not_contacted: 'Not Contacted',
+  contacted: 'Contacted',
+  in_negotiation: 'In Negotiation',
+  won: 'Won',
+  lost: 'Lost',
+};
+
+function renderPipeline() {
+  const all = Store.getAll();
+  const counts = Store.counts();
+  const grid = document.getElementById('pgrid');
+  grid.innerHTML = '';
+
+  if (!all.length) {
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1;margin-top:40px"><div class="eico">◈</div>No prospects yet.<br>Search and save businesses to start your pipeline.</div>';
+    return;
+  }
+
+  Object.entries(STATUS_LABELS).forEach(([status, label]) => {
+    const items = all.filter(p => p.status === status);
+    const col = document.createElement('div');
+    col.className = `pcol s-${status}`;
+    col.innerHTML = `
+      <div class="pcolhdr"><span>${label}</span><span class="ccount">${counts[status] || 0}</span></div>
+      <div id="pc-${status}"></div>`;
+    grid.appendChild(col);
+
+    const inner = col.querySelector(`#pc-${status}`);
+    if (!items.length) {
+      inner.innerHTML = '<div style="color:var(--dim);font-size:11px;text-align:center;padding:16px 0">Empty</div>';
+    } else {
+      items.forEach(p => inner.appendChild(buildPCard(p)));
+    }
+  });
+}
+
+function buildPCard(p) {
+  const div = document.createElement('div');
+  div.className = 'pcard';
+  div.id = 'pcard-' + p.id;
+
+  const web = p.website
+    ? `<a href="${p.website}" target="_blank">Website ↗</a>`
+    : '<span class="rnoweb">No website</span>';
+
+  const opts = Object.entries(STATUS_LABELS).map(([v, l]) =>
+    `<option value="${v}" ${v === p.status ? 'selected' : ''}>${l}</option>`).join('');
+
+  const emailBtn = p.generated_email ? 'View Email' : 'Generate Email';
+
+  div.innerHTML = `
+    <div class="pname">${p.name}</div>
+    <div class="ptype">${p.category || 'Business'}${p.rating ? ` · ★ ${p.rating}` : ''}</div>
+    <div class="pdet">${p.address || ''}<br>${p.phone || ''}<br>${web}</div>
+    <select class="ssel" onchange="patchStatus('${p.id}', this.value)">${opts}</select>
+    <div class="pact">
+      <button class="btn btn-g btn-s" onclick="Modal.open('${p.id}')">${emailBtn}</button>
+      <button class="btn btn-m btn-s" onclick="buildMockup('${p.id}')" title="Build mockup website">◈ Mockup</button>
+      <button class="btn btn-d btn-s" onclick="removeProspect('${p.id}')">✕</button>
+    </div>`;
+  return div;
+}
+
+function patchStatus(id, status) {
+  Store.patch(id, { status });
+  renderPipeline();
+  updateFooter();
+}
+
+function removeProspect(id) {
+  Store.remove(id);
+  renderPipeline();
+  updateFooter();
+}
+
+// ── UI: Tabs ──────────────────────────────────────────────────────────────
+function setTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.tab === name));
+  document.querySelectorAll('.tcontent').forEach(c => c.classList.toggle('hide', c.dataset.content !== name));
+  if (name === 'pipeline') renderPipeline();
+}
+
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => setTab(t.dataset.tab)));
+
+// ── UI: Footer ────────────────────────────────────────────────────────────
+function updateFooter() {
+  const c = Store.counts();
+  document.getElementById('ftotal').textContent = c.total;
+  document.getElementById('fcont').textContent = c.contacted;
+  document.getElementById('fneg').textContent = c.in_negotiation;
+  document.getElementById('fwon').textContent = c.won;
+}
+
+// ── UI: Email modal ───────────────────────────────────────────────────────
+const Modal = {
+  id: null,
+  open(id) {
+    this.id = id;
+    const p = Store.getAll().find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('mname').textContent = p.name;
+    document.getElementById('modal').classList.add('show');
+    const email = p.generated_email || buildEmail(p);
+    if (!p.generated_email) Store.patch(id, { generated_email: email });
+    document.getElementById('mbody').innerHTML = `<textarea class="etarea" id="etarea">${email}</textarea>`;
+  },
+  close() {
+    document.getElementById('modal').classList.remove('show');
+    this.id = null;
+    if (document.querySelector('.tab.on')?.dataset.tab === 'pipeline') renderPipeline();
+  },
+  async copy() {
+    const ta = document.getElementById('etarea');
+    if (!ta) return;
+    try {
+      await navigator.clipboard.writeText(ta.value);
+      const fb = document.getElementById('cpfb');
+      fb.classList.add('show');
+      setTimeout(() => fb.classList.remove('show'), 2000);
+    } catch { toast('Copy failed — select all manually', 'err'); }
+  },
+  save() {
+    const ta = document.getElementById('etarea');
+    if (ta && this.id) Store.patch(this.id, { generated_email: ta.value });
+    toast('Email saved', 'ok');
+    this.close();
+  }
+};
+
+// ── Export CSV ────────────────────────────────────────────────────────────
+document.getElementById('exportBtn').addEventListener('click', () => {
+  const all = Store.getAll();
+  if (!all.length) { toast('No prospects to export', 'err'); return; }
+  const cols = ['name', 'category', 'address', 'phone', 'website', 'rating', 'total_ratings', 'status', 'notes', 'added_at', 'maps_url'];
+  const rows = [cols.join(',')];
+  all.forEach(p => rows.push(cols.map(c => `"${(p[c] || '').toString().replace(/"/g, '""')}"`).join(',')));
+  const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'prospects.csv';
+  a.click();
+});
+
+// ── GitHub ────────────────────────────────────────────────────────────────
+const GH = {
+  get token() { return localStorage.getItem('gh_token') || ''; },
+  get owner() { return localStorage.getItem('gh_owner') || ''; },
+  get repo()  { return localStorage.getItem('gh_repo')  || ''; },
+  get configured() { return !!(this.token && this.owner && this.repo); },
+  get pagesBase() { return `https://${this.owner}.github.io/${this.repo}`; },
+
+  async pushFile(path, html) {
+    const url = `https://api.github.com/repos/${this.owner}/${this.repo}/contents/${path}`;
+    const encoded = btoa(unescape(encodeURIComponent(html)));
+    let sha;
+    try {
+      const r = await fetch(url, { headers: { Authorization: `token ${this.token}`, Accept: 'application/vnd.github+json' } });
+      if (r.ok) sha = (await r.json()).sha;
+    } catch {}
+    const body = { message: `Add mockup: ${path}`, content: encoded };
+    if (sha) body.sha = sha;
+    const resp = await fetch(url, {
+      method: 'PUT',
+      headers: { Authorization: `token ${this.token}`, 'Content-Type': 'application/json', Accept: 'application/vnd.github+json' },
+      body: JSON.stringify(body),
+    });
+    if (!resp.ok) { const e = await resp.json(); throw new Error(e.message || 'GitHub push failed'); }
+    return `${this.pagesBase}/${path}`;
+  },
+};
+
+// ── Industry designs ──────────────────────────────────────────────────────
+const DESIGNS = {
+  dentist: {
+    primary:'#061f35', accent:'#00b4e6', accentLight:'#e0f6ff',
+    tagline:'Your Smile, Our Priority',
+    services:[
+      {icon:'✦',name:'Teeth Whitening',desc:'Professional whitening treatments that brighten your smile by up to 10 shades in a single visit.'},
+      {icon:'◈',name:'Dental Implants',desc:'Permanent, natural-looking implants that restore your smile and your confidence for life.'},
+      {icon:'◉',name:'Orthodontics',desc:'Modern invisible aligners and braces that straighten your smile without disrupting your life.'},
+    ],
+    stats:[{n:'15+',l:'Years Experience'},{n:'3,200+',l:'Happy Patients'},{n:'98%',l:'Satisfaction Rate'}],
+    reviews:[
+      {q:'The team made me feel completely at ease. My teeth have never looked better!',a:'Sarah M.'},
+      {q:'Absolute professionals. Clear explanations, zero pain, outstanding results.',a:'Thomas K.'},
+    ],
+    font:'Poppins', heroFont:'Poppins',
+    bg:'linear-gradient(135deg,#061f35 0%,#0a3d6b 60%,#0a5a8a 100%)',
+    cta:'Book a Free Consultation',
+  },
+  restaurant: {
+    primary:'#120800', accent:'#e8622a', accentLight:'#fff3ed',
+    tagline:'An Experience For Every Sense',
+    services:[
+      {icon:'◈',name:'Fine Dining',desc:'An intimate atmosphere where every dish tells a story. Seasonal ingredients, crafted with passion.'},
+      {icon:'✦',name:'Private Events',desc:'From intimate dinners to celebrations for 100 — we handle every detail.'},
+      {icon:'◉',name:'Takeaway & Delivery',desc:'Enjoy our full menu from the comfort of your home. Order online in minutes.'},
+    ],
+    stats:[{n:'12+',l:'Years Open'},{n:'4.8★',l:'Google Rating'},{n:'200+',l:'Menu Items'} ],
+    reviews:[
+      {q:'Every single dish was a masterpiece. We will absolutely be back.',a:'Emma L.'},
+      {q:'The private dining room for our anniversary was perfect. Magical evening.',a:'Mark & Julie'},
+    ],
+    font:'Playfair Display', heroFont:'Playfair Display',
+    bg:'linear-gradient(135deg,#120800 0%,#2a1200 60%,#3d1f00 100%)',
+    cta:'Reserve a Table',
+  },
+  'law firm': {
+    primary:'#0e1626', accent:'#c9a84c', accentLight:'#fdf8ec',
+    tagline:'Expert Legal Counsel You Can Trust',
+    services:[
+      {icon:'◈',name:'Corporate Law',desc:'Strategic legal advice for businesses at every stage — from startup to enterprise.'},
+      {icon:'✦',name:'Civil Litigation',desc:'Aggressive, experienced representation when disputes demand resolution.'},
+      {icon:'◉',name:'Contract Law',desc:'Airtight contracts drafted and reviewed to protect your interests at every turn.'},
+    ],
+    stats:[{n:'20+',l:'Years Practice'},{n:'1,400+',l:'Cases Won'},{n:'98%',l:'Client Retention'}],
+    reviews:[
+      {q:'Their attention to detail and strategic thinking saved our company. Exceptional team.',a:'David R., CEO'},
+      {q:'Clear, direct, and effective. Exactly what you want from a legal partner.',a:'Patricia W.'},
+    ],
+    font:'Cormorant Garamond', heroFont:'Cormorant Garamond',
+    bg:'linear-gradient(135deg,#0e1626 0%,#182038 60%,#1e2d50 100%)',
+    cta:'Request a Free Consultation',
+  },
+  salon: {
+    primary:'#1a0a1f', accent:'#e040fb', accentLight:'#fce4ff',
+    tagline:'Beauty That Speaks For Itself',
+    services:[
+      {icon:'✦',name:'Hair Styling',desc:'Cuts, colour, and treatments from our award-winning stylists using only premium products.'},
+      {icon:'◈',name:'Skin Treatments',desc:'Facials, peels, and advanced skin therapies tailored to your skin type.'},
+      {icon:'◉',name:'Nails & Beauty',desc:'Gel, acrylics, and nail art — plus full beauty treatments for every occasion.'},
+    ],
+    stats:[{n:'8+',l:'Years Open'},{n:'5,000+',l:'Happy Clients'},{n:'4.9★',l:'Google Rating'}],
+    reviews:[
+      {q:'I leave feeling like a completely different person every single time. Incredible team.',a:'Yasmine B.'},
+      {q:'Best hair colour in the city. They really listen to what you want.',a:'Chloe T.'},
+    ],
+    font:'Cormorant Garamond', heroFont:'Cormorant Garamond',
+    bg:'linear-gradient(135deg,#1a0a1f 0%,#2d1040 60%,#3a0a4f 100%)',
+    cta:'Book Your Appointment',
+  },
+  'auto repair': {
+    primary:'#0a0e14', accent:'#ff5722', accentLight:'#fff3f0',
+    tagline:'Expert Care For Every Vehicle',
+    services:[
+      {icon:'◈',name:'Full Servicing',desc:'Comprehensive vehicle checks and maintenance to keep your car running at its best.'},
+      {icon:'✦',name:'Diagnostics',desc:'State-of-the-art computer diagnostics that find problems fast — before they cost more.'},
+      {icon:'◉',name:'Bodywork & Paint',desc:'From minor scratches to major repairs — showroom finish every time.'},
+    ],
+    stats:[{n:'18+',l:'Years Experience'},{n:'8,000+',l:'Vehicles Serviced'},{n:'Same Day',l:'Service Available'}],
+    reviews:[
+      {q:'Fast, honest, and fair pricing. These guys are the real deal.',a:'Ahmed S.'},
+      {q:'They diagnosed an issue three other garages missed. Saved me a fortune.',a:'Rachel P.'},
+    ],
+    font:'Barlow', heroFont:'Barlow',
+    bg:'linear-gradient(135deg,#0a0e14 0%,#141c26 60%,#1a2535 100%)',
+    cta:'Book Your Service',
+  },
+  physiotherapist: {
+    primary:'#071e22', accent:'#00bfa5', accentLight:'#e0f7f5',
+    tagline:'Move Better. Live Better.',
+    services:[
+      {icon:'◈',name:'Sports Rehabilitation',desc:'Get back to peak performance with treatment plans designed around your body and goals.'},
+      {icon:'✦',name:'Back & Neck Pain',desc:'Evidence-based therapy that tackles the root cause — not just the symptoms.'},
+      {icon:'◉',name:'Post-Surgery Recovery',desc:'Guided rehabilitation programmes that rebuild strength, mobility and confidence.'},
+    ],
+    stats:[{n:'12+',l:'Years Experience'},{n:'2,800+',l:'Patients Treated'},{n:'95%',l:'Return to Activity'}],
+    reviews:[
+      {q:'After months of back pain, I was walking comfortably within three sessions.',a:'Michael D.'},
+      {q:'Professional, knowledgeable, and genuinely caring. Highly recommend.',a:'Linda F.'},
+    ],
+    font:'Nunito', heroFont:'Nunito',
+    bg:'linear-gradient(135deg,#071e22 0%,#0d3035 60%,#0f404a 100%)',
+    cta:'Book a Free Assessment',
+  },
+  accountant: {
+    primary:'#0d1b3e', accent:'#4a90e2', accentLight:'#e8f1fd',
+    tagline:'Your Finances, In Expert Hands',
+    services:[
+      {icon:'◈',name:'Tax & Compliance',desc:'Stay fully compliant and never pay more tax than you have to. We handle every detail.'},
+      {icon:'✦',name:'Business Accounting',desc:'Monthly bookkeeping, management accounts, and financial insights that drive decisions.'},
+      {icon:'◉',name:'Financial Planning',desc:'Long-term strategy that protects and grows your wealth — for you and your business.'},
+    ],
+    stats:[{n:'25+',l:'Years Experience'},{n:'400+',l:'Active Clients'},{n:'€2M+',l:'Tax Saved Annually'}],
+    reviews:[
+      {q:'They found savings I had no idea existed. Paid for themselves in the first month.',a:'James T., Director'},
+      {q:'Finally, an accountant who explains things clearly and actually calls back.',a:'Sophie W.'},
+    ],
+    font:'Inter', heroFont:'Inter',
+    bg:'linear-gradient(135deg,#0d1b3e 0%,#152d6b 60%,#1a3a80 100%)',
+    cta:'Request a Free Consultation',
+  },
+  'real estate': {
+    primary:'#111111', accent:'#d4a843', accentLight:'#fdf8ec',
+    tagline:'Your Property Journey Starts Here',
+    services:[
+      {icon:'◈',name:'Property Sales',desc:'Expert valuation, marketing, and negotiation to get you the best possible price.'},
+      {icon:'✦',name:'Lettings & Management',desc:'Full lettings service with ongoing management so you never have to worry.'},
+      {icon:'◉',name:'Investment Advice',desc:'Identify high-yield opportunities in the local market with our in-depth knowledge.'},
+    ],
+    stats:[{n:'200+',l:'Properties Sold'},{n:'15+',l:'Years Local Experience'},{n:'98%',l:'Ask Price Achieved'}],
+    reviews:[
+      {q:'Sold our home in 11 days above asking price. Absolutely brilliant service.',a:'The Williams Family'},
+      {q:'Professional, proactive, and kept us informed at every step.',a:'Karen & Paul M.'},
+    ],
+    font:'Raleway', heroFont:'Raleway',
+    bg:'linear-gradient(135deg,#111111 0%,#1f1f1f 60%,#2a2a2a 100%)',
+    cta:'Get a Free Valuation',
+  },
+};
+
+const DEFAULT_DESIGN = {
+  primary:'#0a1628', accent:'#00aaff', accentLight:'#e0f4ff',
+  tagline:'Professional Service You Can Rely On',
+  services:[
+    {icon:'◈',name:'Our Services',desc:'Comprehensive, tailored solutions designed around your exact needs and goals.'},
+    {icon:'✦',name:'Expert Team',desc:'A dedicated team of professionals with years of hands-on experience in the field.'},
+    {icon:'◉',name:'Results Driven',desc:'We measure our success by yours. Clear outcomes, transparent communication, every time.'},
+  ],
+  stats:[{n:'10+',l:'Years Experience'},{n:'500+',l:'Happy Clients'},{n:'100%',l:'Commitment'}],
+  reviews:[
+    {q:'Exceptional service from start to finish. We wouldn\'t go anywhere else.',a:'A. Client'},
+    {q:'Professional, reliable, and great value. Highly recommended.',a:'B. Customer'},
+  ],
+  font:'Inter', heroFont:'Inter',
+  bg:'linear-gradient(135deg,#0a1628 0%,#122040 60%,#1a2e5a 100%)',
+  cta:'Get In Touch Today',
+};
+
+function getDesign(category) {
+  const c = (category||'').toLowerCase();
+  return Object.entries(DESIGNS).find(([k]) => c.includes(k))?.[1] || DEFAULT_DESIGN;
+}
+
+function slugify(s) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+}
+
+function generateMockupHTML(p) {
+  const d = getDesign(p.category);
+  const city = extractCity(p.address);
+  const phone = p.phone || '';
+  const website = p.website || '';
+  const fontUrl = encodeURIComponent(d.font + ':wght@300;400;600;700;800');
+
+  const servicesHtml = d.services.map(s => `
+    <div class="card" data-aos>
+      <div class="card-icon">${s.icon}</div>
+      <h3>${s.name}</h3>
+      <p>${s.desc}</p>
+    </div>`).join('');
+
+  const statsHtml = d.stats.map(s => `
+    <div class="stat" data-aos>
+      <div class="stat-n">${s.n}</div>
+      <div class="stat-l">${s.l}</div>
+    </div>`).join('');
+
+  const reviewsHtml = d.reviews.map(r => `
+    <div class="review" data-aos>
+      <div class="review-q">"${r.q}"</div>
+      <div class="review-a">— ${r.a}</div>
+    </div>`).join('');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${p.name}</title>
+<link href="https://fonts.googleapis.com/css2?family=${fontUrl}&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:${d.primary};--accent:${d.accent};--light:${d.accentLight};--font:'${d.font}',sans-serif}
+body{font-family:var(--font);background:#fff;color:#1a1a1a;overflow-x:hidden}
+
+/* Preview banner */
+.preview-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:linear-gradient(90deg,#f59e0b,#d97706);color:#000;text-align:center;padding:10px 16px;font-size:13px;font-weight:700;letter-spacing:.5px;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.preview-banner span{font-weight:400;opacity:.8;margin-left:8px}
+body{padding-top:42px}
+
+/* Nav */
+nav{position:sticky;top:42px;background:rgba(${hexToRgb(d.primary)},.97);backdrop-filter:blur(10px);z-index:100;padding:0 5vw;display:flex;align-items:center;justify-content:space-between;height:68px;border-bottom:1px solid rgba(255,255,255,.08)}
+.nav-logo{color:#fff;font-size:20px;font-weight:800;letter-spacing:-0.5px}
+.nav-logo span{color:${d.accent}}
+.nav-cta{background:${d.accent};color:#fff;border:none;padding:10px 22px;border-radius:4px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.5px;transition:.15s;text-decoration:none;font-family:var(--font)}
+.nav-cta:hover{opacity:.88;transform:translateY(-1px)}
+nav ul{display:flex;gap:28px;list-style:none}
+nav ul li a{color:rgba(255,255,255,.7);text-decoration:none;font-size:14px;font-weight:500;transition:.15s}
+nav ul li a:hover{color:#fff}
+@media(max-width:600px){nav ul{display:none}}
+
+/* Hero */
+.hero{background:${d.bg};color:#fff;min-height:92vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:80px 5vw}
+.hero-shapes span{position:absolute;border-radius:50%;opacity:.07}
+.hero-shapes span:nth-child(1){width:500px;height:500px;background:${d.accent};top:-150px;right:-100px;animation:drift 12s ease-in-out infinite}
+.hero-shapes span:nth-child(2){width:300px;height:300px;background:#fff;bottom:-100px;left:-80px;animation:drift 15s ease-in-out infinite reverse}
+.hero-shapes span:nth-child(3){width:180px;height:180px;background:${d.accent};top:40%;left:20%;animation:drift 9s ease-in-out infinite 3s}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(20px,-20px) scale(1.04)}}
+.hero-content{position:relative;z-index:1;max-width:800px;text-align:center}
+.hero-badge{display:inline-block;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85);font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:20px;margin-bottom:24px}
+.hero h1{font-size:clamp(36px,7vw,80px);font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:20px}
+.hero h1 span{color:${d.accent}}
+.hero-sub{font-size:clamp(16px,2.5vw,22px);opacity:.75;margin-bottom:36px;font-weight:300;max-width:540px;margin-left:auto;margin-right:auto;line-height:1.5}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.hero-btns a{padding:16px 34px;border-radius:4px;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:.2s;font-family:var(--font);letter-spacing:.5px}
+.btn-main{background:${d.accent};color:#fff}
+.btn-main:hover{opacity:.9;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.btn-outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4)}
+.btn-outline:hover{background:rgba(255,255,255,.08);transform:translateY(-2px)}
+.hero-meta{margin-top:50px;display:flex;gap:30px;justify-content:center;opacity:.65;font-size:14px;flex-wrap:wrap}
+.hero-meta span::before{margin-right:6px}
+
+/* Sections */
+section{padding:90px 5vw}
+.section-tag{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:${d.accent};font-weight:700;margin-bottom:12px}
+.section-title{font-size:clamp(28px,4vw,46px);font-weight:800;line-height:1.2;letter-spacing:-0.5px;margin-bottom:16px}
+.section-sub{font-size:17px;color:#666;max-width:560px;line-height:1.6}
+.section-head{margin-bottom:56px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media(max-width:700px){.grid3{grid-template-columns:1fr}}
+@media(max-width:900px){.grid3{grid-template-columns:repeat(2,1fr)}}
+
+/* Cards */
+.card{background:#fff;border:1px solid #eee;border-radius:12px;padding:36px 28px;transition:.25s;box-shadow:0 2px 16px rgba(0,0,0,.04)}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.1);border-color:${d.accent}33}
+.card-icon{font-size:28px;color:${d.accent};margin-bottom:16px;display:block}
+.card h3{font-size:19px;font-weight:700;margin-bottom:10px}
+.card p{color:#666;line-height:1.65;font-size:15px}
+
+/* Stats */
+.stats-section{background:${d.bg};color:#fff;padding:80px 5vw}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:800px;margin:0 auto;text-align:center}
+@media(max-width:600px){.stats-grid{grid-template-columns:1fr;gap:20px}}
+.stat-n{font-size:clamp(40px,6vw,64px);font-weight:800;color:${d.accent};line-height:1}
+.stat-l{font-size:15px;opacity:.7;margin-top:8px;letter-spacing:.5px}
+
+/* Reviews */
+.reviews-section{background:${d.accentLight}}
+.reviews-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:700px){.reviews-grid{grid-template-columns:1fr}}
+.review{background:#fff;border-radius:12px;padding:32px;box-shadow:0 2px 20px rgba(0,0,0,.06)}
+.review::before{content:'"';font-size:60px;color:${d.accent};line-height:0;vertical-align:-20px;margin-right:4px;font-family:Georgia,serif}
+.review-q{font-size:16px;line-height:1.65;color:#333;font-style:italic;margin-bottom:16px}
+.review-a{font-size:14px;font-weight:700;color:${d.accent}}
+
+/* CTA section */
+.cta-section{background:${d.bg};color:#fff;text-align:center;padding:100px 5vw}
+.cta-section h2{font-size:clamp(28px,4vw,50px);font-weight:800;margin-bottom:16px}
+.cta-section p{font-size:18px;opacity:.7;margin-bottom:40px}
+
+/* Contact */
+.contact-section{background:#f8f9fa}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+@media(max-width:700px){.contact-grid{grid-template-columns:1fr}}
+.contact-info h2{font-size:32px;font-weight:800;margin-bottom:20px}
+.contact-info p{color:#555;line-height:1.65;margin-bottom:28px;font-size:16px}
+.contact-detail{display:flex;align-items:center;gap:12px;margin-bottom:14px;font-size:15px;color:#333}
+.contact-detail strong{color:${d.accent};font-size:18px;width:24px}
+.contact-form input,.contact-form textarea{width:100%;background:#fff;border:1.5px solid #ddd;border-radius:6px;padding:13px 16px;font-size:15px;font-family:var(--font);outline:none;transition:.15s;margin-bottom:12px}
+.contact-form input:focus,.contact-form textarea:focus{border-color:${d.accent}}
+.contact-form textarea{height:120px;resize:vertical}
+.contact-form button{width:100%;background:${d.accent};color:#fff;border:none;padding:15px;border-radius:6px;font-size:16px;font-weight:700;cursor:pointer;font-family:var(--font);letter-spacing:.5px;transition:.15s}
+.contact-form button:hover{opacity:.9}
+
+/* Footer */
+footer{background:${d.primary};color:rgba(255,255,255,.5);text-align:center;padding:32px 5vw;font-size:13px}
+footer strong{color:#fff}
+
+/* Scroll reveal */
+[data-aos]{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease}
+[data-aos].visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<div class="preview-banner">
+  🎨 Website Preview for <strong>${p.name}</strong>
+  <span>— This is a mockup. Your real site will be fully customised.</span>
+</div>
+
+<nav>
+  <div class="nav-logo">${p.name.split(' ').slice(0,2).join(' ')}<span>.</span></div>
+  <ul>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">${d.cta}</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-shapes"><span></span><span></span><span></span></div>
+  <div class="hero-content">
+    <div class="hero-badge">${p.category || 'Professional Services'} · ${city}</div>
+    <h1>${p.name.split(' ').slice(0,4).join(' ')}<br><span>${d.tagline}</span></h1>
+    <p class="hero-sub">${p.category ? `Trusted ${p.category.toLowerCase()} serving ${city} and surrounding areas.` : `Serving ${city} with professional excellence.`}${p.rating ? ` Rated ${p.rating}★ by our clients.` : ''}</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-main">${d.cta}</a>
+      <a href="#services" class="btn-outline">Our Services</a>
+    </div>
+    <div class="hero-meta">
+      ${phone ? `<span>📞 ${phone}</span>` : ''}
+      <span>📍 ${city}</span>
+      ${p.rating ? `<span>⭐ ${p.rating} Stars (${p.total_ratings} reviews)</span>` : ''}
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="section-head">
+    <div class="section-tag">What We Offer</div>
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-sub">Everything you need, delivered with the professionalism and care you deserve.</p>
+  </div>
+  <div class="grid3">${servicesHtml}</div>
+</section>
+
+<div class="stats-section">
+  <div class="stats-grid">${statsHtml}</div>
+</div>
+
+<section id="about" class="reviews-section">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="section-head">
+      <div class="section-tag">Client Reviews</div>
+      <h2 class="section-title">What Our Clients Say</h2>
+    </div>
+    <div class="reviews-grid">${reviewsHtml}</div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2>Ready to Get Started?</h2>
+  <p>Reach out today — we'd love to hear from you.</p>
+  <a href="#contact" class="btn-main" style="display:inline-block;padding:18px 40px;font-size:17px;font-weight:700;border-radius:4px;text-decoration:none;color:#fff;background:${d.accent};font-family:var(--font)">${d.cta}</a>
+</section>
+
+<section id="contact" class="contact-section">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="section-tag">Get In Touch</div>
+        <h2 class="section-title" style="font-size:clamp(24px,3vw,38px)">Let's Talk</h2>
+        <p>We're here to help. Reach out and we'll get back to you as soon as possible.</p>
+        ${phone ? `<div class="contact-detail"><strong>📞</strong>${phone}</div>` : ''}
+        <div class="contact-detail"><strong>📍</strong>${p.address || city}</div>
+        ${website ? `<div class="contact-detail"><strong>🌐</strong>${website}</div>` : ''}
+      </div>
+      <div class="contact-form">
+        <input type="text" placeholder="Your Name">
+        <input type="email" placeholder="Your Email">
+        <input type="tel" placeholder="Your Phone Number">
+        <textarea placeholder="How can we help you?"></textarea>
+        <button type="button">${d.cta}</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <strong>${p.name}</strong> · ${city}${phone ? ' · ' + phone : ''}<br>
+  <span style="font-size:11px;opacity:.5;margin-top:6px;display:block">Preview mockup — website design by [Your Agency]</span>
+</footer>
+
+<script>
+function hexToRgb(h){h=h.replace('#','');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return r+','+g+','+b}
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.15});
+document.querySelectorAll('[data-aos]').forEach(el=>obs.observe(el));
+<\/script>
+</body>
+</html>`.replace('hexToRgb', '/* */');
+}
+
+function hexToRgb(h) {
+  h = h.replace('#','');
+  return parseInt(h.slice(0,2),16)+','+parseInt(h.slice(2,4),16)+','+parseInt(h.slice(4,6),16);
+}
+
+// ── Build mockup flow ─────────────────────────────────────────────────────
+let revProspect = null;
+let revMockupUrl = null;
+
+async function buildMockup(prospectId) {
+  if (!GH.configured) { Settings.open(); toast('Set up GitHub first', 'err'); return; }
+  const p = Store.getAll().find(x => x.id === prospectId);
+  if (!p) return;
+
+  revProspect = p;
+  revMockupUrl = null;
+  document.getElementById('revName').textContent = p.name;
+  document.getElementById('revBody').innerHTML = `<div class="building-state"><div class="spin"></div><div class="building-bar"></div><span>BUILDING MOCKUP...</span></div>`;
+  document.getElementById('revFoot').style.display = 'none';
+  document.getElementById('revModal').classList.add('show');
+
+  try {
+    const html = generateMockupHTML(p);
+    const slug = slugify(p.name);
+    const path = `mockups/${slug}.html`;
+    const url = await GH.pushFile(path, html);
+    revMockupUrl = url;
+
+    // Build email with link
+    const emailWithLink = buildEmail(p).replace(
+      /\n\nBest,/,
+      `\n\nI've put together a preview of what your new website could look like:\n👉 ${url}\n\nTake a look and let me know what you think. Happy to adjust anything.\n\nBest,`
+    );
+
+    document.getElementById('revBody').innerHTML = `
+      <div class="rev-grid">
+        <div class="rev-preview">
+          <div class="rev-preview-top">
+            <div style="text-align:center">
+              <div class="mockup-ready-icon">🌐</div>
+              <div style="font-family:var(--head);font-size:11px;letter-spacing:2px;color:var(--accent);margin-bottom:8px">LIVE PREVIEW</div>
+              <div style="font-size:13px;color:var(--mid);margin-bottom:16px">Your mockup is live on GitHub Pages.<br>It may take 1-2 min to appear if Pages was just enabled.</div>
+            </div>
+          </div>
+          <div class="rev-url-bar">
+            <a href="${url}" target="_blank" id="revUrl">${url}</a>
+            <button class="btn btn-p btn-s" onclick="window.open('${url}','_blank')">Open ↗</button>
+          </div>
+        </div>
+        <div class="rev-email-wrap">
+          <label>Draft Email (includes mockup link)</label>
+          <textarea class="rev-etarea" id="revEmail">${emailWithLink}</textarea>
+        </div>
+      </div>`;
+    document.getElementById('revFoot').style.display = 'flex';
+
+    Store.patch(prospectId, { mockup_url: url });
+    toast(`Mockup live: ${p.name}`, 'ok');
+  } catch(err) {
+    document.getElementById('revBody').innerHTML = `<div class="building-state"><div style="color:var(--red);font-size:32px">✕</div><div style="color:var(--red)">${err.message}</div><div style="margin-top:12px;font-size:12px;color:var(--dim)">Check your GitHub token and repo name in Settings.</div></div>`;
+    toast(err.message, 'err');
+  }
+}
+
+const RevModal = {
+  close() { document.getElementById('revModal').classList.remove('show'); },
+  openPreview() { if (revMockupUrl) window.open(revMockupUrl, '_blank'); },
+  async copyEmail() {
+    const ta = document.getElementById('revEmail');
+    if (!ta) return;
+    await navigator.clipboard.writeText(ta.value).catch(()=>{});
+    const fb = document.getElementById('revCpfb');
+    fb.classList.add('show'); setTimeout(()=>fb.classList.remove('show'), 2000);
+  },
+  send() {
+    const ta = document.getElementById('revEmail');
+    const email = ta ? ta.value : '';
+    const subject = encodeURIComponent(`Website proposal for ${revProspect?.name||'your business'}`);
+    const body = encodeURIComponent(email);
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  },
+};
+
+// ── Settings ──────────────────────────────────────────────────────────────
+const Settings = {
+  open() {
+    document.getElementById('sToken').value = GH.token;
+    document.getElementById('sOwner').value = GH.owner;
+    document.getElementById('sRepo').value = GH.repo;
+    document.getElementById('settingsModal').classList.add('show');
+  },
+  close() { document.getElementById('settingsModal').classList.remove('show'); },
+  save() {
+    const t = document.getElementById('sToken').value.trim();
+    const o = document.getElementById('sOwner').value.trim();
+    const r = document.getElementById('sRepo').value.trim();
+    if (!t || !o || !r) { toast('Fill in all fields', 'err'); return; }
+    localStorage.setItem('gh_token', t);
+    localStorage.setItem('gh_owner', o);
+    localStorage.setItem('gh_repo', r);
+    updateGhDot();
+    toast('GitHub connected ✓', 'ok');
+    this.close();
+  },
+};
+
+function updateGhDot() {
+  const dot = document.getElementById('ghDot');
+  dot.style.background = GH.configured ? 'var(--green)' : 'var(--red)';
+  dot.title = GH.configured ? `Connected: ${GH.owner}/${GH.repo}` : 'GitHub not configured';
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+initChips();
+updateFooter();
+updateGhDot();
+document.getElementById('searchBtn').disabled = true; // enabled by mapsInit
+</script>
+
+<!-- Load Google Maps JS API with Places library -->
+<script async
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYfznnHvdN0CYnk5b9wMwYOJILVJtZPAE&libraries=places&callback=mapsInit">
+</script>
+</body>
+</html>
