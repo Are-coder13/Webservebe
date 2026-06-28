@@ -306,6 +306,14 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:13px; h
         <strong style="color:var(--warn)">One-time GitHub Pages setup:</strong><br>
         In your Webservebe repo → Settings → Pages → Source: <strong style="color:var(--text)">Deploy from branch → main → / (root)</strong>. Save. Takes ~2 min to activate.
       </div>
+      <div style="font-family:var(--head);font-size:9px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-bottom:10px">Design Agent — Worker URL <span style="color:var(--green)">(optional)</span></div>
+      <div class="sfield">
+        <label>Cloudflare Worker URL <span id="agentDot" style="width:6px;height:6px;border-radius:50%;display:inline-block;background:var(--dim);margin-left:4px" title="Not configured"></span></label>
+        <input type="text" id="sAgentUrl" placeholder="https://prospector-designer.<you>.workers.dev">
+        <div class="hint" style="font-size:11px;color:var(--dim);margin-top:4px">
+          When set, mockups are designed by an AI creative-director agent (scrapes the prospect's site, designs, then self-reviews) instead of the built-in templates. Deploy steps: <strong style="color:var(--text)">worker/README.md</strong>. Leave blank to use the template engine.
+        </div>
+      </div>
       <div style="font-family:var(--head);font-size:9px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-bottom:10px">Brandfetch — Brand Matching <span style="color:var(--green)">(optional)</span></div>
       <div class="sfield">
         <label>Brandfetch Client ID <span id="bfDot" style="width:6px;height:6px;border-radius:50%;display:inline-block;background:var(--dim);margin-left:4px" title="Not configured"></span></label>
@@ -1036,7 +1044,9 @@ function slugify(s) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 }
 
-function generateMockupHTML(p, branding) {
+function generateMockupHTML(p, branding, scan, spec) {
+  scan = scan || null;
+  spec = spec || null;
   const d = getDesign(p.category);
   const city = extractCity(p.address);
   const phone = p.phone || '';
@@ -1052,61 +1062,160 @@ function generateMockupHTML(p, branding) {
   const reviewRng  = mulberry32(seed ^ 0x8765);
 
   // Layout
-  const layout = pick(layoutRng, LAYOUTS);
+  let layout = pick(layoutRng, LAYOUTS);
+  if (spec && spec.layout) layout = LAYOUTS.find(l => l.id === spec.layout) || layout;
 
   // Font pair (bias by archetype)
   let fontPool = layout.fontBias
     ? FONT_PAIRS.filter(f => layout.fontBias.includes(f.head))
     : FONT_PAIRS;
   if (!fontPool.length) fontPool = FONT_PAIRS;
-  const fp = pick(fontRng, fontPool);
+  let fp = pick(fontRng, fontPool);
+  if (spec && spec.fontPair) {
+    const wantHead = spec.fontPair.split(' + ')[0].trim().replace(/\s+/g, '+');
+    fp = FONT_PAIRS.find(f => f.head === wantHead) || fp;
+  }
   const headFont = fp.head.replace(/\+/g,' ');
   const bodyFont = fp.body.replace(/\+/g,' ');
 
-  // Vanta effect (skipped for minimal)
-  let vantaCfgStr = '', effectFile = '';
-  if (layout.id !== 'minimal') {
-    const effectPool = d.vantaPool || [{effect:'WAVES',color:0x12407a,shininess:35,waveHeight:16,waveSpeed:0.9,zoom:0.92}];
-    const chosen = pick(effectRng, effectPool);
-    effectFile = (chosen.effect || 'WAVES').toLowerCase();
-    vantaCfgStr = JSON.stringify(chosen);
-  }
-
-  // Copy
-  const tagline    = pick(copyRng, d.taglines || ['Professional Service']);
-  const cta        = pick(mulberry32(seed ^ 0x1111), d.ctaPool || ['Get In Touch']);
-  const sectionTag = pick(mulberry32(seed ^ 0x2222), d.sectionTags || ['What We Offer']);
-  const reviews    = (d.reviews2 && reviewRng() > 0.5) ? d.reviews2 : d.reviews;
-
-  // Colour: base palette + bounded hue shift
+  // ── Colours (computed first so vanta can inherit them) ──
   const shiftDeg = Math.round(colorRng() * 30) - 15;
   let primary = hueShift(d.primary, shiftDeg);
   let accent  = hueShift(d.accent,  shiftDeg);
+  let bg = d.bg;
+  let accentLight = d.accentLight;
 
-  // Brand colour override when Brandfetch returned palette
+  // Website theme-color from scan → use as accent, darken for primary
+  if (scan && scan.themeColor) {
+    accent  = scan.themeColor;
+    primary = darken(scan.themeColor, 0.55);
+    if (brightness(primary) > 80) primary = darken(scan.themeColor, 0.75);
+  }
+  // Brandfetch palette (more trusted than scan)
   if (branding && branding.colors && branding.colors.length >= 2) {
     const sorted = [...branding.colors].sort((a,b) => brightness(a) - brightness(b));
     primary = sorted[0];
     accent  = sorted[sorted.length - 1];
   }
+  // Agent palette is the most authoritative — it has already reasoned over brand + content
+  if (spec && spec.palette) {
+    if (spec.palette.primary) primary = spec.palette.primary;
+    if (spec.palette.accent) accent = spec.palette.accent;
+    if (spec.palette.accentLight) accentLight = spec.palette.accentLight;
+    if (spec.palette.bg) bg = spec.palette.bg;
+  }
+  // Sanity-check: accent must not be near-white/near-black
+  if (brightness(accent) > 220) accent = hueShift(d.accent, shiftDeg);
+  if (brightness(accent) < 20)  accent = hueShift(d.accent, shiftDeg);
 
   const pr = hexToRgb(primary);
   const ar = hexToRgb(accent);
   const accSoft = lighten(accent, 0.4);
   const [mr,mg,mb] = accent.replace('#','').match(/.{2}/g).map(x=>parseInt(x,16));
 
+  // ── Vanta effect (uses brand colours when available) ──
+  let vantaCfgStr = '', effectFile = '';
+  const agentEffect = spec && spec.vantaEffect;
+  const useVanta = layout.id !== 'minimal' && agentEffect !== 'none';
+  if (useVanta) {
+    let chosen;
+    if (agentEffect) {
+      const bases = {
+        NET:   {effect:'NET',points:10,maxDistance:22,spacing:17},
+        WAVES: {effect:'WAVES',shininess:35,waveHeight:16,waveSpeed:0.9,zoom:0.92},
+        FOG:   {effect:'FOG',blurFactor:0.66,speed:1.1,zoom:0.9},
+        GLOBE: {effect:'GLOBE',size:1.1},
+      };
+      chosen = Object.assign({}, bases[agentEffect] || bases.WAVES);
+    } else {
+      const effectPool = d.vantaPool || [{effect:'WAVES',color:0x12407a,shininess:35,waveHeight:16,waveSpeed:0.9,zoom:0.92}];
+      chosen = Object.assign({}, pick(effectRng, effectPool));
+    }
+    effectFile = (chosen.effect || 'WAVES').toLowerCase();
+    // Paint vanta with brand/agent colours when we have a real palette
+    if (spec || (scan && scan.themeColor) || (branding && branding.colors && branding.colors.length)) {
+      chosen.color = parseInt(accent.replace('#',''), 16);
+      chosen.backgroundColor = parseInt(primary.replace('#',''), 16);
+      if (chosen.effect === 'FOG') {
+        chosen.highlightColor = parseInt(accent.replace('#',''), 16);
+        chosen.midtoneColor = parseInt(lighten(primary, 0.2).replace('#',''), 16);
+        chosen.lowlightColor = parseInt(primary.replace('#',''), 16);
+        chosen.baseColor = parseInt(primary.replace('#',''), 16);
+      }
+      if (chosen.effect === 'GLOBE') chosen.color2 = parseInt(lighten(accent, 0.55).replace('#',''), 16);
+    }
+    vantaCfgStr = JSON.stringify(chosen);
+  }
+
+  // ── Copy (agent spec > real scrape > seed defaults) ──
+  let cta        = pick(mulberry32(seed ^ 0x1111), d.ctaPool || ['Get In Touch']);
+  let sectionTag = pick(mulberry32(seed ^ 0x2222), d.sectionTags || ['What We Offer']);
+  let reviews    = (d.reviews2 && reviewRng() > 0.5) ? d.reviews2 : d.reviews;
+
+  // Tagline: prefer scanned h1 if it looks like a real headline
+  const scannedH1 = scan && scan.headline && scan.headline.length > 10 && scan.headline.length < 90
+    && !/^(home|welcome|about|contact|services|menu|gallery|nieuws|blog)/i.test(scan.headline)
+    ? scan.headline : null;
+  let tagline = scannedH1 || pick(copyRng, d.taglines || ['Professional Service']);
+
+  // Hero subtitle: prefer scanned meta description or first paragraph
+  let heroSub = (scan && scan.description && scan.description.length > 20)
+    ? scan.description.slice(0, 220)
+    : (p.category
+      ? 'Trusted '+p.category.toLowerCase()+' serving '+city+' and surrounding areas.'+(p.rating?' Rated '+p.rating+'★ by our clients.':'')
+      : 'Serving '+city+' with professional excellence.'+(p.rating?' Rated '+p.rating+'★ by our clients.':''));
+
+  let badge = (p.category ? p.category : 'Professional Services') + ' \xb7 ' + city;
+
+  // Services: real scrape when ≥2 found, else design defaults
+  const ICONS = ['◈','✦','◉','◆','◇','✧'];
+  const scannedSvcs = scan && scan.services && scan.services.filter(s => s.name && s.name.length > 2);
+  let services;
+  if (scannedSvcs && scannedSvcs.length >= 2) {
+    services = scannedSvcs.slice(0, 4).map((s, i) => ({
+      icon: ICONS[i % ICONS.length],
+      name: s.name,
+      desc: (s.desc && s.desc.length > 15) ? s.desc : (d.services[i] ? d.services[i].desc : 'Tailored to your exact needs and delivered with expertise.')
+    }));
+    for (let i = services.length; i < 3 && d.services[i]; i++) services.push(d.services[i]);
+  } else {
+    services = d.services;
+  }
+
+  let stats = d.stats;
+  let about = null;
+
+  // ── Agent spec overrides everything copy-related ──
+  if (spec) {
+    if (spec.hero) {
+      if (spec.hero.headline) tagline = spec.hero.headline;
+      if (spec.hero.subhead) heroSub = spec.hero.subhead;
+      if (spec.hero.badge) badge = spec.hero.badge;
+      if (spec.hero.ctaPrimary) cta = spec.hero.ctaPrimary;
+    }
+    if (spec.sectionTag) sectionTag = spec.sectionTag;
+    if (Array.isArray(spec.services) && spec.services.length >= 2) {
+      services = spec.services.slice(0, 4).map((s, i) => ({
+        icon: s.icon || ICONS[i % ICONS.length], name: s.name, desc: s.desc || ''
+      }));
+    }
+    if (Array.isArray(spec.stats) && spec.stats.length) stats = spec.stats.slice(0, 3);
+    if (Array.isArray(spec.reviews) && spec.reviews.length) reviews = spec.reviews.slice(0, 2);
+    if (spec.about && spec.about.body) about = spec.about;
+  }
+
   // Nav logo
   const navLogoHtml = (branding && branding.logoUrl)
     ? '<img src="'+branding.logoUrl+'" style="max-height:36px;max-width:120px;object-fit:contain;filter:brightness(0) invert(1)" alt="'+p.name+'">'
     : '<div class="nav-logo">'+p.name.split(' ').slice(0,2).join(' ')+'<span>.</span></div>';
 
-  const ctx = {p, d, tagline, cta, city, phone, accent, accSoft, primary, branding};
+  const ctx = {p, d, tagline, heroSub, badge, cta, city, phone, accent, accSoft, primary, branding};
 
-  const servicesHtml = d.services.map(s =>
+  const servicesHtml = services.map(s =>
     '<div class="card tilt" data-tilt><div class="card-icon">'+s.icon+'</div><h3>'+s.name+'</h3><p>'+s.desc+'</p></div>'
   ).join('');
 
-  const statsHtml = d.stats.map(s =>
+  const statsHtml = stats.map(s =>
     '<div class="stat"><div class="stat-n">'+s.n+'</div><div class="stat-l">'+s.l+'</div></div>'
   ).join('');
 
@@ -1116,11 +1225,11 @@ function generateMockupHTML(p, branding) {
 
   const heroSection = layout.heroHtml(ctx);
 
-  const vantaScripts = layout.id === 'minimal' ? '' :
+  const vantaScripts = !vantaCfgStr ? '' :
     '<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"><\\/script>\n'+
     '<script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.'+effectFile+'.min.js"><\\/script>';
 
-  const vantaInit = layout.id === 'minimal' ? '' :
+  const vantaInit = !vantaCfgStr ? '' :
     'if(!reduce&&hasWebGL()&&window.VANTA){try{var CFG='+vantaCfgStr+';var fx=CFG.effect;delete CFG.effect;if(VANTA[fx]){VANTA[fx](Object.assign({el:"#vanta-hero",mouseControls:true,touchControls:true,gyroControls:false,minHeight:200,minWidth:200,scale:1,scaleMobile:1},CFG));}}catch(e){}}';
 
   return '<!DOCTYPE html>\n<html lang="en">\n<head>\n'+
@@ -1130,7 +1239,7 @@ function generateMockupHTML(p, branding) {
 '<link href="https://fonts.googleapis.com/css2?family='+fp.url+'&display=swap" rel="stylesheet">\n'+
 '<style>\n'+
 '*{box-sizing:border-box;margin:0;padding:0}\n'+
-':root{--primary:'+primary+';--accent:'+accent+';--accent-soft:'+accSoft+';--light:'+d.accentLight+';--font:\''+bodyFont+'\',sans-serif;--font-head:\''+headFont+'\','+(fp.serif?'serif':'sans-serif')+';--ar:'+ar+';--pr:'+pr+';--mr:'+mr+';--mg:'+mg+';--mb:'+mb+'}\n'+
+':root{--primary:'+primary+';--accent:'+accent+';--accent-soft:'+accSoft+';--light:'+accentLight+';--font:\''+bodyFont+'\',sans-serif;--font-head:\''+headFont+'\','+(fp.serif?'serif':'sans-serif')+';--ar:'+ar+';--pr:'+pr+';--mr:'+mr+';--mg:'+mg+';--mb:'+mb+'}\n'+
 'html{scroll-behavior:smooth}\n'+
 'body{font-family:var(--font);background:#fff;color:#141414;overflow-x:hidden;-webkit-font-smoothing:antialiased}\n'+
 '#progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:10001;background:linear-gradient(90deg,'+accent+','+accSoft+');box-shadow:0 0 12px rgba('+ar+',.7)}\n'+
@@ -1147,7 +1256,7 @@ function generateMockupHTML(p, branding) {
 'nav ul li a{color:rgba(255,255,255,.75);text-decoration:none;font-size:14px;font-weight:500;transition:.15s}\n'+
 'nav ul li a:hover{color:#fff}\n'+
 '@media(max-width:600px){nav ul{display:none}}\n'+
-'.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#fff;padding:120px 5vw 100px;background:'+d.bg+'}\n'+
+'.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#fff;padding:120px 5vw 100px;background:'+bg+'}\n'+
 '#vanta-hero{position:absolute;inset:0;z-index:0}\n'+
 '.hero-veil{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 58%,transparent 0%,rgba(0,0,0,.32) 68%,rgba(0,0,0,.6) 100%)}\n'+
 '.hero-content{position:relative;z-index:2;max-width:860px;text-align:center}\n'+
@@ -1176,20 +1285,20 @@ function generateMockupHTML(p, branding) {
 '.card-icon{font-size:30px;color:'+accent+';margin-bottom:18px;display:inline-block}\n'+
 '.card h3{font-family:var(--font-head);font-size:20px;font-weight:700;margin-bottom:10px}\n'+
 '.card p{color:#666;line-height:1.65;font-size:15px}\n'+
-'.stats-section{position:relative;background:'+d.bg+';color:#fff;padding:90px 5vw;overflow:hidden}\n'+
+'.stats-section{position:relative;background:'+bg+';color:#fff;padding:90px 5vw;overflow:hidden}\n'+
 '.stats-section::before{content:\'\';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba('+ar+',.25),transparent 50%),radial-gradient(circle at 80% 70%,rgba('+ar+',.18),transparent 50%)}\n'+
 '.stats-grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:880px;margin:0 auto;text-align:center}\n'+
 '@media(max-width:600px){.stats-grid{grid-template-columns:1fr;gap:26px}}\n'+
 '.stat-n{font-family:var(--font-head);font-size:clamp(42px,6vw,68px);font-weight:800;line-height:1;background:linear-gradient(120deg,#fff,'+accSoft+');-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}\n'+
 '.stat-l{font-size:15px;opacity:.75;margin-top:10px;letter-spacing:.5px}\n'+
-'.reviews-section{background:'+d.accentLight+'}\n'+
+'.reviews-section{background:'+accentLight+'}\n'+
 '.reviews-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}\n'+
 '@media(max-width:700px){.reviews-grid{grid-template-columns:1fr}}\n'+
 '.review{position:relative;background:#fff;border-radius:16px;padding:34px;box-shadow:0 8px 30px rgba(0,0,0,.07);border:1px solid rgba('+ar+',.10);transform-style:preserve-3d;transition:transform .15s ease-out,box-shadow .3s}\n'+
 '.review::before{content:"\\201C";position:absolute;top:12px;left:20px;font-size:70px;color:rgba('+ar+',.18);font-family:Georgia,serif;line-height:1}\n'+
 '.review-q{position:relative;font-size:16px;line-height:1.65;color:#333;font-style:italic;margin-bottom:16px}\n'+
 '.review-a{font-size:14px;font-weight:700;color:'+accent+'}\n'+
-'.cta-section{position:relative;background:'+d.bg+';color:#fff;text-align:center;padding:110px 5vw;overflow:hidden}\n'+
+'.cta-section{position:relative;background:'+bg+';color:#fff;text-align:center;padding:110px 5vw;overflow:hidden}\n'+
 '.cta-section::before{content:\'\';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba('+ar+',.3),transparent 60%)}\n'+
 '.cta-section h2{position:relative;font-family:var(--font-head);font-size:clamp(30px,4vw,52px);font-weight:800;margin-bottom:16px}\n'+
 '.cta-section p{position:relative;font-size:18px;opacity:.75;margin-bottom:40px}\n'+
@@ -1241,7 +1350,7 @@ heroSection+'\n'+
 '</section>\n'+
 '<section id="contact" class="contact-section"><div style="max-width:1100px;margin:0 auto"><div class="contact-grid">\n'+
 '<div class="contact-info" data-reveal><div class="section-tag">Get In Touch</div><h2 class="section-title" style="font-size:clamp(24px,3vw,38px)"><span class="grad">Let’s Talk</span></h2>\n'+
-'<p>We’re here to help. Reach out and we’ll get back to you as soon as possible.</p>\n'+
+'<p>'+(about && about.body ? about.body : 'We’re here to help. Reach out and we’ll get back to you as soon as possible.')+'</p>\n'+
 (phone?'<div class="contact-detail"><strong>📞</strong>'+phone+'</div>':'')+
 '<div class="contact-detail"><strong>📍</strong>'+(p.address||city)+'</div>\n'+
 (website?'<div class="contact-detail"><strong>🌐</strong>'+website+'</div>':'')+
@@ -1347,14 +1456,14 @@ const LAYOUTS = [
     id: 'centered',
     fontBias: null,
     heroHtml(ctx) {
-      const {p, tagline, cta, city, phone} = ctx;
+      const {p, tagline, heroSub, badge, cta, city, phone} = ctx;
       return `<section class="hero">
   <div id="vanta-hero"></div>
   <div class="hero-veil"></div>
   <div class="hero-content">
-    <div class="hero-badge" data-reveal>${p.category||'Professional Services'} \xb7 ${city}</div>
+    <div class="hero-badge" data-reveal>${badge}</div>
     <h1 data-reveal>${p.name.split(' ').slice(0,4).join(' ')}<br><span class="grad">${tagline}</span></h1>
-    <p class="hero-sub" data-reveal>${p.category?'Trusted '+p.category.toLowerCase()+' serving '+city+' and surrounding areas.':'Serving '+city+' with professional excellence.'}${p.rating?' Rated '+p.rating+'★ by our clients.':''}</p>
+    <p class="hero-sub" data-reveal>${heroSub}</p>
     <div class="hero-btns" data-reveal>
       <a href="#contact" class="btn-main">${cta}</a>
       <a href="#services" class="btn-outline">Our Services</a>
@@ -1373,7 +1482,7 @@ const LAYOUTS = [
     id: 'split',
     fontBias: null,
     heroHtml(ctx) {
-      const {p, tagline, cta, city, phone, branding} = ctx;
+      const {p, tagline, heroSub, badge, cta, city, phone, branding} = ctx;
       const logoInner = branding&&branding.logoUrl
         ? '<img src="'+branding.logoUrl+'" class="split-card-logo" alt="'+p.name+'">'
         : '<div class="split-card-wordmark">'+p.name.split(' ').slice(0,2).join('<br>')+'</div>';
@@ -1382,9 +1491,9 @@ const LAYOUTS = [
   <div class="hero-veil"></div>
   <div class="split-inner">
     <div class="split-text">
-      <div class="hero-badge" data-reveal>${p.category||'Professional Services'} \xb7 ${city}</div>
+      <div class="hero-badge" data-reveal>${badge}</div>
       <h1 data-reveal><span class="grad">${tagline}</span></h1>
-      <p class="hero-sub" data-reveal>${p.category?'Your trusted '+p.category.toLowerCase()+' in '+city+'.':'Professional services in '+city+'.'}${p.rating?' '+p.rating+'★ rated.':''}</p>
+      <p class="hero-sub" data-reveal>${heroSub}</p>
       <div class="hero-btns" style="justify-content:flex-start" data-reveal>
         <a href="#contact" class="btn-main">${cta}</a>
         <a href="#services" class="btn-outline">Learn More</a>
@@ -1412,17 +1521,17 @@ const LAYOUTS = [
     id: 'editorial',
     fontBias: ['Playfair+Display','Cormorant+Garamond','DM+Serif+Display'],
     heroHtml(ctx) {
-      const {p, tagline, cta, city, phone} = ctx;
+      const {p, tagline, heroSub, badge, cta, city, phone} = ctx;
       return `<section class="hero lhero-editorial">
   <div id="vanta-hero"></div>
   <div class="hero-veil" style="background:radial-gradient(ellipse at 30% 50%,transparent 0%,rgba(0,0,0,0.42) 70%,rgba(0,0,0,0.72) 100%)"></div>
   <div class="editorial-content">
-    <div class="editorial-tag" data-reveal>${p.category||'Professional Services'} — ${city}</div>
+    <div class="editorial-tag" data-reveal>${badge}</div>
     <h1 class="editorial-h1" data-reveal>
       <span class="editorial-l1">${p.name.split(' ').slice(0,3).join(' ')}</span>
       <span class="editorial-l2 grad">${tagline}</span>
     </h1>
-    <p class="editorial-sub" data-reveal>${p.category?'The '+city+' '+p.category.toLowerCase()+' you can trust.':'Serving '+city+' with distinction.'}${p.rating?' '+p.rating+'★ on Google.':''}</p>
+    <p class="editorial-sub" data-reveal>${heroSub}</p>
     <div class="editorial-meta" data-reveal>
       ${phone?'<span>📞 '+phone+'</span>':''}
       <span>📍 ${city}</span>
@@ -1441,7 +1550,7 @@ const LAYOUTS = [
     id: 'minimal',
     fontBias: ['Space+Grotesk','Sora','Poppins'],
     heroHtml(ctx) {
-      const {p, tagline, cta, city, phone, branding} = ctx;
+      const {p, tagline, heroSub, badge, cta, city, phone, branding} = ctx;
       const logoHtml = branding&&branding.logoUrl
         ? '<img src="'+branding.logoUrl+'" style="max-height:56px;max-width:180px;object-fit:contain;margin:0 auto 28px;display:block" alt="'+p.name+'">'
         : '';
@@ -1449,9 +1558,9 @@ const LAYOUTS = [
   <div class="minimal-mesh"></div>
   <div class="hero-content" style="position:relative;z-index:2">
     ${logoHtml}
-    <div class="hero-badge minimal-badge" data-reveal>${p.category||'Professional Services'} \xb7 ${city}</div>
+    <div class="hero-badge minimal-badge" data-reveal>${badge}</div>
     <h1 data-reveal style="color:#0a0a18">${p.name.split(' ').slice(0,4).join(' ')}<br><span class="grad minimal-grad">${tagline}</span></h1>
-    <p class="hero-sub" style="color:rgba(10,10,24,0.65);text-shadow:none" data-reveal>${p.category?city+"'s trusted "+p.category.toLowerCase()+'.':'Professional services in '+city+'.'}${p.rating?' Rated '+p.rating+'★.':''}</p>
+    <p class="hero-sub" style="color:rgba(10,10,24,0.65);text-shadow:none" data-reveal>${heroSub}</p>
     <div class="hero-btns" data-reveal>
       <a href="#contact" class="btn-main">${cta}</a>
       <a href="#services" class="btn-outline minimal-outline">Our Services</a>
@@ -1473,6 +1582,26 @@ const BF = {
   get clientId() { return localStorage.getItem('bf_clientid') || ''; },
   get configured() { return !!this.clientId; },
 };
+
+const Agent = {
+  get url() {
+    let u = (localStorage.getItem('agent_url') || '').trim().replace(/\/$/, '');
+    if (u && !/^https?:\/\//i.test(u)) u = 'https://' + u;
+    return u;
+  },
+  get configured() { return !!this.url; },
+};
+
+async function designWithAgent(p, branding) {
+  const res = await fetch(Agent.url, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ place: p, branding }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.spec) throw new Error(data.error || ('Agent error ' + res.status));
+  return data.spec;
+}
 
 async function getBranding(website) {
   if (!website || !BF.configured) return null;
@@ -1510,6 +1639,71 @@ async function getBranding(website) {
   } catch { return null; }
 }
 
+// ── Website scanner ───────────────────────────────────────────────────────
+async function scanWebsite(website) {
+  if (!website) return null;
+  try {
+    const targetUrl = website.startsWith('http') ? website : 'https://' + website;
+    let html = null;
+    try {
+      const r = await fetch('https://corsproxy.io/?' + encodeURIComponent(targetUrl), {signal: AbortSignal.timeout(9000)});
+      if (r.ok) html = await r.text();
+    } catch {}
+    if (!html) {
+      try {
+        const r = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(targetUrl), {signal: AbortSignal.timeout(9000)});
+        if (r.ok) { const j = await r.json(); html = j.contents; }
+      } catch {}
+    }
+    if (!html) return null;
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const clean = el => el.textContent.replace(/\s+/g,' ').trim();
+
+    // Colors
+    const themeColor = doc.querySelector('meta[name="theme-color"]')?.getAttribute('content') || null;
+
+    // Headings
+    const h1s = [...doc.querySelectorAll('h1')].map(clean).filter(t => t.length > 5 && t.length < 120);
+    const h2s = [...doc.querySelectorAll('h2')].map(clean).filter(t => t.length > 3 && t.length < 90);
+    const h3s = [...doc.querySelectorAll('h3')].map(clean).filter(t => t.length > 3 && t.length < 80);
+
+    // Description
+    const metaDesc = (doc.querySelector('meta[name="description"]')?.getAttribute('content') || '').trim();
+    const ogDesc   = (doc.querySelector('meta[property="og:description"]')?.getAttribute('content') || '').trim();
+    const paras    = [...doc.querySelectorAll('p')]
+      .map(clean)
+      .filter(t => t.length > 60 && t.length < 500 && !/cookie|privacy|copyright|©|\d{4} all rights/i.test(t));
+
+    // Services: h3s preferred over h2s; skip nav/footer noise
+    const skipRe = /contact|about|home|welcome|testimonial|review|faq|team|gallery|news|blog|price|tarif|prijs/i;
+    const svcPool = (h3s.length >= 2 ? h3s : h2s).filter(t => !skipRe.test(t)).slice(0, 5);
+    const allHeads = [...doc.querySelectorAll('h2,h3')];
+    const services = svcPool.map(name => {
+      const headEl = allHeads.find(el => clean(el) === name);
+      if (!headEl) return {name, desc: ''};
+      let node = headEl.nextElementSibling, tries = 0;
+      while (node && tries < 6) {
+        if (node.tagName === 'P' && clean(node).length > 20) return {name, desc: clean(node).slice(0, 200)};
+        const p = node.querySelector('p');
+        if (p && clean(p).length > 20) return {name, desc: clean(p).slice(0, 200)};
+        node = node.nextElementSibling; tries++;
+      }
+      return {name, desc: ''};
+    });
+
+    // Best headline: first h1 that isn't just the business/domain name
+    const domainBase = targetUrl.replace(/https?:\/\/(www\.)?/,'').split('.')[0].toLowerCase();
+    const headline = h1s.find(t => t.toLowerCase() !== domainBase && t.length > 8) || h1s[0] || null;
+
+    return {
+      themeColor: (themeColor && /^#[0-9a-fA-F]{3,8}$/.test(themeColor)) ? themeColor.slice(0,7) : null,
+      headline,
+      description: (metaDesc || ogDesc || paras[0] || '').slice(0, 220),
+      services,
+    };
+  } catch { return null; }
+}
+
 // ── Build mockup flow ─────────────────────────────────────────────────────
 let revProspect = null;
 let revMockupUrl = null;
@@ -1522,22 +1716,48 @@ async function buildMockup(prospectId) {
   revProspect = p;
   revMockupUrl = null;
   document.getElementById('revName').textContent = p.name;
-  document.getElementById('revBody').innerHTML = '<div class="building-state"><div class="spin"></div><div class="building-bar"></div><span id="buildStep">MATCHING BRAND...</span></div>';
+  document.getElementById('revBody').innerHTML = '<div class="building-state"><div class="spin"></div><div class="building-bar"></div><span id="buildStep">SCANNING WEBSITE...</span></div>';
   document.getElementById('revFoot').style.display = 'none';
   document.getElementById('revModal').classList.add('show');
 
+  const stepEl = document.getElementById('buildStep');
+
+  // Brandfetch logo + palette (optional) — used for the logo + as a colour hint
   let branding = null;
   if (p.website && BF.configured) {
+    if (stepEl) stepEl.textContent = 'MATCHING BRAND...';
     try {
       branding = await getBranding(p.website);
-      if (branding && (branding.logoUrl || branding.colors)) toast('Brand colours matched ✓', 'ok');
+      if (branding && branding.logoUrl) toast('Brand logo matched ✓', 'ok');
     } catch {}
   }
-  const stepEl = document.getElementById('buildStep');
+
+  // The design agent (if configured) scrapes + designs + self-reviews server-side.
+  // Otherwise fall back to client-side scrape + the deterministic template engine.
+  let scan = null;
+  let spec = null;
+  if (Agent.configured) {
+    if (stepEl) stepEl.textContent = 'AI AGENT DESIGNING & REVIEWING...';
+    try {
+      spec = await designWithAgent(p, branding);
+      toast('Design agent finished ✓', 'ok');
+    } catch (e) {
+      toast('Agent failed, using templates: ' + e.message, 'err');
+    }
+  }
+  if (!spec) {
+    if (stepEl) stepEl.textContent = 'SCANNING WEBSITE...';
+    if (p.website) {
+      try {
+        scan = await scanWebsite(p.website);
+        if (scan) toast('Website scanned ✓'+(scan.themeColor?' · brand colour found':''), 'ok');
+      } catch {}
+    }
+  }
   if (stepEl) stepEl.textContent = 'BUILDING MOCKUP...';
 
   try {
-    const html = generateMockupHTML(p, branding);
+    const html = generateMockupHTML(p, branding, scan, spec);
     const slug = slugify(p.name);
     const path = `mockups/${slug}.html`;
     const url = await GH.pushFile(path, html);
@@ -1605,7 +1825,9 @@ const Settings = {
     document.getElementById('sOwner').value = GH.owner;
     document.getElementById('sRepo').value = GH.repo;
     document.getElementById('sBfId').value = BF.clientId;
+    document.getElementById('sAgentUrl').value = Agent.url;
     updateBfDot();
+    updateAgentDot();
     document.getElementById('settingsModal').classList.add('show');
   },
   close() { document.getElementById('settingsModal').classList.remove('show'); },
@@ -1614,14 +1836,18 @@ const Settings = {
     const o = document.getElementById('sOwner').value.trim();
     const r = document.getElementById('sRepo').value.trim();
     const bf = document.getElementById('sBfId').value.trim();
+    const agent = document.getElementById('sAgentUrl').value.trim();
     if (!t || !o || !r) { toast('Fill in GitHub fields', 'err'); return; }
     localStorage.setItem('gh_token', t);
     localStorage.setItem('gh_owner', o);
     localStorage.setItem('gh_repo', r);
     if (bf) localStorage.setItem('bf_clientid', bf);
     else localStorage.removeItem('bf_clientid');
+    if (agent) localStorage.setItem('agent_url', agent);
+    else localStorage.removeItem('agent_url');
     updateGhDot();
     updateBfDot();
+    updateAgentDot();
     toast('Settings saved ✓', 'ok');
     this.close();
   },
@@ -1638,6 +1864,13 @@ function updateBfDot() {
   if (!dot) return;
   dot.style.background = BF.configured ? 'var(--green)' : 'var(--dim)';
   dot.title = BF.configured ? 'Brandfetch active' : 'Not configured';
+}
+
+function updateAgentDot() {
+  const dot = document.getElementById('agentDot');
+  if (!dot) return;
+  dot.style.background = Agent.configured ? 'var(--green)' : 'var(--dim)';
+  dot.title = Agent.configured ? 'Design agent active' : 'Not configured (using template engine)';
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────
