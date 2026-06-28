@@ -1036,7 +1036,8 @@ function slugify(s) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 }
 
-function generateMockupHTML(p, branding) {
+function generateMockupHTML(p, branding, scan) {
+  scan = scan || null;
   const d = getDesign(p.category);
   const city = extractCity(p.address);
   const phone = p.phone || '';
@@ -1063,46 +1064,89 @@ function generateMockupHTML(p, branding) {
   const headFont = fp.head.replace(/\+/g,' ');
   const bodyFont = fp.body.replace(/\+/g,' ');
 
-  // Vanta effect (skipped for minimal)
-  let vantaCfgStr = '', effectFile = '';
-  if (layout.id !== 'minimal') {
-    const effectPool = d.vantaPool || [{effect:'WAVES',color:0x12407a,shininess:35,waveHeight:16,waveSpeed:0.9,zoom:0.92}];
-    const chosen = pick(effectRng, effectPool);
-    effectFile = (chosen.effect || 'WAVES').toLowerCase();
-    vantaCfgStr = JSON.stringify(chosen);
-  }
-
-  // Copy
-  const tagline    = pick(copyRng, d.taglines || ['Professional Service']);
-  const cta        = pick(mulberry32(seed ^ 0x1111), d.ctaPool || ['Get In Touch']);
-  const sectionTag = pick(mulberry32(seed ^ 0x2222), d.sectionTags || ['What We Offer']);
-  const reviews    = (d.reviews2 && reviewRng() > 0.5) ? d.reviews2 : d.reviews;
-
-  // Colour: base palette + bounded hue shift
+  // ── Colours (computed first so vanta can inherit them) ──
   const shiftDeg = Math.round(colorRng() * 30) - 15;
   let primary = hueShift(d.primary, shiftDeg);
   let accent  = hueShift(d.accent,  shiftDeg);
 
-  // Brand colour override when Brandfetch returned palette
+  // Website theme-color from scan → use as accent, darken for primary
+  if (scan && scan.themeColor) {
+    accent  = scan.themeColor;
+    primary = darken(scan.themeColor, 0.55);
+    if (brightness(primary) > 80) primary = darken(scan.themeColor, 0.75);
+  }
+  // Brandfetch palette (most trusted source — overrides scan)
   if (branding && branding.colors && branding.colors.length >= 2) {
     const sorted = [...branding.colors].sort((a,b) => brightness(a) - brightness(b));
     primary = sorted[0];
     accent  = sorted[sorted.length - 1];
   }
+  // Sanity-check: accent must not be near-white/near-black
+  if (brightness(accent) > 220) accent = hueShift(d.accent, shiftDeg);
+  if (brightness(accent) < 20)  accent = hueShift(d.accent, shiftDeg);
 
   const pr = hexToRgb(primary);
   const ar = hexToRgb(accent);
   const accSoft = lighten(accent, 0.4);
   const [mr,mg,mb] = accent.replace('#','').match(/.{2}/g).map(x=>parseInt(x,16));
 
+  // ── Vanta effect (uses brand colours when available) ──
+  let vantaCfgStr = '', effectFile = '';
+  if (layout.id !== 'minimal') {
+    const effectPool = d.vantaPool || [{effect:'WAVES',color:0x12407a,shininess:35,waveHeight:16,waveSpeed:0.9,zoom:0.92}];
+    const chosen = Object.assign({}, pick(effectRng, effectPool));
+    effectFile = (chosen.effect || 'WAVES').toLowerCase();
+    // Paint vanta with brand colours when we have a real palette
+    if (scan && scan.themeColor || (branding && branding.colors && branding.colors.length)) {
+      chosen.color = parseInt(accent.replace('#',''), 16);
+      chosen.backgroundColor = parseInt(primary.replace('#',''), 16);
+      if ('color2' in chosen) chosen.color2 = parseInt(lighten(accent, 0.55).replace('#',''), 16);
+    }
+    vantaCfgStr = JSON.stringify(chosen);
+  }
+
+  // ── Copy (real content from scan takes priority) ──
+  const cta        = pick(mulberry32(seed ^ 0x1111), d.ctaPool || ['Get In Touch']);
+  const sectionTag = pick(mulberry32(seed ^ 0x2222), d.sectionTags || ['What We Offer']);
+  const reviews    = (d.reviews2 && reviewRng() > 0.5) ? d.reviews2 : d.reviews;
+
+  // Tagline: prefer scanned h1 if it looks like a real headline
+  const scannedH1 = scan && scan.headline && scan.headline.length > 10 && scan.headline.length < 90
+    && !/^(home|welcome|about|contact|services|menu|gallery|nieuws|blog)/i.test(scan.headline)
+    ? scan.headline : null;
+  const tagline = scannedH1 || pick(copyRng, d.taglines || ['Professional Service']);
+
+  // Hero subtitle: prefer scanned meta description or first paragraph
+  const heroSub = (scan && scan.description && scan.description.length > 20)
+    ? scan.description.slice(0, 220)
+    : (p.category
+      ? 'Trusted '+p.category.toLowerCase()+' serving '+city+' and surrounding areas.'+(p.rating?' Rated '+p.rating+'★ by our clients.':'')
+      : 'Serving '+city+' with professional excellence.'+(p.rating?' Rated '+p.rating+'★ by our clients.':''));
+
+  // Services: use real services from scan when ≥2 found, else fall back to design defaults
+  const ICONS = ['◈','✦','◉','◆','◇','✧'];
+  const scannedSvcs = scan && scan.services && scan.services.filter(s => s.name && s.name.length > 2);
+  let services;
+  if (scannedSvcs && scannedSvcs.length >= 2) {
+    services = scannedSvcs.slice(0, 4).map((s, i) => ({
+      icon: ICONS[i % ICONS.length],
+      name: s.name,
+      desc: (s.desc && s.desc.length > 15) ? s.desc : (d.services[i] ? d.services[i].desc : 'Tailored to your exact needs and delivered with expertise.')
+    }));
+    // Pad to 3 cards minimum
+    for (let i = services.length; i < 3 && d.services[i]; i++) services.push(d.services[i]);
+  } else {
+    services = d.services;
+  }
+
   // Nav logo
   const navLogoHtml = (branding && branding.logoUrl)
     ? '<img src="'+branding.logoUrl+'" style="max-height:36px;max-width:120px;object-fit:contain;filter:brightness(0) invert(1)" alt="'+p.name+'">'
     : '<div class="nav-logo">'+p.name.split(' ').slice(0,2).join(' ')+'<span>.</span></div>';
 
-  const ctx = {p, d, tagline, cta, city, phone, accent, accSoft, primary, branding};
+  const ctx = {p, d, tagline, heroSub, cta, city, phone, accent, accSoft, primary, branding};
 
-  const servicesHtml = d.services.map(s =>
+  const servicesHtml = services.map(s =>
     '<div class="card tilt" data-tilt><div class="card-icon">'+s.icon+'</div><h3>'+s.name+'</h3><p>'+s.desc+'</p></div>'
   ).join('');
 
@@ -1347,14 +1391,14 @@ const LAYOUTS = [
     id: 'centered',
     fontBias: null,
     heroHtml(ctx) {
-      const {p, tagline, cta, city, phone} = ctx;
+      const {p, tagline, heroSub, cta, city, phone} = ctx;
       return `<section class="hero">
   <div id="vanta-hero"></div>
   <div class="hero-veil"></div>
   <div class="hero-content">
     <div class="hero-badge" data-reveal>${p.category||'Professional Services'} \xb7 ${city}</div>
     <h1 data-reveal>${p.name.split(' ').slice(0,4).join(' ')}<br><span class="grad">${tagline}</span></h1>
-    <p class="hero-sub" data-reveal>${p.category?'Trusted '+p.category.toLowerCase()+' serving '+city+' and surrounding areas.':'Serving '+city+' with professional excellence.'}${p.rating?' Rated '+p.rating+'★ by our clients.':''}</p>
+    <p class="hero-sub" data-reveal>${heroSub}</p>
     <div class="hero-btns" data-reveal>
       <a href="#contact" class="btn-main">${cta}</a>
       <a href="#services" class="btn-outline">Our Services</a>
@@ -1373,7 +1417,7 @@ const LAYOUTS = [
     id: 'split',
     fontBias: null,
     heroHtml(ctx) {
-      const {p, tagline, cta, city, phone, branding} = ctx;
+      const {p, tagline, heroSub, cta, city, phone, branding} = ctx;
       const logoInner = branding&&branding.logoUrl
         ? '<img src="'+branding.logoUrl+'" class="split-card-logo" alt="'+p.name+'">'
         : '<div class="split-card-wordmark">'+p.name.split(' ').slice(0,2).join('<br>')+'</div>';
@@ -1384,7 +1428,7 @@ const LAYOUTS = [
     <div class="split-text">
       <div class="hero-badge" data-reveal>${p.category||'Professional Services'} \xb7 ${city}</div>
       <h1 data-reveal><span class="grad">${tagline}</span></h1>
-      <p class="hero-sub" data-reveal>${p.category?'Your trusted '+p.category.toLowerCase()+' in '+city+'.':'Professional services in '+city+'.'}${p.rating?' '+p.rating+'★ rated.':''}</p>
+      <p class="hero-sub" data-reveal>${heroSub}</p>
       <div class="hero-btns" style="justify-content:flex-start" data-reveal>
         <a href="#contact" class="btn-main">${cta}</a>
         <a href="#services" class="btn-outline">Learn More</a>
@@ -1412,7 +1456,7 @@ const LAYOUTS = [
     id: 'editorial',
     fontBias: ['Playfair+Display','Cormorant+Garamond','DM+Serif+Display'],
     heroHtml(ctx) {
-      const {p, tagline, cta, city, phone} = ctx;
+      const {p, tagline, heroSub, cta, city, phone} = ctx;
       return `<section class="hero lhero-editorial">
   <div id="vanta-hero"></div>
   <div class="hero-veil" style="background:radial-gradient(ellipse at 30% 50%,transparent 0%,rgba(0,0,0,0.42) 70%,rgba(0,0,0,0.72) 100%)"></div>
@@ -1422,7 +1466,7 @@ const LAYOUTS = [
       <span class="editorial-l1">${p.name.split(' ').slice(0,3).join(' ')}</span>
       <span class="editorial-l2 grad">${tagline}</span>
     </h1>
-    <p class="editorial-sub" data-reveal>${p.category?'The '+city+' '+p.category.toLowerCase()+' you can trust.':'Serving '+city+' with distinction.'}${p.rating?' '+p.rating+'★ on Google.':''}</p>
+    <p class="editorial-sub" data-reveal>${heroSub}</p>
     <div class="editorial-meta" data-reveal>
       ${phone?'<span>📞 '+phone+'</span>':''}
       <span>📍 ${city}</span>
@@ -1441,7 +1485,7 @@ const LAYOUTS = [
     id: 'minimal',
     fontBias: ['Space+Grotesk','Sora','Poppins'],
     heroHtml(ctx) {
-      const {p, tagline, cta, city, phone, branding} = ctx;
+      const {p, tagline, heroSub, cta, city, phone, branding} = ctx;
       const logoHtml = branding&&branding.logoUrl
         ? '<img src="'+branding.logoUrl+'" style="max-height:56px;max-width:180px;object-fit:contain;margin:0 auto 28px;display:block" alt="'+p.name+'">'
         : '';
@@ -1451,7 +1495,7 @@ const LAYOUTS = [
     ${logoHtml}
     <div class="hero-badge minimal-badge" data-reveal>${p.category||'Professional Services'} \xb7 ${city}</div>
     <h1 data-reveal style="color:#0a0a18">${p.name.split(' ').slice(0,4).join(' ')}<br><span class="grad minimal-grad">${tagline}</span></h1>
-    <p class="hero-sub" style="color:rgba(10,10,24,0.65);text-shadow:none" data-reveal>${p.category?city+"'s trusted "+p.category.toLowerCase()+'.':'Professional services in '+city+'.'}${p.rating?' Rated '+p.rating+'★.':''}</p>
+    <p class="hero-sub" style="color:rgba(10,10,24,0.65);text-shadow:none" data-reveal>${heroSub}</p>
     <div class="hero-btns" data-reveal>
       <a href="#contact" class="btn-main">${cta}</a>
       <a href="#services" class="btn-outline minimal-outline">Our Services</a>
@@ -1510,6 +1554,71 @@ async function getBranding(website) {
   } catch { return null; }
 }
 
+// ── Website scanner ───────────────────────────────────────────────────────
+async function scanWebsite(website) {
+  if (!website) return null;
+  try {
+    const targetUrl = website.startsWith('http') ? website : 'https://' + website;
+    let html = null;
+    try {
+      const r = await fetch('https://corsproxy.io/?' + encodeURIComponent(targetUrl), {signal: AbortSignal.timeout(9000)});
+      if (r.ok) html = await r.text();
+    } catch {}
+    if (!html) {
+      try {
+        const r = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(targetUrl), {signal: AbortSignal.timeout(9000)});
+        if (r.ok) { const j = await r.json(); html = j.contents; }
+      } catch {}
+    }
+    if (!html) return null;
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const clean = el => el.textContent.replace(/\s+/g,' ').trim();
+
+    // Colors
+    const themeColor = doc.querySelector('meta[name="theme-color"]')?.getAttribute('content') || null;
+
+    // Headings
+    const h1s = [...doc.querySelectorAll('h1')].map(clean).filter(t => t.length > 5 && t.length < 120);
+    const h2s = [...doc.querySelectorAll('h2')].map(clean).filter(t => t.length > 3 && t.length < 90);
+    const h3s = [...doc.querySelectorAll('h3')].map(clean).filter(t => t.length > 3 && t.length < 80);
+
+    // Description
+    const metaDesc = (doc.querySelector('meta[name="description"]')?.getAttribute('content') || '').trim();
+    const ogDesc   = (doc.querySelector('meta[property="og:description"]')?.getAttribute('content') || '').trim();
+    const paras    = [...doc.querySelectorAll('p')]
+      .map(clean)
+      .filter(t => t.length > 60 && t.length < 500 && !/cookie|privacy|copyright|©|\d{4} all rights/i.test(t));
+
+    // Services: h3s preferred over h2s; skip nav/footer noise
+    const skipRe = /contact|about|home|welcome|testimonial|review|faq|team|gallery|news|blog|price|tarif|prijs/i;
+    const svcPool = (h3s.length >= 2 ? h3s : h2s).filter(t => !skipRe.test(t)).slice(0, 5);
+    const allHeads = [...doc.querySelectorAll('h2,h3')];
+    const services = svcPool.map(name => {
+      const headEl = allHeads.find(el => clean(el) === name);
+      if (!headEl) return {name, desc: ''};
+      let node = headEl.nextElementSibling, tries = 0;
+      while (node && tries < 6) {
+        if (node.tagName === 'P' && clean(node).length > 20) return {name, desc: clean(node).slice(0, 200)};
+        const p = node.querySelector('p');
+        if (p && clean(p).length > 20) return {name, desc: clean(p).slice(0, 200)};
+        node = node.nextElementSibling; tries++;
+      }
+      return {name, desc: ''};
+    });
+
+    // Best headline: first h1 that isn't just the business/domain name
+    const domainBase = targetUrl.replace(/https?:\/\/(www\.)?/,'').split('.')[0].toLowerCase();
+    const headline = h1s.find(t => t.toLowerCase() !== domainBase && t.length > 8) || h1s[0] || null;
+
+    return {
+      themeColor: (themeColor && /^#[0-9a-fA-F]{3,8}$/.test(themeColor)) ? themeColor.slice(0,7) : null,
+      headline,
+      description: (metaDesc || ogDesc || paras[0] || '').slice(0, 220),
+      services,
+    };
+  } catch { return null; }
+}
+
 // ── Build mockup flow ─────────────────────────────────────────────────────
 let revProspect = null;
 let revMockupUrl = null;
@@ -1522,22 +1631,33 @@ async function buildMockup(prospectId) {
   revProspect = p;
   revMockupUrl = null;
   document.getElementById('revName').textContent = p.name;
-  document.getElementById('revBody').innerHTML = '<div class="building-state"><div class="spin"></div><div class="building-bar"></div><span id="buildStep">MATCHING BRAND...</span></div>';
+  document.getElementById('revBody').innerHTML = '<div class="building-state"><div class="spin"></div><div class="building-bar"></div><span id="buildStep">SCANNING WEBSITE...</span></div>';
   document.getElementById('revFoot').style.display = 'none';
   document.getElementById('revModal').classList.add('show');
 
+  // Step 1: scan existing website for real content + colours
+  let scan = null;
+  if (p.website) {
+    try {
+      scan = await scanWebsite(p.website);
+      if (scan) toast('Website scanned ✓'+(scan.themeColor?' · brand colour found':''), 'ok');
+    } catch {}
+  }
+
+  // Step 2: Brandfetch logo + palette (optional, overrides scan colours)
+  const stepEl = document.getElementById('buildStep');
+  if (stepEl) stepEl.textContent = 'MATCHING BRAND...';
   let branding = null;
   if (p.website && BF.configured) {
     try {
       branding = await getBranding(p.website);
-      if (branding && (branding.logoUrl || branding.colors)) toast('Brand colours matched ✓', 'ok');
+      if (branding && branding.logoUrl) toast('Brand logo matched ✓', 'ok');
     } catch {}
   }
-  const stepEl = document.getElementById('buildStep');
   if (stepEl) stepEl.textContent = 'BUILDING MOCKUP...';
 
   try {
-    const html = generateMockupHTML(p, branding);
+    const html = generateMockupHTML(p, branding, scan);
     const slug = slugify(p.name);
     const path = `mockups/${slug}.html`;
     const url = await GH.pushFile(path, html);
