@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Prospector</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
 <style>
 :root {
   --bg: #030308; --bg2: #080810; --panel: #0a0a18;
@@ -186,7 +187,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:13px; h
   <div class="logo">PROSPECTOR <span>LOCAL BUSINESS OUTREACH</span></div>
   <div style="display:flex;gap:8px;align-items:center">
     <span id="ghDot" style="width:7px;height:7px;border-radius:50%;display:inline-block;background:var(--red)" title="GitHub not configured"></span>
-    <button class="btn btn-g btn-s" onclick="Settings.open()">⚙ GitHub</button>
+    <button class="btn btn-g btn-s" onclick="Settings.open()">⚙ Settings</button>
     <button class="btn btn-g btn-s" id="exportBtn">↓ Export CSV</button>
   </div>
 </header>
@@ -280,10 +281,11 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:13px; h
 <div class="mover" id="settingsModal">
   <div class="modal" style="max-width:460px">
     <div class="mhdr">
-      <div><div class="mtitle">GitHub Setup</div><div class="msub">Needed to host mockup links</div></div>
+      <div><div class="mtitle">Settings</div><div class="msub">GitHub hosting + brand matching</div></div>
       <button class="btn-close" onclick="Settings.close()">×</button>
     </div>
     <div class="mbody">
+      <div style="font-family:var(--head);font-size:9px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-bottom:10px">GitHub — Mockup Hosting</div>
       <div class="sfield">
         <label>Personal Access Token</label>
         <input type="password" id="sToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
@@ -300,9 +302,18 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:13px; h
         <label>Repository Name</label>
         <input type="text" id="sRepo" placeholder="Webservebe">
       </div>
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px;font-size:12px;color:var(--dim);line-height:1.6;margin-top:4px">
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px;font-size:12px;color:var(--dim);line-height:1.6;margin-top:4px;margin-bottom:16px">
         <strong style="color:var(--warn)">One-time GitHub Pages setup:</strong><br>
         In your Webservebe repo → Settings → Pages → Source: <strong style="color:var(--text)">Deploy from branch → main → / (root)</strong>. Save. Takes ~2 min to activate.
+      </div>
+      <div style="font-family:var(--head);font-size:9px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-bottom:10px">Brandfetch — Brand Matching <span style="color:var(--green)">(optional)</span></div>
+      <div class="sfield">
+        <label>Brandfetch Client ID <span id="bfDot" style="width:6px;height:6px;border-radius:50%;display:inline-block;background:var(--dim);margin-left:4px" title="Not configured"></span></label>
+        <input type="text" id="sBfId" placeholder="leave blank to skip brand matching">
+        <div class="hint" style="font-size:11px;color:var(--dim);margin-top:4px">
+          Free logo API. Get your client ID at <strong style="color:var(--text)">brandfetch.com/dev</strong> → register app → copy Client ID.<br>
+          When set, mockups will attempt to use the prospect's real logo &amp; brand colours.
+        </div>
       </div>
     </div>
     <div class="mfoot">
@@ -323,7 +334,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:13px; h
       <div class="building-state">
         <div class="spin"></div>
         <div class="building-bar"></div>
-        <span>BUILDING MOCKUP...</span>
+        <span id="buildStep">MATCHING BRAND...</span>
       </div>
     </div>
     <div class="mfoot" id="revFoot" style="display:none">
@@ -781,7 +792,8 @@ const GH = {
 const DESIGNS = {
   dentist: {
     primary:'#061f35', accent:'#00b4e6', accentLight:'#e0f6ff',
-    tagline:'Your Smile, Our Priority',
+    taglines:['Your Smile, Our Priority','Where Perfect Smiles Begin','Expert Care, Exceptional Results','Crafting Confidence, One Smile at a Time'],
+    sectionTags:['What We Offer','Our Treatments','Dental Services','How We Can Help'],
     services:[
       {icon:'✦',name:'Teeth Whitening',desc:'Professional whitening treatments that brighten your smile by up to 10 shades in a single visit.'},
       {icon:'◈',name:'Dental Implants',desc:'Permanent, natural-looking implants that restore your smile and your confidence for life.'},
@@ -792,32 +804,48 @@ const DESIGNS = {
       {q:'The team made me feel completely at ease. My teeth have never looked better!',a:'Sarah M.'},
       {q:'Absolute professionals. Clear explanations, zero pain, outstanding results.',a:'Thomas K.'},
     ],
-    font:'Poppins', heroFont:'Poppins',
+    reviews2:[
+      {q:'Painless, professional, and my smile looks incredible. Couldn\'t be happier.',a:'Charlotte B.'},
+      {q:'I\'d been avoiding the dentist for years. This team changed that completely.',a:'Michael R.'},
+    ],
     bg:'linear-gradient(135deg,#061f35 0%,#0a3d6b 60%,#0a5a8a 100%)',
-    cta:'Book a Free Consultation',
-    vanta:{effect:'WAVES',color:0x0a4d80,shininess:38,waveHeight:17,waveSpeed:0.85,zoom:0.92},
+    ctaPool:['Book a Free Consultation','Schedule Your Appointment','Book Online Today'],
+    vantaPool:[
+      {effect:'WAVES',color:0x0a4d80,shininess:38,waveHeight:17,waveSpeed:0.85,zoom:0.92},
+      {effect:'NET',color:0x00b4e6,backgroundColor:0x061f35,points:10,maxDistance:22,spacing:16},
+      {effect:'FOG',highlightColor:0x00b4e6,midtoneColor:0x0a4d80,lowlightColor:0x061f35,baseColor:0x061f35,blurFactor:0.65,speed:1.2,zoom:0.9},
+    ],
   },
   restaurant: {
     primary:'#120800', accent:'#e8622a', accentLight:'#fff3ed',
-    tagline:'An Experience For Every Sense',
+    taglines:['An Experience For Every Sense','Where Every Meal Becomes a Memory','Passion on Every Plate','Fine Food. Warm Welcome.'],
+    sectionTags:['On The Menu','What We Offer','Our Cuisine','Dining With Us'],
     services:[
       {icon:'◈',name:'Fine Dining',desc:'An intimate atmosphere where every dish tells a story. Seasonal ingredients, crafted with passion.'},
       {icon:'✦',name:'Private Events',desc:'From intimate dinners to celebrations for 100 — we handle every detail.'},
       {icon:'◉',name:'Takeaway & Delivery',desc:'Enjoy our full menu from the comfort of your home. Order online in minutes.'},
     ],
-    stats:[{n:'12+',l:'Years Open'},{n:'4.8★',l:'Google Rating'},{n:'200+',l:'Menu Items'} ],
+    stats:[{n:'12+',l:'Years Open'},{n:'4.8★',l:'Google Rating'},{n:'200+',l:'Menu Items'}],
     reviews:[
       {q:'Every single dish was a masterpiece. We will absolutely be back.',a:'Emma L.'},
       {q:'The private dining room for our anniversary was perfect. Magical evening.',a:'Mark & Julie'},
     ],
-    font:'Playfair Display', heroFont:'Playfair Display',
+    reviews2:[
+      {q:'Best dining experience we\'ve had this year. The attention to detail is extraordinary.',a:'James & Claire S.'},
+      {q:'The food, the service, the atmosphere — absolutely flawless.',a:'Beatrice K.'},
+    ],
     bg:'linear-gradient(135deg,#120800 0%,#2a1200 60%,#3d1f00 100%)',
-    cta:'Reserve a Table',
-    vanta:{effect:'FOG',highlightColor:0xe8622a,midtoneColor:0x7a2e0a,lowlightColor:0x120800,baseColor:0x120800,blurFactor:0.62,speed:1.3,zoom:0.85},
+    ctaPool:['Reserve a Table','Book Your Table','Make a Reservation','Reserve Now'],
+    vantaPool:[
+      {effect:'FOG',highlightColor:0xe8622a,midtoneColor:0x7a2e0a,lowlightColor:0x120800,baseColor:0x120800,blurFactor:0.62,speed:1.3,zoom:0.85},
+      {effect:'HALO',baseColor:0x3d1f00,backgroundColor:0x120800,amplitudeFactor:1.4,size:1.3},
+      {effect:'WAVES',color:0x7a2e0a,shininess:25,waveHeight:12,waveSpeed:0.7,zoom:0.9},
+    ],
   },
   'law firm': {
     primary:'#0e1626', accent:'#c9a84c', accentLight:'#fdf8ec',
-    tagline:'Expert Legal Counsel You Can Trust',
+    taglines:['Expert Legal Counsel You Can Trust','Your Rights, Fiercely Protected','Precision Law. Powerful Results.','Strategy. Integrity. Results.'],
+    sectionTags:['Legal Services','Practice Areas','How We Help','Our Expertise'],
     services:[
       {icon:'◈',name:'Corporate Law',desc:'Strategic legal advice for businesses at every stage — from startup to enterprise.'},
       {icon:'✦',name:'Civil Litigation',desc:'Aggressive, experienced representation when disputes demand resolution.'},
@@ -828,14 +856,22 @@ const DESIGNS = {
       {q:'Their attention to detail and strategic thinking saved our company. Exceptional team.',a:'David R., CEO'},
       {q:'Clear, direct, and effective. Exactly what you want from a legal partner.',a:'Patricia W.'},
     ],
-    font:'Cormorant Garamond', heroFont:'Cormorant Garamond',
+    reviews2:[
+      {q:'They handled our most complex dispute with remarkable precision and calm.',a:'R. Thornton, MD'},
+      {q:'I felt genuinely supported throughout what was an incredibly stressful process.',a:'Anna V.'},
+    ],
     bg:'linear-gradient(135deg,#0e1626 0%,#182038 60%,#1e2d50 100%)',
-    cta:'Request a Free Consultation',
-    vanta:{effect:'NET',color:0xc9a84c,backgroundColor:0x0e1626,points:11,maxDistance:23,spacing:17},
+    ctaPool:['Request a Free Consultation','Speak With a Lawyer','Get Legal Advice','Book a Consultation'],
+    vantaPool:[
+      {effect:'NET',color:0xc9a84c,backgroundColor:0x0e1626,points:11,maxDistance:23,spacing:17},
+      {effect:'WAVES',color:0x1e2d50,shininess:20,waveHeight:10,waveSpeed:0.6,zoom:0.95},
+      {effect:'FOG',highlightColor:0xc9a84c,midtoneColor:0x182038,lowlightColor:0x0e1626,baseColor:0x0e1626,blurFactor:0.7,speed:1.0,zoom:0.9},
+    ],
   },
   salon: {
     primary:'#1a0a1f', accent:'#e040fb', accentLight:'#fce4ff',
-    tagline:'Beauty That Speaks For Itself',
+    taglines:['Beauty That Speaks For Itself','Where Confidence Begins','Your Best Self, Every Visit','Luxury Beauty. Personal Touch.'],
+    sectionTags:['Our Services','What We Offer','Treatments & Styles','Beauty Menu'],
     services:[
       {icon:'✦',name:'Hair Styling',desc:'Cuts, colour, and treatments from our award-winning stylists using only premium products.'},
       {icon:'◈',name:'Skin Treatments',desc:'Facials, peels, and advanced skin therapies tailored to your skin type.'},
@@ -846,14 +882,22 @@ const DESIGNS = {
       {q:'I leave feeling like a completely different person every single time. Incredible team.',a:'Yasmine B.'},
       {q:'Best hair colour in the city. They really listen to what you want.',a:'Chloe T.'},
     ],
-    font:'Cormorant Garamond', heroFont:'Cormorant Garamond',
+    reviews2:[
+      {q:'The most relaxing, professional salon experience I\'ve ever had. Absolutely worth it.',a:'Marina L.'},
+      {q:'My colour has never looked this good. They genuinely know their craft.',a:'Danielle F.'},
+    ],
     bg:'linear-gradient(135deg,#1a0a1f 0%,#2d1040 60%,#3a0a4f 100%)',
-    cta:'Book Your Appointment',
-    vanta:{effect:'HALO',baseColor:0x3a0a4f,backgroundColor:0x1a0a1f,amplitudeFactor:1.6,size:1.5},
+    ctaPool:['Book Your Appointment','Reserve Your Session','Book Now','Schedule a Visit'],
+    vantaPool:[
+      {effect:'HALO',baseColor:0x3a0a4f,backgroundColor:0x1a0a1f,amplitudeFactor:1.6,size:1.5},
+      {effect:'FOG',highlightColor:0xe040fb,midtoneColor:0x3a0a4f,lowlightColor:0x1a0a1f,baseColor:0x1a0a1f,blurFactor:0.6,speed:1.4,zoom:0.88},
+      {effect:'WAVES',color:0x3a0a4f,shininess:42,waveHeight:18,waveSpeed:0.9,zoom:0.9},
+    ],
   },
   'auto repair': {
     primary:'#0a0e14', accent:'#ff5722', accentLight:'#fff3f0',
-    tagline:'Expert Care For Every Vehicle',
+    taglines:['Expert Care For Every Vehicle','Your Car Deserves the Best','Trusted Mechanics. Honest Prices.','Drive In. Drive Out Confident.'],
+    sectionTags:['Our Services','What We Fix','Auto Services','Workshop Services'],
     services:[
       {icon:'◈',name:'Full Servicing',desc:'Comprehensive vehicle checks and maintenance to keep your car running at its best.'},
       {icon:'✦',name:'Diagnostics',desc:'State-of-the-art computer diagnostics that find problems fast — before they cost more.'},
@@ -864,14 +908,22 @@ const DESIGNS = {
       {q:'Fast, honest, and fair pricing. These guys are the real deal.',a:'Ahmed S.'},
       {q:'They diagnosed an issue three other garages missed. Saved me a fortune.',a:'Rachel P.'},
     ],
-    font:'Barlow', heroFont:'Barlow',
+    reviews2:[
+      {q:'Never felt ripped off. Clear explanations, fair pricing, great work.',a:'Tom H.'},
+      {q:'Took my car in for a mysterious noise — they found and fixed it same day.',a:'Nadia B.'},
+    ],
     bg:'linear-gradient(135deg,#0a0e14 0%,#141c26 60%,#1a2535 100%)',
-    cta:'Book Your Service',
-    vanta:{effect:'NET',color:0xff5722,backgroundColor:0x0a0e14,points:12,maxDistance:21,spacing:16},
+    ctaPool:['Book Your Service','Schedule a Repair','Get a Quote','Book Now'],
+    vantaPool:[
+      {effect:'NET',color:0xff5722,backgroundColor:0x0a0e14,points:12,maxDistance:21,spacing:16},
+      {effect:'WAVES',color:0x1a2535,shininess:18,waveHeight:8,waveSpeed:0.7,zoom:0.95},
+      {effect:'FOG',highlightColor:0xff5722,midtoneColor:0x1a2535,lowlightColor:0x0a0e14,baseColor:0x0a0e14,blurFactor:0.7,speed:1.1,zoom:0.9},
+    ],
   },
   physiotherapist: {
     primary:'#071e22', accent:'#00bfa5', accentLight:'#e0f7f5',
-    tagline:'Move Better. Live Better.',
+    taglines:['Move Better. Live Better.','Expert Care for Every Body','Pain Relief. Lasting Results.','Recovery Starts Here.'],
+    sectionTags:['What We Treat','Our Services','Treatment Areas','How We Help'],
     services:[
       {icon:'◈',name:'Sports Rehabilitation',desc:'Get back to peak performance with treatment plans designed around your body and goals.'},
       {icon:'✦',name:'Back & Neck Pain',desc:'Evidence-based therapy that tackles the root cause — not just the symptoms.'},
@@ -882,14 +934,22 @@ const DESIGNS = {
       {q:'After months of back pain, I was walking comfortably within three sessions.',a:'Michael D.'},
       {q:'Professional, knowledgeable, and genuinely caring. Highly recommend.',a:'Linda F.'},
     ],
-    font:'Nunito', heroFont:'Nunito',
+    reviews2:[
+      {q:'I\'d tried everything. Three sessions here and I was genuinely pain-free.',a:'Chris N.'},
+      {q:'The team took time to actually understand my injury. World class treatment.',a:'Sophie R.'},
+    ],
     bg:'linear-gradient(135deg,#071e22 0%,#0d3035 60%,#0f404a 100%)',
-    cta:'Book a Free Assessment',
-    vanta:{effect:'WAVES',color:0x0d5048,shininess:32,waveHeight:15,waveSpeed:0.8,zoom:0.95},
+    ctaPool:['Book a Free Assessment','Book Your Session','Schedule a Consultation','Book Now'],
+    vantaPool:[
+      {effect:'WAVES',color:0x0d5048,shininess:32,waveHeight:15,waveSpeed:0.8,zoom:0.95},
+      {effect:'NET',color:0x00bfa5,backgroundColor:0x071e22,points:10,maxDistance:22,spacing:16},
+      {effect:'FOG',highlightColor:0x00bfa5,midtoneColor:0x0d3035,lowlightColor:0x071e22,baseColor:0x071e22,blurFactor:0.65,speed:1.1,zoom:0.9},
+    ],
   },
   accountant: {
     primary:'#0d1b3e', accent:'#4a90e2', accentLight:'#e8f1fd',
-    tagline:'Your Finances, In Expert Hands',
+    taglines:['Your Finances, In Expert Hands','Numbers You Can Count On','Financial Clarity. Business Growth.','Trusted Accountants. Proven Results.'],
+    sectionTags:['Financial Services','What We Do','Our Expertise','Services'],
     services:[
       {icon:'◈',name:'Tax & Compliance',desc:'Stay fully compliant and never pay more tax than you have to. We handle every detail.'},
       {icon:'✦',name:'Business Accounting',desc:'Monthly bookkeeping, management accounts, and financial insights that drive decisions.'},
@@ -900,14 +960,22 @@ const DESIGNS = {
       {q:'They found savings I had no idea existed. Paid for themselves in the first month.',a:'James T., Director'},
       {q:'Finally, an accountant who explains things clearly and actually calls back.',a:'Sophie W.'},
     ],
-    font:'Inter', heroFont:'Inter',
+    reviews2:[
+      {q:'They transformed how we manage our business finances. Hugely recommend.',a:'Oliver T., Founder'},
+      {q:'Finally found an accountant who\'s proactive, not just reactive. Excellent team.',a:'Laura P.'},
+    ],
     bg:'linear-gradient(135deg,#0d1b3e 0%,#152d6b 60%,#1a3a80 100%)',
-    cta:'Request a Free Consultation',
-    vanta:{effect:'NET',color:0x4a90e2,backgroundColor:0x0d1b3e,points:11,maxDistance:24,spacing:18},
+    ctaPool:['Request a Free Consultation','Book a Meeting','Get Started Today','Speak to an Accountant'],
+    vantaPool:[
+      {effect:'NET',color:0x4a90e2,backgroundColor:0x0d1b3e,points:11,maxDistance:24,spacing:18},
+      {effect:'WAVES',color:0x152d6b,shininess:22,waveHeight:10,waveSpeed:0.7,zoom:0.95},
+      {effect:'FOG',highlightColor:0x4a90e2,midtoneColor:0x152d6b,lowlightColor:0x0d1b3e,baseColor:0x0d1b3e,blurFactor:0.68,speed:1.0,zoom:0.9},
+    ],
   },
   'real estate': {
     primary:'#111111', accent:'#d4a843', accentLight:'#fdf8ec',
-    tagline:'Your Property Journey Starts Here',
+    taglines:['Your Property Journey Starts Here','Find. Sell. Invest. With Confidence.','The Local Experts Who Deliver.','Your Home is Our Priority.'],
+    sectionTags:['Our Services','How We Help','Property Services','What We Do'],
     services:[
       {icon:'◈',name:'Property Sales',desc:'Expert valuation, marketing, and negotiation to get you the best possible price.'},
       {icon:'✦',name:'Lettings & Management',desc:'Full lettings service with ongoing management so you never have to worry.'},
@@ -918,16 +986,24 @@ const DESIGNS = {
       {q:'Sold our home in 11 days above asking price. Absolutely brilliant service.',a:'The Williams Family'},
       {q:'Professional, proactive, and kept us informed at every step.',a:'Karen & Paul M.'},
     ],
-    font:'Raleway', heroFont:'Raleway',
+    reviews2:[
+      {q:'They negotiated beyond our asking price and kept us informed at every step.',a:'Richard & Helen B.'},
+      {q:'Trusted them completely. They delivered everything they promised and more.',a:'Georgina L.'},
+    ],
     bg:'linear-gradient(135deg,#111111 0%,#1f1f1f 60%,#2a2a2a 100%)',
-    cta:'Get a Free Valuation',
-    vanta:{effect:'GLOBE',color:0xd4a843,color2:0xffffff,backgroundColor:0x111111,size:1.1},
+    ctaPool:['Get a Free Valuation','Start Your Search','Book a Viewing','Speak to an Agent'],
+    vantaPool:[
+      {effect:'GLOBE',color:0xd4a843,color2:0xffffff,backgroundColor:0x111111,size:1.1},
+      {effect:'NET',color:0xd4a843,backgroundColor:0x111111,points:9,maxDistance:20,spacing:17},
+      {effect:'WAVES',color:0x2a2a2a,shininess:15,waveHeight:10,waveSpeed:0.65,zoom:0.95},
+    ],
   },
 };
 
 const DEFAULT_DESIGN = {
   primary:'#0a1628', accent:'#00aaff', accentLight:'#e0f4ff',
-  tagline:'Professional Service You Can Rely On',
+  taglines:['Professional Service You Can Rely On','Trusted Experts, Exceptional Results','Quality You Can Count On','Your Local Professionals'],
+  sectionTags:['What We Offer','Our Services','How We Help','Services'],
   services:[
     {icon:'◈',name:'Our Services',desc:'Comprehensive, tailored solutions designed around your exact needs and goals.'},
     {icon:'✦',name:'Expert Team',desc:'A dedicated team of professionals with years of hands-on experience in the field.'},
@@ -938,10 +1014,17 @@ const DEFAULT_DESIGN = {
     {q:'Exceptional service from start to finish. We wouldn\'t go anywhere else.',a:'A. Client'},
     {q:'Professional, reliable, and great value. Highly recommended.',a:'B. Customer'},
   ],
-  font:'Inter', heroFont:'Inter',
+  reviews2:[
+    {q:'Genuinely impressed from first contact to delivery. A team you can trust.',a:'C. Davies'},
+    {q:'They understood exactly what we needed and delivered beyond expectations.',a:'D. Martens'},
+  ],
   bg:'linear-gradient(135deg,#0a1628 0%,#122040 60%,#1a2e5a 100%)',
-  cta:'Get In Touch Today',
-  vanta:{effect:'WAVES',color:0x12407a,shininess:35,waveHeight:16,waveSpeed:0.9,zoom:0.92},
+  ctaPool:['Get In Touch Today','Request a Free Quote','Book a Consultation','Start Today'],
+  vantaPool:[
+    {effect:'WAVES',color:0x12407a,shininess:35,waveHeight:16,waveSpeed:0.9,zoom:0.92},
+    {effect:'NET',color:0x00aaff,backgroundColor:0x0a1628,points:10,maxDistance:22,spacing:17},
+    {effect:'FOG',highlightColor:0x00aaff,midtoneColor:0x122040,lowlightColor:0x0a1628,baseColor:0x0a1628,blurFactor:0.66,speed:1.1,zoom:0.9},
+  ],
 };
 
 function getDesign(category) {
@@ -953,285 +1036,234 @@ function slugify(s) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 }
 
-function generateMockupHTML(p) {
+function generateMockupHTML(p, branding) {
   const d = getDesign(p.category);
   const city = extractCity(p.address);
   const phone = p.phone || '';
   const website = p.website || '';
-  const fontUrl = encodeURIComponent(d.font + ':wght@300;400;600;700;800');
 
-  const pr = hexToRgb(d.primary);
-  const ar = hexToRgb(d.accent);
-  const accSoft = lighten(d.accent, 0.4);
-  const vantaCfg = JSON.stringify(d.vanta || {effect:'WAVES'});
-  const effectFile = (d.vanta && d.vanta.effect ? d.vanta.effect : 'WAVES').toLowerCase();
+  // ── Seed-driven variety ──
+  const seed = seedFrom(p);
+  const layoutRng  = mulberry32(seed ^ 0x1234);
+  const fontRng    = mulberry32(seed ^ 0x5678);
+  const effectRng  = mulberry32(seed ^ 0x9abc);
+  const copyRng    = mulberry32(seed ^ 0xdef0);
+  const colorRng   = mulberry32(seed ^ 0x4321);
+  const reviewRng  = mulberry32(seed ^ 0x8765);
 
-  const servicesHtml = d.services.map(s => `
-    <div class="card tilt" data-tilt>
-      <div class="card-icon">${s.icon}</div>
-      <h3>${s.name}</h3>
-      <p>${s.desc}</p>
-    </div>`).join('');
+  // Layout
+  const layout = pick(layoutRng, LAYOUTS);
 
-  const statsHtml = d.stats.map(s => `
-    <div class="stat">
-      <div class="stat-n">${s.n}</div>
-      <div class="stat-l">${s.l}</div>
-    </div>`).join('');
+  // Font pair (bias by archetype)
+  let fontPool = layout.fontBias
+    ? FONT_PAIRS.filter(f => layout.fontBias.includes(f.head))
+    : FONT_PAIRS;
+  if (!fontPool.length) fontPool = FONT_PAIRS;
+  const fp = pick(fontRng, fontPool);
+  const headFont = fp.head.replace(/\+/g,' ');
+  const bodyFont = fp.body.replace(/\+/g,' ');
 
-  const reviewsHtml = d.reviews.map(r => `
-    <div class="review tilt" data-tilt>
-      <div class="review-q">"${r.q}"</div>
-      <div class="review-a">— ${r.a}</div>
-    </div>`).join('');
-
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${p.name}</title>
-<link href="https://fonts.googleapis.com/css2?family=${fontUrl}&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{--primary:${d.primary};--accent:${d.accent};--accent-soft:${accSoft};--light:${d.accentLight};--font:'${d.font}',sans-serif}
-html{scroll-behavior:smooth}
-body{font-family:var(--font);background:#fff;color:#141414;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-
-/* Scroll progress + film grain */
-#progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:10001;background:linear-gradient(90deg,${d.accent},${accSoft});box-shadow:0 0 12px rgba(${ar},.7)}
-.grain{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.045;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-
-/* Preview banner */
-.preview-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:linear-gradient(90deg,#f59e0b,#d97706);color:#000;text-align:center;padding:10px 16px;font-size:13px;font-weight:700;letter-spacing:.5px;box-shadow:0 2px 10px rgba(0,0,0,.2)}
-.preview-banner span{font-weight:400;opacity:.8;margin-left:8px}
-body{padding-top:42px}
-
-/* Nav (glass) */
-nav{position:sticky;top:42px;background:rgba(${pr},.55);backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);z-index:100;padding:0 5vw;display:flex;align-items:center;justify-content:space-between;height:70px;border-bottom:1px solid rgba(255,255,255,.10)}
-.nav-logo{color:#fff;font-size:21px;font-weight:800;letter-spacing:-.5px}
-.nav-logo span{color:${d.accent}}
-.nav-cta{background:linear-gradient(120deg,${d.accent},${accSoft});color:#fff;border:none;padding:11px 24px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.4px;transition:.2s;text-decoration:none;font-family:var(--font);box-shadow:0 8px 22px rgba(${ar},.35)}
-.nav-cta:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(${ar},.5)}
-nav ul{display:flex;gap:30px;list-style:none}
-nav ul li a{color:rgba(255,255,255,.75);text-decoration:none;font-size:14px;font-weight:500;transition:.15s}
-nav ul li a:hover{color:#fff}
-@media(max-width:600px){nav ul{display:none}}
-
-/* Hero (3D) */
-.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#fff;padding:120px 5vw 100px;background:${d.bg}}
-#vanta-hero{position:absolute;inset:0;z-index:0}
-.hero-veil{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 58%,transparent 0%,rgba(0,0,0,.32) 68%,rgba(0,0,0,.6) 100%)}
-.hero-content{position:relative;z-index:2;max-width:860px;text-align:center}
-.hero-badge{display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px);color:rgba(255,255,255,.9);font-size:12px;letter-spacing:2.5px;text-transform:uppercase;padding:8px 18px;border-radius:30px;margin-bottom:26px}
-.hero h1{font-size:clamp(40px,7.5vw,86px);font-weight:800;line-height:1.05;letter-spacing:-1.5px;margin-bottom:22px;text-shadow:0 4px 40px rgba(0,0,0,.3)}
-.hero h1 .grad{background:linear-gradient(120deg,#fff 0%,${accSoft} 55%,${d.accent} 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
-.hero-sub{font-size:clamp(16px,2.4vw,22px);opacity:.88;margin-bottom:38px;font-weight:300;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.55;text-shadow:0 2px 20px rgba(0,0,0,.4)}
-.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-.hero-btns a{padding:16px 36px;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:.25s;font-family:var(--font);letter-spacing:.4px}
-.btn-main{background:linear-gradient(120deg,${d.accent},${accSoft});color:#fff;box-shadow:0 12px 34px rgba(${ar},.45)}
-.btn-main:hover{transform:translateY(-3px);box-shadow:0 18px 44px rgba(${ar},.6)}
-.btn-outline{background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.45);backdrop-filter:blur(6px)}
-.btn-outline:hover{background:rgba(255,255,255,.14);transform:translateY(-3px)}
-.hero-meta{margin-top:54px;display:flex;gap:30px;justify-content:center;opacity:.85;font-size:14px;flex-wrap:wrap;text-shadow:0 2px 12px rgba(0,0,0,.4)}
-
-/* Sections */
-section{padding:100px 5vw}
-.section-tag{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:${d.accent};font-weight:700;margin-bottom:12px}
-.section-title{font-size:clamp(28px,4vw,48px);font-weight:800;line-height:1.15;letter-spacing:-.5px;margin-bottom:16px}
-.section-title .grad{background:linear-gradient(120deg,${d.primary},${d.accent});-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
-.section-sub{font-size:17px;color:#666;max-width:560px;line-height:1.6}
-.section-head{margin-bottom:60px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-@media(max-width:900px){.grid3{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:700px){.grid3{grid-template-columns:1fr}}
-
-/* Cards */
-.card{position:relative;background:#fff;border:1px solid #ececec;border-radius:16px;padding:38px 30px;transition:box-shadow .3s,border-color .3s,transform .15s ease-out;box-shadow:0 4px 24px rgba(0,0,0,.05);transform-style:preserve-3d;will-change:transform}
-.card:hover{box-shadow:0 24px 60px rgba(${ar},.18);border-color:rgba(${ar},.35)}
-.card-icon{font-size:30px;color:${d.accent};margin-bottom:18px;display:inline-block}
-.card h3{font-size:20px;font-weight:700;margin-bottom:10px}
-.card p{color:#666;line-height:1.65;font-size:15px}
-
-/* Stats */
-.stats-section{position:relative;background:${d.bg};color:#fff;padding:90px 5vw;overflow:hidden}
-.stats-section::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(${ar},.25),transparent 50%),radial-gradient(circle at 80% 70%,rgba(${ar},.18),transparent 50%)}
-.stats-grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:880px;margin:0 auto;text-align:center}
-@media(max-width:600px){.stats-grid{grid-template-columns:1fr;gap:26px}}
-.stat-n{font-size:clamp(42px,6vw,68px);font-weight:800;line-height:1;background:linear-gradient(120deg,#fff,${accSoft});-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
-.stat-l{font-size:15px;opacity:.75;margin-top:10px;letter-spacing:.5px}
-
-/* Reviews */
-.reviews-section{background:${d.accentLight}}
-.reviews-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-@media(max-width:700px){.reviews-grid{grid-template-columns:1fr}}
-.review{position:relative;background:#fff;border-radius:16px;padding:34px;box-shadow:0 8px 30px rgba(0,0,0,.07);border:1px solid rgba(${ar},.10);transform-style:preserve-3d;transition:transform .15s ease-out,box-shadow .3s}
-.review::before{content:'\\201C';position:absolute;top:12px;left:20px;font-size:70px;color:rgba(${ar},.18);font-family:Georgia,serif;line-height:1}
-.review-q{position:relative;font-size:16px;line-height:1.65;color:#333;font-style:italic;margin-bottom:16px}
-.review-a{font-size:14px;font-weight:700;color:${d.accent}}
-
-/* CTA section */
-.cta-section{position:relative;background:${d.bg};color:#fff;text-align:center;padding:110px 5vw;overflow:hidden}
-.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(${ar},.3),transparent 60%)}
-.cta-section h2{position:relative;font-size:clamp(30px,4vw,52px);font-weight:800;margin-bottom:16px}
-.cta-section p{position:relative;font-size:18px;opacity:.75;margin-bottom:40px}
-.cta-section a{position:relative}
-
-/* Contact */
-.contact-section{background:#f7f8fa}
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
-@media(max-width:700px){.contact-grid{grid-template-columns:1fr}}
-.contact-info h2{font-size:32px;font-weight:800;margin-bottom:20px}
-.contact-info p{color:#555;line-height:1.65;margin-bottom:28px;font-size:16px}
-.contact-detail{display:flex;align-items:center;gap:12px;margin-bottom:14px;font-size:15px;color:#333}
-.contact-detail strong{color:${d.accent};font-size:18px;width:24px}
-.contact-form{background:#fff;border:1px solid #eee;border-radius:16px;padding:30px;box-shadow:0 10px 40px rgba(0,0,0,.05)}
-.contact-form input,.contact-form textarea{width:100%;background:#fafafa;border:1.5px solid #e2e2e2;border-radius:8px;padding:13px 16px;font-size:15px;font-family:var(--font);outline:none;transition:.15s;margin-bottom:12px}
-.contact-form input:focus,.contact-form textarea:focus{border-color:${d.accent};background:#fff}
-.contact-form textarea{height:120px;resize:vertical}
-.contact-form button{width:100%;background:linear-gradient(120deg,${d.accent},${accSoft});color:#fff;border:none;padding:15px;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;font-family:var(--font);letter-spacing:.4px;transition:.2s;box-shadow:0 10px 28px rgba(${ar},.35)}
-.contact-form button:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(${ar},.5)}
-
-/* Footer */
-footer{background:${d.primary};color:rgba(255,255,255,.5);text-align:center;padding:34px 5vw;font-size:13px}
-footer strong{color:#fff}
-
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.tilt{transform:none!important}}
-</style>
-</head>
-<body>
-
-<div class="preview-banner">
-  🎨 Website Preview for <strong>${p.name}</strong>
-  <span>— This is a mockup. Your real site will be fully customised.</span>
-</div>
-<div class="grain"></div>
-<div id="progress"></div>
-
-<nav>
-  <div class="nav-logo">${p.name.split(' ').slice(0,2).join(' ')}<span>.</span></div>
-  <ul>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <a href="#contact" class="nav-cta">${d.cta}</a>
-</nav>
-
-<section class="hero">
-  <div id="vanta-hero"></div>
-  <div class="hero-veil"></div>
-  <div class="hero-content">
-    <div class="hero-badge" data-reveal>${p.category || 'Professional Services'} · ${city}</div>
-    <h1 data-reveal>${p.name.split(' ').slice(0,4).join(' ')}<br><span class="grad">${d.tagline}</span></h1>
-    <p class="hero-sub" data-reveal>${p.category ? `Trusted ${p.category.toLowerCase()} serving ${city} and surrounding areas.` : `Serving ${city} with professional excellence.`}${p.rating ? ` Rated ${p.rating}★ by our clients.` : ''}</p>
-    <div class="hero-btns" data-reveal>
-      <a href="#contact" class="btn-main">${d.cta}</a>
-      <a href="#services" class="btn-outline">Our Services</a>
-    </div>
-    <div class="hero-meta" data-reveal>
-      ${phone ? `<span>📞 ${phone}</span>` : ''}
-      <span>📍 ${city}</span>
-      ${p.rating ? `<span>⭐ ${p.rating} Stars (${p.total_ratings} reviews)</span>` : ''}
-    </div>
-  </div>
-</section>
-
-<section id="services">
-  <div class="section-head" data-reveal>
-    <div class="section-tag">What We Offer</div>
-    <h2 class="section-title"><span class="grad">Our Services</span></h2>
-    <p class="section-sub">Everything you need, delivered with the professionalism and care you deserve.</p>
-  </div>
-  <div class="grid3" data-stagger>${servicesHtml}</div>
-</section>
-
-<div class="stats-section">
-  <div class="stats-grid" data-stagger>${statsHtml}</div>
-</div>
-
-<section id="about" class="reviews-section">
-  <div style="max-width:1100px;margin:0 auto">
-    <div class="section-head" data-reveal>
-      <div class="section-tag">Client Reviews</div>
-      <h2 class="section-title"><span class="grad">What Our Clients Say</span></h2>
-    </div>
-    <div class="reviews-grid" data-stagger>${reviewsHtml}</div>
-  </div>
-</section>
-
-<section class="cta-section">
-  <h2 data-reveal>Ready to Get Started?</h2>
-  <p data-reveal>Reach out today — we'd love to hear from you.</p>
-  <a href="#contact" class="btn-main" data-reveal style="display:inline-block;padding:18px 44px;font-size:17px;font-weight:700;border-radius:8px;text-decoration:none;color:#fff;background:linear-gradient(120deg,${d.accent},${accSoft});font-family:var(--font);box-shadow:0 14px 38px rgba(${ar},.45)">${d.cta}</a>
-</section>
-
-<section id="contact" class="contact-section">
-  <div style="max-width:1100px;margin:0 auto">
-    <div class="contact-grid">
-      <div class="contact-info" data-reveal>
-        <div class="section-tag">Get In Touch</div>
-        <h2 class="section-title" style="font-size:clamp(24px,3vw,38px)"><span class="grad">Let's Talk</span></h2>
-        <p>We're here to help. Reach out and we'll get back to you as soon as possible.</p>
-        ${phone ? `<div class="contact-detail"><strong>📞</strong>${phone}</div>` : ''}
-        <div class="contact-detail"><strong>📍</strong>${p.address || city}</div>
-        ${website ? `<div class="contact-detail"><strong>🌐</strong>${website}</div>` : ''}
-      </div>
-      <div class="contact-form" data-reveal>
-        <input type="text" placeholder="Your Name">
-        <input type="email" placeholder="Your Email">
-        <input type="tel" placeholder="Your Phone Number">
-        <textarea placeholder="How can we help you?"></textarea>
-        <button type="button">${d.cta}</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <strong>${p.name}</strong> · ${city}${phone ? ' · ' + phone : ''}<br>
-  <span style="font-size:11px;opacity:.5;margin-top:6px;display:block">Preview mockup — website design by [Your Agency]</span>
-</footer>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"><\/script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.${effectFile}.min.js"><\/script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"><\/script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"><\/script>
-<script>
-(function(){
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function hasWebGL(){try{var c=document.createElement('canvas');return !!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl')));}catch(e){return false;}}
-  if(!reduce && hasWebGL() && window.VANTA){
-    try{
-      var CFG=${vantaCfg};
-      var fx=CFG.effect; delete CFG.effect;
-      if(VANTA[fx]){VANTA[fx](Object.assign({el:'#vanta-hero',mouseControls:true,touchControls:true,gyroControls:false,minHeight:200,minWidth:200,scale:1,scaleMobile:1},CFG));}
-    }catch(e){}
+  // Vanta effect (skipped for minimal)
+  let vantaCfgStr = '', effectFile = '';
+  if (layout.id !== 'minimal') {
+    const effectPool = d.vantaPool || [{effect:'WAVES',color:0x12407a,shininess:35,waveHeight:16,waveSpeed:0.9,zoom:0.92}];
+    const chosen = pick(effectRng, effectPool);
+    effectFile = (chosen.effect || 'WAVES').toLowerCase();
+    vantaCfgStr = JSON.stringify(chosen);
   }
-  var bar=document.getElementById('progress');
-  if(bar){var upd=function(){var h=document.documentElement;var m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?(h.scrollTop/m*100):0)+'%';};window.addEventListener('scroll',upd,{passive:true});upd();}
-  var fine=window.matchMedia('(hover:hover) and (pointer:fine)').matches;
-  if(fine && !reduce){
-    document.querySelectorAll('[data-tilt]').forEach(function(el){
-      el.addEventListener('pointermove',function(e){var r=el.getBoundingClientRect();var x=(e.clientX-r.left)/r.width-0.5;var y=(e.clientY-r.top)/r.height-0.5;el.style.transform='perspective(900px) rotateX('+(-y*5).toFixed(2)+'deg) rotateY('+(x*7).toFixed(2)+'deg) translateY(-6px)';});
-      el.addEventListener('pointerleave',function(){el.style.transform='';});
-    });
+
+  // Copy
+  const tagline    = pick(copyRng, d.taglines || ['Professional Service']);
+  const cta        = pick(mulberry32(seed ^ 0x1111), d.ctaPool || ['Get In Touch']);
+  const sectionTag = pick(mulberry32(seed ^ 0x2222), d.sectionTags || ['What We Offer']);
+  const reviews    = (d.reviews2 && reviewRng() > 0.5) ? d.reviews2 : d.reviews;
+
+  // Colour: base palette + bounded hue shift
+  const shiftDeg = Math.round(colorRng() * 30) - 15;
+  let primary = hueShift(d.primary, shiftDeg);
+  let accent  = hueShift(d.accent,  shiftDeg);
+
+  // Brand colour override when Brandfetch returned palette
+  if (branding && branding.colors && branding.colors.length >= 2) {
+    const sorted = [...branding.colors].sort((a,b) => brightness(a) - brightness(b));
+    primary = sorted[0];
+    accent  = sorted[sorted.length - 1];
   }
-  if(window.gsap && !reduce && window.ScrollTrigger){
-    gsap.registerPlugin(ScrollTrigger);
-    gsap.utils.toArray('[data-reveal]').forEach(function(el){gsap.from(el,{opacity:0,y:42,duration:.9,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 86%'}});});
-    gsap.utils.toArray('[data-stagger]').forEach(function(g){gsap.from(g.children,{opacity:0,y:42,duration:.8,ease:'power3.out',stagger:.12,scrollTrigger:{trigger:g,start:'top 82%'}});});
-    gsap.to('.hero-content',{yPercent:16,opacity:.55,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
-    document.querySelectorAll('.stat-n').forEach(function(el){
-      var txt=el.textContent.trim();var i=0;while(i<txt.length&&!(txt.charAt(i)>='0'&&txt.charAt(i)<='9'))i++;if(i>=txt.length)return;var j=i;while(j<txt.length&&((txt.charAt(j)>='0'&&txt.charAt(j)<='9')||txt.charAt(j)===','||txt.charAt(j)==='.'))j++;
-      var pre=txt.slice(0,i),numStr=txt.slice(i,j).replace(/,/g,''),suf=txt.slice(j),target=parseFloat(numStr);if(isNaN(target))return;var dec=numStr.indexOf('.')>=0?1:0,o={v:0};
-      gsap.to(o,{v:target,duration:1.7,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 92%'},onUpdate:function(){el.textContent=pre+(dec?o.v.toFixed(1):Math.round(o.v).toLocaleString())+suf;},onComplete:function(){el.textContent=pre+(dec?target.toFixed(1):Math.round(target).toLocaleString())+suf;}});
-    });
-  }
-})();
-<\/script>
-</body>
-</html>`;
+
+  const pr = hexToRgb(primary);
+  const ar = hexToRgb(accent);
+  const accSoft = lighten(accent, 0.4);
+  const [mr,mg,mb] = accent.replace('#','').match(/.{2}/g).map(x=>parseInt(x,16));
+
+  // Nav logo
+  const navLogoHtml = (branding && branding.logoUrl)
+    ? '<img src="'+branding.logoUrl+'" style="max-height:36px;max-width:120px;object-fit:contain;filter:brightness(0) invert(1)" alt="'+p.name+'">'
+    : '<div class="nav-logo">'+p.name.split(' ').slice(0,2).join(' ')+'<span>.</span></div>';
+
+  const ctx = {p, d, tagline, cta, city, phone, accent, accSoft, primary, branding};
+
+  const servicesHtml = d.services.map(s =>
+    '<div class="card tilt" data-tilt><div class="card-icon">'+s.icon+'</div><h3>'+s.name+'</h3><p>'+s.desc+'</p></div>'
+  ).join('');
+
+  const statsHtml = d.stats.map(s =>
+    '<div class="stat"><div class="stat-n">'+s.n+'</div><div class="stat-l">'+s.l+'</div></div>'
+  ).join('');
+
+  const reviewsHtml = reviews.map(r =>
+    '<div class="review tilt" data-tilt><div class="review-q">“'+r.q+'”</div><div class="review-a">— '+r.a+'</div></div>'
+  ).join('');
+
+  const heroSection = layout.heroHtml(ctx);
+
+  const vantaScripts = layout.id === 'minimal' ? '' :
+    '<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"><\\/script>\n'+
+    '<script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.'+effectFile+'.min.js"><\\/script>';
+
+  const vantaInit = layout.id === 'minimal' ? '' :
+    'if(!reduce&&hasWebGL()&&window.VANTA){try{var CFG='+vantaCfgStr+';var fx=CFG.effect;delete CFG.effect;if(VANTA[fx]){VANTA[fx](Object.assign({el:"#vanta-hero",mouseControls:true,touchControls:true,gyroControls:false,minHeight:200,minWidth:200,scale:1,scaleMobile:1},CFG));}}catch(e){}}';
+
+  return '<!DOCTYPE html>\n<html lang="en">\n<head>\n'+
+'<meta charset="UTF-8">\n'+
+'<meta name="viewport" content="width=device-width,initial-scale=1">\n'+
+'<title>'+p.name+'</title>\n'+
+'<link href="https://fonts.googleapis.com/css2?family='+fp.url+'&display=swap" rel="stylesheet">\n'+
+'<style>\n'+
+'*{box-sizing:border-box;margin:0;padding:0}\n'+
+':root{--primary:'+primary+';--accent:'+accent+';--accent-soft:'+accSoft+';--light:'+d.accentLight+';--font:\''+bodyFont+'\',sans-serif;--font-head:\''+headFont+'\','+(fp.serif?'serif':'sans-serif')+';--ar:'+ar+';--pr:'+pr+';--mr:'+mr+';--mg:'+mg+';--mb:'+mb+'}\n'+
+'html{scroll-behavior:smooth}\n'+
+'body{font-family:var(--font);background:#fff;color:#141414;overflow-x:hidden;-webkit-font-smoothing:antialiased}\n'+
+'#progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:10001;background:linear-gradient(90deg,'+accent+','+accSoft+');box-shadow:0 0 12px rgba('+ar+',.7)}\n'+
+'.grain{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.045;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'140\' height=\'140\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'2\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")}\n'+
+'.preview-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:linear-gradient(90deg,#f59e0b,#d97706);color:#000;text-align:center;padding:10px 16px;font-size:13px;font-weight:700;letter-spacing:.5px;box-shadow:0 2px 10px rgba(0,0,0,.2)}\n'+
+'.preview-banner span{font-weight:400;opacity:.8;margin-left:8px}\n'+
+'body{padding-top:42px}\n'+
+'nav{position:sticky;top:42px;background:rgba('+pr+',.55);backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);z-index:100;padding:0 5vw;display:flex;align-items:center;justify-content:space-between;height:70px;border-bottom:1px solid rgba(255,255,255,.10)}\n'+
+'.nav-logo{color:#fff;font-family:var(--font-head);font-size:21px;font-weight:800;letter-spacing:-.5px}\n'+
+'.nav-logo span{color:'+accent+'}\n'+
+'.nav-cta{background:linear-gradient(120deg,'+accent+','+accSoft+');color:#fff;border:none;padding:11px 24px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.4px;transition:.2s;text-decoration:none;font-family:var(--font);box-shadow:0 8px 22px rgba('+ar+',.35)}\n'+
+'.nav-cta:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba('+ar+',.5)}\n'+
+'nav ul{display:flex;gap:30px;list-style:none}\n'+
+'nav ul li a{color:rgba(255,255,255,.75);text-decoration:none;font-size:14px;font-weight:500;transition:.15s}\n'+
+'nav ul li a:hover{color:#fff}\n'+
+'@media(max-width:600px){nav ul{display:none}}\n'+
+'.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#fff;padding:120px 5vw 100px;background:'+d.bg+'}\n'+
+'#vanta-hero{position:absolute;inset:0;z-index:0}\n'+
+'.hero-veil{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 58%,transparent 0%,rgba(0,0,0,.32) 68%,rgba(0,0,0,.6) 100%)}\n'+
+'.hero-content{position:relative;z-index:2;max-width:860px;text-align:center}\n'+
+'.hero-badge{display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px);color:rgba(255,255,255,.9);font-size:12px;letter-spacing:2.5px;text-transform:uppercase;padding:8px 18px;border-radius:30px;margin-bottom:26px}\n'+
+'.hero h1{font-family:var(--font-head);font-size:clamp(40px,7.5vw,86px);font-weight:800;line-height:1.05;letter-spacing:-1.5px;margin-bottom:22px;text-shadow:0 4px 40px rgba(0,0,0,.3)}\n'+
+'.hero h1 .grad{background:linear-gradient(120deg,#fff 0%,'+accSoft+' 55%,'+accent+' 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}\n'+
+'.hero-sub{font-size:clamp(16px,2.4vw,22px);opacity:.88;margin-bottom:38px;font-weight:300;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.55;text-shadow:0 2px 20px rgba(0,0,0,.4)}\n'+
+'.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}\n'+
+'.hero-btns a{padding:16px 36px;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:.25s;font-family:var(--font);letter-spacing:.4px}\n'+
+'.btn-main{background:linear-gradient(120deg,'+accent+','+accSoft+');color:#fff;box-shadow:0 12px 34px rgba('+ar+',.45)}\n'+
+'.btn-main:hover{transform:translateY(-3px);box-shadow:0 18px 44px rgba('+ar+',.6)}\n'+
+'.btn-outline{background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.45);backdrop-filter:blur(6px)}\n'+
+'.btn-outline:hover{background:rgba(255,255,255,.14);transform:translateY(-3px)}\n'+
+'.hero-meta{margin-top:54px;display:flex;gap:30px;justify-content:center;opacity:.85;font-size:14px;flex-wrap:wrap;text-shadow:0 2px 12px rgba(0,0,0,.4)}\n'+
+'section{padding:100px 5vw}\n'+
+'.section-tag{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:'+accent+';font-weight:700;margin-bottom:12px}\n'+
+'.section-title{font-family:var(--font-head);font-size:clamp(28px,4vw,48px);font-weight:800;line-height:1.15;letter-spacing:-.5px;margin-bottom:16px}\n'+
+'.section-title .grad{background:linear-gradient(120deg,'+primary+','+accent+');-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}\n'+
+'.section-sub{font-size:17px;color:#666;max-width:560px;line-height:1.6}\n'+
+'.section-head{margin-bottom:60px}\n'+
+'.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}\n'+
+'@media(max-width:900px){.grid3{grid-template-columns:repeat(2,1fr)}}\n'+
+'@media(max-width:700px){.grid3{grid-template-columns:1fr}}\n'+
+'.card{position:relative;background:#fff;border:1px solid #ececec;border-radius:16px;padding:38px 30px;transition:box-shadow .3s,border-color .3s,transform .15s ease-out;box-shadow:0 4px 24px rgba(0,0,0,.05);transform-style:preserve-3d;will-change:transform}\n'+
+'.card:hover{box-shadow:0 24px 60px rgba('+ar+',.18);border-color:rgba('+ar+',.35)}\n'+
+'.card-icon{font-size:30px;color:'+accent+';margin-bottom:18px;display:inline-block}\n'+
+'.card h3{font-family:var(--font-head);font-size:20px;font-weight:700;margin-bottom:10px}\n'+
+'.card p{color:#666;line-height:1.65;font-size:15px}\n'+
+'.stats-section{position:relative;background:'+d.bg+';color:#fff;padding:90px 5vw;overflow:hidden}\n'+
+'.stats-section::before{content:\'\';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba('+ar+',.25),transparent 50%),radial-gradient(circle at 80% 70%,rgba('+ar+',.18),transparent 50%)}\n'+
+'.stats-grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:880px;margin:0 auto;text-align:center}\n'+
+'@media(max-width:600px){.stats-grid{grid-template-columns:1fr;gap:26px}}\n'+
+'.stat-n{font-family:var(--font-head);font-size:clamp(42px,6vw,68px);font-weight:800;line-height:1;background:linear-gradient(120deg,#fff,'+accSoft+');-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}\n'+
+'.stat-l{font-size:15px;opacity:.75;margin-top:10px;letter-spacing:.5px}\n'+
+'.reviews-section{background:'+d.accentLight+'}\n'+
+'.reviews-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}\n'+
+'@media(max-width:700px){.reviews-grid{grid-template-columns:1fr}}\n'+
+'.review{position:relative;background:#fff;border-radius:16px;padding:34px;box-shadow:0 8px 30px rgba(0,0,0,.07);border:1px solid rgba('+ar+',.10);transform-style:preserve-3d;transition:transform .15s ease-out,box-shadow .3s}\n'+
+'.review::before{content:"\\201C";position:absolute;top:12px;left:20px;font-size:70px;color:rgba('+ar+',.18);font-family:Georgia,serif;line-height:1}\n'+
+'.review-q{position:relative;font-size:16px;line-height:1.65;color:#333;font-style:italic;margin-bottom:16px}\n'+
+'.review-a{font-size:14px;font-weight:700;color:'+accent+'}\n'+
+'.cta-section{position:relative;background:'+d.bg+';color:#fff;text-align:center;padding:110px 5vw;overflow:hidden}\n'+
+'.cta-section::before{content:\'\';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba('+ar+',.3),transparent 60%)}\n'+
+'.cta-section h2{position:relative;font-family:var(--font-head);font-size:clamp(30px,4vw,52px);font-weight:800;margin-bottom:16px}\n'+
+'.cta-section p{position:relative;font-size:18px;opacity:.75;margin-bottom:40px}\n'+
+'.cta-section a{position:relative}\n'+
+'.contact-section{background:#f7f8fa}\n'+
+'.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}\n'+
+'@media(max-width:700px){.contact-grid{grid-template-columns:1fr}}\n'+
+'.contact-info h2{font-family:var(--font-head);font-size:32px;font-weight:800;margin-bottom:20px}\n'+
+'.contact-info p{color:#555;line-height:1.65;margin-bottom:28px;font-size:16px}\n'+
+'.contact-detail{display:flex;align-items:center;gap:12px;margin-bottom:14px;font-size:15px;color:#333}\n'+
+'.contact-detail strong{color:'+accent+';font-size:18px;width:24px}\n'+
+'.contact-form{background:#fff;border:1px solid #eee;border-radius:16px;padding:30px;box-shadow:0 10px 40px rgba(0,0,0,.05)}\n'+
+'.contact-form input,.contact-form textarea{width:100%;background:#fafafa;border:1.5px solid #e2e2e2;border-radius:8px;padding:13px 16px;font-size:15px;font-family:var(--font);outline:none;transition:.15s;margin-bottom:12px}\n'+
+'.contact-form input:focus,.contact-form textarea:focus{border-color:'+accent+';background:#fff}\n'+
+'.contact-form textarea{height:120px;resize:vertical}\n'+
+'.contact-form button{width:100%;background:linear-gradient(120deg,'+accent+','+accSoft+');color:#fff;border:none;padding:15px;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;font-family:var(--font);letter-spacing:.4px;transition:.2s;box-shadow:0 10px 28px rgba('+ar+',.35)}\n'+
+'.contact-form button:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba('+ar+',.5)}\n'+
+'footer{background:'+primary+';color:rgba(255,255,255,.5);text-align:center;padding:34px 5vw;font-size:13px}\n'+
+'footer strong{color:#fff}\n'+
+layout.extraCss+'\n'+
+'@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.tilt{transform:none!important}}\n'+
+'</style>\n</head>\n<body>\n'+
+'<div class="preview-banner">\u{1F3A8} Website Preview for <strong>'+p.name+'</strong><span>— This is a mockup. Your real site will be fully customised.</span></div>\n'+
+'<div class="grain"></div>\n'+
+'<div id="progress"></div>\n'+
+'<nav>\n'+
+navLogoHtml+'\n'+
+'<ul><li><a href="#services">Services</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul>\n'+
+'<a href="#contact" class="nav-cta">'+cta+'</a>\n'+
+'</nav>\n'+
+heroSection+'\n'+
+'<section id="services">\n'+
+'<div class="section-head" data-reveal>\n'+
+'<div class="section-tag">'+sectionTag+'</div>\n'+
+'<h2 class="section-title"><span class="grad">Our Services</span></h2>\n'+
+'<p class="section-sub">Everything you need, delivered with the professionalism and care you deserve.</p>\n'+
+'</div>\n'+
+'<div class="grid3" data-stagger>'+servicesHtml+'</div>\n'+
+'</section>\n'+
+'<div class="stats-section"><div class="stats-grid" data-stagger>'+statsHtml+'</div></div>\n'+
+'<section id="about" class="reviews-section"><div style="max-width:1100px;margin:0 auto">\n'+
+'<div class="section-head" data-reveal><div class="section-tag">Client Reviews</div><h2 class="section-title"><span class="grad">What Our Clients Say</span></h2></div>\n'+
+'<div class="reviews-grid" data-stagger>'+reviewsHtml+'</div>\n'+
+'</div></section>\n'+
+'<section class="cta-section">\n'+
+'<h2 data-reveal>Ready to Get Started?</h2>\n'+
+'<p data-reveal>Reach out today — we’d love to hear from you.</p>\n'+
+'<a href="#contact" class="btn-main" data-reveal style="display:inline-block;padding:18px 44px;font-size:17px;font-weight:700;border-radius:8px;text-decoration:none;color:#fff;background:linear-gradient(120deg,'+accent+','+accSoft+');font-family:var(--font);box-shadow:0 14px 38px rgba('+ar+',.45)">'+cta+'</a>\n'+
+'</section>\n'+
+'<section id="contact" class="contact-section"><div style="max-width:1100px;margin:0 auto"><div class="contact-grid">\n'+
+'<div class="contact-info" data-reveal><div class="section-tag">Get In Touch</div><h2 class="section-title" style="font-size:clamp(24px,3vw,38px)"><span class="grad">Let’s Talk</span></h2>\n'+
+'<p>We’re here to help. Reach out and we’ll get back to you as soon as possible.</p>\n'+
+(phone?'<div class="contact-detail"><strong>📞</strong>'+phone+'</div>':'')+
+'<div class="contact-detail"><strong>📍</strong>'+(p.address||city)+'</div>\n'+
+(website?'<div class="contact-detail"><strong>🌐</strong>'+website+'</div>':'')+
+'</div>\n'+
+'<div class="contact-form" data-reveal><input type="text" placeholder="Your Name"><input type="email" placeholder="Your Email"><input type="tel" placeholder="Your Phone Number"><textarea placeholder="How can we help you?"></textarea><button type="button">'+cta+'</button></div>\n'+
+'</div></div></section>\n'+
+'<footer><strong>'+p.name+'</strong> \xb7 '+city+(phone?' \xb7 '+phone:'')+'<br><span style="font-size:11px;opacity:.5;margin-top:6px;display:block">Preview mockup — website design by [Your Agency]</span></footer>\n'+
+vantaScripts+'\n'+
+'<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"><\/script>\n'+
+'<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"><\/script>\n'+
+'<script>\n'+
+'(function(){\n'+
+'var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;\n'+
+'function hasWebGL(){try{var c=document.createElement("canvas");return !!(window.WebGLRenderingContext&&(c.getContext("webgl")||c.getContext("experimental-webgl")));}catch(e){return false;}}\n'+
+vantaInit+'\n'+
+'var bar=document.getElementById("progress");\n'+
+'if(bar){var upd=function(){var h=document.documentElement;var m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?(h.scrollTop/m*100):0)+"%";};window.addEventListener("scroll",upd,{passive:true});upd();}\n'+
+'var fine=window.matchMedia("(hover:hover) and (pointer:fine)").matches;\n'+
+'if(fine&&!reduce){document.querySelectorAll("[data-tilt]").forEach(function(el){el.addEventListener("pointermove",function(e){var r=el.getBoundingClientRect();var x=(e.clientX-r.left)/r.width-0.5;var y=(e.clientY-r.top)/r.height-0.5;el.style.transform="perspective(900px) rotateX("+(-y*5).toFixed(2)+"deg) rotateY("+(x*7).toFixed(2)+"deg) translateY(-6px)";});el.addEventListener("pointerleave",function(){el.style.transform="";});});}\n'+
+'if(window.gsap&&!reduce&&window.ScrollTrigger){gsap.registerPlugin(ScrollTrigger);gsap.utils.toArray("[data-reveal]").forEach(function(el){gsap.from(el,{opacity:0,y:42,duration:.9,ease:"power3.out",scrollTrigger:{trigger:el,start:"top 86%"}});});gsap.utils.toArray("[data-stagger]").forEach(function(g){gsap.from(g.children,{opacity:0,y:42,duration:.8,ease:"power3.out",stagger:.12,scrollTrigger:{trigger:g,start:"top 82%"}});});gsap.to(".hero-content",{yPercent:16,opacity:.55,ease:"none",scrollTrigger:{trigger:".hero",start:"top top",end:"bottom top",scrub:true}});document.querySelectorAll(".stat-n").forEach(function(el){var txt=el.textContent.trim();var i=0;while(i<txt.length&&!(txt.charAt(i)>="0"&&txt.charAt(i)<="9"))i++;if(i>=txt.length)return;var j=i;while(j<txt.length&&((txt.charAt(j)>="0"&&txt.charAt(j)<="9")||txt.charAt(j)===","||txt.charAt(j)==="."))j++;var pre=txt.slice(0,i),numStr=txt.slice(i,j).replace(/,/g,""),suf=txt.slice(j),target=parseFloat(numStr);if(isNaN(target))return;var dec=numStr.indexOf(".")>=0?1:0,o={v:0};gsap.to(o,{v:target,duration:1.7,ease:"power2.out",scrollTrigger:{trigger:el,start:"top 92%"},onUpdate:function(){el.textContent=pre+(dec?o.v.toFixed(1):Math.round(o.v).toLocaleString())+suf;},onComplete:function(){el.textContent=pre+(dec?target.toFixed(1):Math.round(target).toLocaleString())+suf;}});});}\n'+
+'})();\n'+
+'<\/script>\n</body>\n</html>';
 }
 
 function hexToRgb(h) {
@@ -1248,6 +1280,236 @@ function lighten(hex, p) {
   return '#' + [r,g,b].map(x => x.toString(16).padStart(2,'0')).join('');
 }
 
+function darken(hex, p) {
+  hex = hex.replace('#','');
+  let r = parseInt(hex.slice(0,2),16), g = parseInt(hex.slice(2,4),16), b = parseInt(hex.slice(4,6),16);
+  r = Math.round(r * (1 - p)); g = Math.round(g * (1 - p)); b = Math.round(b * (1 - p));
+  return '#' + [r,g,b].map(x => x.toString(16).padStart(2,'0')).join('');
+}
+
+function hueShift(hex, deg) {
+  hex = hex.replace('#','');
+  let r = parseInt(hex.slice(0,2),16)/255, g = parseInt(hex.slice(2,4),16)/255, b = parseInt(hex.slice(4,6),16)/255;
+  const max = Math.max(r,g,b), min = Math.min(r,g,b), d = max - min;
+  let h = 0, s = max === 0 ? 0 : d/max, v = max;
+  if (d !== 0) {
+    if (max === r) h = ((g - b) / d + 6) % 6;
+    else if (max === g) h = (b - r) / d + 2;
+    else h = (r - g) / d + 4;
+    h *= 60;
+  }
+  h = (h + deg % 360 + 360) % 360;
+  const i = Math.floor(h / 60), f = h / 60 - i;
+  const p2 = v*(1-s), q = v*(1-f*s), t2 = v*(1-(1-f)*s);
+  let nr,ng,nb;
+  switch(i % 6){case 0:nr=v;ng=t2;nb=p2;break;case 1:nr=q;ng=v;nb=p2;break;case 2:nr=p2;ng=v;nb=t2;break;case 3:nr=p2;ng=q;nb=v;break;case 4:nr=t2;ng=p2;nb=v;break;default:nr=v;ng=p2;nb=q;}
+  return '#' + [nr,ng,nb].map(x => Math.round(x*255).toString(16).padStart(2,'0')).join('');
+}
+
+function brightness(hex) {
+  hex = hex.replace('#','');
+  return 0.299*parseInt(hex.slice(0,2),16) + 0.587*parseInt(hex.slice(2,4),16) + 0.114*parseInt(hex.slice(4,6),16);
+}
+
+// ── Seed engine ───────────────────────────────────────────────────────────
+function seedFrom(p) {
+  const str = p.place_id || p.name || '';
+  let h = 0x811c9dc5 >>> 0;
+  for (let i = 0; i < str.length; i++) { h = (Math.imul(h ^ str.charCodeAt(i), 0x01000193)) >>> 0; }
+  return h;
+}
+
+function mulberry32(seed) {
+  return function() {
+    seed = (seed + 0x6D2B79F5) >>> 0;
+    var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function pick(rng, arr) { return arr[Math.floor(rng() * arr.length)]; }
+
+// ── Font pairs ────────────────────────────────────────────────────────────
+const FONT_PAIRS = [
+  {head:'Playfair+Display',body:'Inter',url:'Playfair+Display:ital,wght@0,700;0,800;1,400|Inter:wght@300;400;600',serif:true},
+  {head:'Sora',body:'Inter',url:'Sora:wght@300;600;800|Inter:wght@300;400;600',serif:false},
+  {head:'Space+Grotesk',body:'Inter',url:'Space+Grotesk:wght@400;600;700|Inter:wght@300;400;600',serif:false},
+  {head:'Cormorant+Garamond',body:'Nunito+Sans',url:'Cormorant+Garamond:wght@400;600;700|Nunito+Sans:wght@300;400;600',serif:true},
+  {head:'Poppins',body:'Poppins',url:'Poppins:wght@300;400;600;700;800',serif:false},
+  {head:'Raleway',body:'Inter',url:'Raleway:wght@400;600;700;800|Inter:wght@300;400;600',serif:false},
+  {head:'DM+Serif+Display',body:'DM+Sans',url:'DM+Serif+Display:ital@0;1|DM+Sans:wght@300;400;600',serif:true},
+];
+
+// ── Layout archetypes ─────────────────────────────────────────────────────
+const LAYOUTS = [
+  {
+    id: 'centered',
+    fontBias: null,
+    heroHtml(ctx) {
+      const {p, tagline, cta, city, phone} = ctx;
+      return `<section class="hero">
+  <div id="vanta-hero"></div>
+  <div class="hero-veil"></div>
+  <div class="hero-content">
+    <div class="hero-badge" data-reveal>${p.category||'Professional Services'} \xb7 ${city}</div>
+    <h1 data-reveal>${p.name.split(' ').slice(0,4).join(' ')}<br><span class="grad">${tagline}</span></h1>
+    <p class="hero-sub" data-reveal>${p.category?'Trusted '+p.category.toLowerCase()+' serving '+city+' and surrounding areas.':'Serving '+city+' with professional excellence.'}${p.rating?' Rated '+p.rating+'★ by our clients.':''}</p>
+    <div class="hero-btns" data-reveal>
+      <a href="#contact" class="btn-main">${cta}</a>
+      <a href="#services" class="btn-outline">Our Services</a>
+    </div>
+    <div class="hero-meta" data-reveal>
+      ${phone?'<span>📞 '+phone+'</span>':''}
+      <span>📍 ${city}</span>
+      ${p.rating?'<span>⭐ '+p.rating+' Stars ('+p.total_ratings+' reviews)</span>':''}
+    </div>
+  </div>
+</section>`;
+    },
+    extraCss: '',
+  },
+  {
+    id: 'split',
+    fontBias: null,
+    heroHtml(ctx) {
+      const {p, tagline, cta, city, phone, branding} = ctx;
+      const logoInner = branding&&branding.logoUrl
+        ? '<img src="'+branding.logoUrl+'" class="split-card-logo" alt="'+p.name+'">'
+        : '<div class="split-card-wordmark">'+p.name.split(' ').slice(0,2).join('<br>')+'</div>';
+      return `<section class="hero lhero-split">
+  <div id="vanta-hero"></div>
+  <div class="hero-veil"></div>
+  <div class="split-inner">
+    <div class="split-text">
+      <div class="hero-badge" data-reveal>${p.category||'Professional Services'} \xb7 ${city}</div>
+      <h1 data-reveal><span class="grad">${tagline}</span></h1>
+      <p class="hero-sub" data-reveal>${p.category?'Your trusted '+p.category.toLowerCase()+' in '+city+'.':'Professional services in '+city+'.'}${p.rating?' '+p.rating+'★ rated.':''}</p>
+      <div class="hero-btns" style="justify-content:flex-start" data-reveal>
+        <a href="#contact" class="btn-main">${cta}</a>
+        <a href="#services" class="btn-outline">Learn More</a>
+      </div>
+      <div class="hero-meta" style="justify-content:flex-start" data-reveal>
+        ${phone?'<span>📞 '+phone+'</span>':''}
+        <span>📍 ${city}</span>
+        ${p.rating?'<span>⭐ '+p.rating+'</span>':''}
+      </div>
+    </div>
+    <div class="split-visual" data-reveal>
+      <div class="split-card">
+        ${logoInner}
+        <div class="split-card-rule"></div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.55);letter-spacing:2px;text-transform:uppercase">${city}</div>
+        <div class="split-card-glow"></div>
+      </div>
+    </div>
+  </div>
+</section>`;
+    },
+    extraCss: '.lhero-split{padding:80px 5vw;align-items:center}.split-inner{display:flex;align-items:center;gap:60px;max-width:1100px;margin:0 auto;width:100%}.split-text{flex:1 1 55%}.split-text h1{text-align:left;font-size:clamp(36px,5.5vw,72px)}.split-text .hero-sub{margin-left:0;text-align:left}.split-text .hero-badge{text-align:left}.split-visual{flex:1 1 40%;display:flex;align-items:center;justify-content:center}.split-card{position:relative;background:rgba(255,255,255,0.07);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.15);border-radius:24px;padding:48px 36px;text-align:center;width:100%;max-width:340px}.split-card-logo{max-width:140px;max-height:100px;object-fit:contain;filter:brightness(0) invert(1);margin-bottom:20px;display:block;margin-left:auto;margin-right:auto}.split-card-wordmark{font-size:28px;font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:20px;line-height:1.15}.split-card-rule{width:40px;height:2px;background:rgba(255,255,255,0.2);margin:16px auto}.split-card-glow{position:absolute;inset:-60px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.1) 0%,transparent 70%);pointer-events:none;z-index:-1}@media(max-width:768px){.split-inner{flex-direction:column}.split-visual{display:none}}',
+  },
+  {
+    id: 'editorial',
+    fontBias: ['Playfair+Display','Cormorant+Garamond','DM+Serif+Display'],
+    heroHtml(ctx) {
+      const {p, tagline, cta, city, phone} = ctx;
+      return `<section class="hero lhero-editorial">
+  <div id="vanta-hero"></div>
+  <div class="hero-veil" style="background:radial-gradient(ellipse at 30% 50%,transparent 0%,rgba(0,0,0,0.42) 70%,rgba(0,0,0,0.72) 100%)"></div>
+  <div class="editorial-content">
+    <div class="editorial-tag" data-reveal>${p.category||'Professional Services'} — ${city}</div>
+    <h1 class="editorial-h1" data-reveal>
+      <span class="editorial-l1">${p.name.split(' ').slice(0,3).join(' ')}</span>
+      <span class="editorial-l2 grad">${tagline}</span>
+    </h1>
+    <p class="editorial-sub" data-reveal>${p.category?'The '+city+' '+p.category.toLowerCase()+' you can trust.':'Serving '+city+' with distinction.'}${p.rating?' '+p.rating+'★ on Google.':''}</p>
+    <div class="editorial-meta" data-reveal>
+      ${phone?'<span>📞 '+phone+'</span>':''}
+      <span>📍 ${city}</span>
+      ${p.rating?'<span>⭐ '+p.rating+' ('+p.total_ratings+' reviews)</span>':''}
+    </div>
+    <div class="hero-btns" style="justify-content:flex-start" data-reveal>
+      <a href="#contact" class="btn-main">${cta}</a>
+      <a href="#services" class="btn-outline">View Services</a>
+    </div>
+  </div>
+</section>`;
+    },
+    extraCss: '.lhero-editorial{padding:100px 5vw 80px;align-items:flex-start}.editorial-content{max-width:900px;text-align:left;position:relative;z-index:2}.editorial-tag{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:20px}.editorial-h1{font-size:clamp(52px,9vw,110px);font-weight:800;line-height:0.95;letter-spacing:-3px;margin-bottom:28px;display:flex;flex-direction:column}.editorial-l1{color:rgba(255,255,255,0.9)}.editorial-l2{display:block}.editorial-sub{font-size:clamp(15px,2vw,18px);opacity:0.72;margin-bottom:24px;max-width:500px;line-height:1.6;font-weight:300}.editorial-meta{display:flex;gap:20px;margin-bottom:28px;flex-wrap:wrap}.editorial-meta span{font-size:12px;color:rgba(255,255,255,0.5);letter-spacing:1px}',
+  },
+  {
+    id: 'minimal',
+    fontBias: ['Space+Grotesk','Sora','Poppins'],
+    heroHtml(ctx) {
+      const {p, tagline, cta, city, phone, branding} = ctx;
+      const logoHtml = branding&&branding.logoUrl
+        ? '<img src="'+branding.logoUrl+'" style="max-height:56px;max-width:180px;object-fit:contain;margin:0 auto 28px;display:block" alt="'+p.name+'">'
+        : '';
+      return `<section class="hero lhero-minimal">
+  <div class="minimal-mesh"></div>
+  <div class="hero-content" style="position:relative;z-index:2">
+    ${logoHtml}
+    <div class="hero-badge minimal-badge" data-reveal>${p.category||'Professional Services'} \xb7 ${city}</div>
+    <h1 data-reveal style="color:#0a0a18">${p.name.split(' ').slice(0,4).join(' ')}<br><span class="grad minimal-grad">${tagline}</span></h1>
+    <p class="hero-sub" style="color:rgba(10,10,24,0.65);text-shadow:none" data-reveal>${p.category?city+"'s trusted "+p.category.toLowerCase()+'.':'Professional services in '+city+'.'}${p.rating?' Rated '+p.rating+'★.':''}</p>
+    <div class="hero-btns" data-reveal>
+      <a href="#contact" class="btn-main">${cta}</a>
+      <a href="#services" class="btn-outline minimal-outline">Our Services</a>
+    </div>
+    <div class="hero-meta" style="color:rgba(10,10,24,0.5);text-shadow:none" data-reveal>
+      ${phone?'<span>📞 '+phone+'</span>':''}
+      <span>📍 ${city}</span>
+      ${p.rating?'<span>⭐ '+p.rating+'</span>':''}
+    </div>
+  </div>
+</section>`;
+    },
+    extraCss: '.lhero-minimal{background:#f5f7ff;color:#0a0a18;min-height:88vh;padding:100px 5vw}.lhero-minimal #vanta-hero{display:none!important}.lhero-minimal .hero-veil{display:none!important}.lhero-minimal .hero-badge{background:rgba(10,10,24,0.06);border-color:rgba(10,10,24,0.14);color:rgba(10,10,24,0.7)}.minimal-mesh{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at 20% 30%,rgba(var(--mr),var(--mg),var(--mb),0.13) 0%,transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(var(--mr),var(--mg),var(--mb),0.08) 0%,transparent 50%);animation:meshPulse 6s ease-in-out infinite alternate}@keyframes meshPulse{0%{opacity:0.5}100%{opacity:1}}@media(prefers-reduced-motion:reduce){.minimal-mesh{animation:none}}.minimal-grad{background:linear-gradient(120deg,#0a0a18 0%,var(--accent) 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important}.minimal-outline{background:rgba(10,10,24,0.06)!important;color:#0a0a18!important;border:1px solid rgba(10,10,24,0.2)!important;backdrop-filter:none!important}.minimal-outline:hover{background:rgba(10,10,24,0.1)!important}',
+  },
+];
+
+// ── Brandfetch ────────────────────────────────────────────────────────────
+const BF = {
+  get clientId() { return localStorage.getItem('bf_clientid') || ''; },
+  get configured() { return !!this.clientId; },
+};
+
+async function getBranding(website) {
+  if (!website || !BF.configured) return null;
+  try {
+    const url = new URL(website.startsWith('http') ? website : 'https://' + website);
+    const domain = url.hostname.replace(/^www\./, '').split('.').slice(-2).join('.');
+    const logoUrl = `https://cdn.brandfetch.io/${domain}/w/200/h/200?c=${BF.clientId}`;
+
+    // Color extraction via color-thief (needs CORS; may be tainted — fallback gracefully)
+    let colors = null;
+    if (window.ColorThief) {
+      try {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        await new Promise((res, rej) => {
+          img.onload = res; img.onerror = rej;
+          img.src = logoUrl + '&_r=' + Math.random().toString(36).slice(2);
+          setTimeout(rej, 5000);
+        });
+        const ct = new ColorThief();
+        const palette = ct.getPalette(img, 6);
+        colors = palette.map(([r,g,b]) => '#' + [r,g,b].map(x => x.toString(16).padStart(2,'0')).join(''));
+      } catch { /* canvas tainted or CORS blocked — fall back to seeded colours */ }
+    }
+
+    // Verify logo loads (no CORS needed for embedding)
+    const logoOk = await new Promise(res => {
+      const img = new Image();
+      img.onload = () => res(true); img.onerror = () => res(false);
+      img.src = logoUrl;
+      setTimeout(() => res(false), 4000);
+    });
+
+    return { logoUrl: logoOk ? logoUrl : null, colors };
+  } catch { return null; }
+}
+
 // ── Build mockup flow ─────────────────────────────────────────────────────
 let revProspect = null;
 let revMockupUrl = null;
@@ -1260,12 +1522,22 @@ async function buildMockup(prospectId) {
   revProspect = p;
   revMockupUrl = null;
   document.getElementById('revName').textContent = p.name;
-  document.getElementById('revBody').innerHTML = `<div class="building-state"><div class="spin"></div><div class="building-bar"></div><span>BUILDING MOCKUP...</span></div>`;
+  document.getElementById('revBody').innerHTML = '<div class="building-state"><div class="spin"></div><div class="building-bar"></div><span id="buildStep">MATCHING BRAND...</span></div>';
   document.getElementById('revFoot').style.display = 'none';
   document.getElementById('revModal').classList.add('show');
 
+  let branding = null;
+  if (p.website && BF.configured) {
+    try {
+      branding = await getBranding(p.website);
+      if (branding && (branding.logoUrl || branding.colors)) toast('Brand colours matched ✓', 'ok');
+    } catch {}
+  }
+  const stepEl = document.getElementById('buildStep');
+  if (stepEl) stepEl.textContent = 'BUILDING MOCKUP...';
+
   try {
-    const html = generateMockupHTML(p);
+    const html = generateMockupHTML(p, branding);
     const slug = slugify(p.name);
     const path = `mockups/${slug}.html`;
     const url = await GH.pushFile(path, html);
@@ -1332,6 +1604,8 @@ const Settings = {
     document.getElementById('sToken').value = GH.token;
     document.getElementById('sOwner').value = GH.owner;
     document.getElementById('sRepo').value = GH.repo;
+    document.getElementById('sBfId').value = BF.clientId;
+    updateBfDot();
     document.getElementById('settingsModal').classList.add('show');
   },
   close() { document.getElementById('settingsModal').classList.remove('show'); },
@@ -1339,12 +1613,16 @@ const Settings = {
     const t = document.getElementById('sToken').value.trim();
     const o = document.getElementById('sOwner').value.trim();
     const r = document.getElementById('sRepo').value.trim();
-    if (!t || !o || !r) { toast('Fill in all fields', 'err'); return; }
+    const bf = document.getElementById('sBfId').value.trim();
+    if (!t || !o || !r) { toast('Fill in GitHub fields', 'err'); return; }
     localStorage.setItem('gh_token', t);
     localStorage.setItem('gh_owner', o);
     localStorage.setItem('gh_repo', r);
+    if (bf) localStorage.setItem('bf_clientid', bf);
+    else localStorage.removeItem('bf_clientid');
     updateGhDot();
-    toast('GitHub connected ✓', 'ok');
+    updateBfDot();
+    toast('Settings saved ✓', 'ok');
     this.close();
   },
 };
@@ -1352,7 +1630,14 @@ const Settings = {
 function updateGhDot() {
   const dot = document.getElementById('ghDot');
   dot.style.background = GH.configured ? 'var(--green)' : 'var(--red)';
-  dot.title = GH.configured ? `Connected: ${GH.owner}/${GH.repo}` : 'GitHub not configured';
+  dot.title = GH.configured ? 'Connected: ' + GH.owner + '/' + GH.repo : 'GitHub not configured';
+}
+
+function updateBfDot() {
+  const dot = document.getElementById('bfDot');
+  if (!dot) return;
+  dot.style.background = BF.configured ? 'var(--green)' : 'var(--dim)';
+  dot.title = BF.configured ? 'Brandfetch active' : 'Not configured';
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────
