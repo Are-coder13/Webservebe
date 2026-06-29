@@ -34,6 +34,7 @@ function designSystem() {
     '- Self-contained: all CSS in a <style> tag, all JS in a <script> tag.',
     '- You MAY use CDN <link>/<script> for Google Fonts and GSAP (+ScrollTrigger) for animation.',
     '- DO NOT reference any external image or photo files — none exist. Create every visual with CSS gradients, CSS shapes, SVG, or <canvas>. You may use the business LOGO URL if one is provided (as an <img>).',
+    '- Treat hand-crafted inline SVG as your primary illustration medium — this is how you create rich imagery without photos. Draw bespoke hero artwork, abstract scenes, decorative background patterns, and custom trade-specific iconography (e.g. a stylised tooth for a dentist, a wrench for a garage, scissors for a salon). Use SVG gradients, filters (blur/glow), blend modes, masks, and subtle SVG/GSAP animation so the art feels designed and alive, not like plain coloured boxes.',
     '- Ground all content in the scraped website: real service names, real tone, real city. No lorem ipsum, no generic filler like "Quality You Can Trust".',
     '- Use the provided brand colours if any; otherwise choose a palette that suits the trade and mood.',
     '- Make it feel alive and high-end: a hero with motion, scroll-reveal animations, hover states, smooth transitions, a sticky/blurred nav, and a confident type scale. Tasteful, purposeful — never gaudy.',
