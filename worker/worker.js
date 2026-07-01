@@ -16,6 +16,8 @@
  * Deploy: see README.md.
  */
 
+import { designBrief, qaChecklist } from './design-knowledge.js';
+
 const MODEL = 'claude-opus-4-8';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const MAX_TOKENS = 32000;
@@ -188,16 +190,23 @@ export default {
     try {
       const scraped = await scrape(place.website);
       const ctx = businessBlock(place, branding, scraped);
+      // Curated design intelligence (palettes/fonts/patterns/styles) matched to
+      // the business type — extracted from the ui-ux-pro-max skill data.
+      const brief = designBrief(place, branding);
 
       // DESIGN pass
-      let html = extractHtml(await callClaudeStream(env, designSystem(), ctx + '\n\nNow build the complete website.'));
+      let html = extractHtml(await callClaudeStream(
+        env, designSystem(),
+        ctx + '\n\n' + brief + '\n\nNow build the complete website.'
+      ));
       if (!looksComplete(html)) throw new Error('Design pass produced incomplete HTML.');
 
       // ART-DIRECTOR review/refine pass
       try {
         const reviewed = extractHtml(await callClaudeStream(
           env, reviewSystem(),
-          businessBlock(place, branding, scraped) + '\n\nHTML TO IMPROVE:\n' + html
+          businessBlock(place, branding, scraped) + '\n\n' + qaChecklist() +
+            '\n\nHTML TO IMPROVE:\n' + html
         ));
         if (looksComplete(reviewed) && reviewed.length > html.length * 0.6) html = reviewed;
       } catch { /* keep design-pass HTML if review fails */ }

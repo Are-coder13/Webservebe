@@ -5,6 +5,13 @@ the public `prospector.html` on GitHub Pages. For each prospect it scrapes their
 real website, runs a Claude **design** pass and a **review** pass, and returns a
 tailored design spec that `prospector.html` renders into the mockup.
 
+The design pass is grounded in curated **design intelligence** (`design-knowledge.js`):
+the business is classified into a domain (health / auto / beauty / home / food /
+general) and a shortlist of matched colour palettes, font pairings, layout
+patterns and styles is injected into the prompt; the review pass gets a UX
+checklist as a QA gate. That data is extracted from the vendored `ui-ux-pro-max`
+skill — regenerate it with `python3 ../scripts/build-design-knowledge.py`.
+
 ```
 prospector.html (public)  ──POST /──▶  this Worker (holds the key)  ──▶  api.anthropic.com
                                             │

@@ -1,62 +1,65 @@
 # Design skills for Webservebe mockups
 
-These are the **UI/UX Pro Max** skills (from the open-source
-[`ui-ux-pro-max-skill`](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill),
-MIT-licensed), vendored into this repo so Claude Code can use them when building
-and improving the business mockups in `mockups/`.
+The **ui-ux-pro-max** skill (from the MIT-licensed
+[`ui-ux-pro-max-skill`](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)),
+vendored so Claude Code can use it when building and refining the business
+mockups in `mockups/`.
 
-Claude Code auto-discovers any skill under `.claude/skills/`, so they're active
-in every session in this repo — no install step needed.
+Claude Code auto-discovers skills under `.claude/skills/`, so it's active in
+every session in this repo — no install step.
 
-## What's here
+> We kept **only** `ui-ux-pro-max`. The other bundled sub-skills (banner-design,
+> brand, design, design-system, slides, ui-styling) were removed: they lean on
+> AI image generation and Tailwind/shadcn, neither of which fits our pipeline
+> (single-file HTML, CSS/SVG only, no external photos).
 
-| Skill | Use it for |
-|-------|-----------|
-| **ui-ux-pro-max** | The core design-intelligence engine. Given a business + vibe, it recommends a complete design system: layout pattern, UI style, colour palette, font pairing, effects, and a pre-delivery checklist. Backed by a searchable database (styles, 161 palettes, font pairings, UX rules, charts) across many stacks. |
-| **ui-styling** | Tailwind CSS + shadcn/ui component and theming guidance. |
-| **design-system** | Design tokens (primitive → semantic → component), component specs, CSS variables. |
-| **design** | Umbrella design skill: logos, corporate identity, banners, icons, slides. |
-| **brand** | Brand voice, visual identity, messaging frameworks, consistency checks. |
-| **banner-design** | Social / ad / web-hero / print banners. |
-| **slides** | HTML presentations (Chart.js, design tokens). |
+## What's valuable here
 
-## How this helps the mockups
+`ui-ux-pro-max` is a searchable database of design decisions:
 
-Our mockups are single-file HTML landing pages tailored to a specific local
-business (see `mockups/` and the design agent in `worker/worker.js`). The core
-value here is **grounding each mockup in a deliberate design system instead of
-guessing**.
+- **161 colour palettes** with semantic roles (primary / accent / bg / border …)
+- **57 font pairings** with moods and Google Fonts URLs
+- **landing-page layout patterns** (section orders, CTA placement)
+- **UI styles** with effects and best-for guidance
+- **99 UX guidelines** (accessibility, touch, animation, forms) — a QA checklist
 
-Typical flow when generating or refining a mockup:
+The "design-system engine" auto-picker is only so-so (e.g. it once suggested an
+orange palette for a dentist). Treat the data as a **menu to choose from**, not
+an oracle.
+
+## Two ways it's used
+
+### 1. Hand-building / refining mockups (run the scripts)
 
 ```bash
-# 1. Get a recommended design system for the business
-python3 .claude/skills/ui-ux-pro-max/scripts/search.py \
-  "local dentist practice antwerp trustworthy modern" \
-  --design-system -p "N-VoDent"
-
-# 2. Drill into a specific domain if you want alternatives
 python3 .claude/skills/ui-ux-pro-max/scripts/search.py "healthcare calm trust" --domain color
 python3 .claude/skills/ui-ux-pro-max/scripts/search.py "service business landing" --domain landing
 python3 .claude/skills/ui-ux-pro-max/scripts/search.py "minimalism dark mode" --domain style
 ```
 
-Feed the recommended pattern / style / palette / typography into the mockup so
-the result is coherent and on-brand, and run the pre-delivery checklist before
-sending a preview to a prospect.
+### 2. The automated worker (extracted data — no Python at runtime)
 
-> **Note on the Cloudflare worker:** `worker/worker.js` runs on Cloudflare and
-> can't execute Python, so it can't call `search.py` directly. To bring this
-> intelligence into the automated pipeline, precompute a design system for a
-> business and pass it into the worker's prompt as extra context (a good
-> follow-up). For hand-built mockups, run the scripts above directly.
+`worker/worker.js` runs on Cloudflare and can't execute Python, so the
+**local-business-relevant slice** of this data is extracted into
+`worker/design-knowledge.js`. For each prospect the worker:
+
+- classifies the business into a domain (health / auto / beauty / home / food /
+  general) from its name + category,
+- injects a **shortlist of matched palettes, font pairings, layout patterns and
+  styles** into the design prompt (Claude picks what fits),
+- injects the **UX checklist** into the art-director review prompt as a QA gate.
+
+To regenerate `worker/design-knowledge.js` after updating the skill data:
+
+```bash
+python3 scripts/build-design-knowledge.py
+```
 
 ## Requirements
 
-Python 3 (the search scripts use only the standard library).
+Python 3 (standard library only) for the skill scripts and the build script.
 
 ## Provenance / license
 
-Vendored from `ui-ux-pro-max-skill` (MIT). Upstream skill version 2.6.2. The
-`ui-ux-pro-max/SKILL.md` here is the Claude Code build of that skill; the other
-six are its bundled sub-skills. Keep this note if you update them.
+Vendored from `ui-ux-pro-max-skill` (MIT), upstream skill version 2.6.2.
+`ui-ux-pro-max/SKILL.md` is the Claude Code build of that skill.
