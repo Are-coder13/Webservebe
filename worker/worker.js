@@ -1,186 +1,88 @@
 /**
- * Prospector design agent — Cloudflare Worker
+ * Prospector design agent — Cloudflare Worker (generative mode)
  *
- * Holds the Anthropic API key server-side (never exposed to the public
- * prospector.html on GitHub Pages). For each prospect it:
+ * Holds the Anthropic API key server-side. For each prospect it:
  *   1. Scrapes the prospect's real website via Jina Reader (JS-rendered markdown)
- *   2. DESIGN pass  — Claude acts as an expert creative web designer and produces
- *      a structured design spec grounded in the scraped content + brand
- *   3. REVIEW pass  — Claude acts as a senior design director, critiques the spec
- *      against a rubric, and returns an improved spec
- * and returns the final spec as JSON for prospector.html to render.
+ *   2. DESIGN pass — Claude writes a COMPLETE, bespoke, single-file HTML website
+ *      from scratch (custom CSS/JS/animation), grounded in the scraped content +
+ *      brand. No templates.
+ *   3. ART-DIRECTOR pass — Claude critiques the page against a rubric and returns
+ *      a refined full HTML document.
+ *   4. Validates/repairs and returns the final HTML.
  *
- * Deploy: see README.md in this folder.
+ * Visuals policy (Option A): all imagery is CSS gradients / CSS shapes / SVG /
+ * canvas + the business's logo. No external photo files.
+ *
+ * Deploy: see README.md.
  */
 
 const MODEL = 'claude-opus-4-8';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
-
-// Curated, render-safe vocabularies. The agent may only pick from these, so the
-// renderer in prospector.html never receives an unknown font/effect/layout/icon.
-const LAYOUTS = ['centered', 'split', 'editorial', 'minimal'];
-const FONT_PAIRS = [
-  'Playfair Display + Inter',
-  'Sora + Inter',
-  'Space Grotesk + Inter',
-  'Cormorant Garamond + Nunito Sans',
-  'Poppins',
-  'Raleway + Inter',
-  'DM Serif Display + DM Sans',
-];
-const VANTA_EFFECTS = ['NET', 'WAVES', 'FOG', 'GLOBE', 'none'];
-const ICONS = ['◈', '✦', '◉', '◆', '◇', '✧', '❖', '⬡'];
-
-// ── JSON schema the agent must fill (structured outputs) ────────────────────
-const DESIGN_SCHEMA = {
-  type: 'object',
-  additionalProperties: false,
-  properties: {
-    layout: { type: 'string', enum: LAYOUTS,
-      description: 'centered=bold full-bleed hero; split=hero text + glass logo card; editorial=oversized serif headline, asymmetric; minimal=light background, no 3D, calm.' },
-    fontPair: { type: 'string', enum: FONT_PAIRS },
-    vantaEffect: { type: 'string', enum: VANTA_EFFECTS,
-      description: 'Animated 3D hero background. Use "none" for the minimal layout or calm brands.' },
-    palette: {
-      type: 'object', additionalProperties: false,
-      properties: {
-        primary: { type: 'string', description: 'Dark brand colour, hex e.g. #0a1628' },
-        accent: { type: 'string', description: 'Vibrant accent, hex' },
-        accentLight: { type: 'string', description: 'Very light tint of accent for section backgrounds, hex' },
-        bg: { type: 'string', description: 'CSS linear-gradient for dark hero/stats/cta sections' },
-      },
-      required: ['primary', 'accent', 'accentLight', 'bg'],
-    },
-    hero: {
-      type: 'object', additionalProperties: false,
-      properties: {
-        badge: { type: 'string', description: 'Small uppercase eyebrow, e.g. "Family Dentistry · Antwerp"' },
-        headline: { type: 'string', description: 'The big H1. Specific to THIS business, not generic.' },
-        subhead: { type: 'string', description: 'One or two sentences. Concrete, benefit-led, derived from their real services.' },
-        ctaPrimary: { type: 'string' },
-        ctaSecondary: { type: 'string' },
-      },
-      required: ['badge', 'headline', 'subhead', 'ctaPrimary', 'ctaSecondary'],
-    },
-    sectionTag: { type: 'string', description: 'Eyebrow for the services section, e.g. "What We Offer"' },
-    services: {
-      type: 'array',
-      description: '3 to 4 real services this business offers, from the scraped site when available.',
-      items: {
-        type: 'object', additionalProperties: false,
-        properties: {
-          icon: { type: 'string', enum: ICONS },
-          name: { type: 'string' },
-          desc: { type: 'string', description: 'One or two specific sentences.' },
-        },
-        required: ['icon', 'name', 'desc'],
-      },
-    },
-    stats: {
-      type: 'array',
-      description: 'Exactly 3 trust stats. Use real numbers from the site if present, otherwise plausible ones (rating, review count, years).',
-      items: {
-        type: 'object', additionalProperties: false,
-        properties: {
-          n: { type: 'string', description: 'e.g. "4.8★", "500+", "15"' },
-          l: { type: 'string', description: 'e.g. "Average Rating", "Happy Clients", "Years Experience"' },
-        },
-        required: ['n', 'l'],
-      },
-    },
-    reviews: {
-      type: 'array',
-      description: '2 short testimonials. Reuse real review snippets from the scrape if present; otherwise write believable ones in the right voice for this trade.',
-      items: {
-        type: 'object', additionalProperties: false,
-        properties: {
-          q: { type: 'string' },
-          a: { type: 'string', description: 'Attribution, e.g. "Sarah M." or "James, Verified Client"' },
-        },
-        required: ['q', 'a'],
-      },
-    },
-    about: {
-      type: 'object', additionalProperties: false,
-      properties: {
-        title: { type: 'string' },
-        body: { type: 'string', description: 'Two or three sentences about the business, grounded in the scrape.' },
-      },
-      required: ['title', 'body'],
-    },
-    rationale: { type: 'string', description: 'One sentence: why these design choices fit this specific business.' },
-  },
-  required: ['layout', 'fontPair', 'vantaEffect', 'palette', 'hero', 'sectionTag', 'services', 'stats', 'reviews', 'about', 'rationale'],
-};
+const MAX_TOKENS = 32000;
 
 // ── Prompts ─────────────────────────────────────────────────────────────────
 function designSystem() {
   return [
-    'You are an award-winning creative web designer who builds bespoke marketing sites for local businesses.',
-    'You are given a real business, what was scraped from their existing website (may be empty), and their brand assets.',
-    'Design a single tailored landing-page concept by filling the provided schema.',
+    'You are an award-winning creative web designer and front-end developer. You build the kind of bespoke marketing sites a top agency charges thousands for.',
+    'Produce a COMPLETE, self-contained, single-file HTML5 landing page for the specific local business described by the user.',
     '',
-    'Hard rules:',
-    '- Ground EVERYTHING in the specific business. No filler like "Quality You Can Trust". Name their actual services, city, and specialities.',
-    '- If scraped content exists, pull real service names, real copy, real testimonials, and real numbers from it.',
-    '- Choose layout/font/effect/colours that fit the trade and brand mood (a law firm ≠ a tattoo studio ≠ a bakery).',
-    '- If brand colours are provided, build the palette around them. Otherwise pick colours that suit the industry.',
-    '- accentLight must be a near-white tint of the accent. bg must be a dark linear-gradient that complements primary.',
-    '- Copy must be concrete and sales-driving — the goal is a mockup convincing enough that the owner wants to buy the real site.',
-    '- Use the minimal layout (and vantaEffect "none") for calm/premium/wellness/professional brands; bolder layouts + effects for energetic trades.',
+    'OUTPUT RULES (critical):',
+    '- Output ONLY the HTML document. Start with <!DOCTYPE html> and end with </html>.',
+    '- No markdown, no code fences, no commentary before or after.',
+    '',
+    'BUILD RULES:',
+    '- Self-contained: all CSS in a <style> tag, all JS in a <script> tag.',
+    '- You MAY use CDN <link>/<script> for Google Fonts, GSAP (+ScrollTrigger), Lenis (smooth scroll), and Three.js (WebGL).',
+    '- Create ONE signature 3D scroll moment with Three.js when it suits the brand: a procedural, asset-free WebGL scene (e.g. a drifting particle/point field, flowing light strands, a morphing wireframe form, or a wave surface) that reacts to scroll position via GSAP ScrollTrigger. Keep it abstract and generated from math — do NOT attempt photo-based effects (no source images exist). This is the main "wow".',
+    '- 3D must degrade gracefully: guard WebGL with a try/catch and a feature check, disable the heavy scene under prefers-reduced-motion and on small/low-power screens (fall back to a CSS gradient/SVG), cap the device pixel ratio, and dispose/throttle so it stays smooth. Never let a failed 3D scene blank the page.',
+    '- DO NOT reference any external image or photo files — none exist. Create every visual with CSS gradients, CSS shapes, SVG, or <canvas>. You may use the business LOGO URL if one is provided (as an <img>).',
+    '- Treat hand-crafted inline SVG as your primary illustration medium — this is how you create rich imagery without photos. Draw bespoke hero artwork, abstract scenes, decorative background patterns, and custom trade-specific iconography (e.g. a stylised tooth for a dentist, a wrench for a garage, scissors for a salon). Use SVG gradients, filters (blur/glow), blend modes, masks, and subtle SVG/GSAP animation so the art feels designed and alive, not like plain coloured boxes.',
+    '- Ground all content in the scraped website: real service names, real tone, real city. No lorem ipsum, no generic filler like "Quality You Can Trust".',
+    '- Use the provided brand colours if any; otherwise choose a palette that suits the trade and mood.',
+    '- Make it feel alive and high-end: a hero with motion, scroll-reveal animations, hover states, smooth transitions, a sticky/blurred nav, and a confident type scale. Tasteful, purposeful — never gaudy.',
+    '- Include the sections that fit this business: hero, services/offerings, a why-us or stats band, testimonials, about, a contact section with a (non-functional) form, and a footer.',
+    '- Fully mobile-responsive with accessible colour contrast.',
+    '- Add a fixed top banner reading: "Website Preview — concept mockup for <business name>" so it is clearly a preview (offset the page so the banner does not overlap content).',
+    '',
+    'Aim for a design that makes the business owner think "I want this".',
   ].join('\n');
 }
 
-function designUser(place, branding, scraped) {
-  const parts = [];
-  parts.push('BUSINESS:');
+function reviewSystem() {
+  return [
+    'You are a senior art director and front-end lead reviewing a landing page before it is sent to a paying prospect.',
+    'You receive a complete HTML landing page. Critique it hard against this rubric, then RETURN AN IMPROVED, COMPLETE HTML document:',
+    '1. Bespoke vs generic — does it look custom-designed for THIS business, or like a template? Elevate weak areas.',
+    '2. Visual hierarchy & polish — type scale, spacing, rhythm, colour use, depth. Make it feel premium.',
+    '3. Animation with purpose — motion should guide the eye, not distract. Fix anything janky or gratuitous.',
+    '4. Brand & copy — colours consistent; copy specific to this business and genuinely persuasive.',
+    '5. Technical — fully responsive; NO external image/photo files (only CSS/SVG/canvas/logo); valid, complete, not truncated.',
+    '',
+    'OUTPUT RULES: Output ONLY the improved HTML document. Start with <!DOCTYPE html>, end with </html>. No markdown, no commentary.',
+    'Keep what already works; raise everything else.',
+  ].join('\n');
+}
+
+function businessBlock(place, branding, scraped) {
+  const parts = ['BUSINESS:'];
   parts.push(`- Name: ${place.name || '(unknown)'}`);
   if (place.category) parts.push(`- Category: ${place.category}`);
   if (place.address) parts.push(`- Address: ${place.address}`);
   if (place.phone) parts.push(`- Phone: ${place.phone}`);
   if (place.website) parts.push(`- Website: ${place.website}`);
   if (place.rating) parts.push(`- Google rating: ${place.rating}★ (${place.total_ratings || 0} reviews)`);
-  parts.push('');
   if (branding && (branding.logoUrl || (branding.colors && branding.colors.length))) {
-    parts.push('BRAND:');
-    if (branding.logoUrl) parts.push(`- Logo available: yes`);
+    parts.push('', 'BRAND:');
+    if (branding.logoUrl) parts.push(`- Logo URL (you may use as <img>): ${branding.logoUrl}`);
     if (branding.colors && branding.colors.length) parts.push(`- Brand colours: ${branding.colors.join(', ')}`);
-    parts.push('');
   }
-  parts.push('SCRAPED WEBSITE CONTENT (may be empty or noisy — extract what is useful):');
+  parts.push('', 'SCRAPED WEBSITE CONTENT (may be empty or noisy — extract what is useful):');
   parts.push(scraped ? scraped.slice(0, 6000) : '(nothing scraped — design from the business name, category and city)');
-  parts.push('');
-  parts.push('Now produce the design spec.');
   return parts.join('\n');
 }
 
-function reviewSystem() {
-  return [
-    'You are a senior design director reviewing a junior designer\'s landing-page concept before it is sent to a paying prospect.',
-    'You are given the business context and the proposed design spec (as JSON).',
-    'Critique it hard against this rubric, then RETURN AN IMPROVED spec in the same schema:',
-    '1. Specificity — is every line clearly about THIS business, or is there generic filler? Replace filler with concrete, trade-specific copy.',
-    '2. Sales pull — would the owner read the hero and think "I want this"? Sharpen the headline and subhead.',
-    '3. Brand fit — do layout, fonts, effect and palette suit this trade and the brand colours? Fix mismatches.',
-    '4. Coherence — accentLight is a light tint of accent; bg is a dark gradient matching primary; contrast is legible.',
-    '5. Believability — services/stats/reviews read as real, not invented boilerplate.',
-    'Keep what already works. Only change what improves it. Return the full improved spec.',
-  ].join('\n');
-}
-
-function reviewUser(place, spec) {
-  return [
-    `BUSINESS: ${place.name || ''}${place.category ? ' — ' + place.category : ''}${place.address ? ' (' + place.address + ')' : ''}`,
-    '',
-    'PROPOSED SPEC:',
-    JSON.stringify(spec, null, 2),
-    '',
-    'Return the improved spec.',
-  ].join('\n');
-}
-
-// ── Anthropic call (raw HTTP; structured output) ────────────────────────────
-async function callClaude(env, system, userText) {
+// ── Anthropic streaming call (raw HTTP SSE; returns assembled text) ──────────
+async function callClaudeStream(env, system, userText) {
   const res = await fetch(ANTHROPIC_URL, {
     method: 'POST',
     headers: {
@@ -190,24 +92,55 @@ async function callClaude(env, system, userText) {
     },
     body: JSON.stringify({
       model: MODEL,
-      max_tokens: 4096,
+      max_tokens: MAX_TOKENS,
+      stream: true,
+      output_config: { effort: 'high' },
       system,
-      output_config: { format: { type: 'json_schema', schema: DESIGN_SCHEMA } },
       messages: [{ role: 'user', content: userText }],
     }),
   });
-  if (!res.ok) {
-    const detail = await res.text();
+  if (!res.ok || !res.body) {
+    const detail = await res.text().catch(() => '');
     throw new Error(`Anthropic ${res.status}: ${detail.slice(0, 300)}`);
   }
-  const data = await res.json();
-  if (data.stop_reason === 'refusal') throw new Error('Model refused this request.');
-  const textBlock = (data.content || []).find((b) => b.type === 'text');
-  if (!textBlock) throw new Error('No text block in Anthropic response.');
-  return JSON.parse(textBlock.text);
+  const reader = res.body.getReader();
+  const dec = new TextDecoder();
+  let buf = '', out = '', stop = null;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    let nl;
+    while ((nl = buf.indexOf('\n')) >= 0) {
+      const line = buf.slice(0, nl); buf = buf.slice(nl + 1);
+      if (!line.startsWith('data:')) continue;
+      const data = line.slice(5).trim();
+      if (!data || data === '[DONE]') continue;
+      let ev; try { ev = JSON.parse(data); } catch { continue; }
+      if (ev.type === 'content_block_delta' && ev.delta && ev.delta.type === 'text_delta') out += ev.delta.text;
+      else if (ev.type === 'message_delta' && ev.delta && ev.delta.stop_reason) stop = ev.delta.stop_reason;
+    }
+  }
+  if (stop === 'refusal') throw new Error('Model refused this request.');
+  return out;
 }
 
-// ── Scrape via Jina Reader (renders JS, returns clean markdown, CORS-free) ──
+// Pull a clean HTML document out of the model's text (handles any stray preamble/fences)
+function extractHtml(t) {
+  if (!t) return '';
+  let s = t.search(/<!doctype html/i);
+  if (s < 0) s = t.search(/<html[\s>]/i);
+  const e = t.toLowerCase().lastIndexOf('</html>');
+  if (s >= 0 && e > s) return t.slice(s, e + 7).trim();
+  const fence = t.match(/```(?:html)?\s*([\s\S]*?)```/i);
+  if (fence && /<html|<!doctype/i.test(fence[1])) return fence[1].trim();
+  return t.trim();
+}
+function looksComplete(html) {
+  return !!html && /<html[\s>]/i.test(html) && /<\/html>/i.test(html) && html.length > 1200;
+}
+
+// ── Scrape via Jina Reader ──────────────────────────────────────────────────
 async function scrape(website) {
   if (!website) return '';
   try {
@@ -217,18 +150,15 @@ async function scrape(website) {
       signal: AbortSignal.timeout(15000),
     });
     if (!r.ok) return '';
-    const md = await r.text();
-    return md || '';
-  } catch {
-    return '';
-  }
+    return (await r.text()) || '';
+  } catch { return ''; }
 }
 
-// ── CORS helpers ────────────────────────────────────────────────────────────
+// ── CORS / JSON helpers ─────────────────────────────────────────────────────
 function withCors(resp) {
   const h = new Headers(resp.headers);
   h.set('Access-Control-Allow-Origin', '*');
-  h.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  h.set('Access-Control-Allow-Methods', 'POST, OPTIONS, GET');
   h.set('Access-Control-Allow-Headers', 'content-type');
   return new Response(resp.body, { status: resp.status, headers: h });
 }
@@ -239,6 +169,13 @@ function json(obj, status = 200) {
 export default {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') return withCors(new Response(null, { status: 204 }));
+    // Diagnostic: GET the Worker URL in a browser to confirm the secret is bound.
+    if (request.method === 'GET') return withCors(json({
+      ok: true,
+      hasKey: !!env.ANTHROPIC_API_KEY,
+      keyLength: (env.ANTHROPIC_API_KEY || '').length,
+      keyPrefix: (env.ANTHROPIC_API_KEY || '').slice(0, 8),
+    }));
     if (request.method !== 'POST') return withCors(json({ error: 'POST only' }, 405));
     if (!env.ANTHROPIC_API_KEY) return withCors(json({ error: 'Worker missing ANTHROPIC_API_KEY secret' }, 500));
 
@@ -250,11 +187,24 @@ export default {
 
     try {
       const scraped = await scrape(place.website);
-      const design = await callClaude(env, designSystem(), designUser(place, branding, scraped));
-      const reviewed = await callClaude(env, reviewSystem(), reviewUser(place, design));
-      return withCors(json({ spec: reviewed, scrapedChars: scraped.length }));
+      const ctx = businessBlock(place, branding, scraped);
+
+      // DESIGN pass
+      let html = extractHtml(await callClaudeStream(env, designSystem(), ctx + '\n\nNow build the complete website.'));
+      if (!looksComplete(html)) throw new Error('Design pass produced incomplete HTML.');
+
+      // ART-DIRECTOR review/refine pass
+      try {
+        const reviewed = extractHtml(await callClaudeStream(
+          env, reviewSystem(),
+          businessBlock(place, branding, scraped) + '\n\nHTML TO IMPROVE:\n' + html
+        ));
+        if (looksComplete(reviewed) && reviewed.length > html.length * 0.6) html = reviewed;
+      } catch { /* keep design-pass HTML if review fails */ }
+
+      return withCors(json({ html, scrapedChars: scraped.length }));
     } catch (err) {
-      return withCors(json({ error: String(err && err.message || err) }, 502));
+      return withCors(json({ error: String((err && err.message) || err) }, 502));
     }
   },
 };

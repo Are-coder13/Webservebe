@@ -1599,8 +1599,8 @@ async function designWithAgent(p, branding) {
     body: JSON.stringify({ place: p, branding }),
   });
   const data = await res.json().catch(() => ({}));
-  if (!res.ok || !data.spec) throw new Error(data.error || ('Agent error ' + res.status));
-  return data.spec;
+  if (!res.ok || (!data.html && !data.spec)) throw new Error(data.error || ('Agent error ' + res.status));
+  return data; // { html } (generative mode) or { spec } (legacy)
 }
 
 async function getBranding(website) {
@@ -1736,16 +1736,19 @@ async function buildMockup(prospectId) {
   // Otherwise fall back to client-side scrape + the deterministic template engine.
   let scan = null;
   let spec = null;
+  let agentHtml = null;
   if (Agent.configured) {
     if (stepEl) stepEl.textContent = 'AI AGENT DESIGNING & REVIEWING...';
     try {
-      spec = await designWithAgent(p, branding);
+      const data = await designWithAgent(p, branding);
+      if (data.html) agentHtml = data.html;
+      else if (data.spec) spec = data.spec;
       toast('Design agent finished ✓', 'ok');
     } catch (e) {
       toast('Agent failed, using templates: ' + e.message, 'err');
     }
   }
-  if (!spec) {
+  if (!agentHtml && !spec) {
     if (stepEl) stepEl.textContent = 'SCANNING WEBSITE...';
     if (p.website) {
       try {
@@ -1757,7 +1760,7 @@ async function buildMockup(prospectId) {
   if (stepEl) stepEl.textContent = 'BUILDING MOCKUP...';
 
   try {
-    const html = generateMockupHTML(p, branding, scan, spec);
+    const html = agentHtml || generateMockupHTML(p, branding, scan, spec);
     const slug = slugify(p.name);
     const path = `mockups/${slug}.html`;
     const url = await GH.pushFile(path, html);
