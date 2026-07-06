@@ -110,6 +110,33 @@ camera.position.y+=((cam.y-mouse.y*1.6)-camera.position.y)*0.06;
 camera.lookAt(0,0,0); composer.render();
 Also gsap.from() each .chapter .inner (opacity 0, y:60) with its own ScrollTrigger at 'top 78%'.
 
+RECIPE H — SCAN/TARGETING HUD (optional; use ONLY for precision/tech/security-coded
+trades — dental, auto diagnostics, legal, security, engineering, medical. Skip it
+entirely for warm/casual trades like restaurants, salons, cafes — it reads cold there):
+A pure CSS/SVG overlay (NOT WebGL — a plain fixed <div class="hud"> above the canvas,
+z-index above .veil) that frames the hero-product hologram (RECIPE G) like a targeting
+scan. Fade it in only while that hologram is forming, fade out after:
+<div class="hud" id="hud"> containing:
+  - 4 corner brackets: absolutely positioned 26x26px divs, each with two 1.5px borders
+    forming an L (top+left / top+right / bottom+left / bottom+right), framing a
+    rectangle around the hologram's screen position.
+  - a reticle: inline SVG, viewBox 0 0 100 100, two concentric circles (r=46, r=30) +
+    a crosshair (two centered lines), stroke only, accent colour, opacity ~0.5,
+    centered over the hologram.
+  - a moving scanline: a 1px-tall gradient bar (transparent-accent-transparent) that
+    animates top<->bottom across the bracket frame on a 2-3s ease-in-out loop.
+  - a readout panel: small monospace/heading-font card (dark translucent bg, 1px
+    accent border, backdrop-filter:blur) with 2-3 label/value rows (e.g. SCAN:ACTIVE,
+    TARGET:<real service name>, a plausible precision/metric stat). One row has a
+    small pulsing dot (radial glow, opacity keyframe 1<->0.3 on ~1.4s loop).
+Toggle visibility with a CSS class (.hud{opacity:0;transition:opacity .5s}.hud.show{opacity:1})
+driven from the SAME scroll timeline that drives the hologram morph — call
+document.getElementById('hud').classList.add('show') / .remove('show') at the timeline
+positions bracketing the morph tween (add slightly before morph starts, remove slightly
+after it completes). Hide the whole .hud under prefers-reduced-motion and below 768px
+width (this is a decorative precision layer, not core content — never let it block
+touch targets, keep pointer-events:none on the whole block).
+
 MANDATORY GUARDS (all of them, every time):
 - Wrap the whole scene in: if(reduce||!hasWebGL()||!window.THREE)return; try{...}catch(e){}
   where reduce = matchMedia('(prefers-reduced-motion: reduce)').matches and
