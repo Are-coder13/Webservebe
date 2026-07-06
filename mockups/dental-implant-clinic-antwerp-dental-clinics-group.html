@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dental Implant Clinic Antwerp | Dental Clinics Group</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;600;800|Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#0b2a4a;--accent:#00a7b5;--accent-soft:#66cad3;--light:#eef9fa;--font:'Inter',sans-serif;--font-head:'Sora',sans-serif;--ar:0,167,181;--pr:11,42,74;--mr:0;--mg:167;--mb:181}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:#fff;color:#141414;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:10001;background:linear-gradient(90deg,#00a7b5,#66cad3);box-shadow:0 0 12px rgba(0,167,181,.7)}
+.grain{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.045;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.preview-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:linear-gradient(90deg,#f59e0b,#d97706);color:#000;text-align:center;padding:10px 16px;font-size:13px;font-weight:700;letter-spacing:.5px;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.preview-banner span{font-weight:400;opacity:.8;margin-left:8px}
+body{padding-top:42px}
+nav{position:sticky;top:42px;background:rgba(11,42,74,.55);backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);z-index:100;padding:0 5vw;display:flex;align-items:center;justify-content:space-between;height:70px;border-bottom:1px solid rgba(255,255,255,.10)}
+.nav-logo{color:#fff;font-family:var(--font-head);font-size:21px;font-weight:800;letter-spacing:-.5px}
+.nav-logo span{color:#00a7b5}
+.nav-cta{background:linear-gradient(120deg,#00a7b5,#66cad3);color:#fff;border:none;padding:11px 24px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.4px;transition:.2s;text-decoration:none;font-family:var(--font);box-shadow:0 8px 22px rgba(0,167,181,.35)}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,167,181,.5)}
+nav ul{display:flex;gap:30px;list-style:none}
+nav ul li a{color:rgba(255,255,255,.75);text-decoration:none;font-size:14px;font-weight:500;transition:.15s}
+nav ul li a:hover{color:#fff}
+@media(max-width:600px){nav ul{display:none}}
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#fff;padding:120px 5vw 100px;background:linear-gradient(135deg,#0b2a4a 0%,#0a3d54 100%)}
+#vanta-hero{position:absolute;inset:0;z-index:0}
+.hero-veil{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 58%,transparent 0%,rgba(0,0,0,.32) 68%,rgba(0,0,0,.6) 100%)}
+.hero-content{position:relative;z-index:2;max-width:860px;text-align:center}
+.hero-badge{display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px);color:rgba(255,255,255,.9);font-size:12px;letter-spacing:2.5px;text-transform:uppercase;padding:8px 18px;border-radius:30px;margin-bottom:26px}
+.hero h1{font-family:var(--font-head);font-size:clamp(40px,7.5vw,86px);font-weight:800;line-height:1.05;letter-spacing:-1.5px;margin-bottom:22px;text-shadow:0 4px 40px rgba(0,0,0,.3)}
+.hero h1 .grad{background:linear-gradient(120deg,#fff 0%,#66cad3 55%,#00a7b5 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.hero-sub{font-size:clamp(16px,2.4vw,22px);opacity:.88;margin-bottom:38px;font-weight:300;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.55;text-shadow:0 2px 20px rgba(0,0,0,.4)}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.hero-btns a{padding:16px 36px;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:.25s;font-family:var(--font);letter-spacing:.4px}
+.btn-main{background:linear-gradient(120deg,#00a7b5,#66cad3);color:#fff;box-shadow:0 12px 34px rgba(0,167,181,.45)}
+.btn-main:hover{transform:translateY(-3px);box-shadow:0 18px 44px rgba(0,167,181,.6)}
+.btn-outline{background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.45);backdrop-filter:blur(6px)}
+.btn-outline:hover{background:rgba(255,255,255,.14);transform:translateY(-3px)}
+.hero-meta{margin-top:54px;display:flex;gap:30px;justify-content:center;opacity:.85;font-size:14px;flex-wrap:wrap;text-shadow:0 2px 12px rgba(0,0,0,.4)}
+section{padding:100px 5vw}
+.section-tag{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#00a7b5;font-weight:700;margin-bottom:12px}
+.section-title{font-family:var(--font-head);font-size:clamp(28px,4vw,48px);font-weight:800;line-height:1.15;letter-spacing:-.5px;margin-bottom:16px}
+.section-title .grad{background:linear-gradient(120deg,#0b2a4a,#00a7b5);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.section-sub{font-size:17px;color:#666;max-width:560px;line-height:1.6}
+.section-head{margin-bottom:60px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media(max-width:900px){.grid3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.grid3{grid-template-columns:1fr}}
+.card{position:relative;background:#fff;border:1px solid #ececec;border-radius:16px;padding:38px 30px;transition:box-shadow .3s,border-color .3s,transform .15s ease-out;box-shadow:0 4px 24px rgba(0,0,0,.05);transform-style:preserve-3d;will-change:transform}
+.card:hover{box-shadow:0 24px 60px rgba(0,167,181,.18);border-color:rgba(0,167,181,.35)}
+.card-icon{font-size:30px;color:#00a7b5;margin-bottom:18px;display:inline-block}
+.card h3{font-family:var(--font-head);font-size:20px;font-weight:700;margin-bottom:10px}
+.card p{color:#666;line-height:1.65;font-size:15px}
+.stats-section{position:relative;background:linear-gradient(135deg,#0b2a4a 0%,#0a3d54 100%);color:#fff;padding:90px 5vw;overflow:hidden}
+.stats-section::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(0,167,181,.25),transparent 50%),radial-gradient(circle at 80% 70%,rgba(0,167,181,.18),transparent 50%)}
+.stats-grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:880px;margin:0 auto;text-align:center}
+@media(max-width:600px){.stats-grid{grid-template-columns:1fr;gap:26px}}
+.stat-n{font-family:var(--font-head);font-size:clamp(42px,6vw,68px);font-weight:800;line-height:1;background:linear-gradient(120deg,#fff,#66cad3);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.stat-l{font-size:15px;opacity:.75;margin-top:10px;letter-spacing:.5px}
+.reviews-section{background:#eef9fa}
+.reviews-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:700px){.reviews-grid{grid-template-columns:1fr}}
+.review{position:relative;background:#fff;border-radius:16px;padding:34px;box-shadow:0 8px 30px rgba(0,0,0,.07);border:1px solid rgba(0,167,181,.10);transform-style:preserve-3d;transition:transform .15s ease-out,box-shadow .3s}
+.review::before{content:"\201C";position:absolute;top:12px;left:20px;font-size:70px;color:rgba(0,167,181,.18);font-family:Georgia,serif;line-height:1}
+.review-q{position:relative;font-size:16px;line-height:1.65;color:#333;font-style:italic;margin-bottom:16px}
+.review-a{font-size:14px;font-weight:700;color:#00a7b5}
+.cta-section{position:relative;background:linear-gradient(135deg,#0b2a4a 0%,#0a3d54 100%);color:#fff;text-align:center;padding:110px 5vw;overflow:hidden}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(0,167,181,.3),transparent 60%)}
+.cta-section h2{position:relative;font-family:var(--font-head);font-size:clamp(30px,4vw,52px);font-weight:800;margin-bottom:16px}
+.cta-section p{position:relative;font-size:18px;opacity:.75;margin-bottom:40px}
+.cta-section a{position:relative}
+.contact-section{background:#f7f8fa}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+@media(max-width:700px){.contact-grid{grid-template-columns:1fr}}
+.contact-info h2{font-family:var(--font-head);font-size:32px;font-weight:800;margin-bottom:20px}
+.contact-info p{color:#555;line-height:1.65;margin-bottom:28px;font-size:16px}
+.contact-detail{display:flex;align-items:center;gap:12px;margin-bottom:14px;font-size:15px;color:#333}
+.contact-detail strong{color:#00a7b5;font-size:18px;width:24px}
+.contact-form{background:#fff;border:1px solid #eee;border-radius:16px;padding:30px;box-shadow:0 10px 40px rgba(0,0,0,.05)}
+.contact-form input,.contact-form textarea{width:100%;background:#fafafa;border:1.5px solid #e2e2e2;border-radius:8px;padding:13px 16px;font-size:15px;font-family:var(--font);outline:none;transition:.15s;margin-bottom:12px}
+.contact-form input:focus,.contact-form textarea:focus{border-color:#00a7b5;background:#fff}
+.contact-form textarea{height:120px;resize:vertical}
+.contact-form button{width:100%;background:linear-gradient(120deg,#00a7b5,#66cad3);color:#fff;border:none;padding:15px;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;font-family:var(--font);letter-spacing:.4px;transition:.2s;box-shadow:0 10px 28px rgba(0,167,181,.35)}
+.contact-form button:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(0,167,181,.5)}
+footer{background:#0b2a4a;color:rgba(255,255,255,.5);text-align:center;padding:34px 5vw;font-size:13px}
+footer strong{color:#fff}
+.lhero-split{padding:80px 5vw;align-items:center}.split-inner{display:flex;align-items:center;gap:60px;max-width:1100px;margin:0 auto;width:100%}.split-text{flex:1 1 55%}.split-text h1{text-align:left;font-size:clamp(36px,5.5vw,72px)}.split-text .hero-sub{margin-left:0;text-align:left}.split-text .hero-badge{text-align:left}.split-visual{flex:1 1 40%;display:flex;align-items:center;justify-content:center}.split-card{position:relative;background:rgba(255,255,255,0.07);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.15);border-radius:24px;padding:48px 36px;text-align:center;width:100%;max-width:340px}.split-card-logo{max-width:140px;max-height:100px;object-fit:contain;filter:brightness(0) invert(1);margin-bottom:20px;display:block;margin-left:auto;margin-right:auto}.split-card-wordmark{font-size:28px;font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:20px;line-height:1.15}.split-card-rule{width:40px;height:2px;background:rgba(255,255,255,0.2);margin:16px auto}.split-card-glow{position:absolute;inset:-60px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.1) 0%,transparent 70%);pointer-events:none;z-index:-1}@media(max-width:768px){.split-inner{flex-direction:column}.split-visual{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.tilt{transform:none!important}}
+</style>
+</head>
+<body>
+<div class="preview-banner">🎨 Website Preview for <strong>Dental Implant Clinic Antwerp | Dental Clinics Group</strong><span>— This is a mockup. Your real site will be fully customised.</span></div>
+<div class="grain"></div>
+<div id="progress"></div>
+<nav>
+<div class="nav-logo">Dental Implant<span>.</span></div>
+<ul><li><a href="#services">Services</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul>
+<a href="#contact" class="nav-cta">Book Your Consultation</a>
+</nav>
+<section class="hero lhero-split">
+  <div id="vanta-hero"></div>
+  <div class="hero-veil"></div>
+  <div class="split-inner">
+    <div class="split-text">
+      <div class="hero-badge" data-reveal>Dental Implant Clinic · Antwerp & Brussels</div>
+      <h1 data-reveal><span class="grad">Precision dental implants, placed to within 1/10mm</span></h1>
+      <p class="hero-sub" data-reveal>Fully guided implants planned on 3D Cone Beam imaging, from INAMI/RIZIV-accredited dentists who speak your language. Antwerp's multicultural clinic since 1997.</p>
+      <div class="hero-btns" style="justify-content:flex-start" data-reveal>
+        <a href="#contact" class="btn-main">Book Your Consultation</a>
+        <a href="#services" class="btn-outline">Learn More</a>
+      </div>
+      <div class="hero-meta" style="justify-content:flex-start" data-reveal>
+        <span>📞 03 239 88 88</span>
+        <span>📍 2018 Antwerpen</span>
+        <span>⭐ 4.5</span>
+      </div>
+    </div>
+    <div class="split-visual" data-reveal>
+      <div class="split-card">
+        <div class="split-card-wordmark">Dental<br>Implant</div>
+        <div class="split-card-rule"></div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.55);letter-spacing:2px;text-transform:uppercase">2018 Antwerpen</div>
+        <div class="split-card-glow"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="services">
+<div class="section-head" data-reveal>
+<div class="section-tag">Our Disciplines</div>
+<h2 class="section-title"><span class="grad">Our Services</span></h2>
+<p class="section-sub">Everything you need, delivered with the professionalism and care you deserve.</p>
+</div>
+<div class="grid3" data-stagger><div class="card tilt" data-tilt><div class="card-icon">◈</div><h3>Guided Dental Implants</h3><p>Implants planned digitally on multiple Cone Beam 3D scanners and placed accurate to within 1/10mm — for stable, natural-looking teeth that last.</p></div><div class="card tilt" data-tilt><div class="card-icon">◉</div><h3>Zirconium Crowns & Bridges</h3><p>Digital intra-oral scanners replace messy paste impressions, so every zirconium crown and bridge seats perfectly the first time.</p></div><div class="card tilt" data-tilt><div class="card-icon">✦</div><h3>Orthodontics · Children & Adults</h3><p>Modern braces and aligner treatments for every age, using the latest German and American equipment to straighten your smile discreetly.</p></div><div class="card tilt" data-tilt><div class="card-icon">◆</div><h3>General & Preventive Care</h3><p>From routine scaling and check-ups to advanced restorations — the full spectrum of dental care under one roof in Antwerp.</p></div></div>
+</section>
+<div class="stats-section"><div class="stats-grid" data-stagger><div class="stat"><div class="stat-n">4.5★</div><div class="stat-l">Google Rating</div></div><div class="stat"><div class="stat-n">500+</div><div class="stat-l">Patient Reviews</div></div><div class="stat"><div class="stat-n">1997</div><div class="stat-l">Caring Since</div></div></div></div>
+<section id="about" class="reviews-section"><div style="max-width:1100px;margin:0 auto">
+<div class="section-head" data-reveal><div class="section-tag">Client Reviews</div><h2 class="section-title"><span class="grad">What Our Clients Say</span></h2></div>
+<div class="reviews-grid" data-stagger><div class="review tilt" data-tilt><div class="review-q">“They speak every language and always made me feel understood. The implant work was precise and completely painless — the most modern clinic I've visited in Belgium.”</div><div class="review-a">— Elena K., Verified Patient</div></div><div class="review tilt" data-tilt><div class="review-q">“State-of-the-art 3D scanning and a genuinely multicultural, professional team. My zirconium crowns fit perfectly on the first try.”</div><div class="review-a">— Marco P., Antwerp</div></div></div>
+</div></section>
+<section class="cta-section">
+<h2 data-reveal>Ready to Get Started?</h2>
+<p data-reveal>Reach out today — we’d love to hear from you.</p>
+<a href="#contact" class="btn-main" data-reveal style="display:inline-block;padding:18px 44px;font-size:17px;font-weight:700;border-radius:8px;text-decoration:none;color:#fff;background:linear-gradient(120deg,#00a7b5,#66cad3);font-family:var(--font);box-shadow:0 14px 38px rgba(0,167,181,.45)">Book Your Consultation</a>
+</section>
+<section id="contact" class="contact-section"><div style="max-width:1100px;margin:0 auto"><div class="contact-grid">
+<div class="contact-info" data-reveal><div class="section-tag">Get In Touch</div><h2 class="section-title" style="font-size:clamp(24px,3vw,38px)"><span class="grad">Let’s Talk</span></h2>
+<p>Founded in 1997 by dentist David Hatzkevich, our Antwerp and Brussels clinics believe multiculturalism is our strength — our team speaks English, Dutch, French, Spanish, Portuguese, Ukrainian, Russian, Bulgarian, Greek and Arabic. We recruit the best INAMI/RIZIV-accredited dentists worldwide and invest in the finest German and American technology, including several Cone Beam scanners and SIRONA systems, to treat you better.</p>
+<div class="contact-detail"><strong>📞</strong>03 239 88 88</div><div class="contact-detail"><strong>📍</strong>Belgiëlei 57/A, 2018 Antwerpen, Belgium</div>
+<div class="contact-detail"><strong>🌐</strong>https://www.dentalclinics.be/</div></div>
+<div class="contact-form" data-reveal><input type="text" placeholder="Your Name"><input type="email" placeholder="Your Email"><input type="tel" placeholder="Your Phone Number"><textarea placeholder="How can we help you?"></textarea><button type="button">Book Your Consultation</button></div>
+</div></div></section>
+<footer><strong>Dental Implant Clinic Antwerp | Dental Clinics Group</strong> · 2018 Antwerpen · 03 239 88 88<br><span style="font-size:11px;opacity:.5;margin-top:6px;display:block">Preview mockup — website design by [Your Agency]</span></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"><\/script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.net.min.js"><\/script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function hasWebGL(){try{var c=document.createElement("canvas");return !!(window.WebGLRenderingContext&&(c.getContext("webgl")||c.getContext("experimental-webgl")));}catch(e){return false;}}
+if(!reduce&&hasWebGL()&&window.VANTA){try{var CFG={"effect":"NET","points":10,"maxDistance":22,"spacing":17,"color":42933,"backgroundColor":731722};var fx=CFG.effect;delete CFG.effect;if(VANTA[fx]){VANTA[fx](Object.assign({el:"#vanta-hero",mouseControls:true,touchControls:true,gyroControls:false,minHeight:200,minWidth:200,scale:1,scaleMobile:1},CFG));}}catch(e){}}
+var bar=document.getElementById("progress");
+if(bar){var upd=function(){var h=document.documentElement;var m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?(h.scrollTop/m*100):0)+"%";};window.addEventListener("scroll",upd,{passive:true});upd();}
+var fine=window.matchMedia("(hover:hover) and (pointer:fine)").matches;
+if(fine&&!reduce){document.querySelectorAll("[data-tilt]").forEach(function(el){el.addEventListener("pointermove",function(e){var r=el.getBoundingClientRect();var x=(e.clientX-r.left)/r.width-0.5;var y=(e.clientY-r.top)/r.height-0.5;el.style.transform="perspective(900px) rotateX("+(-y*5).toFixed(2)+"deg) rotateY("+(x*7).toFixed(2)+"deg) translateY(-6px)";});el.addEventListener("pointerleave",function(){el.style.transform="";});});}
+if(window.gsap&&!reduce&&window.ScrollTrigger){gsap.registerPlugin(ScrollTrigger);gsap.utils.toArray("[data-reveal]").forEach(function(el){gsap.from(el,{opacity:0,y:42,duration:.9,ease:"power3.out",scrollTrigger:{trigger:el,start:"top 86%"}});});gsap.utils.toArray("[data-stagger]").forEach(function(g){gsap.from(g.children,{opacity:0,y:42,duration:.8,ease:"power3.out",stagger:.12,scrollTrigger:{trigger:g,start:"top 82%"}});});gsap.to(".hero-content",{yPercent:16,opacity:.55,ease:"none",scrollTrigger:{trigger:".hero",start:"top top",end:"bottom top",scrub:true}});document.querySelectorAll(".stat-n").forEach(function(el){var txt=el.textContent.trim();var i=0;while(i<txt.length&&!(txt.charAt(i)>="0"&&txt.charAt(i)<="9"))i++;if(i>=txt.length)return;var j=i;while(j<txt.length&&((txt.charAt(j)>="0"&&txt.charAt(j)<="9")||txt.charAt(j)===","||txt.charAt(j)==="."))j++;var pre=txt.slice(0,i),numStr=txt.slice(i,j).replace(/,/g,""),suf=txt.slice(j),target=parseFloat(numStr);if(isNaN(target))return;var dec=numStr.indexOf(".")>=0?1:0,o={v:0};gsap.to(o,{v:target,duration:1.7,ease:"power2.out",scrollTrigger:{trigger:el,start:"top 92%"},onUpdate:function(){el.textContent=pre+(dec?o.v.toFixed(1):Math.round(o.v).toLocaleString())+suf;},onComplete:function(){el.textContent=pre+(dec?target.toFixed(1):Math.round(target).toLocaleString())+suf;}});});}
+})();
+</script>
+</body>
+</html>
