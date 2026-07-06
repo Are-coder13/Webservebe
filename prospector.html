@@ -324,6 +324,14 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:13px; h
         </div>
       </div>
     </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px;font-size:12px;color:var(--dim);line-height:1.6;margin:0 20px 4px">
+      <strong style="color:var(--text)">Using another device?</strong> Generate a one-time setup link here, then open it once on the other device to fill in all fields above automatically.<br>
+      <span style="color:var(--warn)">⚠ The link contains your GitHub token in plain text</span> — only send it to yourself (e.g. your own notes app or a private chat with yourself), never post it publicly.
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn btn-g btn-s" onclick="Settings.copyLink()">📋 Copy Setup Link</button>
+        <button class="btn btn-g btn-s" onclick="Settings.pasteLink()">📥 Paste Setup Link</button>
+      </div>
+    </div>
     <div class="mfoot">
       <button class="btn btn-g btn-s" onclick="Settings.close()">Cancel</button>
       <button class="btn btn-p btn-s" onclick="Settings.save()">Save & Connect</button>
@@ -1854,7 +1862,56 @@ const Settings = {
     toast('Settings saved ✓', 'ok');
     this.close();
   },
+  copyLink() {
+    const data = {
+      t: document.getElementById('sToken').value.trim() || GH.token,
+      o: document.getElementById('sOwner').value.trim() || GH.owner,
+      r: document.getElementById('sRepo').value.trim() || GH.repo,
+      bf: document.getElementById('sBfId').value.trim() || BF.clientId,
+      agent: document.getElementById('sAgentUrl').value.trim() || Agent.url,
+    };
+    if (!data.t || !data.o || !data.r) { toast('Fill in GitHub fields first', 'err'); return; }
+    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+    const link = `${location.origin}${location.pathname}#setup=${encoded}`;
+    navigator.clipboard.writeText(link).then(() => {
+      toast('Setup link copied — paste it in a private note, then open it on the other device', 'ok');
+    }).catch(() => {
+      prompt('Copy this setup link:', link);
+    });
+  },
+  pasteLink() {
+    const input = prompt('Paste the setup link (or just the code after #setup=):');
+    if (!input) return;
+    const match = input.match(/#setup=(.+)$/);
+    const encoded = (match ? match[1] : input).trim();
+    if (applySetupCode(encoded)) this.open();
+  },
 };
+
+// ── Setup-link import (cross-device settings transfer) ──────────────────────
+function applySetupCode(encoded) {
+  try {
+    const data = JSON.parse(decodeURIComponent(escape(atob(encoded))));
+    if (!data.t || !data.o || !data.r) throw new Error('incomplete');
+    localStorage.setItem('gh_token', data.t);
+    localStorage.setItem('gh_owner', data.o);
+    localStorage.setItem('gh_repo', data.r);
+    if (data.bf) localStorage.setItem('bf_clientid', data.bf); else localStorage.removeItem('bf_clientid');
+    if (data.agent) localStorage.setItem('agent_url', data.agent); else localStorage.removeItem('agent_url');
+    updateGhDot(); updateBfDot(); updateAgentDot();
+    toast('Settings imported ✓', 'ok');
+    return true;
+  } catch {
+    toast('Invalid or corrupted setup link', 'err');
+    return false;
+  }
+}
+function importSetupFromUrl() {
+  const m = location.hash.match(/#setup=(.+)$/);
+  if (!m) return;
+  applySetupCode(m[1]);
+  history.replaceState(null, '', location.pathname + location.search);
+}
 
 function updateGhDot() {
   const dot = document.getElementById('ghDot');
@@ -1877,6 +1934,7 @@ function updateAgentDot() {
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────
+importSetupFromUrl();
 initChips();
 updateFooter();
 updateGhDot();
