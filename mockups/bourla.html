@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bourla</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair%20Display%3Awght%40300%3B400%3B600%3B700%3B800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#120800;--accent:#e8622a;--light:#fff3ed;--font:'Playfair Display',sans-serif}
+body{font-family:var(--font);background:#fff;color:#1a1a1a;overflow-x:hidden}
+
+/* Preview banner */
+.preview-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:linear-gradient(90deg,#f59e0b,#d97706);color:#000;text-align:center;padding:10px 16px;font-size:13px;font-weight:700;letter-spacing:.5px;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.preview-banner span{font-weight:400;opacity:.8;margin-left:8px}
+body{padding-top:42px}
+
+/* Nav */
+nav{position:sticky;top:42px;background:rgba(18,8,0,.97);backdrop-filter:blur(10px);z-index:100;padding:0 5vw;display:flex;align-items:center;justify-content:space-between;height:68px;border-bottom:1px solid rgba(255,255,255,.08)}
+.nav-logo{color:#fff;font-size:20px;font-weight:800;letter-spacing:-0.5px}
+.nav-logo span{color:#e8622a}
+.nav-cta{background:#e8622a;color:#fff;border:none;padding:10px 22px;border-radius:4px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.5px;transition:.15s;text-decoration:none;font-family:var(--font)}
+.nav-cta:hover{opacity:.88;transform:translateY(-1px)}
+nav ul{display:flex;gap:28px;list-style:none}
+nav ul li a{color:rgba(255,255,255,.7);text-decoration:none;font-size:14px;font-weight:500;transition:.15s}
+nav ul li a:hover{color:#fff}
+@media(max-width:600px){nav ul{display:none}}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#120800 0%,#2a1200 60%,#3d1f00 100%);color:#fff;min-height:92vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:80px 5vw}
+.hero-shapes span{position:absolute;border-radius:50%;opacity:.07}
+.hero-shapes span:nth-child(1){width:500px;height:500px;background:#e8622a;top:-150px;right:-100px;animation:drift 12s ease-in-out infinite}
+.hero-shapes span:nth-child(2){width:300px;height:300px;background:#fff;bottom:-100px;left:-80px;animation:drift 15s ease-in-out infinite reverse}
+.hero-shapes span:nth-child(3){width:180px;height:180px;background:#e8622a;top:40%;left:20%;animation:drift 9s ease-in-out infinite 3s}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(20px,-20px) scale(1.04)}}
+.hero-content{position:relative;z-index:1;max-width:800px;text-align:center}
+.hero-badge{display:inline-block;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85);font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:20px;margin-bottom:24px}
+.hero h1{font-size:clamp(36px,7vw,80px);font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:20px}
+.hero h1 span{color:#e8622a}
+.hero-sub{font-size:clamp(16px,2.5vw,22px);opacity:.75;margin-bottom:36px;font-weight:300;max-width:540px;margin-left:auto;margin-right:auto;line-height:1.5}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.hero-btns a{padding:16px 34px;border-radius:4px;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:.2s;font-family:var(--font);letter-spacing:.5px}
+.btn-main{background:#e8622a;color:#fff}
+.btn-main:hover{opacity:.9;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.btn-outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4)}
+.btn-outline:hover{background:rgba(255,255,255,.08);transform:translateY(-2px)}
+.hero-meta{margin-top:50px;display:flex;gap:30px;justify-content:center;opacity:.65;font-size:14px;flex-wrap:wrap}
+.hero-meta span::before{margin-right:6px}
+
+/* Sections */
+section{padding:90px 5vw}
+.section-tag{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#e8622a;font-weight:700;margin-bottom:12px}
+.section-title{font-size:clamp(28px,4vw,46px);font-weight:800;line-height:1.2;letter-spacing:-0.5px;margin-bottom:16px}
+.section-sub{font-size:17px;color:#666;max-width:560px;line-height:1.6}
+.section-head{margin-bottom:56px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media(max-width:700px){.grid3{grid-template-columns:1fr}}
+@media(max-width:900px){.grid3{grid-template-columns:repeat(2,1fr)}}
+
+/* Cards */
+.card{background:#fff;border:1px solid #eee;border-radius:12px;padding:36px 28px;transition:.25s;box-shadow:0 2px 16px rgba(0,0,0,.04)}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.1);border-color:#e8622a33}
+.card-icon{font-size:28px;color:#e8622a;margin-bottom:16px;display:block}
+.card h3{font-size:19px;font-weight:700;margin-bottom:10px}
+.card p{color:#666;line-height:1.65;font-size:15px}
+
+/* Stats */
+.stats-section{background:linear-gradient(135deg,#120800 0%,#2a1200 60%,#3d1f00 100%);color:#fff;padding:80px 5vw}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:800px;margin:0 auto;text-align:center}
+@media(max-width:600px){.stats-grid{grid-template-columns:1fr;gap:20px}}
+.stat-n{font-size:clamp(40px,6vw,64px);font-weight:800;color:#e8622a;line-height:1}
+.stat-l{font-size:15px;opacity:.7;margin-top:8px;letter-spacing:.5px}
+
+/* Reviews */
+.reviews-section{background:#fff3ed}
+.reviews-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:700px){.reviews-grid{grid-template-columns:1fr}}
+.review{background:#fff;border-radius:12px;padding:32px;box-shadow:0 2px 20px rgba(0,0,0,.06)}
+.review::before{content:'"';font-size:60px;color:#e8622a;line-height:0;vertical-align:-20px;margin-right:4px;font-family:Georgia,serif}
+.review-q{font-size:16px;line-height:1.65;color:#333;font-style:italic;margin-bottom:16px}
+.review-a{font-size:14px;font-weight:700;color:#e8622a}
+
+/* CTA section */
+.cta-section{background:linear-gradient(135deg,#120800 0%,#2a1200 60%,#3d1f00 100%);color:#fff;text-align:center;padding:100px 5vw}
+.cta-section h2{font-size:clamp(28px,4vw,50px);font-weight:800;margin-bottom:16px}
+.cta-section p{font-size:18px;opacity:.7;margin-bottom:40px}
+
+/* Contact */
+.contact-section{background:#f8f9fa}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+@media(max-width:700px){.contact-grid{grid-template-columns:1fr}}
+.contact-info h2{font-size:32px;font-weight:800;margin-bottom:20px}
+.contact-info p{color:#555;line-height:1.65;margin-bottom:28px;font-size:16px}
+.contact-detail{display:flex;align-items:center;gap:12px;margin-bottom:14px;font-size:15px;color:#333}
+.contact-detail strong{color:#e8622a;font-size:18px;width:24px}
+.contact-form input,.contact-form textarea{width:100%;background:#fff;border:1.5px solid #ddd;border-radius:6px;padding:13px 16px;font-size:15px;font-family:var(--font);outline:none;transition:.15s;margin-bottom:12px}
+.contact-form input:focus,.contact-form textarea:focus{border-color:#e8622a}
+.contact-form textarea{height:120px;resize:vertical}
+.contact-form button{width:100%;background:#e8622a;color:#fff;border:none;padding:15px;border-radius:6px;font-size:16px;font-weight:700;cursor:pointer;font-family:var(--font);letter-spacing:.5px;transition:.15s}
+.contact-form button:hover{opacity:.9}
+
+/* Footer */
+footer{background:#120800;color:rgba(255,255,255,.5);text-align:center;padding:32px 5vw;font-size:13px}
+footer strong{color:#fff}
+
+/* Scroll reveal */
+[data-aos]{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease}
+[data-aos].visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<div class="preview-banner">
+  🎨 Website Preview for <strong>Bourla</strong>
+  <span>— This is a mockup. Your real site will be fully customised.</span>
+</div>
+
+<nav>
+  <div class="nav-logo">Bourla<span>.</span></div>
+  <ul>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Reserve a Table</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-shapes"><span></span><span></span><span></span></div>
+  <div class="hero-content">
+    <div class="hero-badge">Restaurant · 2000 Antwerpen</div>
+    <h1>Bourla<br><span>An Experience For Every Sense</span></h1>
+    <p class="hero-sub">Trusted restaurant serving 2000 Antwerpen and surrounding areas. Rated 4.3★ by our clients.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-main">Reserve a Table</a>
+      <a href="#services" class="btn-outline">Our Services</a>
+    </div>
+    <div class="hero-meta">
+      <span>📞 03 232 16 32</span>
+      <span>📍 2000 Antwerpen</span>
+      <span>⭐ 4.3 Stars (1835 reviews)</span>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="section-head">
+    <div class="section-tag">What We Offer</div>
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-sub">Everything you need, delivered with the professionalism and care you deserve.</p>
+  </div>
+  <div class="grid3">
+    <div class="card" data-aos>
+      <div class="card-icon">◈</div>
+      <h3>Fine Dining</h3>
+      <p>An intimate atmosphere where every dish tells a story. Seasonal ingredients, crafted with passion.</p>
+    </div>
+    <div class="card" data-aos>
+      <div class="card-icon">✦</div>
+      <h3>Private Events</h3>
+      <p>From intimate dinners to celebrations for 100 — we handle every detail.</p>
+    </div>
+    <div class="card" data-aos>
+      <div class="card-icon">◉</div>
+      <h3>Takeaway & Delivery</h3>
+      <p>Enjoy our full menu from the comfort of your home. Order online in minutes.</p>
+    </div></div>
+</section>
+
+<div class="stats-section">
+  <div class="stats-grid">
+    <div class="stat" data-aos>
+      <div class="stat-n">12+</div>
+      <div class="stat-l">Years Open</div>
+    </div>
+    <div class="stat" data-aos>
+      <div class="stat-n">4.8★</div>
+      <div class="stat-l">Google Rating</div>
+    </div>
+    <div class="stat" data-aos>
+      <div class="stat-n">200+</div>
+      <div class="stat-l">Menu Items</div>
+    </div></div>
+</div>
+
+<section id="about" class="reviews-section">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="section-head">
+      <div class="section-tag">Client Reviews</div>
+      <h2 class="section-title">What Our Clients Say</h2>
+    </div>
+    <div class="reviews-grid">
+    <div class="review" data-aos>
+      <div class="review-q">"Every single dish was a masterpiece. We will absolutely be back."</div>
+      <div class="review-a">— Emma L.</div>
+    </div>
+    <div class="review" data-aos>
+      <div class="review-q">"The private dining room for our anniversary was perfect. Magical evening."</div>
+      <div class="review-a">— Mark & Julie</div>
+    </div></div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2>Ready to Get Started?</h2>
+  <p>Reach out today — we'd love to hear from you.</p>
+  <a href="#contact" class="btn-main" style="display:inline-block;padding:18px 40px;font-size:17px;font-weight:700;border-radius:4px;text-decoration:none;color:#fff;background:#e8622a;font-family:var(--font)">Reserve a Table</a>
+</section>
+
+<section id="contact" class="contact-section">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="section-tag">Get In Touch</div>
+        <h2 class="section-title" style="font-size:clamp(24px,3vw,38px)">Let's Talk</h2>
+        <p>We're here to help. Reach out and we'll get back to you as soon as possible.</p>
+        <div class="contact-detail"><strong>📞</strong>03 232 16 32</div>
+        <div class="contact-detail"><strong>📍</strong>Graanmarkt 7, 2000 Antwerpen, Belgium</div>
+        <div class="contact-detail"><strong>🌐</strong>http://www.bourla.be/</div>
+      </div>
+      <div class="contact-form">
+        <input type="text" placeholder="Your Name">
+        <input type="email" placeholder="Your Email">
+        <input type="tel" placeholder="Your Phone Number">
+        <textarea placeholder="How can we help you?"></textarea>
+        <button type="button">Reserve a Table</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <strong>Bourla</strong> · 2000 Antwerpen · 03 232 16 32<br>
+  <span style="font-size:11px;opacity:.5;margin-top:6px;display:block">Preview mockup — website design by [Your Agency]</span>
+</footer>
+
+<script>
+function /* */(h){h=h.replace('#','');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return r+','+g+','+b}
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.15});
+document.querySelectorAll('[data-aos]').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

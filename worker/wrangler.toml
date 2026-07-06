@@ -1,0 +1,7 @@
+name = "designerprospector"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+# The Anthropic API key is NOT stored here. Set it as an encrypted secret:
+#   npx wrangler secret put ANTHROPIC_API_KEY
+# (see README.md)
