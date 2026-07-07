@@ -21,7 +21,15 @@ import { threeRecipes } from './three-recipes.js';
 
 const MODEL = 'claude-opus-4-8';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
-const MAX_TOKENS = 32000;
+// A full cinematic single-file page (recipes B-H, chapters, copy) runs
+// ~5,000-9,000 output tokens in practice. 32k + 'high' effort made both
+// passes spend minutes on reasoning depth the output never needed, and the
+// two-pass total (design + review) was blowing past platform/proxy timeouts
+// and coming back as an opaque 502 instead of a real error. 16k/'medium'
+// keeps comfortable headroom while cutting wall-clock time dramatically.
+const MAX_TOKENS = 16000;
+const EFFORT = 'medium';
+const CALL_TIMEOUT_MS = 110000; // fail with a clear error well before any ~120-180s upstream/proxy cutoff
 
 // ── Prompts ─────────────────────────────────────────────────────────────────
 function designSystem() {
@@ -155,10 +163,11 @@ async function callClaudeStream(env, system, userText) {
       model: MODEL,
       max_tokens: MAX_TOKENS,
       stream: true,
-      output_config: { effort: 'high' },
+      output_config: { effort: EFFORT },
       system,
       messages: [{ role: 'user', content: userText }],
     }),
+    signal: AbortSignal.timeout(CALL_TIMEOUT_MS),
   });
   if (!res.ok || !res.body) {
     const detail = await res.text().catch(() => '');
