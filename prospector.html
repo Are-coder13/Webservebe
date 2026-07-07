@@ -1724,7 +1724,9 @@ async function buildMockup(prospectId) {
   revProspect = p;
   revMockupUrl = null;
   document.getElementById('revName').textContent = p.name;
-  document.getElementById('revBody').innerHTML = '<div class="building-state"><div class="spin"></div><div class="building-bar"></div><span id="buildStep">SCANNING WEBSITE...</span></div>';
+  document.getElementById('revBody').innerHTML = '<div class="building-state"><div class="spin"></div><div class="building-bar"></div><span id="buildStep">SCANNING WEBSITE...</span>'
+    + (Agent.configured ? '' : '<div style="margin-top:14px;font-size:12px;color:var(--warn);max-width:360px;line-height:1.5">⚠ Design agent not connected — this will use the basic template engine. Set the Worker URL in ⚙ Settings for cinematic 3D mockups.</div>')
+    + '</div>';
   document.getElementById('revFoot').style.display = 'none';
   document.getElementById('revModal').classList.add('show');
 
@@ -1745,14 +1747,27 @@ async function buildMockup(prospectId) {
   let scan = null;
   let spec = null;
   let agentHtml = null;
+  // Engine provenance — surfaced in the result modal so it is always obvious
+  // which pipeline produced the mockup (no more silent template fallbacks).
+  let engine = 'template';
+  let engineNote = 'Design agent not connected. Open ⚙ Settings and paste your Worker URL to enable the cinematic 3D engine.';
   if (Agent.configured) {
     if (stepEl) stepEl.textContent = 'AI AGENT DESIGNING & REVIEWING...';
     try {
       const data = await designWithAgent(p, branding);
-      if (data.html) agentHtml = data.html;
-      else if (data.spec) spec = data.spec;
+      if (data.html) {
+        agentHtml = data.html;
+        engine = 'agent';
+        engineNote = 'Built by the AI design agent (cinematic 3D engine).';
+      } else if (data.spec) {
+        spec = data.spec;
+        engine = 'legacy';
+        engineNote = 'Your Worker is an OLD version (spec mode). Run "npx wrangler deploy" in the worker folder to get the cinematic 3D engine.';
+      }
       toast('Design agent finished ✓', 'ok');
     } catch (e) {
+      engine = 'template';
+      engineNote = 'Design agent FAILED (' + e.message + ') — fell back to the built-in template.';
       toast('Agent failed, using templates: ' + e.message, 'err');
     }
   }
@@ -1787,6 +1802,8 @@ async function buildMockup(prospectId) {
             <div style="text-align:center">
               <div class="mockup-ready-icon">🌐</div>
               <div style="font-family:var(--head);font-size:11px;letter-spacing:2px;color:var(--accent);margin-bottom:8px">LIVE PREVIEW</div>
+              <div style="display:inline-block;font-family:var(--head);font-size:10px;letter-spacing:2px;padding:6px 14px;border-radius:var(--r);margin-bottom:10px;${engine==='agent' ? 'background:rgba(0,255,136,.1);border:1px solid var(--green);color:var(--green)' : 'background:rgba(255,170,0,.1);border:1px solid var(--warn);color:var(--warn)'}">${engine==='agent' ? '⚡ AI DESIGN AGENT' : engine==='legacy' ? '⚠ OLD WORKER — REDEPLOY' : '⚠ TEMPLATE MODE'}</div>
+              <div style="font-size:12px;color:${engine==='agent' ? 'var(--mid)' : 'var(--warn)'};margin-bottom:10px;line-height:1.5;max-width:340px;margin-left:auto;margin-right:auto">${engineNote}</div>
               <div style="font-size:13px;color:var(--mid);margin-bottom:16px">Your mockup is live on GitHub Pages.<br>It may take 1-2 min to appear if Pages was just enabled.</div>
             </div>
           </div>
