@@ -19,18 +19,20 @@
 import { designBrief, qaChecklist } from './design-knowledge.js';
 import { threeRecipes } from './three-recipes.js';
 
-const MODEL = 'claude-opus-4-8';
+// Model choice is a latency corner, measured across three live failures:
+// the platform hard-kills the request at ~318s total, we run TWO sequential
+// passes (design + art-director), and a full cinematic page needs >12k
+// output tokens (a 12k ceiling truncated mid-page — "incomplete HTML").
+// Opus 4.8 can't produce that many tokens twice inside 318s; Sonnet 5 is the
+// faster tier with near-Opus coding quality and supports the same
+// output_config.effort levels, so it's the tier that fits both constraints.
+const MODEL = 'claude-sonnet-5';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
-// A full cinematic single-file page (recipes B-H, chapters, copy) runs
-// ~5,000-9,000 output tokens in practice, but the huge system prompt (all
-// recipes + design brief) plus a single generation pass measurably took
-// >110s even at 'medium' effort — a live test hit our own abort at 110s.
-// The platform's real hard cutoff (observed) is ~5.3min/318s, so there is
-// safe room to extend well past 110s without reintroducing the old silent
-// multi-minute hang; we just fail cleanly before that ceiling instead.
-const MAX_TOKENS = 12000;
+// 24k gives real headroom over the observed >12k need; adaptive thinking
+// (on by default for this model) also counts toward max_tokens.
+const MAX_TOKENS = 24000;
 const EFFORT = 'medium';
-const CALL_TIMEOUT_MS = 170000; // per-call cap; two sequential passes can take up to ~340s total, comfortably under most gateway limits
+const CALL_TIMEOUT_MS = 170000; // per-call cap; two sequential passes stay under the ~318s platform ceiling
 
 // ── Prompts ─────────────────────────────────────────────────────────────────
 function designSystem() {
@@ -42,6 +44,7 @@ function designSystem() {
     'OUTPUT RULES (critical):',
     '- Output ONLY the HTML document. Start with <!DOCTYPE html> and end with </html>.',
     '- No markdown, no code fences, no commentary before or after.',
+    '- HARD SIZE BUDGET: the complete document must stay under ~70KB. Write dense, non-repetitive CSS (group shared rules, no restated boilerplate per section), lean JS, and no explanatory comments beyond the CONCEPT block. Running out of budget mid-file is a total failure — compact code is not optional.',
     '',
     '═══ VISUAL IDENTITY — what makes the site look state-of-the-art ═══',
     '',
@@ -193,6 +196,7 @@ async function callClaudeStream(env, system, userText) {
     }
   }
   if (stop === 'refusal') throw new Error('Model refused this request.');
+  if (stop === 'max_tokens') throw new Error('Output hit the token limit and was truncated — raise MAX_TOKENS in the worker.');
   return out;
 }
 
