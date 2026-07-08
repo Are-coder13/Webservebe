@@ -1752,7 +1752,7 @@ async function buildMockup(prospectId) {
   let engine = 'template';
   let engineNote = 'Design agent not connected. Open ⚙ Settings and paste your Worker URL to enable the cinematic 3D engine.';
   if (Agent.configured) {
-    if (stepEl) stepEl.textContent = 'AI AGENT DESIGNING & REVIEWING...';
+    if (stepEl) stepEl.textContent = 'AI AGENT DESIGNING & REVIEWING... (can take up to 3-4 min)';
     try {
       const data = await designWithAgent(p, branding);
       if (data.html) {

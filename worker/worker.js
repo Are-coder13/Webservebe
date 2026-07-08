@@ -22,14 +22,15 @@ import { threeRecipes } from './three-recipes.js';
 const MODEL = 'claude-opus-4-8';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 // A full cinematic single-file page (recipes B-H, chapters, copy) runs
-// ~5,000-9,000 output tokens in practice. 32k + 'high' effort made both
-// passes spend minutes on reasoning depth the output never needed, and the
-// two-pass total (design + review) was blowing past platform/proxy timeouts
-// and coming back as an opaque 502 instead of a real error. 16k/'medium'
-// keeps comfortable headroom while cutting wall-clock time dramatically.
-const MAX_TOKENS = 16000;
+// ~5,000-9,000 output tokens in practice, but the huge system prompt (all
+// recipes + design brief) plus a single generation pass measurably took
+// >110s even at 'medium' effort — a live test hit our own abort at 110s.
+// The platform's real hard cutoff (observed) is ~5.3min/318s, so there is
+// safe room to extend well past 110s without reintroducing the old silent
+// multi-minute hang; we just fail cleanly before that ceiling instead.
+const MAX_TOKENS = 12000;
 const EFFORT = 'medium';
-const CALL_TIMEOUT_MS = 110000; // fail with a clear error well before any ~120-180s upstream/proxy cutoff
+const CALL_TIMEOUT_MS = 170000; // per-call cap; two sequential passes can take up to ~340s total, comfortably under most gateway limits
 
 // ── Prompts ─────────────────────────────────────────────────────────────────
 function designSystem() {
