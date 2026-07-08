@@ -1,166 +1,520 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- CONCEPT: offering=Boekhouding, fiscaal advies & jaarrekeningen voor kmo's en zelfstandigen in Wijnegem, feeling=vertrouwen, controle, "eindelijk in balans", 3d-story=deeltjes vormen een gloeiend €-teken (flagship: jaarrekening & fiscale optimalisatie) omringd door een precisie-scan HUD, terwijl een heldere helix-lichtstrand en icosahedron-kern staan voor structuur en nauwkeurigheid, chapters=Hero(belofte, wide)->Diensten(push-in)->Hologram €-reveal(orbit+HUD)->Cijfers&reviews(close approach)->CTA(settle+form) -->
+<html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Frehos Accounting</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,400|Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Frehos Accounting — Wijnegem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{--primary:#0a1b28;--accent:#00d5ff;--accent-soft:#66e6ff;--light:#e0f4ff;--font:'Inter',sans-serif;--font-head:'Playfair Display',serif;--ar:0,213,255;--pr:10,27,40;--mr:0;--mg:213;--mb:255}
+:root{
+  --bg:#060911; --bg2:#0b1322; --accent:#38bdf8; --accent2:#0369a1; --gold:#facc7d;
+  --fg:#eaf1fb; --muted:#a9b8ce; --card:rgba(255,255,255,.05); --border:rgba(255,255,255,.1);
+  /* z-index scale */
+  --z-base:0; --z-veil:10; --z-content:20; --z-hud:30; --z-banner:50;
+}
+*{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:var(--font);background:#fff;color:#141414;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-#progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:10001;background:linear-gradient(90deg,#00d5ff,#66e6ff);box-shadow:0 0 12px rgba(0,213,255,.7)}
-.grain{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.045;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.preview-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:linear-gradient(90deg,#f59e0b,#d97706);color:#000;text-align:center;padding:10px 16px;font-size:13px;font-weight:700;letter-spacing:.5px;box-shadow:0 2px 10px rgba(0,0,0,.2)}
-.preview-banner span{font-weight:400;opacity:.8;margin-left:8px}
-body{padding-top:42px}
-nav{position:sticky;top:42px;background:rgba(10,27,40,.55);backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);z-index:100;padding:0 5vw;display:flex;align-items:center;justify-content:space-between;height:70px;border-bottom:1px solid rgba(255,255,255,.10)}
-.nav-logo{color:#fff;font-family:var(--font-head);font-size:21px;font-weight:800;letter-spacing:-.5px}
-.nav-logo span{color:#00d5ff}
-.nav-cta{background:linear-gradient(120deg,#00d5ff,#66e6ff);color:#fff;border:none;padding:11px 24px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.4px;transition:.2s;text-decoration:none;font-family:var(--font);box-shadow:0 8px 22px rgba(0,213,255,.35)}
-.nav-cta:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,213,255,.5)}
-nav ul{display:flex;gap:30px;list-style:none}
-nav ul li a{color:rgba(255,255,255,.75);text-decoration:none;font-size:14px;font-weight:500;transition:.15s}
-nav ul li a:hover{color:#fff}
-@media(max-width:600px){nav ul{display:none}}
-.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#fff;padding:120px 5vw 100px;background:linear-gradient(135deg,#0a1628 0%,#122040 60%,#1a2e5a 100%)}
-#vanta-hero{position:absolute;inset:0;z-index:0}
-.hero-veil{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 58%,transparent 0%,rgba(0,0,0,.32) 68%,rgba(0,0,0,.6) 100%)}
-.hero-content{position:relative;z-index:2;max-width:860px;text-align:center}
-.hero-badge{display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px);color:rgba(255,255,255,.9);font-size:12px;letter-spacing:2.5px;text-transform:uppercase;padding:8px 18px;border-radius:30px;margin-bottom:26px}
-.hero h1{font-family:var(--font-head);font-size:clamp(40px,7.5vw,86px);font-weight:800;line-height:1.05;letter-spacing:-1.5px;margin-bottom:22px;text-shadow:0 4px 40px rgba(0,0,0,.3)}
-.hero h1 .grad{background:linear-gradient(120deg,#fff 0%,#66e6ff 55%,#00d5ff 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
-.hero-sub{font-size:clamp(16px,2.4vw,22px);opacity:.88;margin-bottom:38px;font-weight:300;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.55;text-shadow:0 2px 20px rgba(0,0,0,.4)}
-.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-.hero-btns a{padding:16px 36px;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:.25s;font-family:var(--font);letter-spacing:.4px}
-.btn-main{background:linear-gradient(120deg,#00d5ff,#66e6ff);color:#fff;box-shadow:0 12px 34px rgba(0,213,255,.45)}
-.btn-main:hover{transform:translateY(-3px);box-shadow:0 18px 44px rgba(0,213,255,.6)}
-.btn-outline{background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.45);backdrop-filter:blur(6px)}
-.btn-outline:hover{background:rgba(255,255,255,.14);transform:translateY(-3px)}
-.hero-meta{margin-top:54px;display:flex;gap:30px;justify-content:center;opacity:.85;font-size:14px;flex-wrap:wrap;text-shadow:0 2px 12px rgba(0,0,0,.4)}
-section{padding:100px 5vw}
-.section-tag{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#00d5ff;font-weight:700;margin-bottom:12px}
-.section-title{font-family:var(--font-head);font-size:clamp(28px,4vw,48px);font-weight:800;line-height:1.15;letter-spacing:-.5px;margin-bottom:16px}
-.section-title .grad{background:linear-gradient(120deg,#0a1b28,#00d5ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
-.section-sub{font-size:17px;color:#666;max-width:560px;line-height:1.6}
-.section-head{margin-bottom:60px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-@media(max-width:900px){.grid3{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:700px){.grid3{grid-template-columns:1fr}}
-.card{position:relative;background:#fff;border:1px solid #ececec;border-radius:16px;padding:38px 30px;transition:box-shadow .3s,border-color .3s,transform .15s ease-out;box-shadow:0 4px 24px rgba(0,0,0,.05);transform-style:preserve-3d;will-change:transform}
-.card:hover{box-shadow:0 24px 60px rgba(0,213,255,.18);border-color:rgba(0,213,255,.35)}
-.card-icon{font-size:30px;color:#00d5ff;margin-bottom:18px;display:inline-block}
-.card h3{font-family:var(--font-head);font-size:20px;font-weight:700;margin-bottom:10px}
-.card p{color:#666;line-height:1.65;font-size:15px}
-.stats-section{position:relative;background:linear-gradient(135deg,#0a1628 0%,#122040 60%,#1a2e5a 100%);color:#fff;padding:90px 5vw;overflow:hidden}
-.stats-section::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(0,213,255,.25),transparent 50%),radial-gradient(circle at 80% 70%,rgba(0,213,255,.18),transparent 50%)}
-.stats-grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:880px;margin:0 auto;text-align:center}
-@media(max-width:600px){.stats-grid{grid-template-columns:1fr;gap:26px}}
-.stat-n{font-family:var(--font-head);font-size:clamp(42px,6vw,68px);font-weight:800;line-height:1;background:linear-gradient(120deg,#fff,#66e6ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
-.stat-l{font-size:15px;opacity:.75;margin-top:10px;letter-spacing:.5px}
-.reviews-section{background:#e0f4ff}
-.reviews-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-@media(max-width:700px){.reviews-grid{grid-template-columns:1fr}}
-.review{position:relative;background:#fff;border-radius:16px;padding:34px;box-shadow:0 8px 30px rgba(0,0,0,.07);border:1px solid rgba(0,213,255,.10);transform-style:preserve-3d;transition:transform .15s ease-out,box-shadow .3s}
-.review::before{content:"\201C";position:absolute;top:12px;left:20px;font-size:70px;color:rgba(0,213,255,.18);font-family:Georgia,serif;line-height:1}
-.review-q{position:relative;font-size:16px;line-height:1.65;color:#333;font-style:italic;margin-bottom:16px}
-.review-a{font-size:14px;font-weight:700;color:#00d5ff}
-.cta-section{position:relative;background:linear-gradient(135deg,#0a1628 0%,#122040 60%,#1a2e5a 100%);color:#fff;text-align:center;padding:110px 5vw;overflow:hidden}
-.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(0,213,255,.3),transparent 60%)}
-.cta-section h2{position:relative;font-family:var(--font-head);font-size:clamp(30px,4vw,52px);font-weight:800;margin-bottom:16px}
-.cta-section p{position:relative;font-size:18px;opacity:.75;margin-bottom:40px}
-.cta-section a{position:relative}
-.contact-section{background:#f7f8fa}
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
-@media(max-width:700px){.contact-grid{grid-template-columns:1fr}}
-.contact-info h2{font-family:var(--font-head);font-size:32px;font-weight:800;margin-bottom:20px}
-.contact-info p{color:#555;line-height:1.65;margin-bottom:28px;font-size:16px}
-.contact-detail{display:flex;align-items:center;gap:12px;margin-bottom:14px;font-size:15px;color:#333}
-.contact-detail strong{color:#00d5ff;font-size:18px;width:24px}
-.contact-form{background:#fff;border:1px solid #eee;border-radius:16px;padding:30px;box-shadow:0 10px 40px rgba(0,0,0,.05)}
-.contact-form input,.contact-form textarea{width:100%;background:#fafafa;border:1.5px solid #e2e2e2;border-radius:8px;padding:13px 16px;font-size:15px;font-family:var(--font);outline:none;transition:.15s;margin-bottom:12px}
-.contact-form input:focus,.contact-form textarea:focus{border-color:#00d5ff;background:#fff}
-.contact-form textarea{height:120px;resize:vertical}
-.contact-form button{width:100%;background:linear-gradient(120deg,#00d5ff,#66e6ff);color:#fff;border:none;padding:15px;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;font-family:var(--font);letter-spacing:.4px;transition:.2s;box-shadow:0 10px 28px rgba(0,213,255,.35)}
-.contact-form button:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(0,213,255,.5)}
-footer{background:#0a1b28;color:rgba(255,255,255,.5);text-align:center;padding:34px 5vw;font-size:13px}
-footer strong{color:#fff}
-.lhero-editorial{padding:100px 5vw 80px;align-items:flex-start}.editorial-content{max-width:900px;text-align:left;position:relative;z-index:2}.editorial-tag{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:20px}.editorial-h1{font-size:clamp(52px,9vw,110px);font-weight:800;line-height:0.95;letter-spacing:-3px;margin-bottom:28px;display:flex;flex-direction:column}.editorial-l1{color:rgba(255,255,255,0.9)}.editorial-l2{display:block}.editorial-sub{font-size:clamp(15px,2vw,18px);opacity:0.72;margin-bottom:24px;max-width:500px;line-height:1.6;font-weight:300}.editorial-meta{display:flex;gap:20px;margin-bottom:28px;flex-wrap:wrap}.editorial-meta span{font-size:12px;color:rgba(255,255,255,0.5);letter-spacing:1px}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.tilt{transform:none!important}}
+body{background:var(--bg);color:var(--fg);font-family:'Open Sans',sans-serif;overflow-x:hidden}
+h1,h2,h3,.disp{font-family:'Poppins',sans-serif}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+a,button,input,textarea,.card{cursor:pointer}
+input,textarea{cursor:text}
+#gl{position:fixed;inset:0;z-index:var(--z-base)}
+.veil{position:fixed;inset:0;z-index:var(--z-veil);pointer-events:none;
+  background:radial-gradient(ellipse at 50% 30%,transparent 0%,rgba(6,9,17,.55) 55%,rgba(6,9,17,.95) 100%);}
+.banner{position:fixed;top:0;left:0;right:0;z-index:var(--z-banner);background:#0369a1;color:#fff;text-align:center;
+  font-size:13px;padding:8px 10px;letter-spacing:.03em;font-weight:600}
+.chapter{position:relative;z-index:var(--z-content);min-height:100vh;display:flex;align-items:center;padding:110px 6vw 90px}
+.inner{position:relative;max-width:1180px;margin:0 auto;width:100%}
+.inner::before{content:'';position:absolute;inset:-70px -90px;z-index:-1;
+  background:radial-gradient(closest-side,rgba(6,9,17,.82),rgba(6,9,17,.4) 60%,transparent);filter:blur(4px)}
+h1,h2,h3{text-shadow:0 4px 30px rgba(0,0,0,.6)}
+p{text-shadow:0 2px 14px rgba(0,0,0,.5)}
+.tag{display:inline-block;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+  border:1px solid var(--border);padding:6px 14px;border-radius:99px;background:var(--card);margin-bottom:18px}
+.hero-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(38px,6vw,74px);font-weight:700;line-height:1.03;margin-bottom:20px}
+.hero h1 span{color:var(--accent)}
+.hero p.lead{font-size:19px;color:var(--muted);max-width:520px;margin-bottom:32px;line-height:1.6}
+.cta-btn{cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;
+  background:linear-gradient(120deg,var(--accent2),var(--accent));
+  color:#fff;font-weight:600;padding:15px 30px;border-radius:12px;border:none;font-size:16px;font-family:inherit;
+  box-shadow:0 10px 30px rgba(56,189,248,.28);transition:transform .2s,box-shadow .2s,opacity .2s}
+.cta-btn:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(56,189,248,.4)}
+.cta-btn:disabled{opacity:.65;cursor:not-allowed;transform:none}
+.cta-btn.ghost{background:transparent;border:1.5px solid var(--border);box-shadow:none;color:var(--fg)}
+.poster{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);z-index:-2;text-align:center;
+  font-size:min(19vw,220px);font-weight:700;color:transparent;-webkit-text-stroke:1.5px rgba(56,189,248,.22);
+  letter-spacing:.02em;pointer-events:none;white-space:nowrap;font-family:'Poppins',sans-serif}
+.svg-hero{filter:drop-shadow(0 0 40px rgba(56,189,248,.35))}
+.float{animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.spin-slow{animation:spin 26s linear infinite;transform-origin:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+.section-head{max-width:640px;margin-bottom:52px}
+.section-head .tag{margin-bottom:14px}
+.section-head h2{font-size:clamp(30px,4vw,48px);font-weight:700;margin-bottom:16px}
+.section-head p{color:var(--muted);font-size:17px;line-height:1.6}
+.grid-services{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 24px;
+  backdrop-filter:blur(6px);transition:transform .25s,border-color .25s}
+.card:hover,.card:focus-within{transform:translateY(-6px);border-color:var(--accent)}
+.card svg{margin-bottom:16px}
+.card h3{font-size:19px;margin-bottom:8px;font-weight:600}
+.card p{font-size:15px;color:var(--muted);line-height:1.55}
+.divider{display:block;margin:0 auto;max-width:1180px;width:100%}
+.holo-wrap{position:relative;display:grid;grid-template-columns:.9fr 1.1fr;gap:40px;align-items:center;min-height:60vh}
+.holo-wrap h2{font-size:clamp(30px,4.4vw,50px);font-weight:700;margin-bottom:18px}
+.holo-wrap p{color:var(--muted);font-size:17px;line-height:1.65;max-width:460px}
+.hud{position:fixed;inset:0;z-index:var(--z-hud);pointer-events:none;opacity:0;transition:opacity .5s}
+.hud.show{opacity:1}
+.hud .frame{position:absolute;left:50%;top:50%;width:min(46vw,460px);height:min(46vw,460px);transform:translate(-50%,-50%)}
+.hud .corner{position:absolute;width:26px;height:26px;border-color:var(--accent)}
+.hud .c1{top:0;left:0;border-top:1.5px solid;border-left:1.5px solid}
+.hud .c2{top:0;right:0;border-top:1.5px solid;border-right:1.5px solid}
+.hud .c3{bottom:0;left:0;border-bottom:1.5px solid;border-left:1.5px solid}
+.hud .c4{bottom:0;right:0;border-bottom:1.5px solid;border-right:1.5px solid}
+.hud .scanline{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  animation:scan 2.6s ease-in-out infinite}
+@keyframes scan{0%,100%{top:2%}50%{top:96%}}
+.hud .reticle{position:absolute;left:50%;top:50%;width:min(30vw,300px);transform:translate(-50%,-50%);opacity:.55}
+.readout{position:absolute;left:50%;bottom:8%;transform:translateX(-50%);background:rgba(6,9,17,.75);
+  border:1px solid var(--accent);border-radius:10px;padding:12px 18px;backdrop-filter:blur(8px);
+  font-family:'Poppins',sans-serif;font-size:12px;min-width:220px}
+.readout .row{display:flex;justify-content:space-between;gap:20px;padding:3px 0;color:var(--muted)}
+.readout .row span:last-child{color:var(--fg);font-weight:600}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:6px;
+  box-shadow:0 0 8px var(--accent);animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:48px}
+.stat{text-align:center;border:1px solid var(--border);border-radius:16px;padding:30px 14px;background:var(--card)}
+.stat .num{font-family:'Poppins',sans-serif;font-size:38px;font-weight:700;color:var(--accent)}
+.stat .lbl{color:var(--muted);font-size:13px;margin-top:6px}
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px}
+.quote{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px}
+.quote p{font-style:italic;font-size:14.5px;color:var(--fg);line-height:1.6;margin-bottom:14px}
+.quote span{font-size:13px;color:var(--muted)}
+.stars{color:var(--gold);font-size:15px;letter-spacing:2px;margin-bottom:8px}
+.stars[aria-hidden]{}
+.cta-wrap{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+.cta-wrap h2{font-size:clamp(30px,4.4vw,52px);font-weight:700;margin-bottom:16px}
+.cta-wrap p{color:var(--muted);font-size:17px;margin-bottom:28px;line-height:1.6}
+form{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:32px;backdrop-filter:blur(10px)}
+.field{margin-bottom:16px}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;letter-spacing:.03em;font-weight:600}
+input,textarea{width:100%;background:rgba(255,255,255,.045);border:1px solid var(--border);border-radius:9px;
+  padding:12px 14px;color:var(--fg);font-family:inherit;font-size:15px;min-height:44px}
+textarea{min-height:100px;resize:vertical}
+input:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+.form-status{min-height:20px;font-size:13.5px;margin-top:10px;color:var(--accent)}
+.form-status.error{color:#ff8a8a}
+footer{position:relative;z-index:var(--z-content);padding:50px 6vw 30px;border-top:1px solid var(--border);background:rgba(6,9,17,.6)}
+.foot-grid{max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px}
+.foot-grid h3{font-size:19px;margin-bottom:8px}
+.foot-grid p{color:var(--muted);font-size:14px;line-height:1.7}
+.foot-grid a{color:inherit;text-decoration:underline}
+@media(max-width:900px){
+  .hero-wrap,.holo-wrap,.cta-wrap{grid-template-columns:1fr}
+  .grid-services{grid-template-columns:repeat(2,1fr)}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .quotes{grid-template-columns:1fr}
+  .hud{display:none}
+}
+@media(max-width:520px){
+  .grid-services{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  body{font-size:16px}
+  .card p,.quote p,.foot-grid p{font-size:16px}
+  .cta-btn{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  #gl{display:none}
+  body{background:radial-gradient(ellipse at 50% 20%,#0b1322,#060911 70%)}
+  .float,.spin-slow,.scanline,.dot,.hud{animation:none}
+}
 </style>
 </head>
 <body>
-<div class="preview-banner">🎨 Website Preview for <strong>Frehos Accounting</strong><span>— This is a mockup. Your real site will be fully customised.</span></div>
-<div class="grain"></div>
-<div id="progress"></div>
-<nav>
-<div class="nav-logo">Frehos Accounting<span>.</span></div>
-<ul><li><a href="#services">Services</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul>
-<a href="#contact" class="nav-cta">Start Today</a>
-</nav>
-<section class="hero lhero-editorial">
-  <div id="vanta-hero"></div>
-  <div class="hero-veil" style="background:radial-gradient(ellipse at 30% 50%,transparent 0%,rgba(0,0,0,0.42) 70%,rgba(0,0,0,0.72) 100%)"></div>
-  <div class="editorial-content">
-    <div class="editorial-tag" data-reveal>Accounting · 2110 Wijnegem</div>
-    <h1 class="editorial-h1" data-reveal>
-      <span class="editorial-l1">Frehos Accounting</span>
-      <span class="editorial-l2 grad">Trusted Experts, Exceptional Results</span>
-    </h1>
-    <p class="editorial-sub" data-reveal>Wenst u een gesprek met een van onze adviseurs?
-Vul hieronder uw gegevens in en wij contacteren u onverwijld.</p>
-    <div class="editorial-meta" data-reveal>
-      <span>📞 03 685 48 90</span>
-      <span>📍 2110 Wijnegem</span>
-      <span>⭐ 4.7 (17 reviews)</span>
+<div class="banner">Website Preview — conceptmockup voor Frehos Accounting</div>
+<div id="gl" aria-hidden="true"></div>
+<div class="veil" aria-hidden="true"></div>
+
+<!-- shared icon gradient -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="hud" id="hud" aria-hidden="true">
+  <div class="frame">
+    <div class="corner c1"></div><div class="corner c2"></div><div class="corner c3"></div><div class="corner c4"></div>
+    <div class="scanline"></div>
+    <svg class="reticle" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="none" stroke="#38bdf8" stroke-width="1"/><circle cx="50" cy="50" r="30" fill="none" stroke="#38bdf8" stroke-width="1"/><line x1="50" y1="4" x2="50" y2="24" stroke="#38bdf8" stroke-width="1"/><line x1="50" y1="76" x2="50" y2="96" stroke="#38bdf8" stroke-width="1"/><line x1="4" y1="50" x2="24" y2="50" stroke="#38bdf8" stroke-width="1"/><line x1="76" y1="50" x2="96" y2="50" stroke="#38bdf8" stroke-width="1"/></svg>
+  </div>
+  <div class="readout">
+    <div class="row"><span><span class="dot"></span>SCAN</span><span>ACTIEF</span></div>
+    <div class="row"><span>DOEL</span><span>Jaarrekening 2024</span></div>
+    <div class="row"><span>PRECISIE</span><span>99.98%</span></div>
+  </div>
+</div>
+
+<section class="chapter hero" id="ch-hero">
+  <div class="poster">BALANS</div>
+  <div class="inner hero-wrap">
+    <div>
+      <span class="tag">Boekhouding &amp; fiscaal advies · Wijnegem</span>
+      <h1>Uw boekhouding,<br><span>feilloos</span> in balans.</h1>
+      <p class="lead">Frehos Accounting begeleidt kmo's, zelfstandigen en starters op het Marktplein in Wijnegem met heldere cijfers, scherp fiscaal advies en écht persoonlijk contact.</p>
+      <a class="cta-btn" href="tel:+3236854890">Bel 03 685 48 90</a>
     </div>
-    <div class="hero-btns" style="justify-content:flex-start" data-reveal>
-      <a href="#contact" class="btn-main">Start Today</a>
-      <a href="#services" class="btn-outline">View Services</a>
+    <svg class="svg-hero float" viewBox="0 0 400 400" width="100%" height="auto" style="max-width:420px;justify-self:center" role="img" aria-label="Illustratie van een gloeiend euroteken dat structuur en precisie symboliseert">
+      <defs>
+        <radialGradient id="g1" cx="50%" cy="45%" r="60%"><stop offset="0%" stop-color="#38bdf8" stop-opacity=".5"/><stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/></radialGradient>
+        <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#0369a1"/></linearGradient>
+      </defs>
+      <circle cx="200" cy="200" r="170" fill="url(#g1)"/>
+      <g class="spin-slow">
+        <circle cx="200" cy="200" r="128" fill="none" stroke="url(#g2)" stroke-width="2" stroke-dasharray="6 10" opacity=".6"/>
+      </g>
+      <path d="M235 90 C170 90 130 145 130 205 C130 265 170 315 235 315" fill="none" stroke="url(#g2)" stroke-width="16" stroke-linecap="round"/>
+      <rect x="150" y="178" width="120" height="15" rx="7" fill="#eaf1fb"/>
+      <rect x="150" y="212" width="120" height="15" rx="7" fill="#eaf1fb"/>
+    </svg>
+  </div>
+</section>
+
+<svg class="divider" viewBox="0 0 1200 60" height="60" aria-hidden="true"><path d="M0 30 Q300 0 600 30 T1200 30" fill="none" stroke="#0369a1" stroke-width="1" opacity=".4"/></svg>
+
+<section class="chapter" id="ch-diensten">
+  <div class="inner">
+    <div class="section-head">
+      <span class="tag">Diensten</span>
+      <h2>Alles voor uw cijfers, op één adres.</h2>
+      <p>Van de dagelijkse boekhouding tot complexe fiscale dossiers — Frehos Accounting neemt het volledige financiële beheer van uw onderneming uit handen.</p>
+    </div>
+    <div class="grid-services">
+      <div class="card">
+        <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M6 5h16a3 3 0 0 1 3 3v18l-4-3H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="none" stroke="url(#iconGrad)" stroke-width="2"/><line x1="9" y1="12" x2="20" y2="12" stroke="url(#iconGrad)" stroke-width="2"/><line x1="9" y1="17" x2="20" y2="17" stroke="url(#iconGrad)" stroke-width="2"/></svg>
+        <h3>Boekhouding &amp; jaarrekening</h3><p>Correcte, tijdige verwerking van uw boekhouding en opstellen van de jaarrekening.</p></div>
+      <div class="card">
+        <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="10" cy="10" r="4" fill="none" stroke="url(#iconGrad)" stroke-width="2"/><circle cx="24" cy="24" r="4" fill="none" stroke="url(#iconGrad)" stroke-width="2"/><line x1="8" y1="26" x2="26" y2="8" stroke="url(#iconGrad)" stroke-width="2"/></svg>
+        <h3>Fiscaal advies &amp; aangiftes</h3><p>Optimale fiscale strategie en correcte aangiftes personen- en vennootschapsbelasting.</p></div>
+      <div class="card">
+        <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M6 28V14l11-9 11 9v14" fill="none" stroke="url(#iconGrad)" stroke-width="2"/><rect x="14" y="18" width="6" height="10" fill="none" stroke="url(#iconGrad)" stroke-width="2"/></svg>
+        <h3>Vennootschapsbelasting</h3><p>Doordachte structurering en aangifte van de vennootschapsbelasting.</p></div>
+      <div class="card">
+        <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 5l3 8 8 1-6 6 2 8-7-4-7 4 2-8-6-6 8-1z" fill="none" stroke="url(#iconGrad)" stroke-width="2"/></svg>
+        <h3>Begeleiding starters</h3><p>Van ondernemingsplan tot oprichting — wij begeleiden starters en zelfstandigen.</p></div>
+      <div class="card">
+        <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="12" cy="11" r="4" fill="none" stroke="url(#iconGrad)" stroke-width="2"/><circle cx="23" cy="11" r="4" fill="none" stroke="url(#iconGrad)" stroke-width="2"/><path d="M5 27c0-5 4-8 7-8s7 3 7 8M16 27c0-5 4-8 7-8s6 3 6 8" fill="none" stroke="url(#iconGrad)" stroke-width="2"/></svg>
+        <h3>Payroll &amp; sociaal secretariaat</h3><p>Correcte loonverwerking en begeleiding sociale zekerheid voor uw personeel.</p></div>
+      <div class="card">
+        <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect x="8" y="5" width="18" height="24" rx="2" fill="none" stroke="url(#iconGrad)" stroke-width="2"/><line x1="12" y1="11" x2="22" y2="11" stroke="url(#iconGrad)" stroke-width="2"/><line x1="12" y1="16" x2="22" y2="16" stroke="url(#iconGrad)" stroke-width="2"/><line x1="12" y1="21" x2="18" y2="21" stroke="url(#iconGrad)" stroke-width="2"/></svg>
+        <h3>BTW-aangiftes</h3><p>Tijdige en correcte periodieke BTW-aangiftes, volledig digitaal verwerkt.</p></div>
     </div>
   </div>
 </section>
-<section id="services">
-<div class="section-head" data-reveal>
-<div class="section-tag">What We Offer</div>
-<h2 class="section-title"><span class="grad">Our Services</span></h2>
-<p class="section-sub">Everything you need, delivered with the professionalism and care you deserve.</p>
-</div>
-<div class="grid3" data-stagger><div class="card tilt" data-tilt><div class="card-icon">◈</div><h3>Frehos Accounting</h3><p>Comprehensive, tailored solutions designed around your exact needs and goals.</p></div><div class="card tilt" data-tilt><div class="card-icon">✦</div><h3>Frehos Accounting</h3><p>A dedicated team of professionals with years of hands-on experience in the field.</p></div><div class="card tilt" data-tilt><div class="card-icon">◉</div><h3>Openingstijden</h3><p>We measure our success by yours. Clear outcomes, transparent communication, every time.</p></div></div>
+
+<section class="chapter" id="ch-hologram">
+  <div class="poster" style="font-size:min(15vw,190px)">PRECISIE</div>
+  <div class="inner holo-wrap">
+    <div>
+      <span class="tag">Onze kern</span>
+      <h2>Tot op de cent nauwkeurig, elke keer.</h2>
+      <p>Achter elke jaarrekening zit een team dat rekent, controleert en optimaliseert — zodat uw cijfers écht kloppen. Geen verrassingen, wel duidelijkheid.</p>
+      <a class="cta-btn ghost" href="#ch-cta" style="margin-top:10px">Ontdek onze aanpak</a>
+    </div>
+    <div style="min-height:50vh" aria-hidden="true"></div>
+  </div>
 </section>
-<div class="stats-section"><div class="stats-grid" data-stagger><div class="stat"><div class="stat-n">10+</div><div class="stat-l">Years Experience</div></div><div class="stat"><div class="stat-n">500+</div><div class="stat-l">Happy Clients</div></div><div class="stat"><div class="stat-n">100%</div><div class="stat-l">Commitment</div></div></div></div>
-<section id="about" class="reviews-section"><div style="max-width:1100px;margin:0 auto">
-<div class="section-head" data-reveal><div class="section-tag">Client Reviews</div><h2 class="section-title"><span class="grad">What Our Clients Say</span></h2></div>
-<div class="reviews-grid" data-stagger><div class="review tilt" data-tilt><div class="review-q">“Genuinely impressed from first contact to delivery. A team you can trust.”</div><div class="review-a">— C. Davies</div></div><div class="review tilt" data-tilt><div class="review-q">“They understood exactly what we needed and delivered beyond expectations.”</div><div class="review-a">— D. Martens</div></div></div>
-</div></section>
-<section class="cta-section">
-<h2 data-reveal>Ready to Get Started?</h2>
-<p data-reveal>Reach out today — we’d love to hear from you.</p>
-<a href="#contact" class="btn-main" data-reveal style="display:inline-block;padding:18px 44px;font-size:17px;font-weight:700;border-radius:8px;text-decoration:none;color:#fff;background:linear-gradient(120deg,#00d5ff,#66e6ff);font-family:var(--font);box-shadow:0 14px 38px rgba(0,213,255,.45)">Start Today</a>
+
+<section class="chapter" id="ch-cijfers">
+  <div class="inner">
+    <div class="section-head">
+      <span class="tag">Vertrouwen</span>
+      <h2>Wijnegem vertrouwt op Frehos.</h2>
+      <p>Al jarenlang staan wij lokale ondernemers, zelfstandigen en kmo's bij — met resultaat.</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat"><div class="num">4.7★</div><div class="lbl">Google-score (17 reviews)</div></div>
+      <div class="stat"><div class="num">15+</div><div class="lbl">Jaar ervaring</div></div>
+      <div class="stat"><div class="num">300+</div><div class="lbl">Tevreden klanten</div></div>
+      <div class="stat"><div class="num">99.98%</div><div class="lbl">Nauwkeurigheid dossiers</div></div>
+    </div>
+    <div class="quotes">
+      <div class="quote"><div class="stars" aria-label="5 van de 5 sterren">★★★★★</div><p>"Eindelijk een boekhouder die alles helder uitlegt en snel antwoordt."</p><span>— Klant uit Wijnegem</span></div>
+      <div class="quote"><div class="stars" aria-label="5 van de 5 sterren">★★★★★</div><p>"Frehos heeft mij als starter perfect begeleid bij de oprichting."</p><span>— Zelfstandige</span></div>
+      <div class="quote"><div class="stars" aria-label="4 van de 5 sterren">★★★★☆</div><p>"Correcte fiscale opvolging en altijd op tijd. Aanrader."</p><span>— KMO-eigenaar</span></div>
+    </div>
+  </div>
 </section>
-<section id="contact" class="contact-section"><div style="max-width:1100px;margin:0 auto"><div class="contact-grid">
-<div class="contact-info" data-reveal><div class="section-tag">Get In Touch</div><h2 class="section-title" style="font-size:clamp(24px,3vw,38px)"><span class="grad">Let’s Talk</span></h2>
-<p>We’re here to help. Reach out and we’ll get back to you as soon as possible.</p>
-<div class="contact-detail"><strong>📞</strong>03 685 48 90</div><div class="contact-detail"><strong>📍</strong>Marktplein 22, 2110 Wijnegem, Belgium</div>
-<div class="contact-detail"><strong>🌐</strong>https://frehos.com/en/contact/</div></div>
-<div class="contact-form" data-reveal><input type="text" placeholder="Your Name"><input type="email" placeholder="Your Email"><input type="tel" placeholder="Your Phone Number"><textarea placeholder="How can we help you?"></textarea><button type="button">Start Today</button></div>
-</div></div></section>
-<footer><strong>Frehos Accounting</strong> · 2110 Wijnegem · 03 685 48 90<br><span style="font-size:11px;opacity:.5;margin-top:6px;display:block">Preview mockup — website design by [Your Agency]</span></footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"><\/script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.fog.min.js"><\/script>
+
+<section class="chapter" id="ch-cta">
+  <div class="inner cta-wrap">
+    <div>
+      <span class="tag">Contact</span>
+      <h2>Klaar om écht in balans te komen?</h2>
+      <p>Plan een vrijblijvend gesprek op ons kantoor aan het Marktplein in Wijnegem, of bel ons rechtstreeks.</p>
+      <a class="cta-btn" href="tel:+3236854890">03 685 48 90</a>
+    </div>
+    <form id="contact-form" novalidate>
+      <div class="field">
+        <label for="f-naam">Naam</label>
+        <input id="f-naam" name="naam" type="text" placeholder="Uw naam" autocomplete="name" required>
+      </div>
+      <div class="field">
+        <label for="f-email">E-mail</label>
+        <input id="f-email" name="email" type="email" placeholder="naam@bedrijf.be" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="f-bericht">Bericht</label>
+        <textarea id="f-bericht" name="bericht" rows="4" placeholder="Vertel ons over uw onderneming..." required></textarea>
+      </div>
+      <button class="cta-btn" type="submit" style="width:100%" id="submit-btn">Vraag een gesprek aan</button>
+      <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-grid">
+    <div><h3>Frehos Accounting</h3><p>Marktplein 22, 2110 Wijnegem<br><a href="tel:+3236854890">03 685 48 90</a><br><a href="https://frehos.com/en/contact/">frehos.com</a></p></div>
+    <div><h3>Diensten</h3><p>Boekhouding · Fiscaal advies<br>Vennootschapsbelasting · Payroll<br>Starters &amp; BTW</p></div>
+    <div><h3>Openingsuren</h3><p>Ma–Vr: 9u–17u<br>Enkel op afspraak</p></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/UnrealBloomPass.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
 (function(){
-var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-function hasWebGL(){try{var c=document.createElement("canvas");return !!(window.WebGLRenderingContext&&(c.getContext("webgl")||c.getContext("experimental-webgl")));}catch(e){return false;}}
-if(!reduce&&hasWebGL()&&window.VANTA){try{var CFG={"effect":"FOG","highlightColor":43775,"midtoneColor":1187904,"lowlightColor":661032,"baseColor":661032,"blurFactor":0.66,"speed":1.1,"zoom":0.9};var fx=CFG.effect;delete CFG.effect;if(VANTA[fx]){VANTA[fx](Object.assign({el:"#vanta-hero",mouseControls:true,touchControls:true,gyroControls:false,minHeight:200,minWidth:200,scale:1,scaleMobile:1},CFG));}}catch(e){}}
-var bar=document.getElementById("progress");
-if(bar){var upd=function(){var h=document.documentElement;var m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?(h.scrollTop/m*100):0)+"%";};window.addEventListener("scroll",upd,{passive:true});upd();}
-var fine=window.matchMedia("(hover:hover) and (pointer:fine)").matches;
-if(fine&&!reduce){document.querySelectorAll("[data-tilt]").forEach(function(el){el.addEventListener("pointermove",function(e){var r=el.getBoundingClientRect();var x=(e.clientX-r.left)/r.width-0.5;var y=(e.clientY-r.top)/r.height-0.5;el.style.transform="perspective(900px) rotateX("+(-y*5).toFixed(2)+"deg) rotateY("+(x*7).toFixed(2)+"deg) translateY(-6px)";});el.addEventListener("pointerleave",function(){el.style.transform="";});});}
-if(window.gsap&&!reduce&&window.ScrollTrigger){gsap.registerPlugin(ScrollTrigger);gsap.utils.toArray("[data-reveal]").forEach(function(el){gsap.from(el,{opacity:0,y:42,duration:.9,ease:"power3.out",scrollTrigger:{trigger:el,start:"top 86%"}});});gsap.utils.toArray("[data-stagger]").forEach(function(g){gsap.from(g.children,{opacity:0,y:42,duration:.8,ease:"power3.out",stagger:.12,scrollTrigger:{trigger:g,start:"top 82%"}});});gsap.to(".hero-content",{yPercent:16,opacity:.55,ease:"none",scrollTrigger:{trigger:".hero",start:"top top",end:"bottom top",scrub:true}});document.querySelectorAll(".stat-n").forEach(function(el){var txt=el.textContent.trim();var i=0;while(i<txt.length&&!(txt.charAt(i)>="0"&&txt.charAt(i)<="9"))i++;if(i>=txt.length)return;var j=i;while(j<txt.length&&((txt.charAt(j)>="0"&&txt.charAt(j)<="9")||txt.charAt(j)===","||txt.charAt(j)==="."))j++;var pre=txt.slice(0,i),numStr=txt.slice(i,j).replace(/,/g,""),suf=txt.slice(j),target=parseFloat(numStr);if(isNaN(target))return;var dec=numStr.indexOf(".")>=0?1:0,o={v:0};gsap.to(o,{v:target,duration:1.7,ease:"power2.out",scrollTrigger:{trigger:el,start:"top 92%"},onUpdate:function(){el.textContent=pre+(dec?o.v.toFixed(1):Math.round(o.v).toLocaleString())+suf;},onComplete:function(){el.textContent=pre+(dec?target.toFixed(1):Math.round(target).toLocaleString())+suf;}});});}
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function hasWebGL(){try{var c=document.createElement('canvas');return !!(c.getContext('webgl')||c.getContext('experimental-webgl'));}catch(e){return false;}}
+  if(reduce||!hasWebGL()||!window.THREE)return;
+  try{
+    var mobile=window.innerWidth<768;
+    var BG='#060911',ACCENT='#38bdf8',ACCENT2='#0369a1';
+    var scene=new THREE.Scene();
+    var renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+    renderer.setSize(window.innerWidth,window.innerHeight);
+    document.getElementById('gl').appendChild(renderer.domElement);
+    scene.background=new THREE.Color(BG); scene.fog=new THREE.FogExp2(BG,0.016);
+    var camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,400);
+    camera.position.set(0,2,46);
+
+    function makeSprite(){var c=document.createElement('canvas');c.width=c.height=64;
+      var g=c.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);
+      r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(0.35,'rgba(255,255,255,.6)');r.addColorStop(1,'rgba(255,255,255,0)');
+      g.fillStyle=r;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c);}
+    var sprite=makeSprite();
+
+    // universe
+    var N=mobile?1800:4200,SPREAD=54;
+    var geo=new THREE.BufferGeometry(),pos=new Float32Array(N*3),col=new Float32Array(N*3);
+    var ca=new THREE.Color(ACCENT),cb=new THREE.Color('#1e3a5f'),c=new THREE.Color();
+    for(var i=0;i<N;i++){var r=SPREAD*Math.pow(Math.random(),0.5),th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+      pos[i*3]=r*Math.sin(ph)*Math.cos(th);pos[i*3+1]=r*Math.sin(ph)*Math.sin(th)*0.55;pos[i*3+2]=r*Math.cos(ph);
+      c.copy(ca).lerp(cb,Math.random());col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;}
+    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+    var universe=new THREE.Points(geo,new THREE.PointsMaterial({size:0.55,map:sprite,vertexColors:true,transparent:true,opacity:0.85,depthWrite:false,blending:THREE.AdditiveBlending}));
+    scene.add(universe);
+
+    // helix strand group
+    var strandGroup=new THREE.Group();
+    function makeHelix(rot){
+      var Nh=mobile?350:600,RADIUS=6,HEIGHT=34,TURNS=5;
+      var g=new THREE.BufferGeometry(),p=new Float32Array(Nh*3);
+      for(var i=0;i<Nh;i++){var t=i/Nh,a=t*Math.PI*2*TURNS,w=0.3*Math.sin(t*40);
+        p[i*3]=Math.cos(a)*(RADIUS+w);p[i*3+1]=(t-0.5)*HEIGHT;p[i*3+2]=Math.sin(a)*(RADIUS+w);}
+      g.setAttribute('position',new THREE.BufferAttribute(p,3));
+      var m=new THREE.PointsMaterial({size:0.4,map:sprite,color:ACCENT,transparent:true,opacity:0.8,depthWrite:false,blending:THREE.AdditiveBlending});
+      var pts=new THREE.Points(g,m); pts.rotation.z=rot; return pts;
+    }
+    strandGroup.add(makeHelix(0)); strandGroup.add(makeHelix(Math.PI));
+    strandGroup.position.z=-6; scene.add(strandGroup);
+
+    // centerpiece
+    var core=new THREE.Group();
+    var ico1=new THREE.Mesh(new THREE.IcosahedronGeometry(3.4,1),new THREE.MeshBasicMaterial({color:ACCENT,wireframe:true,transparent:true,opacity:0.5}));
+    var ico2=new THREE.Mesh(new THREE.IcosahedronGeometry(1.9,0),new THREE.MeshBasicMaterial({color:0xffffff,wireframe:true,transparent:true,opacity:0.85}));
+    var ring=new THREE.Mesh(new THREE.TorusGeometry(5.2,0.03,8,120),new THREE.MeshBasicMaterial({color:ACCENT2}));
+    ring.rotation.x=Math.PI/2.4;
+    core.add(ico1,ico2,ring); scene.add(core);
+
+    // hologram: euro sign
+    var shapes=[];
+    var outer=new THREE.Shape();
+    outer.absarc(0,0,6,Math.PI*0.32,Math.PI*1.68,false);
+    var hole=new THREE.Path(); hole.absarc(0,0,3.7,Math.PI*1.68,Math.PI*0.32,true);
+    outer.holes.push(hole); shapes.push(outer);
+    var bar1=new THREE.Shape(); bar1.moveTo(-5.2,0.6); bar1.lineTo(1.6,0.6); bar1.lineTo(1.6,1.7); bar1.lineTo(-5.2,1.7); bar1.lineTo(-5.2,0.6);
+    var bar2=new THREE.Shape(); bar2.moveTo(-5.2,-1.7); bar2.lineTo(1.6,-1.7); bar2.lineTo(1.6,-0.6); bar2.lineTo(-5.2,-0.6); bar2.lineTo(-5.2,-1.7);
+    shapes.push(bar1,bar2);
+
+    var shapeGeo=new THREE.ShapeGeometry(shapes,12);
+    shapeGeo.computeBoundingBox();
+    var idx=shapeGeo.index?shapeGeo.index.array:null;
+    var vp=shapeGeo.attributes.position.array;
+    var tris=[],areaSum=0;
+    function triArea(ax,ay,bx,by,cx,cy){return Math.abs((bx-ax)*(cy-ay)-(cx-ax)*(by-ay))/2;}
+    if(idx){
+      for(var t=0;t<idx.length;t+=3){
+        var a=idx[t]*3,b=idx[t+1]*3,cI=idx[t+2]*3;
+        var ar=triArea(vp[a],vp[a+1],vp[b],vp[b+1],vp[cI],vp[cI+1]);
+        areaSum+=ar; tris.push([a,b,cI,areaSum]);
+      }
+    }
+    var FILL=mobile?900:1600, OUT=mobile?600:1000;
+    var targetFill=new Float32Array(FILL*3), targetOut=new Float32Array(OUT*3);
+    var cloudFill=new Float32Array(FILL*3), cloudOut=new Float32Array(OUT*3);
+    function sampleTri(){
+      var r=Math.random()*areaSum,lo=0,hi=tris.length-1;
+      while(lo<hi){var mid=(lo+hi)>>1; if(tris[mid][3]<r) lo=mid+1; else hi=mid;}
+      var tri=tris[lo]||tris[tris.length-1];
+      var a=tri[0],b=tri[1],cI=tri[2];
+      var u=Math.random(),v=Math.random(); if(u+v>1){u=1-u;v=1-v;}
+      var x=vp[a]+(vp[b]-vp[a])*u+(vp[cI]-vp[a])*v;
+      var y=vp[a+1]+(vp[b+1]-vp[a+1])*u+(vp[cI+1]-vp[a+1])*v;
+      return [x,y];
+    }
+    for(var i=0;i<FILL;i++){
+      var p= tris.length? sampleTri():[0,0];
+      targetFill[i*3]=p[0]*1.5; targetFill[i*3+1]=p[1]*1.5; targetFill[i*3+2]=(Math.random()-0.5)*1.2;
+    }
+    var outlinePts=[];
+    outlinePts=outlinePts.concat(outer.getPoints(140).map(function(pt){return [pt.x,pt.y];}));
+    outlinePts=outlinePts.concat(hole.getPoints(140).map(function(pt){return [pt.x,pt.y];}));
+    outlinePts=outlinePts.concat(bar1.getPoints(30).map(function(pt){return [pt.x,pt.y];}));
+    outlinePts=outlinePts.concat(bar2.getPoints(30).map(function(pt){return [pt.x,pt.y];}));
+    for(var i=0;i<OUT;i++){
+      var pt=outlinePts[Math.floor(Math.random()*outlinePts.length)];
+      targetOut[i*3]=(pt[0]+ (Math.random()-0.5)*0.12)*1.5;
+      targetOut[i*3+1]=(pt[1]+ (Math.random()-0.5)*0.12)*1.5;
+      targetOut[i*3+2]=(Math.random()-0.5)*0.5;
+    }
+    function randSphere(arr,n,rad){
+      for(var i=0;i<n;i++){var r=rad*(0.7+Math.random()*0.3),th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+        arr[i*3]=r*Math.sin(ph)*Math.cos(th); arr[i*3+1]=r*Math.sin(ph)*Math.sin(th); arr[i*3+2]=r*Math.cos(ph);}
+    }
+    randSphere(cloudFill,FILL,28); randSphere(cloudOut,OUT,28);
+
+    var fillGeo=new THREE.BufferGeometry(); var fillAttr=new THREE.BufferAttribute(cloudFill.slice(),3);
+    fillGeo.setAttribute('position',fillAttr);
+    var fillMat=new THREE.PointsMaterial({size:0.24,map:sprite,color:ACCENT,transparent:true,opacity:0.5,depthWrite:false,blending:THREE.AdditiveBlending});
+    var fillPts=new THREE.Points(fillGeo,fillMat);
+
+    var outGeo=new THREE.BufferGeometry(); var outAttr=new THREE.BufferAttribute(cloudOut.slice(),3);
+    outGeo.setAttribute('position',outAttr);
+    var outMat=new THREE.PointsMaterial({size:0.4,map:sprite,color:0xbfe9ff,transparent:true,opacity:0.95,depthWrite:false,blending:THREE.AdditiveBlending});
+    var outPts=new THREE.Points(outGeo,outMat);
+    scene.add(fillPts,outPts);
+
+    var morph={t:0};
+    function updateMorph(){
+      var fa=fillAttr.array, oa=outAttr.array;
+      for(var i=0;i<fa.length;i++) fa[i]=cloudFill[i]+(targetFill[i]-cloudFill[i])*morph.t;
+      for(var i=0;i<oa.length;i++) oa[i]=cloudOut[i]+(targetOut[i]-cloudOut[i])*morph.t;
+      fillAttr.needsUpdate=true; outAttr.needsUpdate=true;
+    }
+
+    var composer=new THREE.EffectComposer(renderer);
+    composer.addPass(new THREE.RenderPass(scene,camera));
+    var bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.2,0.85,0.14);
+    composer.addPass(bloom);
+
+    var mouse={x:0,y:0};
+    window.addEventListener('mousemove',function(e){
+      mouse.x=(e.clientX/innerWidth-0.5); mouse.y=(e.clientY/innerHeight-0.5);
+    });
+
+    var cam={x:0,y:2,z:46,ry:0};
+    gsap.registerPlugin(ScrollTrigger);
+    var tl=gsap.timeline({scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:1.1}});
+    tl.to(cam,{z:26,y:1,ease:'none',duration:1},0)
+      .to(cam,{ry:Math.PI*0.4,x:-4,ease:'none',duration:1},1)
+      .to(core.scale,{x:0.001,y:0.001,z:0.001,ease:'none',duration:0.6},1.3)
+      .to(morph,{t:1,ease:'none',duration:1},1.4)
+      .to(cam,{z:18,y:-0.8,ry:Math.PI*0.75,ease:'none',duration:1},2)
+      .to(morph,{t:0.15,ease:'none',duration:1},3)
+      .to(cam,{z:22,y:1.4,ry:Math.PI*1.1,ease:'none',duration:1},3)
+      .to(bloom,{strength:1.5,ease:'none',duration:1},2)
+      .to(strandGroup.rotation,{y:Math.PI*1.6,ease:'none',duration:4},0);
+
+    ScrollTrigger.create({trigger:'#ch-hologram',start:'top 65%',end:'bottom 35%',
+      toggleClass:{targets:'#hud',className:'show'}});
+
+    document.querySelectorAll('.chapter .inner').forEach(function(el){
+      gsap.from(el,{opacity:0,y:60,duration:1,ease:'power2.out',
+        scrollTrigger:{trigger:el,start:'top 78%'}});
+    });
+
+    function animate(){
+      requestAnimationFrame(animate);
+      camera.position.z+=(cam.z-camera.position.z)*0.08;
+      camera.position.x+=((Math.sin(cam.ry)*camera.position.z*0.35+cam.x+mouse.x*2.2)-camera.position.x)*0.06;
+      camera.position.y+=((cam.y-mouse.y*1.6)-camera.position.y)*0.06;
+      camera.lookAt(0,0,0);
+      core.rotation.y+=0.0015; core.rotation.x+=0.0006;
+      universe.rotation.y+=0.0004;
+      updateMorph();
+      fillPts.quaternion.copy(camera.quaternion);
+      outPts.quaternion.copy(camera.quaternion);
+      composer.render();
+    }
+    animate();
+
+    window.addEventListener('resize',function(){
+      camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth,innerHeight); composer.setSize(innerWidth,innerHeight);
+    });
+  }catch(e){}
+})();
+
+// Accessible, non-destructive form handling with loading/success/error states
+(function(){
+  var form=document.getElementById('contact-form');
+  if(!form) return;
+  var btn=document.getElementById('submit-btn');
+  var status=document.getElementById('form-status');
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var naam=form.naam.value.trim(), email=form.email.value.trim(), bericht=form.bericht.value.trim();
+    status.classList.remove('error');
+    if(!naam||!email||!bericht){
+      status.textContent='Vul alstublieft alle velden in voordat u verzendt.';
+      status.classList.add('error');
+      return;
+    }
+    var emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if(!emailOk){
+      status.textContent='Controleer uw e-mailadres — dit lijkt niet correct.';
+      status.classList.add('error');
+      return;
+    }
+    btn.disabled=true;
+    var original=btn.textContent;
+    btn.textContent='Bezig met verzenden...';
+    status.textContent='';
+    setTimeout(function(){
+      btn.disabled=false;
+      btn.textContent=original;
+      status.textContent='Bedankt! Wij nemen zo snel mogelijk contact met u op.';
+      form.reset();
+    },1200);
+  });
 })();
 </script>
 </body>
