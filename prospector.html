@@ -1787,7 +1787,12 @@ async function buildMockup(prospectId) {
     const slug = slugify(p.name);
     const path = `mockups/${slug}.html`;
     const url = await GH.pushFile(path, html);
-    revMockupUrl = url;
+    // Cache-bust the preview link: regenerating a prospect reuses the same
+    // filename, and browsers/Pages CDN happily serve the stale old version —
+    // which looks exactly like "my new mockup didn't work". The email link
+    // stays clean (prospects never saw an old version).
+    const freshUrl = url + '?v=' + Date.now();
+    revMockupUrl = freshUrl;
 
     // Build email with link
     const emailWithLink = buildEmail(p).replace(
@@ -1808,8 +1813,8 @@ async function buildMockup(prospectId) {
             </div>
           </div>
           <div class="rev-url-bar">
-            <a href="${url}" target="_blank" id="revUrl">${url}</a>
-            <button class="btn btn-p btn-s" onclick="window.open('${url}','_blank')">Open ↗</button>
+            <a href="${freshUrl}" target="_blank" id="revUrl">${url}</a>
+            <button class="btn btn-p btn-s" onclick="window.open('${freshUrl}','_blank')">Open ↗</button>
           </div>
         </div>
         <div class="rev-email-wrap">
