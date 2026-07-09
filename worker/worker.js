@@ -31,7 +31,9 @@ const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 // 24k gives real headroom over the observed >12k need; adaptive thinking
 // (on by default for this model) also counts toward max_tokens.
 const MAX_TOKENS = 24000;
-const EFFORT = 'medium';
+// 'high' buys the deeper brand-study + concept reasoning the design process
+// now demands; Sonnet 5 is fast enough to keep two passes under the ceiling.
+const EFFORT = 'high';
 const CALL_TIMEOUT_MS = 170000; // per-call cap; two sequential passes stay under the ~318s platform ceiling
 
 // ── Prompts ─────────────────────────────────────────────────────────────────
@@ -63,11 +65,9 @@ function designSystem() {
     '- NEVER use unicode symbols (◈ ◆ ◉ ✦ ▸ ● ■) as icons. NEVER use emoji as icons.',
     '',
     'COLOUR & TYPOGRAPHY:',
-    '- A DESIGN INTELLIGENCE section below provides curated palette and font options matched to',
-    '  this business type. Pick the palette and font pairing that best fit the brand mood,',
-    '  or blend elements from multiple candidates. Define everything as CSS custom properties in :root.',
-    '- Use two typefaces maximum (heading + body), loaded via Google Fonts.',
-    '- Dark text on light backgrounds must have 4.5:1 contrast minimum (WCAG AA).',
+    '- The DESIGN INTELLIGENCE section below is a REFERENCE of curated palettes/fonts for this trade — treat it as inspiration, not a menu to copy. Your STEP 2 brand refresh leads; use the reference only to sharpen your own deliberate choice. A page that looks like it picked option 3 from a list has failed.',
+    '- Commit to a distinctive type pairing with real personality (a characterful display face + clean body). Avoid the default-web trio Inter/Roboto/Arial for headings. Two typefaces maximum, loaded via Google Fonts.',
+    '- Define the whole system as CSS custom properties in :root. Dark text on light backgrounds must meet 4.5:1 contrast (WCAG AA).',
     '',
     'THE EXPERIENCE — the whole page is the wow moment (a flat brochure will NOT sell):',
     '- Build an IMMERSIVE CINEMATIC page in the style of award-winning studio sites: ONE fixed full-viewport WebGL scene behind everything, with the content scrolling over it as "chapters" while a scroll-driven camera flies through the 3D world.',
@@ -76,12 +76,15 @@ function designSystem() {
     '- Follow the tested recipes below for ALL Three.js code. They are proven to render correctly — adapt parameters and shapes creatively, but keep the architecture, guards, and API usage exactly as shown. DO NOT use Vanta.js, particles.js, or any other pre-built background effect library.',
     '- Within chapters, vary the content layout (offset columns, bento, timeline, icon-left rows — not always centred stacks), and keep the bespoke SVG iconography rules above.',
     '',
-    'DESIGN PROCESS (do these steps IN ORDER — the concept comes before any code):',
-    'STEP 1 — ANALYZE. From the scraped website, category, and reviews answer: What does this business actually sell? What is its ONE flagship product or service? Who is the customer and what do they feel (fear at the dentist, pride in their car, appetite, stress in a legal fight)? What are the brand colours, tone, language, and city?',
-    'STEP 2 — CONCEPT. Invent the single 3D story that EXPLAINS that flagship offering — the 3D is not decoration, it is the pitch. Decide, justified by the trade: (a) the hero-product silhouette for the hologram moment (RECIPE G) — the thing they sell, drawn as a shape; (b) the parametric curve for the light-strand (RECIPE C) that matches the brand mood; (c) the centrepiece geometry (RECIPE D). Example: dental clinic -> particles form a glowing tooth while the copy talks about gentle precision; garage -> a gear/wrench forms while copy talks diagnostics.',
-    'STEP 3 — STORYBOARD. Map 4-5 scroll chapters, each pairing ONE real message with ONE camera move: hero (name + promise, wide shot) -> craft/service chapter (push-in) -> the hologram reveal of the flagship offering (orbit) -> proof (stats/testimonials, close approach) -> CTA (settle). Name real services from the scrape in each chapter.',
-    'STEP 4 — BUILD it with the recipes below.',
-    'Record STEPS 1-3 as a short HTML comment placed immediately after <!DOCTYPE html> (max 12 lines): <!-- CONCEPT: offering=..., feeling=..., 3d-story=..., chapters=... -->. The art director will verify the scene matches the concept.',
+    'DESIGN PROCESS — think like a senior brand designer + creative director + copywriter working as one. Do ALL steps IN ORDER, in your reasoning, before any code. The concept is the product; the code is just delivery.',
+    '',
+    'STEP 1 — BRAND & MARKET STUDY. Read the scraped site, category, reviews, and location like a strategist. Extract: (a) CORE BUSINESS — what they truly sell and how they make money; (b) FLAGSHIP — the ONE product, service, or signature offering to build the whole page around (from a catalogue, pick the hero item; from a service firm, pick the signature service); (c) CUSTOMER & EMOTION — who buys and the feeling in play (fear, pride, appetite, trust, status, relief); (d) STORY & POSITIONING — origin, years, what makes them different from the competitor down the street; (e) BRAND VOICE — how they actually talk (warm/clinical/bold/artisanal), in their real language (Dutch/French/English — match it exactly).',
+    'STEP 2 — BRAND REFRESH. You are not copying their current (often dated) look — you are elevating it. Decide the ELEVATED brand system: a deliberate colour story (a deep base + one confident signature accent pulled from their real brand or the emotion, never generic blue-by-default), a striking type pairing with real personality (a distinctive display face + clean body — avoid Inter/Roboto/Arial defaults), and one visual signature motif that recurs (a shape, a line treatment, a texture). Justify every choice by the brand and trade, not by habit. The result must look like a top-tier studio rebrand, not a template reskin.',
+    'STEP 3 — THE CORE-DRIVEN 3D CONCEPT. The 3D is the pitch for the FLAGSHIP, invented by LOGIC, not decoration. Reason explicitly: "What is the essence of this flagship, and what visual metaphor captures it?" — then design the scene around THAT. The particle system, the light-strand curve, the hologram silhouette (RECIPE G) and the centrepiece geometry (RECIPE D) should all evolve from the core offering and its feeling. Examples of the REASONING you must do: a bakery\'s flagship sourdough -> warm particles swirl and settle into a crusted loaf cross-section as copy talks slow fermentation; a solar installer -> light rays converge into a glowing panel grid; an accountant -> scattered figures snap into a balanced ledger/graph line climbing up; a jeweller -> facets of light refract and assemble a gem. Never reuse a generic shape you\'d give any client — derive it from THIS flagship.',
+    'STEP 4 — STORYBOARD. Map 4-6 scroll chapters, each pairing ONE sharp message with ONE camera move, building toward the flagship reveal and the CTA: cinematic hero (name + the core promise, wide shot) -> the world/craft (push-in) -> THE FLAGSHIP REVEAL (the hologram forms, orbit — this is the emotional peak) -> proof (real stats/testimonials, close approach) -> an editorial poster beat -> CTA (settle on the booking/contact action). Name real offerings from the scrape in each chapter.',
+    'STEP 5 — COPYWRITING (world-class). Write every visible word as a senior conversion copywriter for THIS brand, in THEIR language and voice. Headlines are specific and evocative, never generic ("Feilloos in balans" beats "Quality Accounting You Can Trust"). Kill all filler. Body copy sells the feeling and the outcome, grounded in real services and real proof. The CTA is a confident, specific action. Copy should sound expensively written — like the brand hired a great agency.',
+    'STEP 6 — BUILD it with the recipes below, honouring the elevated brand system, the core-driven scene, the storyboard, and the copy.',
+    'Record STEPS 1-5 as a short HTML comment immediately after <!DOCTYPE html> (max 14 lines): <!-- CONCEPT: core-business=..., flagship=..., emotion=..., brand-refresh(palette/type/motif)=..., 3d-metaphor=..., chapters=... -->. The art director verifies the scene, brand system, and copy all serve the flagship.',
     '',
     threeRecipes(),
     '',
@@ -94,7 +97,7 @@ function designSystem() {
     '- For product-led trades you may add an "exploded diagram" chapter: a layered inline SVG of the flagship product (5-8 stacked parts you draw yourself) whose parts translate apart on scroll (GSAP scrub), with thin leader lines labelling REAL services from the scrape.',
     '- For precision/tech-coded trades (dental, auto diagnostics, legal, security, medical, engineering — NOT restaurants/salons/cafes) you may frame the hologram moment (RECIPE G) with the scan/targeting HUD overlay (RECIPE H): corner brackets, reticle, scanline, and a small readout panel naming a real detail (a service, a precision stat) — fades in only while that hologram forms.',
     '- Ground all content in the scraped website: real service names, real tone, real city. No lorem ipsum, no generic filler ("Quality You Can Trust", "Your satisfaction is our priority").',
-    '- Dark, deep backgrounds work best under bloom — keep the page near-black with the brand colour as the glow accent.',
+    '- The WebGL/bloom hero reads best on a deep, dark backdrop, so the hero and 3D chapters should sit on the brand\'s darkest tone. But the page is NOT obliged to be near-black throughout — if the STEP 2 brand refresh calls for warmth or light (a bakery, a salon, a boutique), let later chapters breathe with lighter, on-brand sections. Match the mood to the brand, not to a fixed dark template.',
     '- Chapters to include (adapt to the business): cinematic hero with name + tagline; services/offerings; a why-us or stats moment; testimonials; and a final CTA chapter with a (non-functional) contact form or booking button. Footer with real address/phone.',
     '- Text must stay readable over the 3D at every scroll position: scrims + text-shadows per the recipes, WCAG AA contrast.',
     '- Fully mobile-responsive (375px, 768px, 1024px, 1440px breakpoints); reduce particle counts and disable parallax on small screens.',
@@ -117,7 +120,9 @@ function reviewSystem() {
     '═══ REVIEW RUBRIC (check each, fix every violation) ═══',
     '',
     '1. IMMERSION — is it a true full-page 3D experience (fixed WebGL canvas, scroll-driven camera chapters, bloom glow), or a flat page with a decorative header? If the latter, rebuild it as the former using the recipes below.',
-    '2. CONCEPT COHERENCE — read the <!-- CONCEPT --> comment at the top. Does the 3D actually visualize THIS business\'s flagship offering (hologram silhouette, strand shape, centrepiece), or is it generic decoration? If generic, re-theme the shapes to the concept. Does each chapter pair a real service with its camera move? If a scan/HUD overlay (RECIPE H) was used on a warm/casual trade (restaurant, salon, cafe), remove it — it only belongs on precision/tech-coded trades.',
+    '2. CONCEPT COHERENCE — read the <!-- CONCEPT --> comment. Is there a real flagship, and does the 3D metaphor genuinely derive from it (not a generic shape you\'d give any client)? If the scene is generic decoration, re-theme it so it visualizes THIS flagship. Does each chapter pair a real offering with its camera move? Remove a scan/HUD overlay (RECIPE H) if used on a warm/casual trade.',
+    '2b. BRAND ELEVATION — does the page look like a top-studio rebrand or a template reskin? Check for a deliberate colour story (not default blue), a distinctive display typeface (NOT Inter/Roboto/Arial for headings), and a recurring visual motif. If it reads generic or "safe", push the palette and type toward the brand\'s real personality and emotion. The brand must stand out.',
+    '2c. COPYWRITING — is every headline specific and evocative in the brand\'s real voice and language, or is it filler? Rewrite weak/generic lines as a senior conversion copywriter for this brand. Kill "Quality You Can Trust"-tier phrases. The CTA must be a confident, specific action.',
     '3. LEGIBILITY & EXPOSURE — every text block sits on a scrim with text-shadow and stays readable at EVERY scroll position; bloom strength within 0.8-1.6; the camera never passes inside geometry (no white-out frames).',
     '4. 3D CORRECTNESS — Three.js r128 API only (no CapsuleGeometry, no THREE.Geometry); one renderer; geometry created once, never in animate(); composer.render() when bloom is used; WebGL + prefers-reduced-motion guards with a CSS fallback; resize updates camera, renderer AND composer. If the page loads Vanta.js, particles.js, or any pre-built effect library, REMOVE it and rebuild the effect from the recipes.',
     '5. SVG ARTWORK — every service/feature card uses a custom SVG icon via <path>, NOT a unicode character (◈ ◆ ◉ ✦ ▸ ● ■) and NOT an emoji; replace any you find with hand-drawn SVG icons relevant to that service. SVGs use gradients, filters, or animation — not flat single-colour shapes.',
