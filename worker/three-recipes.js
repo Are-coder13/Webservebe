@@ -99,11 +99,16 @@ RECIPE F — scroll-driven camera chapters (GSAP scrub) + mouse parallax + inert
 var cam={x:0,y:2,z:46,ry:0};
 gsap.registerPlugin(ScrollTrigger);
 var tl=gsap.timeline({scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:1.1}});
-tl.to(cam,{z:20,y:1,ease:'none',duration:1},0)          // ch1: push in
-  .to(cam,{ry:Math.PI*0.5,x:-6,ease:'none',duration:1},1) // ch2: orbit
-  .to(cam,{z:16,y:-1.2,ry:Math.PI*0.9,ease:'none',duration:1},2) // ch3: close but never inside
-  .to(strandGroup.rotation,{y:Math.PI*1.6,ease:'none',duration:3},0)
-  .to(bloom,{strength:1.5,ease:'none',duration:1},2);
+// Make the moves BIG — this is a fly-THROUGH, not a nudge. Wide -> deep push -> sweeping
+// orbit -> close reveal -> rise -> settle. Keep closest approach z>=14 (never inside geometry).
+tl.to(cam,{z:30,y:3,ease:'none',duration:1},0)               // ch1: pull the world in
+  .to(cam,{z:18,ry:Math.PI*0.6,x:-8,ease:'none',duration:1},1) // ch2: dive + sweeping orbit
+  .to(cam,{z:14,y:-2,ry:Math.PI*1.1,ease:'none',duration:1},2) // ch3: close reveal (never inside)
+  .to(cam,{z:24,y:4,ry:Math.PI*1.5,ease:'none',duration:1},3)  // ch4: rise + keep orbiting
+  .to(strandGroup.rotation,{y:Math.PI*2.2,ease:'none',duration:4},0) // strand turns the whole way
+  .to(bloomBase,{v:1.5,ease:'none',duration:1},2); // brighten toward the reveal (see bloomBase below)
+// bloomBase is a plain proxy so scroll and the ambient pulse compose instead of fighting:
+var bloomBase={v:1.15};
 In animate(): ease camera toward targets + parallax, then lookAt origin:
 camera.position.z+=(cam.z-camera.position.z)*0.08;
 camera.position.x=Math.sin(cam.ry)*camera.position.z*0.35+mouse.x*2.2;
@@ -117,12 +122,16 @@ that means a visitor sitting at the top of the page (not scrolling) sees a FROZE
 this is the #1 way these pages look dead. FIX: in animate(), advance a clock and apply
 continuous, scroll-INDEPENDENT motion EVERY frame, on top of whatever the scroll timeline does:
 var t=clock.getElapsedTime();
-// 1) slow idle spin of objects the SCROLL TIMELINE does NOT already rotate
-//    (universe + centrepiece here; the strand keeps its scroll-driven spin):
-universe.rotation.y=t*0.04; centrepiece.rotation.y=t*0.12; centrepiece.rotation.x=Math.sin(t*0.3)*0.15;
-// 2) a gentle breathing bob so nothing is rigid:
-centrepiece.position.y=Math.sin(t*0.6)*0.4;
-// 3) subtle shimmer: nudge a Points material opacity or size on a sine (optional but nice).
+// 1) clearly-visible idle spin of objects the SCROLL TIMELINE does NOT already rotate
+//    (universe + centrepiece; the strand keeps its scroll-driven spin). Fast enough to READ:
+universe.rotation.y=t*0.08; universe.rotation.x=Math.sin(t*0.15)*0.08;
+centrepiece.rotation.y=t*0.28; centrepiece.rotation.x=Math.sin(t*0.35)*0.2;
+// 2) a breathing bob so nothing is rigid:
+centrepiece.position.y=Math.sin(t*0.7)*0.7;
+// 3) living particles + sparkle: a slow drift on the whole field and a composed bloom pulse
+//    (scroll sets bloomBase.v; the sine pulses around it — one owner, no fight):
+particleField.position.y=Math.sin(t*0.4)*0.6; particleField.rotation.z=Math.sin(t*0.12)*0.05;
+bloom.strength=Math.min(1.6,Math.max(0.8,bloomBase.v+Math.sin(t*0.8)*0.18));
 IMPORTANT: only assign time-based absolute rotation to objects the scroll GSAP timeline does
 NOT tween (or GSAP will overwrite it each scroll tick). If you also want the strand alive at
 rest, wrap it in an extra parent Group and idle-spin THAT parent, leaving the inner strand for
