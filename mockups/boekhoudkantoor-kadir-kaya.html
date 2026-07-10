@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<!-- CONCEPT: core-business=zelfstandig boekhoudkantoor voor kmo's, zelfstandigen & vrije beroepen in Antwerpen; flagship=volledige boekhouding & fiscale begeleiding (jaarrekening, btw, vennootschapsbelasting); emotion=rust/vertrouwen na financiële onzekerheid, trots op orde; brand-refresh(palette/type/motif)=diep marineblauw + warm goud accent (evenwicht & waarde), Outfit/Work Sans, motief=stijgende balanslijn; 3d-metaphor=verspreide cijfers/deeltjes die samenvloeien tot een kloppende, stijgende balansgrafiek; chapters=hero(belofte)->diensten(vak)->flagship reveal(balans vormt zich, HUD scan)->cijfers/proof->poster BALANS->testimonials->CTA contact -->
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boekhoudkantoor Kadir Kaya — Antwerpen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a1220; --navy2:#0f1c30; --gold:#c9a24b; --gold2:#e8cd8a;
+  --paper:#f6f3ec; --ink:#161b22; --muted:#5a6472; --line:#e5ddc9;
+  /* z-index scale */
+  --z-base:0; --z-veil:10; --z-content:20; --z-hud:30; --z-banner:50;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Work Sans',sans-serif;background:var(--navy);color:#eee;overflow-x:hidden;font-size:16px}
+h1,h2,h3{font-family:'Outfit',sans-serif;font-weight:700;letter-spacing:-.02em}
+a,button,input,textarea{cursor:pointer}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
+  outline:2px solid var(--gold2);outline-offset:3px;border-radius:2px;
+}
+#gl{position:fixed;inset:0;z-index:var(--z-base)}
+.veil{position:fixed;inset:0;z-index:var(--z-veil);pointer-events:none;
+  background:radial-gradient(circle at 50% 40%,transparent 30%,rgba(10,18,32,.55) 75%,rgba(10,18,32,.9) 100%)}
+.banner{position:fixed;top:0;left:0;right:0;z-index:var(--z-banner);background:var(--gold);color:#231a05;
+  text-align:center;font-size:.78rem;padding:7px 10px;font-weight:600;letter-spacing:.02em}
+.chapter{position:relative;z-index:var(--z-content);min-height:100vh;display:flex;align-items:center;padding:100px 6vw 80px}
+.inner{position:relative;max-width:1100px;margin:0 auto;width:100%}
+.inner::before{content:'';position:absolute;inset:-70px -90px;z-index:-1;
+  background:radial-gradient(closest-side,rgba(10,18,32,.82),rgba(10,18,32,.5) 60%,transparent);filter:blur(4px)}
+h1,h2,p,.tag{text-shadow:0 3px 18px rgba(0,0,0,.55)}
+.tag{color:var(--gold2);text-transform:uppercase;font-size:.78rem;letter-spacing:.22em;font-weight:600;margin-bottom:14px;display:block}
+h1{font-size:clamp(2.4rem,6vw,4.6rem);color:#fff;line-height:1.04}
+h1 span{color:var(--gold)}
+h2{font-size:clamp(1.8rem,4vw,3rem);color:#fff;margin-bottom:20px}
+p.lead{font-size:1.15rem;color:#e3e6ec;max-width:620px;line-height:1.6;margin-top:16px}
+.btn{display:inline-flex;align-items:center;gap:10px;cursor:pointer;background:var(--gold);color:#1a1204;
+  font-weight:700;padding:15px 30px;border-radius:3px;text-decoration:none;border:none;font-size:1rem;
+  transition:transform .2s,box-shadow .2s;box-shadow:0 8px 30px rgba(201,162,75,.32);min-height:44px}
+.btn:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(201,162,75,.48)}
+.btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.45);box-shadow:none}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.hero-svg{width:100%;max-width:520px}
+.cta-row{display:flex;gap:16px;margin-top:34px;flex-wrap:wrap}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
+.card{background:rgba(15,28,48,.6);border:1px solid rgba(201,162,75,.28);border-radius:8px;padding:28px 24px;
+  backdrop-filter:blur(6px);transition:transform .3s,border-color .3s}
+.card:hover{transform:translateY(-6px);border-color:var(--gold)}
+.card svg{width:36px;height:36px;margin-bottom:16px;overflow:visible}
+.card h3{color:#fff;font-size:1.15rem;margin-bottom:8px}
+.card p{color:#c9ced7;font-size:.94rem;line-height:1.55}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:40px;text-align:center}
+.stat b{display:block;font-family:'Outfit';font-size:2.6rem;color:var(--gold)}
+.stat span{color:#c9ced7;font-size:.85rem;text-transform:uppercase;letter-spacing:.08em}
+.poster{min-height:70vh;display:flex;align-items:center;justify-content:center;position:relative;z-index:var(--z-content)}
+.poster .word{font-family:'Outfit';font-weight:800;font-size:16vw;color:transparent;
+  -webkit-text-stroke:2px rgba(201,162,75,.5);letter-spacing:-.03em;line-height:1;user-select:none}
+.poster .over{position:absolute;max-width:520px;text-align:center;background:rgba(10,18,32,.78);padding:30px 36px;border-radius:8px;border:1px solid rgba(201,162,75,.32)}
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:36px}
+.tcard{background:rgba(15,28,48,.62);border-left:3px solid var(--gold);padding:24px;border-radius:4px}
+.tcard p{color:#e3e6ec;font-size:.95rem;line-height:1.55;font-style:italic}
+.tcard .who{margin-top:14px;color:var(--gold2);font-weight:600;font-size:.85rem;font-style:normal}
+.stars{color:var(--gold);letter-spacing:2px;margin-bottom:10px;font-size:.9rem}
+.contact-box{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+form{display:flex;flex-direction:column;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{color:var(--gold2);font-size:.85rem;font-weight:600;letter-spacing:.02em}
+input,textarea{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.28);color:#fff;
+  padding:14px 16px;border-radius:4px;font-family:'Work Sans';font-size:1rem;min-height:44px}
+input::placeholder,textarea::placeholder{color:#9aa1ad}
+#formStatus{min-height:20px;font-size:.88rem;color:var(--gold2)}
+footer{position:relative;z-index:var(--z-content);padding:50px 6vw 30px;background:#050a13;border-top:1px solid rgba(201,162,75,.2)}
+.foot-grid{display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;max-width:1100px;margin:0 auto}
+.foot-grid h4{color:var(--gold2);font-family:'Outfit';margin-bottom:10px}
+.foot-grid p{color:#9aa1ad;font-size:.9rem;line-height:1.7}
+.divider{max-width:1100px;margin:0 auto;opacity:.5;position:relative;z-index:var(--z-content)}
+.hud{position:fixed;inset:0;z-index:var(--z-hud);pointer-events:none;opacity:0;transition:opacity .5s}
+.hud.show{opacity:1}
+.hud .bracket{position:absolute;width:26px;height:26px;border-color:var(--gold)}
+.hud .tl{top:28%;left:50%;margin-left:-140px;border-top:2px solid;border-left:2px solid}
+.hud .tr{top:28%;left:50%;margin-left:114px;border-top:2px solid;border-right:2px solid}
+.hud .bl{top:64%;left:50%;margin-left:-140px;border-bottom:2px solid;border-left:2px solid}
+.hud .br{top:64%;left:50%;margin-left:114px;border-bottom:2px solid;border-right:2px solid}
+.hud .reticle{position:absolute;top:46%;left:50%;transform:translate(-50%,-50%);width:200px;height:200px;opacity:.4}
+.hud .scanline{position:absolute;left:calc(50% - 140px);top:28%;width:280px;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:scan 2.6s ease-in-out infinite}
+@keyframes scan{0%,100%{top:28%}50%{top:64%}}
+.hud .readout{position:absolute;top:65%;left:50%;margin-left:120px;background:rgba(10,18,32,.78);
+  border:1px solid rgba(201,162,75,.5);border-radius:4px;padding:10px 14px;font-family:'Outfit';font-size:.72rem;
+  color:var(--gold2);backdrop-filter:blur(6px);min-width:160px}
+.hud .readout .row{display:flex;justify-content:space-between;gap:10px;margin:3px 0}
+.hud .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block;animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@media(max-width:900px){
+  .hero-grid,.contact-box{grid-template-columns:1fr}
+  .grid3,.stats,.test-grid{grid-template-columns:1fr}
+  .poster .word{font-size:22vw}
+  .hud{display:none}
+  .btn{width:100%;justify-content:center}
+}
+@media(max-width:480px){
+  .chapter{padding:90px 5vw 60px}
+}
+@media(prefers-reduced-motion:reduce){
+  #gl{display:none}
+  body{background:radial-gradient(circle at 50% 20%,#152238,#0a1220 70%)}
+  .hud{display:none}
+  *{scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<div class="banner">Boekhoudkantoor Kadir Kaya — Antwerpen · Erkend boekhouder</div>
+<div id="gl" aria-hidden="true"></div>
+<div class="veil" aria-hidden="true"></div>
+<div class="hud" id="hud" aria-hidden="true">
+  <div class="bracket tl"></div><div class="bracket tr"></div><div class="bracket bl"></div><div class="bracket br"></div>
+  <svg class="reticle" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="none" stroke="#c9a24b" stroke-width="1"/><circle cx="50" cy="50" r="30" fill="none" stroke="#c9a24b" stroke-width="1"/><line x1="50" y1="4" x2="50" y2="24" stroke="#c9a24b" stroke-width="1"/><line x1="50" y1="76" x2="50" y2="96" stroke="#c9a24b" stroke-width="1"/><line x1="4" y1="50" x2="24" y2="50" stroke="#c9a24b" stroke-width="1"/><line x1="76" y1="50" x2="96" y2="50" stroke="#c9a24b" stroke-width="1"/></svg>
+  <div class="scanline"></div>
+  <div class="readout">
+    <div class="row"><span>SCAN</span><span><span class="dot"></span> ACTIEF</span></div>
+    <div class="row"><span>DOEL</span><span>Jaarrekening</span></div>
+    <div class="row"><span>PRECISIE</span><span>99.8%</span></div>
+  </div>
+</div>
+
+<section class="chapter" id="hero">
+  <div class="inner hero-grid">
+    <div>
+      <span class="tag">Boekhoudkantoor · Antwerpen</span>
+      <h1>Cijfers die kloppen.<br>Rust die <span>blijft.</span></h1>
+      <p class="lead">Kadir Kaya begeleidt zelfstandigen, KMO's en vrije beroepen in Antwerpen met boekhouding, fiscaliteit en btw — persoonlijk, correct en altijd op tijd binnen.</p>
+      <div class="cta-row">
+        <a class="btn" href="tel:0032032985925">Bel 03 298 59 25</a>
+        <a class="btn ghost" href="#contact">Vraag een kennismaking</a>
+      </div>
+    </div>
+    <svg class="hero-svg" viewBox="0 0 400 400" role="img" aria-label="Stijgende balansgrafiek">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#e8cd8a"/><stop offset="1" stop-color="#c9a24b"/>
+        </linearGradient>
+        <filter id="soft"><feGaussianBlur stdDeviation="6"/></filter>
+      </defs>
+      <circle cx="200" cy="200" r="150" fill="url(#g1)" opacity=".07"/>
+      <g filter="url(#soft)" opacity=".5"><rect x="80" y="240" width="30" height="80" fill="#c9a24b"/><rect x="130" y="200" width="30" height="120" fill="#c9a24b"/><rect x="180" y="150" width="30" height="170" fill="#e8cd8a"/><rect x="230" y="180" width="30" height="140" fill="#c9a24b"/><rect x="280" y="120" width="30" height="200" fill="#e8cd8a"/></g>
+      <rect x="80" y="240" width="30" height="80" fill="none" stroke="url(#g1)" stroke-width="1.5"/>
+      <rect x="130" y="200" width="30" height="120" fill="none" stroke="url(#g1)" stroke-width="1.5"/>
+      <rect x="180" y="150" width="30" height="170" fill="none" stroke="#fff" stroke-width="1.5"/>
+      <rect x="230" y="180" width="30" height="140" fill="none" stroke="url(#g1)" stroke-width="1.5"/>
+      <rect x="280" y="120" width="30" height="200" fill="none" stroke="#fff" stroke-width="1.5"/>
+      <polyline points="95,235 145,190 195,140 245,170 295,110" fill="none" stroke="url(#g1)" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="295" cy="110" r="6" fill="#c9a24b"/>
+    </svg>
+  </div>
+</section>
+
+<svg class="divider" viewBox="0 0 1100 40" width="100%" height="40" style="display:block"><path d="M0 20 Q275 0 550 20 T1100 20" fill="none" stroke="#c9a24b" stroke-opacity=".4" stroke-width="1.5"/></svg>
+
+<section class="chapter" id="diensten">
+  <div class="inner">
+    <span class="tag">Onze diensten</span>
+    <h2>Vakwerk voor elk cijfer in uw zaak.</h2>
+    <p class="lead">Van dagelijkse boekhouding tot complexe fiscale dossiers: één aanspreekpunt, geen verrassingen.</p>
+    <div class="grid3">
+      <div class="card">
+        <svg viewBox="0 0 40 40" fill="none">
+          <defs><linearGradient id="ic1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8cd8a"/><stop offset="1" stop-color="#c9a24b"/></linearGradient></defs>
+          <path d="M8 6h20l6 6v22a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2z" stroke="url(#ic1)" stroke-width="2"/>
+          <path d="M28 6v6h6" stroke="url(#ic1)" stroke-width="2"/>
+          <path d="M12 20h16M12 26h16M12 14h8" stroke="#e8cd8a" stroke-width="1.5"/>
+        </svg>
+        <h3>Boekhouding</h3><p>Volledige, actuele boekhouding voor eenmanszaken en vennootschappen — dagelijks, maandelijks of per kwartaal.</p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 40 40" fill="none">
+          <defs><linearGradient id="ic2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8cd8a"/><stop offset="1" stop-color="#c9a24b"/></linearGradient></defs>
+          <path d="M20 4l14 7v9c0 9-6 15-14 17-8-2-14-8-14-17v-9z" stroke="url(#ic2)" stroke-width="2"/>
+          <path d="M14 20l4 4 8-9" stroke="#e8cd8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h3>Fiscaliteit &amp; BTW</h3><p>Correcte btw-aangiftes en fiscale optimalisatie — wij kennen de regels, u houdt meer over.</p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 40 40" fill="none">
+          <defs><linearGradient id="ic3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8cd8a"/><stop offset="1" stop-color="#c9a24b"/></linearGradient></defs>
+          <circle cx="20" cy="20" r="15" stroke="url(#ic3)" stroke-width="2"/>
+          <path d="M20 11v9l6 4" stroke="#e8cd8a" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <h3>Jaarrekening</h3><p>Tijdige, transparante jaarrekeningen en neerlegging — u weet steeds waar u staat.</p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 40 40" fill="none">
+          <defs><linearGradient id="ic4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8cd8a"/><stop offset="1" stop-color="#c9a24b"/></linearGradient></defs>
+          <path d="M20 6C12 6 6 12 6 20s6 14 14 14 14-6 14-14" stroke="url(#ic4)" stroke-width="2"/>
+          <path d="M20 6v14l10 5" stroke="#e8cd8a" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <h3>Vennootschappen</h3><p>Oprichting, structurering en beheer van uw vennootschap, van A tot Z begeleid.</p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 40 40" fill="none">
+          <defs><linearGradient id="ic5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8cd8a"/><stop offset="1" stop-color="#c9a24b"/></linearGradient></defs>
+          <path d="M6 30l8-8 6 6 12-14" stroke="url(#ic5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="32" cy="14" r="3" fill="#e8cd8a"/>
+        </svg>
+        <h3>Startersbegeleiding</h3><p>Wij zetten uw zaak fiscaal en administratief goed op de rails, vanaf dag één.</p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 40 40" fill="none">
+          <defs><linearGradient id="ic6" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8cd8a"/><stop offset="1" stop-color="#c9a24b"/></linearGradient></defs>
+          <path d="M8 30V16l12-10 12 10v14" stroke="url(#ic6)" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M16 30v-8h8v8" stroke="#e8cd8a" stroke-width="2"/>
+        </svg>
+        <h3>Vastgoed &amp; verhuur</h3><p>Fiscale begeleiding voor eigenaars, verhuurders en vastgoedinvesteerders.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="reveal">
+  <div class="inner">
+    <span class="tag">Waar het om draait</span>
+    <h2>Elk cijfer op zijn plaats.</h2>
+    <p class="lead">Verspreide gegevens, facturen en documenten — wij brengen ze samen tot één kloppend, stijgend geheel. Dat is onze belofte bij elke jaarrekening.</p>
+  </div>
+</section>
+
+<section class="chapter" id="stats">
+  <div class="inner">
+    <span class="tag">Waarom Kadir Kaya</span>
+    <h2>Vertrouwen, zwart op wit.</h2>
+    <div class="stats">
+      <div class="stat"><b>4.8★</b><span>Google-score</span></div>
+      <div class="stat"><b>48+</b><span>Tevreden reviews</span></div>
+      <div class="stat"><b>15+</b><span>Jaar ervaring</span></div>
+      <div class="stat"><b>100%</b><span>Op tijd ingediend</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="poster">
+  <div class="word" aria-hidden="true">BALANS</div>
+  <div class="over">
+    <h2 style="font-size:1.8rem;margin-bottom:10px">Geen rekenwerk. Wél gemoedsrust.</h2>
+    <p style="color:#e3e6ec">Wij nemen de cijfers van u over — u focust op ondernemen.</p>
+  </div>
+</section>
+
+<section class="chapter" id="testimonials">
+  <div class="inner">
+    <span class="tag">Wat klanten zeggen</span>
+    <h2>Antwerpse ondernemers over Kadir Kaya.</h2>
+    <div class="test-grid">
+      <div class="tcard"><div class="stars" aria-label="5 van 5 sterren">★★★★★</div><p>"Eindelijk een boekhouder die alles duidelijk uitlegt en tijdig antwoordt. Mijn btw-aangiftes verlopen nu vlekkeloos."</p><div class="who">— Zelfstandige, Antwerpen</div></div>
+      <div class="tcard"><div class="stars" aria-label="5 van 5 sterren">★★★★★</div><p>"Kadir heeft onze vennootschap mee opgericht en begeleidt ons sindsdien perfect. Persoonlijk contact, geen callcenter."</p><div class="who">— KMO-eigenaar</div></div>
+      <div class="tcard"><div class="stars" aria-label="5 van 5 sterren">★★★★★</div><p>"Als starter wist ik niet waar te beginnen. Hier kreeg ik meteen een duidelijk plan en rust in mijn administratie."</p><div class="who">— Horecazaak, Antwerpen</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="contact">
+  <div class="inner contact-box">
+    <div>
+      <span class="tag">Maak kennis</span>
+      <h2>Klaar voor boekhouding zonder zorgen?</h2>
+      <p class="lead">Kom langs op Onze-Lieve-Vrouwstraat 2 of bel ons voor een vrijblijvend gesprek.</p>
+      <div class="cta-row"><a class="btn" href="tel:0032032985925">03 298 59 25</a></div>
+    </div>
+    <form id="contactForm" novalidate>
+      <div class="field">
+        <label for="naam">Naam</label>
+        <input type="text" id="naam" name="naam" placeholder="Uw naam" required>
+      </div>
+      <div class="field">
+        <label for="email">E-mailadres</label>
+        <input type="email" id="email" name="email" placeholder="naam@bedrijf.be" required>
+      </div>
+      <div class="field">
+        <label for="vraag">Uw vraag</label>
+        <textarea id="vraag" name="vraag" rows="4" placeholder="Vertel kort waarmee we u kunnen helpen"></textarea>
+      </div>
+      <button class="btn" type="submit" id="submitBtn">Verstuur aanvraag</button>
+      <div id="formStatus" role="alert" aria-live="polite"></div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-grid">
+    <div><h4>Boekhoudkantoor Kadir Kaya</h4><p>Onze-Lieve-Vrouwstraat 2<br>2600 Antwerpen, België</p></div>
+    <div><h4>Contact</h4><p>03 298 59 25<br>kadirkaya.be</p></div>
+    <div><h4>Openingsuren</h4><p>Ma–Vr: 9:00 – 17:30<br>Op afspraak</p></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+function hasWebGL(){try{var c=document.createElement('canvas');return !!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl')));}catch(e){return false;}}
+var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(reduce||!hasWebGL()||!window.THREE)return;
+try{
+var BG='#0a1220',ACCENT='#c9a24b',ACCENT2='#8fb0e8';
+var mount=document.getElementById('gl');
+var renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.setSize(window.innerWidth,window.innerHeight);
+mount.appendChild(renderer.domElement);
+var scene=new THREE.Scene();
+scene.background=new THREE.Color(BG);scene.fog=new THREE.FogExp2(BG,0.016);
+var camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,400);
+camera.position.set(0,2,46);
+var clock=new THREE.Clock();
+var isMobile=window.innerWidth<768;
+
+function makeSprite(){var c=document.createElement('canvas');c.width=c.height=64;
+ var g=c.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);
+ r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(0.35,'rgba(255,255,255,.6)');r.addColorStop(1,'rgba(255,255,255,0)');
+ g.fillStyle=r;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c);}
+var sprite=makeSprite();
+
+var N=isMobile?3000:6000,SPREAD=34;
+var geo=new THREE.BufferGeometry(),pos=new Float32Array(N*3),col=new Float32Array(N*3);
+var ca=new THREE.Color(ACCENT),cb=new THREE.Color(ACCENT2),cc=new THREE.Color();
+for(var i=0;i<N;i++){var r=SPREAD*Math.pow(Math.random(),0.5),th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+ pos[i*3]=r*Math.sin(ph)*Math.cos(th);pos[i*3+1]=r*Math.sin(ph)*Math.sin(th)*0.55;pos[i*3+2]=r*Math.cos(ph);
+ cc.copy(ca).lerp(cb,Math.random());col[i*3]=cc.r;col[i*3+1]=cc.g;col[i*3+2]=cc.b;}
+geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+var universe=new THREE.Points(geo,new THREE.PointsMaterial({size:0.55,map:sprite,vertexColors:true,transparent:true,opacity:0.85,depthWrite:false,blending:THREE.AdditiveBlending}));
+scene.add(universe);
+
+var strandParent=new THREE.Group();scene.add(strandParent);
+var strandGroup=new THREE.Group();strandParent.add(strandGroup);
+function makeStrand(rot){
+  var SN=isMobile?700:1400,RADIUS=8,HEIGHT=30,TURNS=6;
+  var g=new THREE.BufferGeometry(),p=new Float32Array(SN*3);
+  for(var i=0;i<SN;i++){var t=i/SN,a=t*Math.PI*2*TURNS,w=0.35*Math.sin(t*40);
+   p[i*3]=Math.cos(a)*(RADIUS+w);p[i*3+1]=(t-0.5)*HEIGHT;p[i*3+2]=Math.sin(a)*(RADIUS+w);}
+  g.setAttribute('position',new THREE.BufferAttribute(p,3));
+  var m=new THREE.PointsMaterial({size:0.4,map:sprite,color:new THREE.Color(ACCENT),transparent:true,opacity:0.7,depthWrite:false,blending:THREE.AdditiveBlending});
+  var pts=new THREE.Points(g,m);pts.rotation.z=rot;return pts;
+}
+strandGroup.add(makeStrand(0));strandGroup.add(makeStrand(Math.PI));
+
+var centrepiece=new THREE.Group();
+var ico1=new THREE.Mesh(new THREE.IcosahedronGeometry(3.4,1),new THREE.MeshBasicMaterial({color:ACCENT,wireframe:true,transparent:true,opacity:0.45}));
+var ico2=new THREE.Mesh(new THREE.IcosahedronGeometry(1.9,0),new THREE.MeshBasicMaterial({color:0xffffff,wireframe:true,transparent:true,opacity:0.75}));
+var ring=new THREE.Mesh(new THREE.TorusGeometry(5.2,0.03,8,120),new THREE.MeshBasicMaterial({color:ACCENT2}));
+ring.rotation.x=Math.PI/2.4;
+centrepiece.add(ico1,ico2,ring);scene.add(centrepiece);
+
+// RECIPE G hologram: rising balance/graph silhouette (the core offering — the jaarrekening balance)
+var shape=new THREE.Shape();
+shape.moveTo(-6,-6);shape.lineTo(-3,-6);shape.lineTo(-3,-2);shape.lineTo(-6,-2);shape.lineTo(-6,-6);
+shape.moveTo(-2,-6);shape.lineTo(1,-6);shape.lineTo(1,0);shape.lineTo(-2,0);shape.lineTo(-2,-6);
+shape.moveTo(2,-6);shape.lineTo(5,-6);shape.lineTo(5,4);shape.lineTo(2,4);shape.lineTo(2,-6);
+var sg=new THREE.ShapeGeometry(shape,24);
+var vAttr=sg.attributes.position.array, idx=sg.index?sg.index.array:null;
+var tris=[],totalArea=0;
+if(idx){
+  for(var i=0;i<idx.length;i+=3){
+    var a=[vAttr[idx[i]*3],vAttr[idx[i]*3+1]],b=[vAttr[idx[i+1]*3],vAttr[idx[i+1]*3+1]],c=[vAttr[idx[i+2]*3],vAttr[idx[i+2]*3+1]];
+    var ar=Math.abs((b[0]-a[0])*(c[1]-a[1])-(c[0]-a[0])*(b[1]-a[1]))/2;
+    tris.push({a:a,b:b,c:c,area:ar});totalArea+=ar;
+  }
+}
+function samplePointInShape(){
+  var r=Math.random()*totalArea,acc=0,tri=tris[0];
+  for(var i=0;i<tris.length;i++){acc+=tris[i].area;if(acc>=r){tri=tris[i];break;}}
+  var u=Math.random(),v=Math.random();if(u+v>1){u=1-u;v=1-v;}
+  var x=tri.a[0]+u*(tri.b[0]-tri.a[0])+v*(tri.c[0]-tri.a[0]);
+  var y=tri.a[1]+u*(tri.b[1]-tri.a[1])+v*(tri.c[1]-tri.a[1]);
+  return [x,y];
+}
+var pts240=shape.getPoints(240);
+var FILL_N=isMobile?1100:2200,OUT_N=isMobile?700:1400;
+var cloudFill=new Float32Array(FILL_N*3),targetFill=new Float32Array(FILL_N*3);
+var cloudOut=new Float32Array(OUT_N*3),targetOut=new Float32Array(OUT_N*3);
+function randSphere(rad){var th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+  return [rad*Math.sin(ph)*Math.cos(th),rad*Math.sin(ph)*Math.sin(th),rad*Math.cos(ph)];}
+for(var i=0;i<FILL_N;i++){
+  var sp=randSphere(26+Math.random()*4);cloudFill[i*3]=sp[0];cloudFill[i*3+1]=sp[1];cloudFill[i*3+2]=sp[2];
+  var xy=samplePointInShape();targetFill[i*3]=xy[0]*1.5;targetFill[i*3+1]=xy[1]*1.5;targetFill[i*3+2]=(Math.random()-0.5)*1.2;
+}
+for(var i=0;i<OUT_N;i++){
+  var sp=randSphere(28+Math.random()*4);cloudOut[i*3]=sp[0];cloudOut[i*3+1]=sp[1];cloudOut[i*3+2]=sp[2];
+  var p=pts240[Math.floor(Math.random()*pts240.length)];
+  targetOut[i*3]=p.x*1.5+(Math.random()-0.5)*0.24;targetOut[i*3+1]=p.y*1.5+(Math.random()-0.5)*0.24;targetOut[i*3+2]=(Math.random()-0.5)*0.5;
+}
+var gFill=new THREE.BufferGeometry();gFill.setAttribute('position',new THREE.BufferAttribute(cloudFill.slice(),3));
+var mFill=new THREE.PointsMaterial({size:0.24,map:sprite,color:new THREE.Color(ACCENT),transparent:true,opacity:0.5,depthWrite:false,blending:THREE.AdditiveBlending});
+var ptsFill=new THREE.Points(gFill,mFill);
+var gOut=new THREE.BufferGeometry();gOut.setAttribute('position',new THREE.BufferAttribute(cloudOut.slice(),3));
+var mOut=new THREE.PointsMaterial({size:0.4,map:sprite,color:new THREE.Color(ACCENT2),transparent:true,opacity:0.95,depthWrite:false,blending:THREE.AdditiveBlending});
+var ptsOut=new THREE.Points(gOut,mOut);
+var holoGroup=new THREE.Group();holoGroup.add(ptsFill,ptsOut);scene.add(holoGroup);
+var morph={t:0.15};
+
+var composer=new THREE.EffectComposer(renderer);
+composer.addPass(new THREE.RenderPass(scene,camera));
+var bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.2,0.85,0.14);
+composer.addPass(bloom);
+
+var mouse={x:0,y:0};
+window.addEventListener('mousemove',function(e){mouse.x=(e.clientX/innerWidth-0.5);mouse.y=(e.clientY/innerHeight-0.5);});
+
+var cam={x:0,y:2,z:46,ry:0};
+gsap.registerPlugin(ScrollTrigger);
+var hud=document.getElementById('hud');
+var tl=gsap.timeline({scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:1.1}});
+tl.to(cam,{z:26,y:1,ease:'none',duration:1},0)
+  .to(cam,{ry:Math.PI*0.4,x:-5,ease:'none',duration:1},1)
+  .to(centrepiece.scale,{x:0.001,y:0.001,z:0.001,ease:'none',duration:.6},1.7)
+  .to(morph,{t:1,ease:'none',duration:1,onStart:function(){hud.classList.add('show');},onComplete:function(){hud.classList.remove('show');}},1.8)
+  .to(cam,{z:18,y:-1,ry:Math.PI*0.8,ease:'none',duration:1},2.8)
+  .to(bloom,{strength:1.45,ease:'none',duration:1},2.8);
+
+gsap.utils.toArray('.chapter .inner, .poster .over').forEach(function(el){
+  gsap.from(el,{opacity:0,y:60,duration:1,scrollTrigger:{trigger:el,start:'top 80%'}});
+});
+
+function onResize(){
+  isMobile=window.innerWidth<768;
+  camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);
+}
+window.addEventListener('resize',onResize);
+
+var fillPos=gFill.attributes.position.array, outPos=gOut.attributes.position.array;
+function animate(){
+  requestAnimationFrame(animate);
+  var t=clock.getElapsedTime();
+  universe.rotation.y=t*0.04;
+  strandParent.rotation.y=t*0.06;
+  centrepiece.rotation.y=t*0.12;centrepiece.rotation.x=Math.sin(t*0.3)*0.15;
+  centrepiece.position.y=Math.sin(t*0.6)*0.4;
+
+  for(var i=0;i<FILL_N;i++){
+    fillPos[i*3]=cloudFill[i*3]+(targetFill[i*3]-cloudFill[i*3])*morph.t;
+    fillPos[i*3+1]=cloudFill[i*3+1]+(targetFill[i*3+1]-cloudFill[i*3+1])*morph.t;
+    fillPos[i*3+2]=cloudFill[i*3+2]+(targetFill[i*3+2]-cloudFill[i*3+2])*morph.t;
+  }
+  for(var i=0;i<OUT_N;i++){
+    outPos[i*3]=cloudOut[i*3]+(targetOut[i*3]-cloudOut[i*3])*morph.t;
+    outPos[i*3+1]=cloudOut[i*3+1]+(targetOut[i*3+1]-cloudOut[i*3+1])*morph.t;
+    outPos[i*3+2]=cloudOut[i*3+2]+(targetOut[i*3+2]-cloudOut[i*3+2])*morph.t;
+  }
+  gFill.attributes.position.needsUpdate=true;
+  gOut.attributes.position.needsUpdate=true;
+  holoGroup.rotation.y=Math.sin(t*0.25)*0.5;
+  holoGroup.position.y=Math.sin(t*0.5)*0.3;
+  mOut.opacity=0.75+Math.sin(t*3)*0.2;
+  holoGroup.quaternion.copy(camera.quaternion);
+
+  camera.position.z+=(cam.z-camera.position.z)*0.08;
+  camera.position.x+=((Math.sin(cam.ry)*camera.position.z*0.35+mouse.x*2.2)-camera.position.x)*0.06;
+  camera.position.y+=((cam.y-mouse.y*1.6)-camera.position.y)*0.06;
+  camera.lookAt(0,0,0);
+  composer.render();
+}
+animate();
+}catch(e){}
+})();
+
+// Contact form: simple accessible submit flow with loading/success state
+(function(){
+  var form=document.getElementById('contactForm');
+  if(!form)return;
+  var btn=document.getElementById('submitBtn');
+  var status=document.getElementById('formStatus');
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var naam=document.getElementById('naam'),email=document.getElementById('email');
+    if(!naam.value.trim()||!email.value.trim()){
+      status.textContent='Vul aub uw naam en e-mailadres in.';
+      status.style.color='#e88a8a';
+      return;
+    }
+    btn.disabled=true;btn.textContent='Bezig met versturen...';
+    status.textContent='';
+    setTimeout(function(){
+      btn.disabled=false;btn.textContent='Verstuur aanvraag';
+      status.style.color='var(--gold2)';
+      status.textContent='Bedankt! We nemen binnen de werkdag contact met u op.';
+      form.reset();
+    },900);
+  });
+})();
+</script>
+</body>
+</html>
