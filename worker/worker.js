@@ -31,10 +31,17 @@ const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 // 24k gives real headroom over the observed >12k need; adaptive thinking
 // (on by default for this model) also counts toward max_tokens.
 const MAX_TOKENS = 24000;
-// 'high' buys the deeper brand-study + concept reasoning the design process
-// now demands; Sonnet 5 is fast enough to keep two passes under the ceiling.
-const EFFORT = 'high';
-const CALL_TIMEOUT_MS = 170000; // per-call cap; two sequential passes stay under the ~318s platform ceiling
+// 'high' timed out: one 24k-token pass at high effort ran past 170s, and two
+// of those blow the ~318s platform hard-kill. 'medium' still carries the
+// 6-step brand reasoning but keeps each pass fast enough that both finish.
+const EFFORT = 'medium';
+// The whole Worker invocation is hard-killed by the platform around ~318s.
+// Both passes must fit under this with margin, so we budget wall-clock time
+// across them instead of giving each a fixed 170s (2×170 = 340 > 318).
+const TOTAL_BUDGET_MS = 300000; // hard ceiling for both passes combined (safety margin under ~318s)
+const DESIGN_TIMEOUT_MS = 210000; // the design pass is primary and must finish
+const REVIEW_MIN_MS = 70000; // skip the review pass unless at least this much budget remains
+const REVIEW_SAFETY_MS = 15000; // leave headroom under TOTAL_BUDGET_MS for parsing/response
 
 // ── Prompts ─────────────────────────────────────────────────────────────────
 function designSystem() {
@@ -160,7 +167,7 @@ function businessBlock(place, branding, scraped) {
 }
 
 // ── Anthropic streaming call (raw HTTP SSE; returns assembled text) ──────────
-async function callClaudeStream(env, system, userText) {
+async function callClaudeStream(env, system, userText, timeoutMs) {
   const res = await fetch(ANTHROPIC_URL, {
     method: 'POST',
     headers: {
@@ -176,7 +183,7 @@ async function callClaudeStream(env, system, userText) {
       system,
       messages: [{ role: 'user', content: userText }],
     }),
-    signal: AbortSignal.timeout(CALL_TIMEOUT_MS),
+    signal: AbortSignal.timeout(timeoutMs),
   });
   if (!res.ok || !res.body) {
     const detail = await res.text().catch(() => '');
@@ -265,6 +272,7 @@ export default {
     const branding = body.branding || null;
     if (!place.name) return withCors(json({ error: 'place.name is required' }, 400));
 
+    const startedAt = Date.now();
     try {
       const scraped = await scrape(place.website);
       const ctx = businessBlock(place, branding, scraped);
@@ -272,22 +280,29 @@ export default {
       // the business type — extracted from the ui-ux-pro-max skill data.
       const brief = designBrief(place, branding);
 
-      // DESIGN pass
+      // DESIGN pass — primary; must finish. Give it the bulk of the budget.
       let html = extractHtml(await callClaudeStream(
         env, designSystem(),
-        ctx + '\n\n' + brief + '\n\nNow build the complete website.'
+        ctx + '\n\n' + brief + '\n\nNow build the complete website.',
+        DESIGN_TIMEOUT_MS
       ));
       if (!looksComplete(html)) throw new Error('Design pass produced incomplete HTML.');
 
-      // ART-DIRECTOR review/refine pass
-      try {
-        const reviewed = extractHtml(await callClaudeStream(
-          env, reviewSystem(),
-          businessBlock(place, branding, scraped) + '\n\n' + qaChecklist() +
-            '\n\nHTML TO IMPROVE:\n' + html
-        ));
-        if (looksComplete(reviewed) && reviewed.length > html.length * 0.6) html = reviewed;
-      } catch { /* keep design-pass HTML if review fails */ }
+      // ART-DIRECTOR review/refine pass — only if enough of the total budget
+      // remains to finish it without risking the platform hard-kill. Otherwise
+      // ship the (already complete) design HTML rather than time out.
+      const remaining = TOTAL_BUDGET_MS - (Date.now() - startedAt) - REVIEW_SAFETY_MS;
+      if (remaining >= REVIEW_MIN_MS) {
+        try {
+          const reviewed = extractHtml(await callClaudeStream(
+            env, reviewSystem(),
+            businessBlock(place, branding, scraped) + '\n\n' + qaChecklist() +
+              '\n\nHTML TO IMPROVE:\n' + html,
+            remaining
+          ));
+          if (looksComplete(reviewed) && reviewed.length > html.length * 0.6) html = reviewed;
+        } catch { /* keep design-pass HTML if review fails */ }
+      }
 
       return withCors(json({ html, scrapedChars: scraped.length }));
     } catch (err) {
