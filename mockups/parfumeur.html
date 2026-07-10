@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="nl">
+<!-- CONCEPT: core-business=Antwerpse concept-boutique voor niche parfums & couture kledij, flagship=persoonlijke geursessie "Compositie op Maat" waarbij een geur rond je garderobe wordt samengesteld, emotion=verlangen/zintuiglijkheid/status, brand-refresh(palette=zwart+antiek goud+ivoor, type=Fraunces+Work Sans, motif=druppel/flacon-silhouet en dunne gouden lijnen), 3d-metaphor=deeltjeswolk die condenseert tot een gloeiende parfumfles-hologram omringd door een geurlint-helix, chapters=hero(belofte)->wereld(het huis)->flagship reveal(compositie op maat)->proof(reviews/jaren)->poster(GEUR)->cta(afspraak) -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parfumeur — Niche Parfumerie &amp; Couture, Antwerpen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,500&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0907; --ink:#f4ecdf; --gold:#c9a15c; --gold2:#e8c98a; --wine:#5a2b23;
+  --ivory:#f6efe3; --dark2:#141009; --muted:#a4937a;
+  --f-head:'Fraunces',serif; --f-body:'Work Sans',sans-serif;
+  --z-gl:10; --z-veil:20; --z-content:30; --z-footer:30;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);overflow-x:hidden}
+a,button,input,textarea{font-family:inherit}
+:focus-visible{outline:2px solid var(--gold2);outline-offset:3px;border-radius:2px}
+#gl{position:fixed;inset:0;z-index:var(--z-gl)}
+.veil{position:fixed;inset:0;z-index:var(--z-veil);pointer-events:none;
+  background:radial-gradient(ellipse at 50% 40%,transparent 0%,rgba(11,9,7,.55) 65%,rgba(11,9,7,.92) 100%)}
+.chapter{position:relative;z-index:var(--z-content);min-height:100vh;display:flex;align-items:center;padding:120px 8vw 80px}
+.inner{position:relative;max-width:640px}
+.inner::before{content:'';position:absolute;inset:-70px -90px;z-index:-1;
+  background:radial-gradient(closest-side,rgba(11,9,7,.82),rgba(11,9,7,.45) 60%,transparent);filter:blur(4px)}
+h1,h2,h3{font-family:var(--f-head);font-weight:600;line-height:1.05;letter-spacing:.005em;
+  text-shadow:0 4px 30px rgba(0,0,0,.7)}
+h1{font-size:clamp(2.6rem,7vw,5.4rem);font-style:italic}
+h2{font-size:clamp(1.9rem,4.5vw,3.2rem);color:var(--gold2)}
+p{font-size:1.05rem;line-height:1.7;color:#efe6d6;text-shadow:0 2px 14px rgba(0,0,0,.7)}
+.tag{font-family:var(--f-body);text-transform:uppercase;letter-spacing:.25em;font-size:.72rem;color:var(--gold2);margin-bottom:18px;display:inline-block}
+.btn{display:inline-block;margin-top:28px;padding:16px 34px;border:1px solid var(--gold);color:var(--gold2);
+  background:transparent;font-family:var(--f-body);letter-spacing:.12em;text-transform:uppercase;font-size:.8rem;
+  cursor:pointer;transition:all .25s ease;text-decoration:none;min-height:44px;min-width:44px}
+.btn:hover{background:var(--gold);color:#151007}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.right{margin-left:auto;text-align:right}
+.right .inner{margin-left:auto}
+
+#hero{align-items:center;justify-content:center;flex-direction:column;text-align:center;padding-top:160px}
+#hero .heroart{width:min(70vw,420px);margin:10px auto 26px;opacity:.95;filter:drop-shadow(0 0 30px rgba(201,161,92,.35))}
+.float{animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@media(prefers-reduced-motion:reduce){.float{animation:none}}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px;margin-top:36px}
+.card{border:1px solid rgba(201,161,92,.28);padding:26px 22px;background:rgba(20,16,9,.5);backdrop-filter:blur(6px);
+  transition:transform .25s ease,border-color .25s ease}
+.card:hover{transform:translateY(-6px);border-color:var(--gold)}
+.card svg{width:34px;height:34px;margin-bottom:14px}
+.card h3{font-size:1.15rem;color:var(--gold2);margin-bottom:8px;text-shadow:none}
+.card p{font-size:.92rem;color:#e2d5bf}
+
+.stats{display:flex;gap:60px;flex-wrap:wrap;margin-top:30px}
+.stat b{display:block;font-family:var(--f-head);font-size:2.6rem;color:var(--gold2);font-style:italic}
+.stat span{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+.poster{min-height:70vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;z-index:var(--z-content)}
+.poster .big{font-family:var(--f-head);font-style:italic;font-weight:600;font-size:18vw;color:transparent;
+  -webkit-text-stroke:1.5px rgba(201,161,92,.55);letter-spacing:-.02em;white-space:nowrap;user-select:none}
+.poster .inner{position:absolute;text-align:center;max-width:520px}
+
+#cta{background:linear-gradient(180deg,rgba(11,9,7,0) 0%,rgba(11,9,7,.9) 30%);flex-direction:column;text-align:center;justify-content:center}
+.form{margin-top:30px;display:grid;gap:18px;max-width:420px;width:100%;margin-inline:auto;text-align:left}
+.field label{display:block;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2);margin-bottom:6px}
+.form input,.form textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(201,161,92,.35);color:var(--ink);
+  padding:14px 16px;font-family:var(--f-body);font-size:1rem}
+.form input:focus,.form textarea:focus{outline:none;border-color:var(--gold2);box-shadow:0 0 0 2px rgba(201,161,92,.35)}
+#formStatus{min-height:22px;font-size:.85rem;color:var(--gold2);margin-top:4px}
+
+.divider{position:relative;z-index:var(--z-content);height:120px;display:flex;align-items:center;justify-content:center}
+
+footer{position:relative;z-index:var(--z-footer);padding:60px 8vw 40px;border-top:1px solid rgba(201,161,92,.2);
+  display:flex;flex-wrap:wrap;gap:30px;justify-content:space-between;background:rgba(8,6,4,.75)}
+footer div{font-size:.88rem;color:#dccdab;line-height:1.85}
+footer a{color:var(--gold2);text-decoration:none}
+footer a:hover{text-decoration:underline}
+footer b{color:var(--gold2);font-family:var(--f-head);font-size:1.3rem;font-style:italic}
+
+@media(max-width:768px){
+  .chapter{padding:100px 6vw 60px}
+  .stats{gap:34px}
+  p{font-size:1rem}
+  .form input,.form textarea{font-size:16px}
+}
+@media(prefers-reduced-motion:reduce){#gl{display:none}body{background:radial-gradient(circle at 50% 20%,#2a1c10,#0b0907 70%)}}
+</style>
+</head>
+<body>
+<div id="gl" aria-hidden="true"></div>
+<div class="veil" aria-hidden="true"></div>
+
+<section class="chapter" id="hero">
+  <div class="inner">
+    <span class="tag">Lange Koepoortstraat 55 · Antwerpen</span>
+    <h1>Parfumeur</h1>
+    <svg class="heroart float" viewBox="0 0 200 320" fill="none" role="img" aria-label="Illustratie van een parfumflacon">
+      <defs><linearGradient id="gbot" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#e8c98a"/><stop offset="1" stop-color="#8a6a35"/>
+      </linearGradient></defs>
+      <rect x="82" y="10" width="36" height="26" rx="4" fill="url(#gbot)" opacity=".9"/>
+      <rect x="90" y="0" width="20" height="14" rx="3" fill="#c9a15c"/>
+      <path d="M60 40 Q60 30 82 36 L118 36 Q140 30 140 40 L150 260 Q150 300 100 300 Q50 300 50 260 Z"
+        stroke="#e8c98a" stroke-width="1.5" fill="rgba(201,161,92,.08)"/>
+      <line x1="100" y1="60" x2="100" y2="280" stroke="#c9a15c" stroke-width=".5" opacity=".4"/>
+    </svg>
+    <p>Een huis voor geur en garderobe in het hart van Antwerpen. Wij componeren de geur die bij jouw kleding, jouw huid en jouw verhaal past — niet omgekeerd.</p>
+    <a href="#afspraak" class="btn">Boek een geursessie</a>
+  </div>
+</section>
+
+<section class="chapter" id="wereld">
+  <div class="inner">
+    <span class="tag">Het huis</span>
+    <h2>Neus, naald en stof.</h2>
+    <p>Sinds jaar en dag combineren wij niche-parfumerie met een streng gecureerde collectie kleding. Geen twee klanten verlaten Lange Koepoortstraat 55 met dezelfde geurlaag — elk flesje wordt hier, tussen de rekken, samengesteld op basis van wat je draagt.</p>
+    <div class="grid">
+      <div class="card">
+        <svg viewBox="0 0 24 24" role="img" aria-label="Flacon icoon"><defs><linearGradient id="ic1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8c98a"/><stop offset="1" stop-color="#c9a15c"/></linearGradient></defs><path d="M9 2h6v3.5c0 1-2 2-2 4v1h3a2 2 0 012 2v9a2 2 0 01-2 2H8a2 2 0 01-2-2v-9a2 2 0 012-2h3v-1c0-2-2-3-2-4z" stroke="url(#ic1)" stroke-width="1.4" fill="none"/></svg>
+        <h3>Niche parfums</h3>
+        <p>Zeldzame huizen uit Parijs, Florence en Antwerpen zelf, per druppel getest.</p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 24 24" role="img" aria-label="Kledingstuk icoon"><defs><linearGradient id="ic2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8c98a"/><stop offset="1" stop-color="#c9a15c"/></linearGradient></defs><path d="M6 4h9l3 3-9 13H6z" stroke="url(#ic2)" stroke-width="1.4" fill="none"/><path d="M12 4v16" stroke="url(#ic2)" stroke-width="1.2"/></svg>
+        <h3>Couture kledij</h3>
+        <p>Belgisch en internationaal ontwerp, geselecteerd op snit en stof.</p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 24 24" role="img" aria-label="Klokicoon voor sessieduur"><defs><linearGradient id="ic3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8c98a"/><stop offset="1" stop-color="#c9a15c"/></linearGradient></defs><circle cx="12" cy="12" r="8" stroke="url(#ic3)" stroke-width="1.4" fill="none"/><path d="M12 6v6l4 2" stroke="url(#ic3)" stroke-width="1.4"/></svg>
+        <h3>Compositie op Maat</h3>
+        <p>45 minuten, drie accorden, één signatuurgeur die met je garderobe meebeweegt.</p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 24 24" role="img" aria-label="Geschenkverpakking icoon"><defs><linearGradient id="ic4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8c98a"/><stop offset="1" stop-color="#c9a15c"/></linearGradient></defs><path d="M4 8l8-5 8 5-8 5-8-5z" stroke="url(#ic4)" stroke-width="1.4" fill="none"/><path d="M4 16l8 5 8-5" stroke="url(#ic4)" stroke-width="1.4" fill="none"/></svg>
+        <h3>Giftwrapping</h3>
+        <p>Handgebonden verpakking in huiskleuren zwart en antiek goud.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="flagship">
+  <div class="inner right">
+    <span class="tag">De signatuur</span>
+    <h2>Compositie op Maat.</h2>
+    <p>Je brengt je favoriete jas, je huid, je herinnering. Wij laten drie accorden om je heen condenseren tot één geur die niemand anders draagt — zichtbaar, tastbaar, gevormd terwijl je toekijkt.</p>
+    <a href="#afspraak" class="btn">Reserveer je sessie</a>
+  </div>
+</section>
+
+<section class="chapter" id="proof">
+  <div class="inner">
+    <span class="tag">Bewezen neus</span>
+    <h2>Antwerpen vertrouwt op Lange Koepoortstraat 55.</h2>
+    <div class="stats">
+      <div class="stat"><b>5.0</b><span>Google-score</span></div>
+      <div class="stat"><b>3/3</b><span>★★★★★ reviews</span></div>
+      <div class="stat"><b>1</b><span>adres, oneindig veel accorden</span></div>
+    </div>
+    <p style="margin-top:30px">"Een geursessie hier voelt als een fitting bij een kleermaker — alleen voor je huid." — klant uit Antwerpen</p>
+  </div>
+</section>
+
+<section class="poster">
+  <div class="big" aria-hidden="true">GEUR</div>
+  <div class="inner">
+    <h2 style="color:var(--ivory)">Draag wat je bent.</h2>
+  </div>
+</section>
+
+<section class="chapter" id="afspraak">
+  <div class="inner" style="max-width:520px;margin:auto">
+    <span class="tag">Maak een afspraak</span>
+    <h2>Kom proeven, ruiken, passen.</h2>
+    <p>Lange Koepoortstraat 55, 2000 Antwerpen — vlak bij de Meir. Bel <a href="tel:+3232885388" style="color:var(--gold2)">03 288 53 88</a> of laat hieronder je gegevens achter, wij nemen contact op.</p>
+    <form class="form" id="afspraakForm" novalidate>
+      <div class="field">
+        <label for="naam">Naam</label>
+        <input type="text" id="naam" name="naam" required autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="email">E-mailadres</label>
+        <input type="email" id="email" name="email" required autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="bericht">Waar mag de geur je herinneren aan?</label>
+        <textarea id="bericht" name="bericht" rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn" id="submitBtn" style="background:var(--gold);color:#151007">Verstuur aanvraag</button>
+      <div id="formStatus" role="status" aria-live="polite"></div>
+    </form>
+  </div>
+</section>
+
+<div class="divider" aria-hidden="true">
+  <svg width="220" height="40" viewBox="0 0 220 40"><path d="M0 20 Q55 0 110 20 T220 20" stroke="#c9a15c" stroke-width="1" fill="none" opacity=".5"/></svg>
+</div>
+
+<footer>
+  <div><b>Parfumeur</b><br>Lange Koepoortstraat 55<br>2000 Antwerpen, België</div>
+  <div>Tel: <a href="tel:+3232885388">03 288 53 88</a><br><a href="http://www.parfumeur.be/" target="_blank" rel="noopener">www.parfumeur.be</a></div>
+  <div>Di–Za: 10:00–18:00<br>Zondag &amp; maandag gesloten</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function hasWebGL(){try{var c=document.createElement('canvas');return !!(c.getContext('webgl')||c.getContext('experimental-webgl'));}catch(e){return false;}}
+  if(reduce||!hasWebGL()||!window.THREE) return;
+  try{
+    var BG='#0b0907', ACCENT='#c9a15c', ACCENT2='#e8c98a';
+    var mobile = innerWidth < 768;
+    var renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+    renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+    renderer.setSize(innerWidth,innerHeight);
+    document.getElementById('gl').appendChild(renderer.domElement);
+    var scene=new THREE.Scene();
+    scene.background=new THREE.Color(BG); scene.fog=new THREE.FogExp2(BG,0.017);
+    var camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,400);
+    camera.position.set(0,2,46);
+
+    function makeSprite(){var c=document.createElement('canvas');c.width=c.height=64;
+      var g=c.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);
+      r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(0.35,'rgba(255,255,255,.6)');r.addColorStop(1,'rgba(255,255,255,0)');
+      g.fillStyle=r;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c);}
+    var sprite=makeSprite();
+
+    // universe
+    var N=mobile?3000:6500;
+    var geo=new THREE.BufferGeometry(),pos=new Float32Array(N*3),col=new Float32Array(N*3);
+    var ca=new THREE.Color(ACCENT),cb=new THREE.Color('#5a2b23'),c=new THREE.Color();
+    for(var i=0;i<N;i++){var r=32*Math.pow(Math.random(),0.5),th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+      pos[i*3]=r*Math.sin(ph)*Math.cos(th);pos[i*3+1]=r*Math.sin(ph)*Math.sin(th)*0.55;pos[i*3+2]=r*Math.cos(ph);
+      c.copy(ca).lerp(cb,Math.random());col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;}
+    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+    var universe=new THREE.Points(geo,new THREE.PointsMaterial({size:0.55,map:sprite,vertexColors:true,transparent:true,opacity:0.85,depthWrite:false,blending:THREE.AdditiveBlending}));
+    scene.add(universe);
+
+    // helix strand (scent ribbon)
+    var strandGroup=new THREE.Group();
+    function makeStrand(rot){
+      var SN=mobile?750:1500,g2=new THREE.BufferGeometry(),p2=new Float32Array(SN*3);
+      for(var i=0;i<SN;i++){var t=i/SN,a=t*Math.PI*2*5,w=0.4*Math.sin(t*40);
+        p2[i*3]=Math.cos(a)*(6.5+w);p2[i*3+1]=(t-0.5)*24;p2[i*3+2]=Math.sin(a)*(6.5+w);}
+      g2.setAttribute('position',new THREE.BufferAttribute(p2,3));
+      var m=new THREE.Points(g2,new THREE.PointsMaterial({size:0.4,map:sprite,color:ACCENT2,transparent:true,opacity:0.75,depthWrite:false,blending:THREE.AdditiveBlending}));
+      m.rotation.y=rot; return m;
+    }
+    strandGroup.add(makeStrand(0)); strandGroup.add(makeStrand(Math.PI));
+    scene.add(strandGroup);
+
+    // centrepiece wireframe (bottle silhouette core)
+    var centre=new THREE.Group();
+    var ico=new THREE.Mesh(new THREE.IcosahedronGeometry(3.4,1),new THREE.MeshBasicMaterial({color:ACCENT,wireframe:true,transparent:true,opacity:.4}));
+    var inner=new THREE.Mesh(new THREE.IcosahedronGeometry(1.9,0),new THREE.MeshBasicMaterial({color:0xffffff,wireframe:true,transparent:true,opacity:.7}));
+    var ring=new THREE.Mesh(new THREE.TorusGeometry(5.2,0.03,8,120),new THREE.MeshBasicMaterial({color:ACCENT2}));
+    ring.rotation.x=Math.PI/2.4;
+    centre.add(ico,inner,ring); scene.add(centre);
+
+    // hologram bottle shape
+    var shape=new THREE.Shape();
+    shape.moveTo(-2.2,-8);
+    shape.lineTo(2.2,-8);
+    shape.bezierCurveTo(2.4,-2,2.6,-1,4.2,2);
+    shape.lineTo(4.2,4.4);
+    shape.bezierCurveTo(4.2,5.6,3.4,6,2.6,6);
+    shape.lineTo(1.6,6);
+    shape.lineTo(1.6,7.6);
+    shape.lineTo(-1.6,7.6);
+    shape.lineTo(-1.6,6);
+    shape.lineTo(-2.6,6);
+    shape.bezierCurveTo(-3.4,6,-4.2,5.6,-4.2,4.4);
+    shape.lineTo(-4.2,2);
+    shape.bezierCurveTo(-2.6,-1,-2.4,-2,-2.2,-8);
+    shape.closePath();
+
+    var shapeGeo=new THREE.ShapeGeometry(shape,24);
+    var triPos=shapeGeo.attributes.position.array, triIdx=shapeGeo.index.array;
+    function area(a,b,cc){return Math.abs((b[0]-a[0])*(cc[1]-a[1])-(cc[0]-a[0])*(b[1]-a[1]))/2;}
+    var tris=[],areas=[],total=0;
+    for(var t=0;t<triIdx.length;t+=3){
+      var i0=triIdx[t]*3,i1=triIdx[t+1]*3,i2=triIdx[t+2]*3;
+      var a=[triPos[i0],triPos[i0+1]],b=[triPos[i1],triPos[i1+1]],cc=[triPos[i2],triPos[i2+1]];
+      var ar=area(a,b,cc); tris.push([a,b,cc]); areas.push(ar); total+=ar;
+    }
+    function pickPoint(){
+      var r=Math.random()*total,acc=0,tri=tris[0];
+      for(var k=0;k<areas.length;k++){acc+=areas[k];if(acc>=r){tri=tris[k];break;}}
+      var u=Math.random(),v=Math.random(); if(u+v>1){u=1-u;v=1-v;}
+      var a=tri[0],b=tri[1],cc=tri[2];
+      var x=a[0]+u*(b[0]-a[0])+v*(cc[0]-a[0]);
+      var y=a[1]+u*(b[1]-a[1])+v*(cc[1]-a[1]);
+      return [x*1.6,y*1.6];
+    }
+    var FN=mobile?1300:2800;
+    var fillPos=new Float32Array(FN*3),fillCloud=new Float32Array(FN*3);
+    for(var i=0;i<FN;i++){
+      var p=pickPoint();
+      fillPos[i*3]=p[0];fillPos[i*3+1]=p[1];fillPos[i*3+2]=(Math.random()-0.5)*1.2;
+      var rr=27*Math.pow(Math.random(),0.5),tt=Math.random()*Math.PI*2,pp=Math.acos(2*Math.random()-1);
+      fillCloud[i*3]=rr*Math.sin(pp)*Math.cos(tt);fillCloud[i*3+1]=rr*Math.sin(pp)*Math.sin(tt);fillCloud[i*3+2]=rr*Math.cos(pp);
+    }
+    var fillGeo=new THREE.BufferGeometry();
+    var fillAttr=new THREE.BufferAttribute(fillCloud.slice(),3);
+    fillGeo.setAttribute('position',fillAttr);
+    var fillPts=new THREE.Points(fillGeo,new THREE.PointsMaterial({size:0.24,map:sprite,color:ACCENT,transparent:true,opacity:0.5,depthWrite:false,blending:THREE.AdditiveBlending}));
+    scene.add(fillPts);
+
+    var outPts2d=shape.getPoints(240);
+    var ON=mobile?650:1400;
+    var outPos=new Float32Array(ON*3),outCloud=new Float32Array(ON*3);
+    for(var i=0;i<ON;i++){
+      var idx=Math.floor(Math.random()*outPts2d.length);
+      var pt=outPts2d[idx];
+      outPos[i*3]=pt.x*1.6+(Math.random()-0.5)*0.12;
+      outPos[i*3+1]=pt.y*1.6+(Math.random()-0.5)*0.12;
+      outPos[i*3+2]=(Math.random()-0.5)*0.5;
+      var rr=29*Math.pow(Math.random(),0.5),tt=Math.random()*Math.PI*2,pp=Math.acos(2*Math.random()-1);
+      outCloud[i*3]=rr*Math.sin(pp)*Math.cos(tt);outCloud[i*3+1]=rr*Math.sin(pp)*Math.sin(tt);outCloud[i*3+2]=rr*Math.cos(pp);
+    }
+    var outGeo=new THREE.BufferGeometry();
+    var outAttr=new THREE.BufferAttribute(outCloud.slice(),3);
+    outGeo.setAttribute('position',outAttr);
+    var outPtsMesh=new THREE.Points(outGeo,new THREE.PointsMaterial({size:0.4,map:sprite,color:ACCENT2,transparent:true,opacity:0.95,depthWrite:false,blending:THREE.AdditiveBlending}));
+    scene.add(outPtsMesh);
+
+    var morph={t:0};
+    function updateMorph(){
+      var fa=fillAttr.array;
+      for(var k=0;k<FN*3;k++){ fa[k]=fillCloud[k]+(fillPos[k]-fillCloud[k])*morph.t; }
+      fillAttr.needsUpdate=true;
+      var oa=outAttr.array;
+      for(var k=0;k<ON*3;k++){ oa[k]=outCloud[k]+(outPos[k]-outCloud[k])*morph.t; }
+      outAttr.needsUpdate=true;
+      fillPts.quaternion.copy(camera.quaternion);
+      outPtsMesh.quaternion.copy(camera.quaternion);
+    }
+
+    var composer=new THREE.EffectComposer(renderer);
+    composer.addPass(new THREE.RenderPass(scene,camera));
+    var bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.25,0.85,0.12);
+    composer.addPass(bloom);
+
+    var mouse={x:0,y:0};
+    if(!mobile) window.addEventListener('mousemove',function(e){
+      mouse.x=(e.clientX/innerWidth-0.5); mouse.y=(e.clientY/innerHeight-0.5);
+    });
+
+    var cam={x:0,y:2,z:46,ry:0};
+    gsap.registerPlugin(ScrollTrigger);
+    var tl=gsap.timeline({scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:1.1}});
+    tl.to(cam,{z:26,y:1,ease:'none',duration:1},0)
+      .to(centre.scale,{x:0.001,y:0.001,z:0.001,ease:'none',duration:0.6},1.0)
+      .to(morph,{t:1,ease:'none',duration:1},1.2)
+      .to(cam,{ry:Math.PI*0.5,x:-5,z:18,y:-0.5,ease:'none',duration:1},2.2)
+      .to(cam,{z:15,ry:Math.PI*0.85,ease:'none',duration:1},3.2)
+      .to(strandGroup.rotation,{y:Math.PI*1.8,ease:'none',duration:5},0)
+      .to(bloom,{strength:1.5,ease:'none',duration:1},3);
+
+    document.querySelectorAll('.chapter .inner').forEach(function(el){
+      gsap.from(el,{opacity:0,y:60,duration:.8,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 82%'}});
+    });
+
+    function animate(){
+      requestAnimationFrame(animate);
+      camera.position.z+=(cam.z-camera.position.z)*0.08;
+      camera.position.x+=((Math.sin(cam.ry)*camera.position.z*0.35+mouse.x*2.2)-camera.position.x)*0.08;
+      camera.position.y+=((cam.y-mouse.y*1.6)-camera.position.y)*0.06;
+      camera.lookAt(0,0,0);
+      universe.rotation.y+=0.0006;
+      updateMorph();
+      composer.render();
+    }
+    animate();
+
+    window.addEventListener('resize',function(){
+      camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth,innerHeight); composer.setSize(innerWidth,innerHeight);
+    });
+  }catch(e){}
+})();
+
+// form handling with loading/success/error states
+(function(){
+  var form=document.getElementById('afspraakForm');
+  if(!form) return;
+  var btn=document.getElementById('submitBtn');
+  var status=document.getElementById('formStatus');
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var naam=document.getElementById('naam'), email=document.getElementById('email');
+    if(!naam.value.trim()||!email.value.trim()||!email.value.includes('@')){
+      status.textContent='Vul je naam en een geldig e-mailadres in.';
+      status.style.color='#e8a37a';
+      return;
+    }
+    btn.disabled=true;
+    var original=btn.textContent;
+    btn.textContent='Versturen…';
+    status.textContent='';
+    setTimeout(function(){
+      btn.disabled=false;
+      btn.textContent='Verstuur aanvraag';
+      status.style.color='var(--gold2)';
+      status.textContent='Aanvraag verzonden — we nemen spoedig contact op.';
+      form.reset();
+    },900);
+  });
+})();
+</script>
+</body>
+</html>
