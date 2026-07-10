@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<!-- CONCEPT: core-business=fiscaal & boekhoudkundig advieskantoor voor ondernemers in Antwerpen, flagship=fiscale optimalisatie & jaarrekening ("feilloos in balans"), emotion=vertrouwen/gemoedsrust bij cijfers en fiscus, brand-refresh(palette=diepe marineblauw + Antwerps goud, type=Outfit/Work Sans, motif=facet-lijnen & balans-symmetrie), 3d-metaphor=verspreide cijfers/deeltjes die samenvloeien tot een beschermend schild met vinkje (cijfers in balans, gecontroleerd), chapters=hero(belofte)->praktijk(diensten)->flagship reveal(schild-hologram+HUD)->cijfers/proof->poster BALANS->testimonials->cta -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Aaf Consultants — fiscaal en boekhoudkundig advieskantoor in Antwerpen. Boekhouding, BTW, vennootschapsbelasting en fiscale optimalisatie voor ondernemers.">
+<title>Aaf Consultants — Fiscaal & Boekhoudkundig Advies Antwerpen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0B1E3D; --navy2:#132A52; --gold:#C9A24B; --gold2:#E8C77A;
+  --bg:#F7F4EC; --fg:#101826; --muted:#EFE9D8; --border:#DDD3B6;
+  --font-h:'Outfit',sans-serif; --font-b:'Work Sans',sans-serif;
+  --z-canvas:0; --z-veil:10; --z-content:20; --z-hud:30; --z-nav:40; --z-skip:50;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-b);color:var(--fg);background:var(--bg);overflow-x:hidden}
+h1,h2,h3{font-family:var(--font-h);line-height:1.08;letter-spacing:-.01em}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+a,button,input,textarea{cursor:pointer}
+input,textarea{cursor:text}
+:focus-visible{outline:3px solid var(--gold2);outline-offset:3px;border-radius:4px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip-link{position:absolute;top:-60px;left:12px;z-index:var(--z-skip);background:var(--gold2);color:var(--navy);
+  padding:10px 18px;border-radius:6px;font-family:var(--font-h);font-weight:600;transition:top .2s}
+.skip-link:focus{top:12px}
+
+/* NAV */
+.topnav{position:fixed;top:0;left:0;right:0;z-index:var(--z-nav);display:flex;align-items:center;justify-content:space-between;
+  padding:16px 6vw;background:linear-gradient(180deg,rgba(11,30,61,.85),transparent);pointer-events:none}
+.topnav *{pointer-events:auto}
+.topnav .brand{font-family:var(--font-h);font-weight:700;color:#fff;font-size:1.05rem;letter-spacing:.02em;text-shadow:0 2px 10px rgba(0,0,0,.4)}
+.topnav .brand span{color:var(--gold2)}
+.topnav-actions{display:flex;align-items:center;gap:16px}
+.topnav-phone{color:#e7ecf5;font-size:.88rem;font-weight:500;text-shadow:0 2px 10px rgba(0,0,0,.4);min-height:44px;display:flex;align-items:center}
+.topnav-cta{font-family:var(--font-h);font-weight:600;font-size:.85rem;padding:11px 20px;border-radius:6px;
+  border:1px solid var(--gold);background:linear-gradient(120deg,var(--gold),var(--gold2));color:var(--navy);
+  min-height:44px;display:inline-flex;align-items:center;transition:transform .2s,box-shadow .2s}
+.topnav-cta:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(201,162,75,.35)}
+@media(max-width:640px){.topnav-phone{display:none}}
+
+#gl{position:fixed;inset:0;z-index:var(--z-canvas)}
+.veil{position:fixed;inset:0;z-index:var(--z-veil);pointer-events:none;
+  background:radial-gradient(ellipse at 50% 35%,transparent 0%,rgba(11,30,61,.25) 55%,rgba(11,30,61,.75) 100%)}
+@media(prefers-reduced-motion:reduce){#gl{display:none}
+  body{background:radial-gradient(circle at 30% 20%,#132A52,#0B1E3D 60%)}}
+.chapter{position:relative;z-index:var(--z-content);min-height:100vh;display:flex;align-items:center;padding:34px 6vw;overflow:hidden}
+.inner{position:relative;max-width:1180px;margin:0 auto;width:100%}
+.inner::before{content:'';position:absolute;inset:-70px -90px;z-index:-1;
+  background:radial-gradient(closest-side,rgba(11,30,61,.82),rgba(11,30,61,.45) 60%,transparent);filter:blur(4px)}
+.light .inner::before{background:radial-gradient(closest-side,rgba(247,244,236,.92),rgba(247,244,236,.6) 60%,transparent)}
+.light{color:var(--fg)}
+h1,h2,h3,p,span,label{text-shadow:0 2px 18px rgba(0,0,0,.35)}
+.light h1,.light h2,.light h3,.light p,.light span,.light label{text-shadow:none}
+.tag{display:inline-block;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold2);
+  border:1px solid var(--gold);padding:6px 14px;border-radius:30px;margin-bottom:22px;background:rgba(201,162,75,.08)}
+.light .tag{color:#6b5417;border-color:#a9822f;background:rgba(201,162,75,.14)}
+.btn{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-family:var(--font-h);font-weight:600;
+  padding:15px 30px;border-radius:6px;border:1px solid var(--gold);background:linear-gradient(120deg,var(--gold),var(--gold2));
+  color:var(--navy);font-size:.95rem;letter-spacing:.02em;transition:transform .25s,box-shadow .25s;min-height:48px}
+.btn:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(201,162,75,.35)}
+.btn.ghost{background:transparent;color:var(--gold2)}
+.btn:disabled{opacity:.65;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* HERO */
+#hero{padding-top:110px}
+#hero .inner{display:flex;flex-direction:column;align-items:flex-start}
+#hero h1{font-size:clamp(2.6rem,7vw,5.4rem);color:#fff;max-width:900px}
+#hero h1 span{color:var(--gold2)}
+#hero p.lead{font-size:1.15rem;max-width:520px;color:#dfe4ee;margin:22px 0 32px;line-height:1.6}
+.hero-meta{display:flex;gap:34px;margin-top:50px;flex-wrap:wrap}
+.hero-meta div{border-left:2px solid var(--gold);padding-left:14px}
+.hero-meta b{display:block;font-family:var(--font-h);font-size:1.5rem;color:#fff}
+.hero-meta span{font-size:.78rem;color:#b9c1d1;text-transform:uppercase;letter-spacing:.08em}
+
+.divider{position:relative;z-index:var(--z-content);display:block;width:100%}
+
+/* SERVICES */
+#services h2{font-size:clamp(2rem,4vw,3rem);color:#fff;margin-bottom:14px}
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px}
+.svc-card{background:rgba(19,42,82,.55);border:1px solid rgba(201,162,75,.35);border-radius:12px;padding:26px 22px;
+  backdrop-filter:blur(6px);transition:transform .3s,border-color .3s}
+.svc-card:hover,.svc-card:focus-within{transform:translateY(-6px);border-color:var(--gold)}
+.svc-card svg{margin-bottom:16px}
+.svc-card h3{color:#fff;font-size:1.12rem;margin-bottom:8px}
+.svc-card p{color:#c7cede;font-size:.95rem;line-height:1.5}
+
+/* FLAGSHIP */
+#flagship .inner{max-width:640px}
+#flagship h2{font-size:clamp(2rem,4.4vw,3.4rem);color:#fff}
+#flagship p{color:#dce1ec;font-size:1.05rem;line-height:1.7;margin:20px 0 26px}
+.hud{position:fixed;inset:0;z-index:var(--z-hud);pointer-events:none;opacity:0;transition:opacity .5s}
+.hud.show{opacity:1}
+.bracket{position:absolute;width:26px;height:26px;border-color:var(--gold2)}
+.bracket.tl{top:18%;left:calc(50% - 160px);border-top:1.5px solid;border-left:1.5px solid}
+.bracket.tr{top:18%;left:calc(50% + 134px);border-top:1.5px solid;border-right:1.5px solid}
+.bracket.bl{top:70%;left:calc(50% - 160px);border-bottom:1.5px solid;border-left:1.5px solid}
+.bracket.br{top:70%;left:calc(50% + 134px);border-bottom:1.5px solid;border-right:1.5px solid}
+.scanline{position:absolute;top:18%;left:calc(50% - 160px);width:294px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold2),transparent);animation:scan 2.6s ease-in-out infinite}
+@keyframes scan{0%,100%{top:18%}50%{top:70%}}
+.reticle{position:absolute;top:44%;left:50%;transform:translate(-50%,-50%);width:220px;height:220px;opacity:.5}
+.readout{position:absolute;bottom:8%;left:50%;transform:translateX(-50%);background:rgba(11,30,61,.7);
+  border:1px solid var(--gold);border-radius:8px;padding:12px 20px;backdrop-filter:blur(8px);
+  font-family:var(--font-b);font-size:.75rem;color:var(--gold2);letter-spacing:.03em;min-width:260px}
+.readout div{display:flex;justify-content:space-between;gap:20px;padding:2px 0}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--gold2);display:inline-block;
+  box-shadow:0 0 8px var(--gold2);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@media(max-width:768px){.hud{display:none}}
+@media(prefers-reduced-motion:reduce){.hud{display:none}}
+
+/* POSTER */
+#poster{justify-content:center;text-align:center}
+#poster .word{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--font-h);
+  font-weight:700;font-size:16vw;color:transparent;-webkit-text-stroke:1.5px rgba(201,162,75,.5);z-index:-1;white-space:nowrap}
+#poster .inner h2{font-size:clamp(2rem,4vw,3.2rem);color:#fff;max-width:600px}
+#poster .inner p{color:#dce1ec;max-width:480px;margin-top:18px;font-size:1.05rem;line-height:1.65}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:40px}
+.stat{text-align:center;padding:24px 10px;border:1px solid rgba(201,162,75,.3);border-radius:10px;background:rgba(19,42,82,.4)}
+.stat b{font-family:var(--font-h);font-size:2.2rem;color:var(--gold2);display:block}
+.stat span{font-size:.78rem;color:#c7cede;text-transform:uppercase;letter-spacing:.06em}
+
+/* TESTIMONIALS */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:36px}
+.testi-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:26px;box-shadow:0 10px 30px rgba(11,30,61,.06)}
+.stars{color:#8a6f21;letter-spacing:2px;margin-bottom:12px;font-size:.9rem}
+.testi-card p{font-size:1rem;line-height:1.6;color:#2b3648;margin-bottom:16px}
+.testi-card b{font-family:var(--font-h);font-size:.9rem;color:#101826}
+
+/* CTA */
+#cta .inner{max-width:520px}
+#cta h2{color:#fff;font-size:clamp(2rem,4.4vw,3.2rem)}
+#cta p{color:#dce1ec;margin:18px 0 30px;font-size:1.05rem}
+.form{display:grid;gap:16px;max-width:460px}
+.field{display:grid;gap:6px}
+.field label{font-size:.8rem;color:var(--gold2);font-weight:600;letter-spacing:.03em}
+.form input,.form textarea{padding:14px 16px;border-radius:6px;border:1px solid rgba(201,162,75,.4);
+  background:rgba(255,255,255,.06);color:#fff;font-family:var(--font-b);font-size:1rem;min-height:48px}
+.form textarea{min-height:96px;resize:vertical}
+.form input::placeholder,.form textarea::placeholder{color:#a9b2c4}
+.form-status{font-size:.85rem;min-height:20px;color:var(--gold2)}
+.form-status.error{color:#ff9a9a}
+.form-status.success{color:#8fe3a4}
+
+footer{position:relative;z-index:var(--z-content);background:var(--navy);color:#c7cede;padding:50px 6vw 30px;font-size:.9rem}
+.foot-grid{display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;max-width:1180px;margin:0 auto}
+.foot-grid h3{color:#fff;font-size:1.2rem;margin-bottom:10px}
+.foot-grid a{border-bottom:1px solid transparent}
+.foot-grid a:hover{border-color:var(--gold2)}
+footer .copy{text-align:center;margin-top:40px;color:#7d879c;font-size:.8rem}
+
+@media(max-width:1024px){.svc-grid{grid-template-columns:repeat(2,1fr)}.stats-grid{grid-template-columns:repeat(2,1fr)}.testi-grid{grid-template-columns:1fr}}
+@media(max-width:768px){.svc-grid{grid-template-columns:1fr}.hero-meta{gap:22px}#poster .word{font-size:22vw}
+  body{font-size:16px}
+  .btn{width:100%;justify-content:center}
+  #cta .btn{width:auto}
+}
+@media(max-width:480px){#hero{padding-top:96px}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Ga naar inhoud</a>
+<nav class="topnav" aria-label="Hoofdnavigatie">
+  <a href="#hero" class="brand">Aaf <span>Consultants</span></a>
+  <div class="topnav-actions">
+    <a class="topnav-phone" href="tel:+3232310656">03 231 06 56</a>
+    <a class="topnav-cta" href="#cta">Plan gesprek</a>
+  </div>
+</nav>
+
+<div id="gl" aria-hidden="true"></div>
+<div class="veil" aria-hidden="true"></div>
+<div class="hud" id="hud" aria-hidden="true">
+  <div class="bracket tl"></div><div class="bracket tr"></div><div class="bracket bl"></div><div class="bracket br"></div>
+  <div class="scanline"></div>
+  <svg class="reticle" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="none" stroke="#E8C77A" stroke-width="1"/><circle cx="50" cy="50" r="30" fill="none" stroke="#E8C77A" stroke-width="1"/><line x1="50" y1="6" x2="50" y2="26" stroke="#E8C77A" stroke-width="1"/><line x1="50" y1="74" x2="50" y2="94" stroke="#E8C77A" stroke-width="1"/><line x1="6" y1="50" x2="26" y2="50" stroke="#E8C77A" stroke-width="1"/><line x1="74" y1="50" x2="94" y2="50" stroke="#E8C77A" stroke-width="1"/></svg>
+  <div class="readout">
+    <div><span><span class="dot"></span> SCAN</span><span>ACTIEF</span></div>
+    <div><span>TARGET</span><span>Vennootschapsbelasting</span></div>
+    <div><span>PRECISIE</span><span>100% tijdig ingediend</span></div>
+  </div>
+</div>
+
+<main id="main">
+<section class="chapter" id="hero">
+  <div class="inner">
+    <div class="tag">Fiscaal & boekhoudkundig advies · Antwerpen</div>
+    <h1>Uw cijfers, <span>feilloos in balans.</span></h1>
+    <p class="lead">Aaf Consultants begeleidt ondernemers, zelfstandigen en vrije beroepen in Antwerpen met boekhouding, fiscale optimalisatie en advies dat verder kijkt dan de aangifte alleen.</p>
+    <a class="btn" href="#cta">Plan een kennismaking</a>
+    <div class="hero-meta">
+      <div><b>5.0★</b><span>Google, 8 reviews</span></div>
+      <div><b>100%</b><span>Tijdige indiening</span></div>
+      <div><b>2000</b><span>August Michielsstraat, Antwerpen</span></div>
+    </div>
+  </div>
+</section>
+
+<svg class="divider" viewBox="0 0 1440 60" preserveAspectRatio="none" style="height:60px" aria-hidden="true"><path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="rgba(201,162,75,.12)"/></svg>
+
+<section class="chapter" id="services">
+  <div class="inner">
+    <div class="tag">Onze praktijk</div>
+    <h2>Eén aanspreekpunt voor al uw fiscale en boekhoudkundige dossiers.</h2>
+    <div class="svc-grid">
+      <div class="svc-card">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8C77A"/><stop offset="1" stop-color="#C9A24B"/></linearGradient></defs><path d="M4 3h11l5 5v13H4z" stroke="url(#g1)" stroke-width="1.4" stroke-linejoin="round"/><path d="M15 3v5h5" stroke="url(#g1)" stroke-width="1.4" stroke-linejoin="round"/><path d="M7.5 12h9M7.5 15h9M7.5 18h6" stroke="url(#g1)" stroke-width="1.2"/></svg>
+        <h3>Boekhouding</h3><p>Volledige verwerking van uw boekhouding, nauwkeurig en up-to-date, elk kwartaal.</p></div>
+      <div class="svc-card">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true"><defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8C77A"/><stop offset="1" stop-color="#C9A24B"/></linearGradient></defs><rect x="4" y="4" width="16" height="16" rx="2" stroke="url(#g2)" stroke-width="1.4"/><path d="M8 16 16 8M9 9h.01M15 15h.01" stroke="url(#g2)" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <h3>BTW-aangifte</h3><p>Correcte en tijdige periodieke BTW-aangiftes, zonder verrassingen achteraf.</p></div>
+      <div class="svc-card">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true"><defs><linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8C77A"/><stop offset="1" stop-color="#C9A24B"/></linearGradient></defs><path d="M4 20V10l8-6 8 6v10" stroke="url(#g3)" stroke-width="1.4" stroke-linejoin="round"/><circle cx="12" cy="14" r="2.4" stroke="url(#g3)" stroke-width="1.3"/></svg>
+        <h3>Vennootschapsbelasting</h3><p>Optimale fiscale structurering en aangifte voor uw vennootschap.</p></div>
+      <div class="svc-card">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true"><defs><linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8C77A"/><stop offset="1" stop-color="#C9A24B"/></linearGradient></defs><circle cx="12" cy="8" r="3.4" stroke="url(#g4)" stroke-width="1.4"/><path d="M5 20c0-4 3-6 7-6s7 2 7 6" stroke="url(#g4)" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <h3>Personenbelasting</h3><p>Persoonlijk fiscaal advies en aangifte, afgestemd op uw situatie.</p></div>
+      <div class="svc-card">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true"><defs><linearGradient id="g5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8C77A"/><stop offset="1" stop-color="#C9A24B"/></linearGradient></defs><path d="M12 2c3 4 6 8 6 12a6 6 0 0 1-12 0c0-4 3-8 6-12z" stroke="url(#g5)" stroke-width="1.4" stroke-linejoin="round"/><path d="M12 14v6" stroke="url(#g5)" stroke-width="1.3"/></svg>
+        <h3>Startersbegeleiding</h3><p>Van oprichting tot eerste jaarrekening: wij begeleiden starters stap voor stap.</p></div>
+      <div class="svc-card">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true"><defs><linearGradient id="g6" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8C77A"/><stop offset="1" stop-color="#C9A24B"/></linearGradient></defs><path d="M4 18l5-6 4 4 7-9" stroke="url(#g6)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7h5v5" stroke="url(#g6)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h3>Fiscale optimalisatie</h3><p>Strategisch advies dat legaal ruimte creëert binnen uw fiscale mogelijkheden.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="flagship">
+  <div class="inner">
+    <div class="tag">Onze kernbelofte</div>
+    <h2>Elk cijfer gecontroleerd. Elk dossier beschermd.</h2>
+    <p>Wij vertalen verspreide facturen, loonfiches en bonnetjes naar één helder, sluitend geheel — gecontroleerd, fiscaal geoptimaliseerd en klaar voor indiening. Geen losse eindjes, geen verrassingen van de fiscus.</p>
+    <a class="btn ghost" href="#cta">Ontdek onze aanpak</a>
+  </div>
+</section>
+
+<section class="chapter" id="poster">
+  <div class="word" aria-hidden="true">BALANS</div>
+  <div class="inner">
+    <h2>Balans is geen toeval. Het is een vak.</h2>
+    <p>Acht jaar aan tevreden klanten, honderden aangiftes en één belofte die nooit wijzigt: uw cijfers kloppen, altijd op tijd.</p>
+  </div>
+</section>
+
+<section class="chapter" id="stats">
+  <div class="inner">
+    <div class="tag">Waarom Aaf Consultants</div>
+    <h2 style="color:#fff;font-size:clamp(1.8rem,3.6vw,2.6rem)">Cijfers die voor zichzelf spreken.</h2>
+    <div class="stats-grid">
+      <div class="stat"><b>5.0★</b><span>Google beoordeling</span></div>
+      <div class="stat"><b>8/8</b><span>Vijfsterren reviews</span></div>
+      <div class="stat"><b>100%</b><span>Tijdige aangiftes</span></div>
+      <div class="stat"><b>1:1</b><span>Persoonlijke begeleiding</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter light" id="testi">
+  <div class="inner">
+    <div class="tag">Wat klanten zeggen</div>
+    <h2>Vertrouwen, zwart op wit.</h2>
+    <div class="testi-grid">
+      <div class="testi-card"><div class="stars" aria-label="5 van de 5 sterren">★★★★★</div><p>"Eindelijk een boekhouder die uitlegt wat hij doet en waarom. Alles verloopt vlot en op tijd."</p><b>Ondernemer, Antwerpen</b></div>
+      <div class="testi-card"><div class="stars" aria-label="5 van de 5 sterren">★★★★★</div><p>"Aaf Consultants heeft ons als starters echt op weg geholpen — persoonlijk en fiscaal scherp."</p><b>Zaakvoerder KMO</b></div>
+      <div class="testi-card"><div class="stars" aria-label="5 van de 5 sterren">★★★★★</div><p>"Bereikbaar, correct en altijd een stap vooruit denkend. Precies wat je van een fiscalist verwacht."</p><b>Vrij beroep, Antwerpen</b></div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="cta">
+  <div class="inner">
+    <div class="tag">Kom in balans</div>
+    <h2>Klaar voor cijfers die kloppen?</h2>
+    <p>Plan een vrijblijvend kennismakingsgesprek in onze praktijk in de August Michielsstraat, of bel ons rechtstreeks op 03 231 06 56.</p>
+    <form class="form" id="contact-form" novalidate>
+      <div class="field">
+        <label for="f-name">Naam</label>
+        <input type="text" id="f-name" name="name" placeholder="Uw naam" required autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="f-email">E-mailadres</label>
+        <input type="email" id="f-email" name="email" placeholder="naam@bedrijf.be" required autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="f-msg">Uw situatie</label>
+        <textarea id="f-msg" name="message" rows="3" placeholder="Vertel ons kort over uw situatie"></textarea>
+      </div>
+      <button type="submit" class="btn" id="submit-btn" style="justify-self:start">Verstuur aanvraag</button>
+      <div class="form-status" id="form-status" role="alert" aria-live="polite"></div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="foot-grid">
+    <div><h3>Aaf Consultants</h3><p>August Michielsstraat 23<br>2000 Antwerpen, België</p></div>
+    <div><h3>Contact</h3><p><a href="tel:+3232310656">03 231 06 56</a><br><a href="http://www.aaftax.be/">www.aaftax.be</a></p></div>
+    <div><h3>Uren</h3><p>Ma–Vr: 09:00–17:30<br>Op afspraak</p></div>
+  </div>
+  <div class="copy">© Aaf Consultants — Fiscaal & boekhoudkundig advies, Antwerpen.</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+function hasWebGL(){try{var c=document.createElement('canvas');return !!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl')));}catch(e){return false;}}
+var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(reduce||!hasWebGL()||!window.THREE)return;
+try{
+var NAVY=0x0B1E3D,GOLD=0xC9A24B,GOLD2=0xE8C77A;
+var mount=document.getElementById('gl');
+var renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance',alpha:false});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.setSize(window.innerWidth,window.innerHeight);
+mount.appendChild(renderer.domElement);
+var scene=new THREE.Scene();
+scene.background=new THREE.Color(NAVY);
+scene.fog=new THREE.FogExp2(NAVY,0.016);
+var camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,400);
+camera.position.set(0,2,46);
+
+function makeSprite(){var c=document.createElement('canvas');c.width=c.height=64;
+ var g=c.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);
+ r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(0.35,'rgba(255,255,255,.6)');r.addColorStop(1,'rgba(255,255,255,0)');
+ g.fillStyle=r;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c);}
+var sprite=makeSprite();
+
+var isMobile=window.innerWidth<768;
+var N=isMobile?3200:7000;
+var geo=new THREE.BufferGeometry(),pos=new Float32Array(N*3),col=new Float32Array(N*3);
+var ca=new THREE.Color(GOLD),cb=new THREE.Color(0x2E4A7A),c=new THREE.Color();
+var SPREAD=32;
+for(var i=0;i<N;i++){var r=SPREAD*Math.pow(Math.random(),0.5),th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+ pos[i*3]=r*Math.sin(ph)*Math.cos(th);pos[i*3+1]=r*Math.sin(ph)*Math.sin(th)*0.55;pos[i*3+2]=r*Math.cos(ph);
+ c.copy(ca).lerp(cb,Math.random());col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;}
+geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+var universe=new THREE.Points(geo,new THREE.PointsMaterial({size:0.55,map:sprite,vertexColors:true,transparent:true,opacity:0.85,depthWrite:false,blending:THREE.AdditiveBlending}));
+scene.add(universe);
+
+var strandGroup=new THREE.Group();
+function makeStrand(color,rot){
+ var n=isMobile?600:1100,pos2=new Float32Array(n*3),RADIUS=8,HEIGHT=34,TURNS=4.2;
+ for(var i=0;i<n;i++){var t=i/n,a=t*Math.PI*2*TURNS,w=0.35*Math.sin(t*40);
+  pos2[i*3]=Math.cos(a)*(RADIUS+w);pos2[i*3+1]=(t-0.5)*HEIGHT;pos2[i*3+2]=Math.sin(a)*(RADIUS+w);}
+ var g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos2,3));
+ var m=new THREE.PointsMaterial({size:0.5,map:sprite,color:color,transparent:true,opacity:0.8,depthWrite:false,blending:THREE.AdditiveBlending});
+ var p=new THREE.Points(g,m);p.rotation.z=rot;return p;}
+strandGroup.add(makeStrand(GOLD2,0));strandGroup.add(makeStrand(0x3E5E96,Math.PI));
+scene.add(strandGroup);
+
+var centre=new THREE.Group();
+var ico1=new THREE.Mesh(new THREE.IcosahedronGeometry(3.4,1),new THREE.MeshBasicMaterial({color:GOLD,wireframe:true,transparent:true,opacity:0.5}));
+var ico2=new THREE.Mesh(new THREE.IcosahedronGeometry(1.9,0),new THREE.MeshBasicMaterial({color:0xffffff,wireframe:true,transparent:true,opacity:0.65}));
+var ring=new THREE.Mesh(new THREE.TorusGeometry(5.2,0.03,8,120),new THREE.MeshBasicMaterial({color:0x3E5E96}));
+ring.rotation.x=Math.PI/2.4;
+centre.add(ico1,ico2,ring);scene.add(centre);
+
+var shape=new THREE.Shape();
+shape.moveTo(0,10);
+shape.bezierCurveTo(5,9,7.2,7.8,7.2,4);
+shape.lineTo(7.2,-2);
+shape.bezierCurveTo(7.2,-7,3,-9.2,0,-11.5);
+shape.bezierCurveTo(-3,-9.2,-7.2,-7,-7.2,-2);
+shape.lineTo(-7.2,4);
+shape.bezierCurveTo(-7.2,7.8,-5,9,0,10);
+
+var FILLN=isMobile?900:2200,OUTN=isMobile?500:1200;
+var sgeo=new THREE.ShapeGeometry(shape,24);
+var idx=sgeo.index.array,vpos=sgeo.attributes.position.array;
+var tris=[],areaSum=0;
+for(var i=0;i<idx.length;i+=3){
+ var a=idx[i]*3,b=idx[i+1]*3,cc=idx[i+2]*3;
+ var ax=vpos[a],ay=vpos[a+1],bx=vpos[b],by=vpos[b+1],cx=vpos[cc],cy=vpos[cc+1];
+ var area=Math.abs((bx-ax)*(cy-ay)-(cx-ax)*(by-ay))/2;
+ areaSum+=area;tris.push([ax,ay,bx,by,cx,cy,areaSum]);
+}
+function sampleTri(){var r=Math.random()*areaSum;for(var i=0;i<tris.length;i++){if(r<=tris[i][6]){var t=tris[i];var r1=Math.sqrt(Math.random()),r2=Math.random();
+ var x=(1-r1)*t[0]+r1*(1-r2)*t[2]+r1*r2*t[4];var y=(1-r1)*t[1]+r1*(1-r2)*t[3]+r1*r2*t[5];return [x,y];}}return [0,0];}
+var fillTarget=new Float32Array(FILLN*3),fillCloud=new Float32Array(FILLN*3);
+for(var i=0;i<FILLN;i++){var p=sampleTri();
+ fillTarget[i*3]=p[0]*1.5;fillTarget[i*3+1]=p[1]*1.5;fillTarget[i*3+2]=(Math.random()-0.5)*1.2;
+ var rr=26+Math.random()*4,tt=Math.random()*Math.PI*2,pp=Math.acos(2*Math.random()-1);
+ fillCloud[i*3]=rr*Math.sin(pp)*Math.cos(tt);fillCloud[i*3+1]=rr*Math.sin(pp)*Math.sin(tt);fillCloud[i*3+2]=rr*Math.cos(pp);}
+var fillPos=new Float32Array(FILLN*3);fillPos.set(fillCloud);
+var fgeo=new THREE.BufferGeometry();fgeo.setAttribute('position',new THREE.BufferAttribute(fillPos,3));
+var fillPts=new THREE.Points(fgeo,new THREE.PointsMaterial({size:0.24,map:sprite,color:GOLD,transparent:true,opacity:0.5,depthWrite:false,blending:THREE.AdditiveBlending}));
+scene.add(fillPts);
+
+var pts=shape.getPoints(240);
+var outTarget=new Float32Array(OUTN*3),outCloud=new Float32Array(OUTN*3);
+for(var i=0;i<OUTN;i++){var pt=pts[Math.floor(Math.random()*pts.length)];
+ outTarget[i*3]=pt.x+(Math.random()-0.5)*0.12;outTarget[i*3+1]=pt.y+(Math.random()-0.5)*0.12;outTarget[i*3+2]=(Math.random()-0.5)*0.5;
+ var rr=28+Math.random()*4,tt=Math.random()*Math.PI*2,pp=Math.acos(2*Math.random()-1);
+ outCloud[i*3]=rr*Math.sin(pp)*Math.cos(tt);outCloud[i*3+1]=rr*Math.sin(pp)*Math.sin(tt);outCloud[i*3+2]=rr*Math.cos(pp);}
+var outPos=new Float32Array(OUTN*3);outPos.set(outCloud);
+var ogeo=new THREE.BufferGeometry();ogeo.setAttribute('position',new THREE.BufferAttribute(outPos,3));
+var outPts=new THREE.Points(ogeo,new THREE.PointsMaterial({size:0.4,map:sprite,color:GOLD2,transparent:true,opacity:0.95,depthWrite:false,blending:THREE.AdditiveBlending}));
+scene.add(outPts);
+
+var composer=new THREE.EffectComposer(renderer);
+composer.addPass(new THREE.RenderPass(scene,camera));
+var bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.1,0.85,0.15);
+composer.addPass(bloom);
+
+var morph={t:0};
+var cam={x:0,y:2,z:46,ry:0};
+gsap.registerPlugin(ScrollTrigger);
+var tl=gsap.timeline({scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:1.1}});
+tl.to(cam,{z:24,y:1.4,ease:'none',duration:1},0)
+  .to(cam,{ry:Math.PI*0.4,x:-4,ease:'none',duration:1},1)
+  .to(centre.scale,{x:0.001,y:0.001,z:0.001,ease:'none',duration:0.6},1.9)
+  .to(morph,{t:1,ease:'none',duration:1,onStart:function(){document.getElementById('hud').classList.add('show');},
+     onComplete:function(){setTimeout(function(){document.getElementById('hud').classList.remove('show');},600);}},2)
+  .to(cam,{z:17,y:-1,ry:Math.PI*0.7,ease:'none',duration:1},3)
+  .to(bloom,{strength:1.4,ease:'none',duration:1},3)
+  .to(cam,{z:30,ry:Math.PI*1.1,ease:'none',duration:1},4)
+  .to(strandGroup.rotation,{y:Math.PI*1.8,ease:'none',duration:5},0);
+
+document.querySelectorAll('.chapter .inner').forEach(function(el){
+ gsap.from(el,{opacity:0,y:60,duration:1,scrollTrigger:{trigger:el,start:'top 78%'}});
+});
+
+var mouse={x:0,y:0};
+window.addEventListener('mousemove',function(e){mouse.x=(e.clientX/innerWidth-0.5);mouse.y=(e.clientY/innerHeight-0.5);});
+
+function animate(){
+ requestAnimationFrame(animate);
+ universe.rotation.y+=0.0006;
+ for(var i=0;i<FILLN;i++){fillPos[i*3]=fillCloud[i*3]+(fillTarget[i*3]-fillCloud[i*3])*morph.t;
+  fillPos[i*3+1]=fillCloud[i*3+1]+(fillTarget[i*3+1]-fillCloud[i*3+1])*morph.t;
+  fillPos[i*3+2]=fillCloud[i*3+2]+(fillTarget[i*3+2]-fillCloud[i*3+2])*morph.t;}
+ fgeo.attributes.position.needsUpdate=true;
+ for(var i=0;i<OUTN;i++){outPos[i*3]=outCloud[i*3]+(outTarget[i*3]-outCloud[i*3])*morph.t;
+  outPos[i*3+1]=outCloud[i*3+1]+(outTarget[i*3+1]-outCloud[i*3+1])*morph.t;
+  outPos[i*3+2]=outCloud[i*3+2]+(outTarget[i*3+2]-outCloud[i*3+2])*morph.t;}
+ ogeo.attributes.position.needsUpdate=true;
+ fillPts.quaternion.copy(camera.quaternion);outPts.quaternion.copy(camera.quaternion);
+ camera.position.z+=(cam.z-camera.position.z)*0.08;
+ camera.position.x+=((Math.sin(cam.ry)*camera.position.z*0.35+(isMobile?0:mouse.x*2.2))-camera.position.x)*0.08;
+ camera.position.y+=((cam.y-(isMobile?0:mouse.y*1.6))-camera.position.y)*0.06;
+ camera.lookAt(0,0,0);
+ composer.render();
+}
+animate();
+window.addEventListener('resize',function(){
+ camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
+ renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);
+});
+}catch(e){}
+})();
+
+/* form handling: loading -> success/error state */
+(function(){
+var form=document.getElementById('contact-form');
+if(!form)return;
+var btn=document.getElementById('submit-btn');
+var status=document.getElementById('form-status');
+form.addEventListener('submit',function(e){
+ e.preventDefault();
+ status.className='form-status';
+ status.textContent='';
+ var name=form.name.value.trim(),email=form.email.value.trim();
+ if(!name||!email){
+   status.className='form-status error';
+   status.textContent='Vul uw naam en e-mailadres in a.u.b.';
+   return;
+ }
+ btn.disabled=true;
+ var original=btn.textContent;
+ btn.textContent='Bezig met verzenden…';
+ setTimeout(function(){
+   btn.disabled=false;
+   btn.textContent=original;
+   status.className='form-status success';
+   status.textContent='Bedankt! Wij nemen binnen 1 werkdag contact met u op.';
+   form.reset();
+ },1100);
+});
+})();
+</script>
+</body>
+</html>
