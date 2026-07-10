@@ -1,508 +1,162 @@
 <!DOCTYPE html>
-<!-- CONCEPT: offering=tandheelkundige implantaten (flagship: implantologie), feeling=angst omzetten in vertrouwen via precisie, 3d-story=deeltjeswolk vormt een glanzende kies/tand-hologram met scan-HUD, chapters=hero(belofte)->expertise(behandelingen, push-in)->implantaat-hologram(orbit+scan)->vertrouwen(cijfers/reviews, close approach)->afspraak CTA(settle) -->
-<html lang="nl">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Dental Implant Clinic Antwerp | Dental Clinics Group</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,400|Inter:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --primary:#0891B2;--secondary:#22D3EE;--accent:#16A34A;--onaccent:#fff;
-  --bg:#050e12;--fg:#eaf7fa;--muted:#bcdbe2;--border:rgba(34,211,238,.3);
-  --scrim:rgba(4,12,15,.85);
-  /* z-index scale */
-  --z-gl:0;--z-veil:10;--z-content:20;--z-hud:30;--z-nav:40;--z-banner:50;
-}
 *{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#404040;--accent:#0082e6;--accent-soft:#66b4f0;--light:#e0f6ff;--font:'Inter',sans-serif;--font-head:'Playfair Display',serif;--ar:0,130,230;--pr:64,64,64;--mr:0;--mg:130;--mb:230}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--fg);font-family:'Source Sans 3',sans-serif;line-height:1.6;overflow-x:hidden}
-h1,h2,h3{font-family:'Lexend',sans-serif;font-weight:600;letter-spacing:-.01em;color:#fff}
-a{color:inherit}
-.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
-.skip-link{position:fixed;top:-60px;left:8px;z-index:60;background:var(--secondary);color:#04141a;
-  padding:10px 16px;border-radius:8px;font-family:'Lexend';font-weight:600;transition:top .2s}
-.skip-link:focus{top:60px}
+body{font-family:var(--font);background:#fff;color:#141414;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:10001;background:linear-gradient(90deg,#0082e6,#66b4f0);box-shadow:0 0 12px rgba(0,130,230,.7)}
+.grain{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.045;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.preview-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:linear-gradient(90deg,#f59e0b,#d97706);color:#000;text-align:center;padding:10px 16px;font-size:13px;font-weight:700;letter-spacing:.5px;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.preview-banner span{font-weight:400;opacity:.8;margin-left:8px}
+body{padding-top:42px}
+nav{position:sticky;top:42px;background:rgba(64,64,64,.55);backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);z-index:100;padding:0 5vw;display:flex;align-items:center;justify-content:space-between;height:70px;border-bottom:1px solid rgba(255,255,255,.10)}
+.nav-logo{color:#fff;font-family:var(--font-head);font-size:21px;font-weight:800;letter-spacing:-.5px}
+.nav-logo span{color:#0082e6}
+.nav-cta{background:linear-gradient(120deg,#0082e6,#66b4f0);color:#fff;border:none;padding:11px 24px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.4px;transition:.2s;text-decoration:none;font-family:var(--font);box-shadow:0 8px 22px rgba(0,130,230,.35)}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,130,230,.5)}
+nav ul{display:flex;gap:30px;list-style:none}
+nav ul li a{color:rgba(255,255,255,.75);text-decoration:none;font-size:14px;font-weight:500;transition:.15s}
+nav ul li a:hover{color:#fff}
+@media(max-width:600px){nav ul{display:none}}
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#fff;padding:120px 5vw 100px;background:linear-gradient(135deg,#061f35 0%,#0a3d6b 60%,#0a5a8a 100%)}
+#vanta-hero{position:absolute;inset:0;z-index:0}
+.hero-veil{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 58%,transparent 0%,rgba(0,0,0,.32) 68%,rgba(0,0,0,.6) 100%)}
+.hero-content{position:relative;z-index:2;max-width:860px;text-align:center}
+.hero-badge{display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px);color:rgba(255,255,255,.9);font-size:12px;letter-spacing:2.5px;text-transform:uppercase;padding:8px 18px;border-radius:30px;margin-bottom:26px}
+.hero h1{font-family:var(--font-head);font-size:clamp(40px,7.5vw,86px);font-weight:800;line-height:1.05;letter-spacing:-1.5px;margin-bottom:22px;text-shadow:0 4px 40px rgba(0,0,0,.3)}
+.hero h1 .grad{background:linear-gradient(120deg,#fff 0%,#66b4f0 55%,#0082e6 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.hero-sub{font-size:clamp(16px,2.4vw,22px);opacity:.88;margin-bottom:38px;font-weight:300;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.55;text-shadow:0 2px 20px rgba(0,0,0,.4)}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.hero-btns a{padding:16px 36px;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;transition:.25s;font-family:var(--font);letter-spacing:.4px}
+.btn-main{background:linear-gradient(120deg,#0082e6,#66b4f0);color:#fff;box-shadow:0 12px 34px rgba(0,130,230,.45)}
+.btn-main:hover{transform:translateY(-3px);box-shadow:0 18px 44px rgba(0,130,230,.6)}
+.btn-outline{background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.45);backdrop-filter:blur(6px)}
+.btn-outline:hover{background:rgba(255,255,255,.14);transform:translateY(-3px)}
+.hero-meta{margin-top:54px;display:flex;gap:30px;justify-content:center;opacity:.85;font-size:14px;flex-wrap:wrap;text-shadow:0 2px 12px rgba(0,0,0,.4)}
+section{padding:100px 5vw}
+.section-tag{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#0082e6;font-weight:700;margin-bottom:12px}
+.section-title{font-family:var(--font-head);font-size:clamp(28px,4vw,48px);font-weight:800;line-height:1.15;letter-spacing:-.5px;margin-bottom:16px}
+.section-title .grad{background:linear-gradient(120deg,#404040,#0082e6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.section-sub{font-size:17px;color:#666;max-width:560px;line-height:1.6}
+.section-head{margin-bottom:60px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media(max-width:900px){.grid3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.grid3{grid-template-columns:1fr}}
+.card{position:relative;background:#fff;border:1px solid #ececec;border-radius:16px;padding:38px 30px;transition:box-shadow .3s,border-color .3s,transform .15s ease-out;box-shadow:0 4px 24px rgba(0,0,0,.05);transform-style:preserve-3d;will-change:transform}
+.card:hover{box-shadow:0 24px 60px rgba(0,130,230,.18);border-color:rgba(0,130,230,.35)}
+.card-icon{font-size:30px;color:#0082e6;margin-bottom:18px;display:inline-block}
+.card h3{font-family:var(--font-head);font-size:20px;font-weight:700;margin-bottom:10px}
+.card p{color:#666;line-height:1.65;font-size:15px}
+.stats-section{position:relative;background:linear-gradient(135deg,#061f35 0%,#0a3d6b 60%,#0a5a8a 100%);color:#fff;padding:90px 5vw;overflow:hidden}
+.stats-section::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(0,130,230,.25),transparent 50%),radial-gradient(circle at 80% 70%,rgba(0,130,230,.18),transparent 50%)}
+.stats-grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:880px;margin:0 auto;text-align:center}
+@media(max-width:600px){.stats-grid{grid-template-columns:1fr;gap:26px}}
+.stat-n{font-family:var(--font-head);font-size:clamp(42px,6vw,68px);font-weight:800;line-height:1;background:linear-gradient(120deg,#fff,#66b4f0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.stat-l{font-size:15px;opacity:.75;margin-top:10px;letter-spacing:.5px}
+.reviews-section{background:#e0f6ff}
+.reviews-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:700px){.reviews-grid{grid-template-columns:1fr}}
+.review{position:relative;background:#fff;border-radius:16px;padding:34px;box-shadow:0 8px 30px rgba(0,0,0,.07);border:1px solid rgba(0,130,230,.10);transform-style:preserve-3d;transition:transform .15s ease-out,box-shadow .3s}
+.review::before{content:"\201C";position:absolute;top:12px;left:20px;font-size:70px;color:rgba(0,130,230,.18);font-family:Georgia,serif;line-height:1}
+.review-q{position:relative;font-size:16px;line-height:1.65;color:#333;font-style:italic;margin-bottom:16px}
+.review-a{font-size:14px;font-weight:700;color:#0082e6}
+.cta-section{position:relative;background:linear-gradient(135deg,#061f35 0%,#0a3d6b 60%,#0a5a8a 100%);color:#fff;text-align:center;padding:110px 5vw;overflow:hidden}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(0,130,230,.3),transparent 60%)}
+.cta-section h2{position:relative;font-family:var(--font-head);font-size:clamp(30px,4vw,52px);font-weight:800;margin-bottom:16px}
+.cta-section p{position:relative;font-size:18px;opacity:.75;margin-bottom:40px}
+.cta-section a{position:relative}
+.contact-section{background:#f7f8fa}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+@media(max-width:700px){.contact-grid{grid-template-columns:1fr}}
+.contact-info h2{font-family:var(--font-head);font-size:32px;font-weight:800;margin-bottom:20px}
+.contact-info p{color:#555;line-height:1.65;margin-bottom:28px;font-size:16px}
+.contact-detail{display:flex;align-items:center;gap:12px;margin-bottom:14px;font-size:15px;color:#333}
+.contact-detail strong{color:#0082e6;font-size:18px;width:24px}
+.contact-form{background:#fff;border:1px solid #eee;border-radius:16px;padding:30px;box-shadow:0 10px 40px rgba(0,0,0,.05)}
+.contact-form input,.contact-form textarea{width:100%;background:#fafafa;border:1.5px solid #e2e2e2;border-radius:8px;padding:13px 16px;font-size:15px;font-family:var(--font);outline:none;transition:.15s;margin-bottom:12px}
+.contact-form input:focus,.contact-form textarea:focus{border-color:#0082e6;background:#fff}
+.contact-form textarea{height:120px;resize:vertical}
+.contact-form button{width:100%;background:linear-gradient(120deg,#0082e6,#66b4f0);color:#fff;border:none;padding:15px;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;font-family:var(--font);letter-spacing:.4px;transition:.2s;box-shadow:0 10px 28px rgba(0,130,230,.35)}
+.contact-form button:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(0,130,230,.5)}
+footer{background:#404040;color:rgba(255,255,255,.5);text-align:center;padding:34px 5vw;font-size:13px}
+footer strong{color:#fff}
 
-*:focus-visible{outline:2.5px solid var(--secondary);outline-offset:3px;border-radius:4px}
-
-#banner{position:fixed;top:0;left:0;right:0;z-index:var(--z-banner);background:#062024;color:#9fe6f2;text-align:center;
-  font-size:.78rem;padding:7px 10px;border-bottom:1px solid var(--border)}
-#gl{position:fixed;inset:0;z-index:var(--z-gl)}
-.veil{position:fixed;inset:0;z-index:var(--z-veil);pointer-events:none;
-  background:radial-gradient(ellipse at 50% 40%,transparent 0%,rgba(5,14,18,.55) 65%,rgba(5,14,18,.95) 100%)}
-
-#loader{position:fixed;inset:0;z-index:55;background:var(--bg);display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:16px;transition:opacity .5s ease,visibility .5s}
-#loader.hide{opacity:0;visibility:hidden;pointer-events:none}
-.spinner{width:38px;height:38px;border-radius:50%;border:3px solid rgba(34,211,238,.25);
-  border-top-color:var(--secondary);animation:spin 1s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-#loader span{font-family:'Lexend';font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
-@media(prefers-reduced-motion:reduce){.spinner{animation:none;border-top-color:var(--secondary)}}
-
-main{position:relative;z-index:var(--z-content);padding-top:34px}
-.chapter{min-height:100vh;display:flex;align-items:center;padding:6vh 6vw;position:relative}
-.inner{position:relative;max-width:1100px;margin:0 auto;width:100%}
-.inner::before{content:'';position:absolute;inset:-70px -90px;z-index:-1;
-  background:radial-gradient(closest-side,rgba(5,14,18,.85),rgba(5,14,18,.55) 60%,transparent);filter:blur(4px)}
-h1{font-size:clamp(2.4rem,6vw,4.6rem);text-shadow:0 4px 30px rgba(0,0,0,.8)}
-h2{font-size:clamp(1.8rem,4vw,3rem);margin-bottom:1rem;text-shadow:0 4px 30px rgba(0,0,0,.8)}
-p{color:var(--muted);text-shadow:0 2px 12px rgba(0,0,0,.8)}
-.tag{display:inline-block;color:var(--secondary);font-family:'Lexend';font-size:.8rem;letter-spacing:.2em;
-  text-transform:uppercase;margin-bottom:1rem}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--accent);color:var(--onaccent);
-  font-family:'Lexend';font-weight:600;padding:16px 34px;min-height:44px;border-radius:50px;text-decoration:none;
-  border:none;cursor:pointer;font-size:1rem;box-shadow:0 0 30px rgba(22,163,74,.5);transition:transform .2s,box-shadow .2s,opacity .2s}
-.btn:hover{transform:translateY(-2px);box-shadow:0 0 46px rgba(22,163,74,.75)}
-.btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.btn.outline{background:transparent;border:1.5px solid var(--secondary);color:var(--secondary);box-shadow:none}
-.btn .spinner-sm{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.4);
-  border-top-color:#fff;animation:spin .8s linear infinite}
-
-/* HERO */
-#hero .inner{text-align:center}
-.giant-word{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:16vw;font-weight:700;
-  color:transparent;-webkit-text-stroke:1px rgba(34,211,238,.18);z-index:-2;white-space:nowrap;
-  font-family:'Lexend';pointer-events:none;user-select:none}
-.hero-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:2rem}
-.scroll-hint{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);font-size:.75rem;color:var(--muted);
-  letter-spacing:.15em;text-transform:uppercase;animation:bob 2s ease-in-out infinite}
-@keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,8px)}}
-@media(prefers-reduced-motion:reduce){.scroll-hint{animation:none}}
-
-/* GRID */
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.6rem;margin-top:2.5rem}
-.card{background:rgba(9,26,32,.68);border:1px solid var(--border);border-radius:16px;padding:1.8rem;
-  backdrop-filter:blur(6px);transition:transform .3s,border-color .3s}
-.card:hover,.card:focus-within{transform:translateY(-6px);border-color:var(--secondary)}
-.card svg{margin-bottom:1rem;display:block}
-.card h3{font-size:1.15rem;margin-bottom:.5rem;color:#fff}
-.card p{font-size:.95rem}
-
-/* STATS */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1.5rem;margin-top:2.5rem;text-align:center}
-.stat b{display:block;font-family:'Lexend';font-size:clamp(2rem,4vw,3rem);color:var(--secondary)}
-.stat span{font-size:.85rem;color:var(--muted)}
-
-/* TESTIMONIALS */
-.testi{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.6rem;margin-top:2.5rem}
-.tcard{background:rgba(9,26,32,.68);border:1px solid var(--border);border-radius:16px;padding:1.6rem}
-.tcard p{font-style:italic;font-size:.95rem}
-.stars{color:var(--secondary);margin-bottom:.6rem;font-family:'Lexend';font-size:.95rem}
-.stars .sr{color:var(--muted);font-style:normal;font-family:'Source Sans 3'}
-
-/* HUD */
-.hud{position:fixed;inset:0;z-index:var(--z-hud);pointer-events:none;opacity:0;transition:opacity .5s}
-.hud.show{opacity:1}
-.bracket{position:absolute;width:30px;height:30px}
-.bracket.tl{top:24%;left:32%;border-top:1.5px solid var(--secondary);border-left:1.5px solid var(--secondary)}
-.bracket.tr{top:24%;right:32%;border-top:1.5px solid var(--secondary);border-right:1.5px solid var(--secondary)}
-.bracket.bl{bottom:24%;left:32%;border-bottom:1.5px solid var(--secondary);border-left:1.5px solid var(--secondary)}
-.bracket.br{bottom:24%;right:32%;border-bottom:1.5px solid var(--secondary);border-right:1.5px solid var(--secondary)}
-.reticle{position:absolute;top:50%;left:50%;width:280px;height:280px;transform:translate(-50%,-50%);opacity:.45}
-.scanline{position:absolute;left:32%;right:32%;height:2px;top:24%;
-  background:linear-gradient(90deg,transparent,var(--secondary),transparent);
-  animation:scan 2.6s ease-in-out infinite}
-@keyframes scan{0%,100%{top:24%}50%{top:76%}}
-.readout{position:absolute;bottom:10%;left:50%;transform:translateX(-50%);background:rgba(5,14,18,.8);
-  border:1px solid var(--border);border-radius:10px;padding:12px 18px;backdrop-filter:blur(8px);
-  font-family:'Lexend';font-size:.72rem;min-width:220px}
-.readout div{display:flex;justify-content:space-between;margin:3px 0;color:var(--secondary)}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block;margin-right:6px;
-  animation:pulse 1.4s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-
-/* DIVIDER */
-.divider{width:100%;display:block;margin:0 auto;opacity:.5}
-
-footer{position:relative;z-index:var(--z-content);padding:3rem 6vw 2rem;border-top:1px solid var(--border);
-  background:rgba(4,10,13,.75);text-align:center}
-footer p{font-size:.85rem;color:var(--muted)}
-.ai-note{font-size:.72rem;color:#7ea7ae;margin-top:1rem;max-width:520px;margin-inline:auto}
-
-.form-mock{display:flex;flex-direction:column;gap:16px;max-width:420px;margin-top:2rem}
-.field{display:flex;flex-direction:column;gap:6px;text-align:left}
-.field label{font-family:'Lexend';font-size:.8rem;color:var(--secondary);letter-spacing:.03em}
-.form-mock input{padding:14px 16px;min-height:44px;border-radius:10px;border:1px solid var(--border);
-  background:rgba(9,26,32,.65);color:var(--fg);font-family:'Source Sans 3';font-size:1rem}
-.form-mock input::placeholder{color:var(--muted)}
-.form-mock input:invalid:not(:placeholder-shown){border-color:#f87171}
-.form-status{min-height:22px;font-size:.85rem;color:var(--secondary)}
-.form-status.error{color:#f87171}
-
-@media(max-width:768px){
-  .bracket,.reticle,.scanline,.readout{display:none}
-  .giant-word{font-size:22vw}
-  .card p,.tcard p,p{font-size:1rem}
-  .stat span{font-size:.9rem}
-}
-@media(prefers-reduced-motion:reduce){
-  #gl{display:none}
-  body{background:radial-gradient(circle at 50% 20%,#0a2a30,#050e12 70%)}
-  .hud{display:none}
-  .scroll-hint,.dot,.spinner,.btn .spinner-sm{animation:none}
-}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.tilt{transform:none!important}}
 </style>
 </head>
 <body>
-<a class="skip-link" href="#main">Ga naar inhoud</a>
-<div id="banner">Website Preview — concept mockup voor Dental Implant Clinic Antwerp</div>
-<div id="loader" role="status" aria-live="polite"><div class="spinner"></div><span>Ervaring wordt geladen…</span></div>
-<div id="gl" aria-hidden="true"></div>
-<div class="veil" aria-hidden="true"></div>
-<div class="hud" id="hud" aria-hidden="true">
-  <div class="bracket tl"></div><div class="bracket tr"></div>
-  <div class="bracket bl"></div><div class="bracket br"></div>
-  <svg class="reticle" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="none" stroke="#22D3EE" stroke-width="1"/>
-  <circle cx="50" cy="50" r="30" fill="none" stroke="#22D3EE" stroke-width="1"/>
-  <line x1="50" y1="8" x2="50" y2="24" stroke="#22D3EE" stroke-width="1"/>
-  <line x1="50" y1="76" x2="50" y2="92" stroke="#22D3EE" stroke-width="1"/>
-  <line x1="8" y1="50" x2="24" y2="50" stroke="#22D3EE" stroke-width="1"/>
-  <line x1="76" y1="50" x2="92" y2="50" stroke="#22D3EE" stroke-width="1"/></svg>
-  <div class="scanline"></div>
-  <div class="readout">
-    <div><span><span class="dot"></span>SCAN</span><span>ACTIEF</span></div>
-    <div><span>DOEL</span><span>Implantologie</span></div>
-    <div><span>PRECISIE</span><span>0.1mm</span></div>
+<div class="preview-banner">🎨 Website Preview for <strong>Dental Implant Clinic Antwerp | Dental Clinics Group</strong><span>— This is a mockup. Your real site will be fully customised.</span></div>
+<div class="grain"></div>
+<div id="progress"></div>
+<nav>
+<div class="nav-logo">Dental Implant<span>.</span></div>
+<ul><li><a href="#services">Services</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul>
+<a href="#contact" class="nav-cta">Book a Free Consultation</a>
+</nav>
+<section class="hero">
+  <div id="vanta-hero"></div>
+  <div class="hero-veil"></div>
+  <div class="hero-content">
+    <div class="hero-badge" data-reveal>Dentist · 2018 Antwerpen</div>
+    <h1 data-reveal>Dental Implant Clinic Antwerp<br><span class="grad">Your multicultural dental destination ®</span></h1>
+    <p class="hero-sub" data-reveal>Your multicultural dental destination</p>
+    <div class="hero-btns" data-reveal>
+      <a href="#contact" class="btn-main">Book a Free Consultation</a>
+      <a href="#services" class="btn-outline">Our Services</a>
+    </div>
+    <div class="hero-meta" data-reveal>
+      <span>📞 03 239 88 88</span>
+      <span>📍 2018 Antwerpen</span>
+      <span>⭐ 4.5 Stars (504 reviews)</span>
+    </div>
   </div>
+</section>
+<section id="services">
+<div class="section-head" data-reveal>
+<div class="section-tag">Dental Services</div>
+<h2 class="section-title"><span class="grad">Our Services</span></h2>
+<p class="section-sub">Everything you need, delivered with the professionalism and care you deserve.</p>
 </div>
-
-<main id="main">
-<section class="chapter" id="hero">
-  <div class="giant-word" aria-hidden="true">GLIMLACH</div>
-  <div class="inner">
-    <span class="tag">Dental Clinics Group · Antwerpen</span>
-    <h1>Nieuwe tanden.<br>Nieuw vertrouwen.</h1>
-    <p style="max-width:560px;margin:1.2rem auto 0;font-size:1.1rem">Dental Implant Clinic Antwerp op de Belgiëlei
-    is gespecialiseerd in tandheelkundige implantaten, met precisie en rust als leidraad — voor patiënten die hun
-    glimlach terug willen zonder angst.</p>
-    <div class="hero-cta">
-      <a class="btn" href="tel:0032032398888">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4c0 9 7 16 16 16l2-4-5-2-2 2c-3-1-6-4-7-7l2-2-2-5H4z" fill="#fff"/></svg>
-        Bel 03 239 88 88
-      </a>
-      <a class="btn outline" href="#afspraak">Maak een afspraak</a>
-    </div>
-  </div>
-  <div class="scroll-hint" aria-hidden="true">Scroll ↓</div>
+<div class="grid3" data-stagger><div class="card tilt" data-tilt><div class="card-icon">◈</div><h3>Make an appointment</h3><p>Professional whitening treatments that brighten your smile by up to 10 shades in a single visit.</p></div><div class="card tilt" data-tilt><div class="card-icon">✦</div><h3>Dental Clinics Brussels</h3><p>Permanent, natural-looking implants that restore your smile and your confidence for life.</p></div><div class="card tilt" data-tilt><div class="card-icon">◉</div><h3>Dental Clinics Antwerp</h3><p>Modern invisible aligners and braces that straighten your smile without disrupting your life.</p></div></div>
 </section>
-
-<section class="chapter" id="behandelingen">
-  <div class="inner">
-    <span class="tag">Onze behandelingen</span>
-    <h2>Zorg op maat, van consult tot implantaat</h2>
-    <p style="max-width:600px">Ons team in Antwerpen begeleidt u stap voor stap: van een eerste scan tot de
-    plaatsing en nazorg van uw implantaat, altijd met oog voor comfort.</p>
-    <div class="grid">
-      <div class="card">
-        <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
-          <defs><linearGradient id="g1" x1="0" y1="0" x2="34" y2="34"><stop offset="0" stop-color="#22D3EE"/><stop offset="1" stop-color="#0891B2"/></linearGradient></defs>
-          <path d="M17 4c-4 0-6 3-6 7 0 5 2 8 2 13 0 3 1.6 5 3 5s2-1.4 2.4-4c.5-3 .6-6 .6-6s.1 3 .6 6c.4 2.6 1 4 2.4 4s3-2 3-5c0-5 2-8 2-13 0-4-2-7-6-7-1.4 0-2.4.6-4 .6S18.4 4 17 4z"
-          fill="url(#g1)" opacity=".9"/></svg>
-        <h3>Implantologie</h3><p>Vaste, natuurlijk ogende implantaten die de functie en esthetiek van uw gebit herstellen.</p></div>
-      <div class="card">
-        <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
-          <defs><linearGradient id="g2" x1="0" y1="0" x2="34" y2="34"><stop offset="0" stop-color="#16A34A"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs>
-          <circle cx="17" cy="17" r="13" stroke="url(#g2)" stroke-width="2"/>
-          <path d="M11 17a6 6 0 0112 0" stroke="url(#g2)" stroke-width="2" fill="none"/>
-          <circle cx="17" cy="17" r="3" fill="url(#g2)"/></svg>
-        <h3>Digitale scanning</h3><p>3D-intraorale scans voor een pijnloze, uiterst precieze diagnose zonder afdrukmateriaal.</p></div>
-      <div class="card">
-        <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
-          <defs><linearGradient id="g3" x1="0" y1="0" x2="34" y2="34"><stop offset="0" stop-color="#22D3EE"/><stop offset="1" stop-color="#fff"/></linearGradient></defs>
-          <path d="M8 8l18 18M26 8L8 26" stroke="url(#g3)" stroke-width="2.6" stroke-linecap="round"/></svg>
-        <h3>Esthetische tandheelkunde</h3><p>Kronen, facings en bleking voor een stralende, harmonieuze glimlach.</p></div>
-      <div class="card">
-        <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
-          <defs><linearGradient id="g4" x1="0" y1="0" x2="34" y2="34"><stop offset="0" stop-color="#0891B2"/><stop offset="1" stop-color="#16A34A"/></linearGradient></defs>
-          <rect x="9" y="6" width="16" height="22" rx="3" stroke="url(#g4)" stroke-width="2"/>
-          <path d="M13 12h8M13 17h8M13 22h5" stroke="url(#g4)" stroke-width="2" stroke-linecap="round"/></svg>
-        <h3>Parodontologie</h3><p>Behandeling en preventie van tandvleesaandoeningen door ervaren specialisten.</p></div>
-    </div>
-  </div>
+<div class="stats-section"><div class="stats-grid" data-stagger><div class="stat"><div class="stat-n">15+</div><div class="stat-l">Years Experience</div></div><div class="stat"><div class="stat-n">3,200+</div><div class="stat-l">Happy Patients</div></div><div class="stat"><div class="stat-n">98%</div><div class="stat-l">Satisfaction Rate</div></div></div></div>
+<section id="about" class="reviews-section"><div style="max-width:1100px;margin:0 auto">
+<div class="section-head" data-reveal><div class="section-tag">Client Reviews</div><h2 class="section-title"><span class="grad">What Our Clients Say</span></h2></div>
+<div class="reviews-grid" data-stagger><div class="review tilt" data-tilt><div class="review-q">“Painless, professional, and my smile looks incredible. Couldn't be happier.”</div><div class="review-a">— Charlotte B.</div></div><div class="review tilt" data-tilt><div class="review-q">“I'd been avoiding the dentist for years. This team changed that completely.”</div><div class="review-a">— Michael R.</div></div></div>
+</div></section>
+<section class="cta-section">
+<h2 data-reveal>Ready to Get Started?</h2>
+<p data-reveal>Reach out today — we’d love to hear from you.</p>
+<a href="#contact" class="btn-main" data-reveal style="display:inline-block;padding:18px 44px;font-size:17px;font-weight:700;border-radius:8px;text-decoration:none;color:#fff;background:linear-gradient(120deg,#0082e6,#66b4f0);font-family:var(--font);box-shadow:0 14px 38px rgba(0,130,230,.45)">Book a Free Consultation</a>
 </section>
-
-<svg class="divider" viewBox="0 0 1200 60" height="60" aria-hidden="true"><path d="M0 30 Q300 0 600 30 T1200 30" fill="none" stroke="#0891B2" stroke-width="1.4" opacity=".4"/></svg>
-
-<section class="chapter" id="implantaat">
-  <div class="inner" style="text-align:center">
-    <span class="tag">De kern van onze praktijk</span>
-    <h2>Eén implantaat. Een leven lang bijten, lachen, praten.</h2>
-    <p style="max-width:620px;margin:0 auto">Kijk hoe onze scan-technologie elk implantaat plant met submillimeter
-    precisie — zichtbaar terwijl u scrollt, net zoals we het elke patiënt tonen vóór behandeling.</p>
-  </div>
-</section>
-
-<section class="chapter" id="cijfers">
-  <div class="inner">
-    <span class="tag">Waarom patiënten ons kiezen</span>
-    <h2>Vertrouwen dat je kan meten</h2>
-    <div class="stats">
-      <div class="stat"><b>4.5★</b><span>504 Google reviews</span></div>
-      <div class="stat"><b>0.1mm</b><span>Scanprecisie</span></div>
-      <div class="stat"><b>25+ jr</b><span>Ervaring als groep</span></div>
-      <div class="stat"><b>1 dag</b><span>Digitale diagnose</span></div>
-    </div>
-    <div class="testi">
-      <div class="tcard"><div class="stars" aria-label="5 van 5 sterren">★★★★★ <span class="sr">(5/5)</span></div><p>"Eindelijk een tandarts waar ik rustig van word. Het implantaat
-      voelt aan alsof het er altijd al was."</p></div>
-      <div class="tcard"><div class="stars" aria-label="5 van 5 sterren">★★★★★ <span class="sr">(5/5)</span></div><p>"Duidelijke uitleg, moderne apparatuur en een team dat echt
-      luistert. Aanrader voor Antwerpen."</p></div>
-      <div class="tcard"><div class="stars" aria-label="4 van 5 sterren">★★★★☆ <span class="sr">(4/5)</span></div><p>"Snelle afspraak kunnen maken en professionele opvolging
-      na mijn implantaatbehandeling."</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="chapter" id="afspraak">
-  <div class="inner">
-    <span class="tag">Klaar voor uw nieuwe glimlach?</span>
-    <h2>Boek uw consult op de Belgiëlei</h2>
-    <p>Bel ons of laat uw gegevens achter — wij nemen binnen de werkdag contact op.</p>
-    <form class="form-mock" id="afspraakForm" novalidate>
-      <div class="field">
-        <label for="naam">Naam</label>
-        <input id="naam" name="naam" type="text" placeholder="Voor- en achternaam" required autocomplete="name">
-      </div>
-      <div class="field">
-        <label for="telefoon">Telefoonnummer</label>
-        <input id="telefoon" name="telefoon" type="tel" placeholder="04xx xx xx xx" required autocomplete="tel">
-      </div>
-      <div class="field">
-        <label for="behandeling">Gewenste behandeling</label>
-        <input id="behandeling" name="behandeling" type="text" placeholder="bv. implantaat, scan, controle">
-      </div>
-      <button class="btn" type="submit" id="submitBtn">Verstuur aanvraag</button>
-      <div class="form-status" id="formStatus" role="alert" aria-live="polite"></div>
-    </form>
-  </div>
-</section>
-</main>
-
-<footer>
-  <p><strong>Dental Implant Clinic Antwerp | Dental Clinics Group</strong></p>
-  <p>Belgiëlei 57/A, 2018 Antwerpen, België · Tel: <a href="tel:0032032398888">03 239 88 88</a></p>
-  <p>© 2024 Dental Clinics Group — dentalclinics.be</p>
-  <p class="ai-note">Deze pagina is een AI-gegenereerd conceptontwerp ter illustratie van een mogelijke website en bevat geen live gegevens van de praktijk.</p>
-</footer>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/EffectComposer.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/RenderPass.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/ShaderPass.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/CopyShader.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/LuminosityHighPassShader.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<section id="contact" class="contact-section"><div style="max-width:1100px;margin:0 auto"><div class="contact-grid">
+<div class="contact-info" data-reveal><div class="section-tag">Get In Touch</div><h2 class="section-title" style="font-size:clamp(24px,3vw,38px)"><span class="grad">Let’s Talk</span></h2>
+<p>We’re here to help. Reach out and we’ll get back to you as soon as possible.</p>
+<div class="contact-detail"><strong>📞</strong>03 239 88 88</div><div class="contact-detail"><strong>📍</strong>Belgiëlei 57/A, 2018 Antwerpen, Belgium</div>
+<div class="contact-detail"><strong>🌐</strong>https://www.dentalclinics.be/</div></div>
+<div class="contact-form" data-reveal><input type="text" placeholder="Your Name"><input type="email" placeholder="Your Email"><input type="tel" placeholder="Your Phone Number"><textarea placeholder="How can we help you?"></textarea><button type="button">Book a Free Consultation</button></div>
+</div></div></section>
+<footer><strong>Dental Implant Clinic Antwerp | Dental Clinics Group</strong> · 2018 Antwerpen · 03 239 88 88<br><span style="font-size:11px;opacity:.5;margin-top:6px;display:block">Preview mockup — website design by [Your Agency]</span></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"><\/script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.net.min.js"><\/script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
 (function(){
-  var loader=document.getElementById('loader');
-  function hideLoader(){loader.classList.add('hide');}
-
-  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function hasWebGL(){try{var c=document.createElement('canvas');return !!(c.getContext('webgl')||c.getContext('experimental-webgl'));}catch(e){return false;}}
-
-  if(reduce||!hasWebGL()||!window.THREE){ setTimeout(hideLoader,200); return; }
-
-  try{
-  var mobile = window.innerWidth<768;
-  var BG='#050e12',ACCENT='#0891B2',ACCENT2='#22D3EE';
-  var container=document.getElementById('gl');
-  var renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-  renderer.setSize(window.innerWidth,window.innerHeight);
-  container.appendChild(renderer.domElement);
-  var scene=new THREE.Scene();
-  scene.background=new THREE.Color(BG); scene.fog=new THREE.FogExp2(BG,0.016);
-  var camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,400);
-  camera.position.set(0,2,46);
-
-  function makeSprite(){var c=document.createElement('canvas');c.width=c.height=64;
-   var g=c.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);
-   r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(0.35,'rgba(255,255,255,.6)');r.addColorStop(1,'rgba(255,255,255,0)');
-   g.fillStyle=r;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c);}
-  var sprite=makeSprite();
-
-  // Universe
-  var N=mobile?3000:8000, SPREAD=42;
-  var geo=new THREE.BufferGeometry(),pos=new Float32Array(N*3),col=new Float32Array(N*3);
-  var ca=new THREE.Color(ACCENT),cb=new THREE.Color(ACCENT2),c=new THREE.Color();
-  for(var i=0;i<N;i++){var r=SPREAD*Math.pow(Math.random(),0.5),th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
-   pos[i*3]=r*Math.sin(ph)*Math.cos(th);pos[i*3+1]=r*Math.sin(ph)*Math.sin(th)*0.55;pos[i*3+2]=r*Math.cos(ph);
-   c.copy(ca).lerp(cb,Math.random());col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;}
-  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
-  var universe=new THREE.Points(geo,new THREE.PointsMaterial({size:0.55,map:sprite,vertexColors:true,transparent:true,opacity:0.9,depthWrite:false,blending:THREE.AdditiveBlending}));
-  scene.add(universe);
-
-  // Helix strand (medical/precision)
-  var strandGroup=new THREE.Group();
-  function makeHelix(rot){
-    var HN=mobile?700:1500, RADIUS=6, HEIGHT=30, TURNS=5;
-    var g=new THREE.BufferGeometry(), p=new Float32Array(HN*3);
-    for(var i=0;i<HN;i++){var t=i/HN,a=t*Math.PI*2*TURNS,w=0.35*Math.sin(t*40);
-      p[i*3]=Math.cos(a)*(RADIUS+w);p[i*3+1]=(t-0.5)*HEIGHT;p[i*3+2]=Math.sin(a)*(RADIUS+w);}
-    g.setAttribute('position',new THREE.BufferAttribute(p,3));
-    var m=new THREE.PointsMaterial({size:0.5,map:sprite,color:ACCENT2,transparent:true,opacity:0.85,depthWrite:false,blending:THREE.AdditiveBlending});
-    var pts=new THREE.Points(g,m); pts.rotation.z=rot; return pts;
-  }
-  strandGroup.add(makeHelix(0)); strandGroup.add(makeHelix(Math.PI));
-  scene.add(strandGroup);
-
-  // Centrepiece wireframe (sphere lattice for dental precision)
-  var centre=new THREE.Group();
-  var ico1=new THREE.Mesh(new THREE.IcosahedronGeometry(3.4,1),new THREE.MeshBasicMaterial({color:ACCENT,wireframe:true,transparent:true,opacity:0.5}));
-  var ico2=new THREE.Mesh(new THREE.IcosahedronGeometry(1.9,0),new THREE.MeshBasicMaterial({color:0xffffff,wireframe:true,transparent:true,opacity:0.85}));
-  var torus=new THREE.Mesh(new THREE.TorusGeometry(5.2,0.03,8,120),new THREE.MeshBasicMaterial({color:ACCENT2}));
-  torus.rotation.x=Math.PI/2.4;
-  centre.add(ico1,ico2,torus);
-  scene.add(centre);
-
-  // HERO-PRODUCT HOLOGRAM: a tooth silhouette
-  var toothShape=new THREE.Shape();
-  toothShape.moveTo(0,10);
-  toothShape.bezierCurveTo(4,10.5,7,8,7.5,3);
-  toothShape.bezierCurveTo(8,-1,6,-4,5,-9);
-  toothShape.bezierCurveTo(4.5,-11.5,2.8,-11,2,-8);
-  toothShape.bezierCurveTo(1.3,-6,0.6,-6,0,-8);
-  toothShape.bezierCurveTo(-0.6,-6,-1.3,-6,-2,-8);
-  toothShape.bezierCurveTo(-2.8,-11,-4.5,-11.5,-5,-9);
-  toothShape.bezierCurveTo(-6,-4,-8,-1,-7.5,3);
-  toothShape.bezierCurveTo(-7,8,-4,10.5,0,10);
-
-  var MAXP=mobile?1600:3400;
-  var shapeGeo=new THREE.ShapeGeometry(toothShape,24);
-  var vpos=shapeGeo.attributes.position.array, idx=shapeGeo.index.array;
-  var tris=[],totalArea=0;
-  for(var t=0;t<idx.length;t+=3){
-    var ia=idx[t]*3,ib=idx[t+1]*3,ic=idx[t+2]*3;
-    var ax=vpos[ia],ay=vpos[ia+1],bx=vpos[ib],by=vpos[ib+1],cx=vpos[ic],cy=vpos[ic+1];
-    var area=Math.abs((bx-ax)*(cy-ay)-(cx-ax)*(by-ay))/2;
-    totalArea+=area; tris.push({ax:ax,ay:ay,bx:bx,by:by,cx:cx,cy:cy,area:area});
-  }
-  var FN=Math.floor(MAXP*0.6);
-  var fillCloud=new Float32Array(FN*3), fillTarget=new Float32Array(FN*3);
-  for(var i=0;i<FN;i++){
-    var rnd=Math.random()*totalArea, acc=0, tri=tris[0];
-    for(var k=0;k<tris.length;k++){acc+=tris[k].area; if(acc>=rnd){tri=tris[k];break;}}
-    var u=Math.random(),v=Math.random(); if(u+v>1){u=1-u;v=1-v;}
-    var px=tri.ax+u*(tri.bx-tri.ax)+v*(tri.cx-tri.ax);
-    var py=tri.ay+u*(tri.by-tri.ay)+v*(tri.cy-tri.ay);
-    fillTarget[i*3]=px*1.5; fillTarget[i*3+1]=py*1.5; fillTarget[i*3+2]=(Math.random()-0.5)*1.2;
-    var rr=27*Math.pow(Math.random(),0.5),th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
-    fillCloud[i*3]=rr*Math.sin(ph)*Math.cos(th); fillCloud[i*3+1]=rr*Math.sin(ph)*Math.sin(th); fillCloud[i*3+2]=rr*Math.cos(ph);
-  }
-  var fillGeo=new THREE.BufferGeometry();
-  fillGeo.setAttribute('position',new THREE.BufferAttribute(fillCloud.slice(),3));
-  var fillMat=new THREE.PointsMaterial({size:0.24,map:sprite,color:ACCENT,transparent:true,opacity:0.5,depthWrite:false,blending:THREE.AdditiveBlending});
-  var fillPts=new THREE.Points(fillGeo,fillMat); scene.add(fillPts);
-
-  var outlinePts2D=toothShape.getPoints(240);
-  var ON=MAXP-FN;
-  var outCloud=new Float32Array(ON*3), outTarget=new Float32Array(ON*3);
-  for(var i=0;i<ON;i++){
-    var op=outlinePts2D[Math.floor(Math.random()*outlinePts2D.length)];
-    outTarget[i*3]=op.x*1.5+(Math.random()-0.5)*0.12; outTarget[i*3+1]=op.y*1.5+(Math.random()-0.5)*0.12; outTarget[i*3+2]=(Math.random()-0.5)*0.5;
-    var rr=29*Math.pow(Math.random(),0.5),th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
-    outCloud[i*3]=rr*Math.sin(ph)*Math.cos(th); outCloud[i*3+1]=rr*Math.sin(ph)*Math.sin(th); outCloud[i*3+2]=rr*Math.cos(ph);
-  }
-  var outGeo=new THREE.BufferGeometry();
-  outGeo.setAttribute('position',new THREE.BufferAttribute(outCloud.slice(),3));
-  var outMat=new THREE.PointsMaterial({size:0.4,map:sprite,color:0x9df3ff,transparent:true,opacity:0.95,depthWrite:false,blending:THREE.AdditiveBlending});
-  var outPts=new THREE.Points(outGeo,outMat); scene.add(outPts);
-
-  var morph={t:0};
-  var fillAttr=fillGeo.attributes.position, outAttr=outGeo.attributes.position;
-
-  var composer=new THREE.EffectComposer(renderer);
-  composer.addPass(new THREE.RenderPass(scene,camera));
-  var bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.25,0.85,0.12);
-  composer.addPass(bloom);
-
-  var mouse={x:0,y:0};
-  window.addEventListener('mousemove',function(e){
-    mouse.x=(e.clientX/innerWidth-0.5)*(mobile?0:1);
-    mouse.y=(e.clientY/innerHeight-0.5)*(mobile?0:1);
-  });
-
-  gsap.registerPlugin(ScrollTrigger);
-  var cam={x:0,y:2,z:46,ry:0};
-  var tl=gsap.timeline({scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:1.1}});
-  tl.to(cam,{z:26,y:1,ease:'none',duration:1},0)
-    .to(cam,{ry:Math.PI*0.4,x:-5,z:20,ease:'none',duration:1},1)
-    .to(centre.scale,{x:0.001,y:0.001,z:0.001,ease:'none',duration:0.6},1.9)
-    .to(morph,{t:1,ease:'none',duration:0.9,onStart:function(){document.getElementById('hud').classList.add('show');},
-       onComplete:function(){setTimeout(function(){document.getElementById('hud').classList.remove('show');},400);}},2.0)
-    .to(cam,{z:17,y:-0.6,ry:Math.PI*0.7,ease:'none',duration:1},2.2)
-    .to(cam,{z:15,y:-1,ry:Math.PI*0.9,ease:'none',duration:1},3.2)
-    .to(strandGroup.rotation,{y:Math.PI*1.6,ease:'none',duration:4},0)
-    .to(bloom,{strength:1.5,ease:'none',duration:1},3);
-
-  document.querySelectorAll('.chapter .inner').forEach(function(el){
-    gsap.from(el,{opacity:0,y:60,duration:1,scrollTrigger:{trigger:el,start:'top 78%'}});
-  });
-
-  function animate(){
-    requestAnimationFrame(animate);
-    universe.rotation.y+=0.0006;
-    if(morph.t>0){
-      var fp=fillAttr.array;
-      for(var i=0;i<FN;i++){fp[i*3]=fillCloud[i*3]+(fillTarget[i*3]-fillCloud[i*3])*morph.t;
-        fp[i*3+1]=fillCloud[i*3+1]+(fillTarget[i*3+1]-fillCloud[i*3+1])*morph.t;
-        fp[i*3+2]=fillCloud[i*3+2]+(fillTarget[i*3+2]-fillCloud[i*3+2])*morph.t;}
-      fillAttr.needsUpdate=true;
-      var op=outAttr.array;
-      for(var i=0;i<ON;i++){op[i*3]=outCloud[i*3]+(outTarget[i*3]-outCloud[i*3])*morph.t;
-        op[i*3+1]=outCloud[i*3+1]+(outTarget[i*3+1]-outCloud[i*3+1])*morph.t;
-        op[i*3+2]=outCloud[i*3+2]+(outTarget[i*3+2]-outCloud[i*3+2])*morph.t;}
-      outAttr.needsUpdate=true;
-      fillPts.quaternion.copy(camera.quaternion);
-      outPts.quaternion.copy(camera.quaternion);
-    }
-    camera.position.z+=(cam.z-camera.position.z)*0.08;
-    camera.position.x+=((Math.sin(cam.ry)*camera.position.z*0.35+mouse.x*2.2)-camera.position.x)*0.06;
-    camera.position.y+=((cam.y-mouse.y*1.6)-camera.position.y)*0.06;
-    camera.lookAt(0,0,0);
-    composer.render();
-  }
-  animate();
-  requestAnimationFrame(function(){ setTimeout(hideLoader,250); });
-
-  window.addEventListener('resize',function(){
-    camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix();
-    renderer.setSize(innerWidth,innerHeight); composer.setSize(innerWidth,innerHeight);
-  });
-  }catch(e){ hideLoader(); }
-})();
-
-// Form: accessible loading / success / error states (mock)
-(function(){
-  var form=document.getElementById('afspraakForm');
-  if(!form) return;
-  var btn=document.getElementById('submitBtn');
-  var status=document.getElementById('formStatus');
-  form.addEventListener('submit',function(e){
-    e.preventDefault();
-    var naam=form.naam.value.trim(), tel=form.telefoon.value.trim();
-    status.classList.remove('error');
-    if(!naam||!tel){
-      status.textContent='Vul uw naam en telefoonnummer in zodat we u kunnen terugbellen.';
-      status.classList.add('error');
-      (naam?form.telefoon:form.naam).focus();
-      return;
-    }
-    btn.disabled=true;
-    var original=btn.textContent;
-    btn.innerHTML='<span class="spinner-sm" aria-hidden="true"></span> Versturen…';
-    status.textContent='Uw aanvraag wordt verstuurd…';
-    setTimeout(function(){
-      btn.disabled=false;
-      btn.textContent=original;
-      status.textContent='Bedankt, '+naam+'! We nemen binnen de werkdag telefonisch contact met u op.';
-    },1200);
-  });
+var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function hasWebGL(){try{var c=document.createElement("canvas");return !!(window.WebGLRenderingContext&&(c.getContext("webgl")||c.getContext("experimental-webgl")));}catch(e){return false;}}
+if(!reduce&&hasWebGL()&&window.VANTA){try{var CFG={"effect":"NET","color":33510,"backgroundColor":4210752,"points":10,"maxDistance":22,"spacing":16};var fx=CFG.effect;delete CFG.effect;if(VANTA[fx]){VANTA[fx](Object.assign({el:"#vanta-hero",mouseControls:true,touchControls:true,gyroControls:false,minHeight:200,minWidth:200,scale:1,scaleMobile:1},CFG));}}catch(e){}}
+var bar=document.getElementById("progress");
+if(bar){var upd=function(){var h=document.documentElement;var m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?(h.scrollTop/m*100):0)+"%";};window.addEventListener("scroll",upd,{passive:true});upd();}
+var fine=window.matchMedia("(hover:hover) and (pointer:fine)").matches;
+if(fine&&!reduce){document.querySelectorAll("[data-tilt]").forEach(function(el){el.addEventListener("pointermove",function(e){var r=el.getBoundingClientRect();var x=(e.clientX-r.left)/r.width-0.5;var y=(e.clientY-r.top)/r.height-0.5;el.style.transform="perspective(900px) rotateX("+(-y*5).toFixed(2)+"deg) rotateY("+(x*7).toFixed(2)+"deg) translateY(-6px)";});el.addEventListener("pointerleave",function(){el.style.transform="";});});}
+if(window.gsap&&!reduce&&window.ScrollTrigger){gsap.registerPlugin(ScrollTrigger);gsap.utils.toArray("[data-reveal]").forEach(function(el){gsap.from(el,{opacity:0,y:42,duration:.9,ease:"power3.out",scrollTrigger:{trigger:el,start:"top 86%"}});});gsap.utils.toArray("[data-stagger]").forEach(function(g){gsap.from(g.children,{opacity:0,y:42,duration:.8,ease:"power3.out",stagger:.12,scrollTrigger:{trigger:g,start:"top 82%"}});});gsap.to(".hero-content",{yPercent:16,opacity:.55,ease:"none",scrollTrigger:{trigger:".hero",start:"top top",end:"bottom top",scrub:true}});document.querySelectorAll(".stat-n").forEach(function(el){var txt=el.textContent.trim();var i=0;while(i<txt.length&&!(txt.charAt(i)>="0"&&txt.charAt(i)<="9"))i++;if(i>=txt.length)return;var j=i;while(j<txt.length&&((txt.charAt(j)>="0"&&txt.charAt(j)<="9")||txt.charAt(j)===","||txt.charAt(j)==="."))j++;var pre=txt.slice(0,i),numStr=txt.slice(i,j).replace(/,/g,""),suf=txt.slice(j),target=parseFloat(numStr);if(isNaN(target))return;var dec=numStr.indexOf(".")>=0?1:0,o={v:0};gsap.to(o,{v:target,duration:1.7,ease:"power2.out",scrollTrigger:{trigger:el,start:"top 92%"},onUpdate:function(){el.textContent=pre+(dec?o.v.toFixed(1):Math.round(o.v).toLocaleString())+suf;},onComplete:function(){el.textContent=pre+(dec?target.toFixed(1):Math.round(target).toLocaleString())+suf;}});});}
 })();
 </script>
 </body>
