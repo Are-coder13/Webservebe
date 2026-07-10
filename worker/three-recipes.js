@@ -34,6 +34,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
 renderer.setSize(window.innerWidth,window.innerHeight);
 scene.background=new THREE.Color(BG); scene.fog=new THREE.FogExp2(BG,0.016);
 var camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,400); camera.position.set(0,2,46);
+var clock=new THREE.Clock(); // drives RECIPE F2/G2 ambient motion — declare once, read in animate()
 
 RECIPE A — soft particle sprite (no image assets ever):
 function makeSprite(){var c=document.createElement('canvas');c.width=c.height=64;
@@ -110,6 +111,37 @@ camera.position.y+=((cam.y-mouse.y*1.6)-camera.position.y)*0.06;
 camera.lookAt(0,0,0); composer.render();
 Also gsap.from() each .chapter .inner (opacity 0, y:60) with its own ScrollTrigger at 'top 78%'.
 
+RECIPE F2 — AMBIENT MOTION (MANDATORY — the scene must be ALIVE at rest, before/without any scroll):
+The camera moves and the strand rotation in RECIPE F are driven by SCROLL. On their own,
+that means a visitor sitting at the top of the page (not scrolling) sees a FROZEN scene —
+this is the #1 way these pages look dead. FIX: in animate(), advance a clock and apply
+continuous, scroll-INDEPENDENT motion EVERY frame, on top of whatever the scroll timeline does:
+var t=clock.getElapsedTime();
+// 1) slow idle spin of objects the SCROLL TIMELINE does NOT already rotate
+//    (universe + centrepiece here; the strand keeps its scroll-driven spin):
+universe.rotation.y=t*0.04; centrepiece.rotation.y=t*0.12; centrepiece.rotation.x=Math.sin(t*0.3)*0.15;
+// 2) a gentle breathing bob so nothing is rigid:
+centrepiece.position.y=Math.sin(t*0.6)*0.4;
+// 3) subtle shimmer: nudge a Points material opacity or size on a sine (optional but nice).
+IMPORTANT: only assign time-based absolute rotation to objects the scroll GSAP timeline does
+NOT tween (or GSAP will overwrite it each scroll tick). If you also want the strand alive at
+rest, wrap it in an extra parent Group and idle-spin THAT parent, leaving the inner strand for
+the scroll tween. The result: motionless page = still gently rotating & breathing; on scroll =
+the choreographed chapters ON TOP. NEVER ship a hero whose only motion is scroll or mouse parallax.
+
+RECIPE G2 — ANIMATING THE HERO PRODUCT (e.g. the tooth) so it is never a static prop:
+The RECIPE G hologram morph (morph.t 0->1) is SCROLL-driven, so at the top of the page the
+product silhouette can look frozen. Give the hero product its OWN continuous life in animate(),
+independent of scroll, so it reads as a live hologram even at rest:
+- billboard + slow idle yaw every frame: holoGroup.rotation.y=Math.sin(t*0.25)*0.5; (a slow
+  left-right turn, not just a static face-on plane), PLUS the per-point billboard to camera.
+- shimmer/scan: oscillate the OUTLINE points opacity (0.7<->1) on a ~2s sine, or drift a few
+  points along the silhouette, so the outline pulses like a live scan.
+- a slow vertical float: holoGroup.position.y=Math.sin(t*0.5)*0.3.
+- START the morph partly formed (morph.t ease 0.15->1 across scroll, not 0->1) so the shape is
+  already legible on load, then completes as the user scrolls into the reveal chapter.
+The tooth (or any flagship silhouette) must be visibly rotating/shimmering/floating at ALL times.
+
 RECIPE H — SCAN/TARGETING HUD (optional; use ONLY for precision/tech/security-coded
 trades — dental, auto diagnostics, legal, security, engineering, medical. Skip it
 entirely for warm/casual trades like restaurants, salons, cafes — it reads cold there):
@@ -145,6 +177,10 @@ MANDATORY GUARDS (all of them, every time):
 - resize handler updates camera.aspect + updateProjectionMatrix() + renderer AND composer setSize.
 - r128 API only: no CapsuleGeometry (r142+), no THREE.Geometry (removed), BufferGeometry everywhere.
 - Never create geometry/materials inside animate(). Share one sprite texture across all Points.
+- ALWAYS-ON MOTION: every scene MUST include RECIPE F2 ambient motion so it animates at rest
+  (idle rotation + breathing), and any hero product (RECIPE G) MUST animate continuously per
+  RECIPE G2. A scene whose only motion is scroll/mouse (frozen when still) is a failure — use a
+  THREE.Clock and advance object rotations/positions every frame regardless of scroll.
 - Points materials always: transparent:true, depthWrite:false, blending:THREE.AdditiveBlending.
 - Total particle budget <= 16000 across all systems; segment counts modest (wireframes look BETTER low-poly).`;
 }
