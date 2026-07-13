@@ -20,6 +20,7 @@ import { designBrief, qaChecklist, classifyDomain } from './design-knowledge.js'
 import { threeRecipes } from './three-recipes.js';
 import { captureFrames, extractSiteBrand } from './screenshot.js';
 import { exemplarBlock } from './exemplars.js';
+import { motifBlock } from './motifs.js';
 
 const MODEL = 'claude-opus-4-8';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
@@ -125,7 +126,8 @@ function conceptSystem() {
     '  "offering": "the ONE flagship product or service this business is really selling",',
     '  "feeling": "the core emotion the visitor should feel",',
     '  "3d_story": "how a procedural, asset-free 3D world visualises that offering — the 3D is the pitch, not decoration",',
-    '  "silhouette": "the core product/service drawn as a single 2D shape for the hologram reveal (e.g. tooth, wrench, flacon, plate, gavel, house)",',
+    '  "silhouette": "the hologram subject as a single 2D shape — chosen from the MOTIF SELECTION angles to reflect THIS client\'s specific flagship/specialty, NOT the generic trade default. Do not pick a motif that would fit any competitor equally (e.g. not just a plain tooth for a dentist — an implant clinic gets an implant, an orthodontist gets an aligner, a whitening studio gets a radiant smile). State the specific shape.",',
+    '  "silhouette_rationale": "one line: why THIS shape for THIS client — which service/specialty/differentiator from the scrape it comes from",',
     '  "strand_curve": "one of: helix | torus-knot | flat-spiral-galaxy | lissajous-ribbon (choose by brand mood)",',
     '  "centrepiece": "the glowing wireframe hero geometry the camera flies around (e.g. icosahedron lattice, octahedron stack, torus-knot, sphere lattice)",',
     '  "use_hud": true or false — true ONLY for precision/tech-coded trades (dental, auto diagnostics, legal, medical, engineering, security); false for warm trades (restaurant, salon, cafe, bakery)",',
@@ -174,6 +176,7 @@ function conceptBrief(c) {
     `- feeling: ${c.feeling || ''}`,
     `- 3d story: ${c['3d_story'] || ''}`,
     `- hologram silhouette (RECIPE G): ${c.silhouette || ''}`,
+    c.silhouette_rationale ? `  (why this shape: ${c.silhouette_rationale})` : '',
     `- light-strand curve (RECIPE C): ${c.strand_curve || ''}`,
     `- centrepiece geometry (RECIPE D): ${c.centrepiece || ''}`,
     `- scan/targeting HUD (RECIPE H): ${c.use_hud ? 'YES — this is a precision/tech trade' : 'NO — warm/casual trade, do not use it'}`,
@@ -446,7 +449,7 @@ export default {
       try {
         const concept = extractJson(await callClaudeStream(
           env, conceptSystem(),
-          ctx + '\n\n' + brief + '\n\n' + exemplar +
+          ctx + '\n\n' + brief + '\n\n' + exemplar + '\n\n' + motifBlock(domain) +
             '\n\nNow decide the concept. Output only the JSON object.',
           null, 2000
         ));
