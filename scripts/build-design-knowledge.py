@@ -61,9 +61,27 @@ PATTERN_DOMAINS = {
     "Scroll-Triggered Storytelling": ["general", "auto", "beauty"],
 }
 
+# ui-reasoning.csv shares the local-business category names with colors.csv, so
+# reuse the palette domain map to pick the decision-rules rows that apply.
+REASONING_DOMAINS = PALETTE_DOMAINS
+
 def rows(name):
     with open(os.path.join(DATA, name), newline="") as f:
         return list(csv.DictReader(f))
+
+import re
+def humanize_rules(raw):
+    """Decision_Rules cells are JSON-ish maps like
+    {"if_luxury": "switch-to-liquid-glass", "must_have": "case-studies"}.
+    Render them as short readable 'condition -> action' phrases. Uses a regex
+    (not json.loads) because cells can repeat a key, e.g. two "must_have"s."""
+    raw = (raw or "").strip()
+    if not raw:
+        return []
+    pairs = re.findall(r'"([^"]+)"\s*:\s*"([^"]+)"', raw)
+    if not pairs:
+        return [raw]
+    return [f'{k.replace("_", " ")}: {v.replace("-", " ")}' for k, v in pairs]
 
 # ── palettes ─────────────────────────────────────────────────────────────────
 palettes = []
@@ -125,6 +143,19 @@ for r in rows("ux-guidelines.csv"):
         seen.add(item)
         checklist.append(item)
 
+# ── reasoning (decision rules + anti-patterns per business type) ──────────────
+reasoning = []
+for r in rows("ui-reasoning.csv"):
+    cat = r["UI_Category"]
+    if cat not in REASONING_DOMAINS:
+        continue
+    reasoning.append({
+        "domains": REASONING_DOMAINS[cat], "type": cat,
+        "colorMood": r["Color_Mood"], "typographyMood": r["Typography_Mood"],
+        "decisionRules": humanize_rules(r["Decision_Rules"]),
+        "antiPatterns": [a.strip() for a in (r["Anti_Patterns"] or "").split("+") if a.strip()],
+    })
+
 def dump(name, obj):
     return f"export const {name} = " + json.dumps(obj, ensure_ascii=False, indent=2) + ";\n"
 
@@ -179,6 +210,7 @@ export function pickShortlist(place, branding) {
     fonts: pick(FONTS, 4),
     patterns: pick(PATTERNS, 3),
     styles: pick(STYLES, 3),
+    reasoning: pick(REASONING, 2),
   };
 }
 
@@ -210,6 +242,24 @@ export function designBrief(place, branding) {
   for (const st of s.styles) {
     lines.push(`- ${st.name}: ${st.keywords}. Effects: ${st.effects}`);
   }
+  if (s.reasoning && s.reasoning.length) {
+    lines.push('');
+    lines.push('DESIGN DECISION RULES & ANTI-PATTERNS (expert judgment for this business type). ' +
+               'Use the mood cues as brand direction and honour the colour/credibility anti-patterns ' +
+               '(e.g. no neon, no AI purple/pink gradients, never hide credentials, no playful tone on a ' +
+               'serious trade). NOTE: this site is a deliberately dark, cinematic WebGL experience — where ' +
+               'a rule conflicts with that medium (e.g. "avoid dark mode", "avoid animation"), the cinematic ' +
+               'direction wins; apply the rule\\'s spirit to palette, type and restraint instead:');
+    for (const r of s.reasoning) {
+      lines.push(`- ${r.type}: colour mood → ${r.colorMood}; type mood → ${r.typographyMood}.`);
+      if (r.decisionRules && r.decisionRules.length) {
+        lines.push(`  decide: ${r.decisionRules.join('; ')}.`);
+      }
+      if (r.antiPatterns && r.antiPatterns.length) {
+        lines.push(`  AVOID: ${r.antiPatterns.join('; ')}.`);
+      }
+    }
+  }
   return lines.join('\\n');
 }
 
@@ -226,9 +276,10 @@ with open(OUT, "w") as f:
     f.write("\n" + dump("FONTS", fonts))
     f.write("\n" + dump("STYLES", styles))
     f.write("\n" + dump("PATTERNS", patterns))
+    f.write("\n" + dump("REASONING", reasoning))
     f.write("\n" + dump("CHECKLIST", checklist))
     f.write(body)
 
 print(f"Wrote {OUT}")
 print(f"  palettes={len(palettes)} fonts={len(fonts)} styles={len(styles)} "
-      f"patterns={len(patterns)} checklist={len(checklist)}")
+      f"patterns={len(patterns)} reasoning={len(reasoning)} checklist={len(checklist)}")

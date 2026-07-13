@@ -914,6 +914,393 @@ export const PATTERNS = [
   }
 ];
 
+export const REASONING = [
+  {
+    "domains": [
+      "general"
+    ],
+    "type": "SaaS (General)",
+    "colorMood": "Trust blue + Accent contrast",
+    "typographyMood": "Professional + Hierarchy",
+    "decisionRules": [
+      "if ux focused: prioritize minimalism",
+      "if data heavy: add glassmorphism"
+    ],
+    "antiPatterns": [
+      "Excessive animation",
+      "Dark mode by default"
+    ]
+  },
+  {
+    "domains": [
+      "general"
+    ],
+    "type": "B2B Service",
+    "colorMood": "Professional blue + Neutral grey",
+    "typographyMood": "Formal + Clear typography",
+    "decisionRules": [
+      "must have: case studies",
+      "must have: roi messaging"
+    ],
+    "antiPatterns": [
+      "Playful design",
+      "Hidden credentials",
+      "AI purple/pink gradients"
+    ]
+  },
+  {
+    "domains": [
+      "health"
+    ],
+    "type": "Healthcare App",
+    "colorMood": "Calm blue + Health green",
+    "typographyMood": "Readable + Large type (16px+)",
+    "decisionRules": [
+      "must have: wcag aaa compliance",
+      "if medication: red alert colors"
+    ],
+    "antiPatterns": [
+      "Bright neon colors",
+      "Motion-heavy animations",
+      "AI purple/pink gradients"
+    ]
+  },
+  {
+    "domains": [
+      "health",
+      "beauty"
+    ],
+    "type": "Mental Health App",
+    "colorMood": "Calm Pastels + Trust colors",
+    "typographyMood": "Calming + Readable typography",
+    "decisionRules": [
+      "must have: privacy first",
+      "if meditation: add breathing animation"
+    ],
+    "antiPatterns": [
+      "Bright neon",
+      "Motion overload"
+    ]
+  },
+  {
+    "domains": [
+      "general",
+      "home"
+    ],
+    "type": "Hyperlocal Services",
+    "colorMood": "Location markers + Trust colors",
+    "typographyMood": "Clear + Functional typography",
+    "decisionRules": [
+      "must have: map integration",
+      "must have: booking system"
+    ],
+    "antiPatterns": [
+      "No map",
+      "Hidden reviews"
+    ]
+  },
+  {
+    "domains": [
+      "beauty",
+      "health"
+    ],
+    "type": "Beauty/Spa/Wellness Service",
+    "colorMood": "Soft pastels (Pink Sage Cream) + Gold accents",
+    "typographyMood": "Elegant + Calming typography",
+    "decisionRules": [
+      "must have: booking system",
+      "must have: before after gallery",
+      "if luxury: add gold accents"
+    ],
+    "antiPatterns": [
+      "Bright neon colors",
+      "Harsh animations",
+      "Dark mode"
+    ]
+  },
+  {
+    "domains": [
+      "beauty"
+    ],
+    "type": "Luxury/Premium Brand",
+    "colorMood": "Black + Gold (#FFD700) + White",
+    "typographyMood": "Elegant + Refined typography",
+    "decisionRules": [
+      "must have: high quality imagery",
+      "must have: storytelling"
+    ],
+    "antiPatterns": [
+      "Cheap visuals",
+      "Fast animations"
+    ]
+  },
+  {
+    "domains": [
+      "food"
+    ],
+    "type": "Restaurant/Food Service",
+    "colorMood": "Warm colors (Orange Red Brown)",
+    "typographyMood": "Appetizing + Clear typography",
+    "decisionRules": [
+      "must have: high_quality_images",
+      "if delivery: emphasize speed"
+    ],
+    "antiPatterns": [
+      "Low-quality imagery",
+      "Outdated hours"
+    ]
+  },
+  {
+    "domains": [
+      "home",
+      "general"
+    ],
+    "type": "Real Estate/Property",
+    "colorMood": "Trust Blue + Gold + White",
+    "typographyMood": "Professional + Confident",
+    "decisionRules": [
+      "if luxury: add 3d models",
+      "must have: map integration"
+    ],
+    "antiPatterns": [
+      "Poor photos",
+      "No virtual tours"
+    ]
+  },
+  {
+    "domains": [
+      "general"
+    ],
+    "type": "Legal Services",
+    "colorMood": "Navy Blue (#1E3A5F) + Gold + White",
+    "typographyMood": "Professional + Authoritative typography",
+    "decisionRules": [
+      "must have: case results",
+      "must have: credential display"
+    ],
+    "antiPatterns": [
+      "Outdated design",
+      "Hidden credentials",
+      "AI purple/pink gradients"
+    ]
+  },
+  {
+    "domains": [
+      "auto",
+      "home"
+    ],
+    "type": "Logistics/Delivery",
+    "colorMood": "Blue (#2563EB) + Orange (tracking) + Green",
+    "typographyMood": "Clear + Functional typography",
+    "decisionRules": [
+      "must have: tracking map",
+      "must have: delivery updates"
+    ],
+    "antiPatterns": [
+      "Static tracking",
+      "No map integration",
+      "AI purple/pink gradients"
+    ]
+  },
+  {
+    "domains": [
+      "home",
+      "auto"
+    ],
+    "type": "Construction/Architecture",
+    "colorMood": "Grey (#4A4A4A) + Orange (safety) + Blueprint Blue",
+    "typographyMood": "Professional + Bold typography",
+    "decisionRules": [
+      "must have: project portfolio",
+      "if team collaboration: add real time updates"
+    ],
+    "antiPatterns": [
+      "2D-only layouts",
+      "Poor image quality",
+      "AI purple/pink gradients"
+    ]
+  },
+  {
+    "domains": [
+      "auto"
+    ],
+    "type": "Automotive/Car Dealership",
+    "colorMood": "Brand colors + Metallic + Dark/Light",
+    "typographyMood": "Bold + Confident typography",
+    "decisionRules": [
+      "must have: vehicle comparison",
+      "must have: financing calculator"
+    ],
+    "antiPatterns": [
+      "Static product pages",
+      "Poor UX"
+    ]
+  },
+  {
+    "domains": [
+      "beauty"
+    ],
+    "type": "Photography Studio",
+    "colorMood": "Black + White + Minimal accent",
+    "typographyMood": "Elegant + Minimal typography",
+    "decisionRules": [
+      "must have: portfolio showcase",
+      "if booking: add calendar system"
+    ],
+    "antiPatterns": [
+      "Heavy text",
+      "Poor image showcase"
+    ]
+  },
+  {
+    "domains": [
+      "home",
+      "auto"
+    ],
+    "type": "Home Services (Plumber/Electrician)",
+    "colorMood": "Trust Blue + Safety Orange + Grey",
+    "typographyMood": "Professional + Clear typography",
+    "decisionRules": [
+      "must have: emergency contact",
+      "must have: certifications display"
+    ],
+    "antiPatterns": [
+      "Hidden contact info",
+      "No certifications"
+    ]
+  },
+  {
+    "domains": [
+      "health"
+    ],
+    "type": "Medical Clinic",
+    "colorMood": "Medical Blue (#0077B6) + Trust White",
+    "typographyMood": "Professional + Readable typography",
+    "decisionRules": [
+      "must have: appointment booking",
+      "must have: insurance info"
+    ],
+    "antiPatterns": [
+      "Outdated interface",
+      "Confusing booking",
+      "AI purple/pink gradients"
+    ]
+  },
+  {
+    "domains": [
+      "health"
+    ],
+    "type": "Pharmacy/Drug Store",
+    "colorMood": "Pharmacy Green + Trust Blue + Clean White",
+    "typographyMood": "Clear + Functional typography",
+    "decisionRules": [
+      "must have: prescription management",
+      "must have: drug interaction warnings"
+    ],
+    "antiPatterns": [
+      "Confusing layout",
+      "Privacy concerns",
+      "AI purple/pink gradients"
+    ]
+  },
+  {
+    "domains": [
+      "health"
+    ],
+    "type": "Dental Practice",
+    "colorMood": "Fresh Blue + White + Smile Yellow",
+    "typographyMood": "Friendly + Professional typography",
+    "decisionRules": [
+      "must have: before after gallery",
+      "must have: appointment system"
+    ],
+    "antiPatterns": [
+      "Poor imagery",
+      "No testimonials"
+    ]
+  },
+  {
+    "domains": [
+      "health"
+    ],
+    "type": "Veterinary Clinic",
+    "colorMood": "Caring Blue + Pet colors + Warm",
+    "typographyMood": "Friendly + Welcoming typography",
+    "decisionRules": [
+      "must have: pet portal",
+      "must have: emergency contact"
+    ],
+    "antiPatterns": [
+      "Generic design",
+      "Hidden services"
+    ]
+  },
+  {
+    "domains": [
+      "food"
+    ],
+    "type": "Bakery/Cafe",
+    "colorMood": "Warm Brown + Cream + Appetizing accents",
+    "typographyMood": "Warm + Inviting typography",
+    "decisionRules": [
+      "must have: menu display",
+      "must have: online ordering"
+    ],
+    "antiPatterns": [
+      "Poor food photos",
+      "Hidden hours"
+    ]
+  },
+  {
+    "domains": [
+      "food"
+    ],
+    "type": "Brewery/Winery",
+    "colorMood": "Deep amber/burgundy + Gold + Craft",
+    "typographyMood": "Artisanal + Heritage typography",
+    "decisionRules": [
+      "must have: product showcase",
+      "must have: story heritage"
+    ],
+    "antiPatterns": [
+      "Generic product pages",
+      "No story"
+    ]
+  },
+  {
+    "domains": [
+      "general",
+      "health"
+    ],
+    "type": "Booking & Appointment App",
+    "colorMood": "Trust blue + available green + booked grey + confirm accent",
+    "typographyMood": "Bold + Clean + Sans-serif",
+    "decisionRules": [
+      "if conversion focused: add urgency colors"
+    ],
+    "antiPatterns": [
+      "Complex shadows",
+      "3D effects"
+    ]
+  },
+  {
+    "domains": [
+      "general"
+    ],
+    "type": "Local Events & Discovery",
+    "colorMood": "City vibrant + event category colors + map accent + date highlight",
+    "typographyMood": "Energetic + Bold + Large",
+    "decisionRules": [
+      "if ux focused: prioritize clarity",
+      "if mobile: optimize touch targets"
+    ],
+    "antiPatterns": [
+      "Muted colors",
+      "Low energy"
+    ]
+  }
+];
+
 export const CHECKLIST = [
   "Navigation: Use scroll-behavior: smooth on html element",
   "Navigation: Preserve navigation history properly",
@@ -994,6 +1381,7 @@ export function pickShortlist(place, branding) {
     fonts: pick(FONTS, 4),
     patterns: pick(PATTERNS, 3),
     styles: pick(STYLES, 3),
+    reasoning: pick(REASONING, 2),
   };
 }
 
@@ -1024,6 +1412,24 @@ export function designBrief(place, branding) {
   lines.push('Candidate visual styles:');
   for (const st of s.styles) {
     lines.push(`- ${st.name}: ${st.keywords}. Effects: ${st.effects}`);
+  }
+  if (s.reasoning && s.reasoning.length) {
+    lines.push('');
+    lines.push('DESIGN DECISION RULES & ANTI-PATTERNS (expert judgment for this business type). ' +
+               'Use the mood cues as brand direction and honour the colour/credibility anti-patterns ' +
+               '(e.g. no neon, no AI purple/pink gradients, never hide credentials, no playful tone on a ' +
+               'serious trade). NOTE: this site is a deliberately dark, cinematic WebGL experience — where ' +
+               'a rule conflicts with that medium (e.g. "avoid dark mode", "avoid animation"), the cinematic ' +
+               'direction wins; apply the rule\'s spirit to palette, type and restraint instead:');
+    for (const r of s.reasoning) {
+      lines.push(`- ${r.type}: colour mood → ${r.colorMood}; type mood → ${r.typographyMood}.`);
+      if (r.decisionRules && r.decisionRules.length) {
+        lines.push(`  decide: ${r.decisionRules.join('; ')}.`);
+      }
+      if (r.antiPatterns && r.antiPatterns.length) {
+        lines.push(`  AVOID: ${r.antiPatterns.join('; ')}.`);
+      }
+    }
   }
   return lines.join('\n');
 }
