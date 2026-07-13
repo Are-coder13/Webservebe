@@ -1,400 +1,381 @@
 <!DOCTYPE html>
-<!-- CONCEPT: offering=premium tandheelkundige implantaten — een vast, natuurlijk gebit dat een leven lang meegaat; feeling=vertrouwen in vakmanschap — de angst voor een 'gat' in je lach vervangen door de rust van een blijvende, verankerde oplossing; 3d-story=een scroll-driven drift van koele partikels condenseert tot een glinsterend draadmodel van een tandimplantaat (titanium schroef verankerd in kaakbot, kroon licht op); camera cirkelt rond het implantaat terwijl een scan-HUD de precisie meet; chapters=1 establishing hero, 2 push-in filosofie, 3 orbit hologram implantaat + HUD, 4 close approach reviews/stats + HUD cijfers, 5 settle op opgelicht implantaat CTA -->
-<html lang="nl">
+<!-- CONCEPT: offering=guided sub-millimetre dental implant rehabilitation by a multicultural INAMI/RIZIV team using SIRONA Cone Beam 3D imaging; feeling=confident precision - relief of world-class specialists rebuilding your smile to 1/10mm in your own language; 3d-story=particle cloud resolves into a rotating volumetric cone-beam field, a glowing wireframe lattice implies the scanned jaw, a molar+implant hologram forms with an alignment reticle locking on to 1/10mm; chapters=(1)multicultural destination wide drift (2)accredited world dentists push-in (3)Cone Beam jaw hologram orbit+HUD (4)SIRONA scanners crown lock close approach (5)appointment Antwerp settle behind PRECISION poster word -->
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dental Implant Clinic Antwerp | Een vast gebit dat blijft</title>
+<title>Dental Implant Clinic Antwerp | Dental Clinics Group</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --primary:#0891B2;
-  --secondary:#38DCF0;
-  --accent:#22C55E;
-  --bg:#04171b;
-  --bg-rgb:4,23,27;
-  --fg:#eafafc;
-  --muted:#a9cdd5;
-  --border:#0f3b44;
-  --head:'Lexend',sans-serif;
-  --body:'Source Sans 3',sans-serif;
-  --z-canvas:0;--z-veil:1;--z-content:2;--z-hud:3;--z-nav:40;--z-banner:50;
+  --primary:#0891B2; --secondary:#22D3EE; --accent:#16A34A;
+  --bg:#04090c; --bg-rgb:4,9,12; --fg:#eaf7fb; --muted:#9dbcc5; --border:#153742;
+  --scan:#22D3EE; --confirm:#16A34A;
+  --hd:'Lexend',sans-serif; --bd:'Source Sans 3',sans-serif;
+  --z-canvas:0; --z-veil:1; --z-content:2; --z-hud:5; --z-banner:50;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:var(--body);background:var(--bg);color:var(--fg);overflow-x:hidden;line-height:1.65}
-h1,h2,h3,h4{font-family:var(--head);font-weight:600;line-height:1.1;letter-spacing:-.01em}
+body{background:var(--bg);color:var(--fg);font-family:var(--bd);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--hd);font-weight:600;line-height:1.1;letter-spacing:-.01em}
+a{color:inherit}
 :focus-visible{outline:2px solid var(--secondary);outline-offset:3px;border-radius:6px}
 
-.preview-banner{
-  position:fixed;top:0;left:0;right:0;z-index:var(--z-banner);
-  background:linear-gradient(90deg,var(--primary),var(--accent));
-  color:#fff;text-align:center;font-size:13px;font-family:var(--head);
-  padding:7px 12px;letter-spacing:.02em;font-weight:500;
-}
+.preview-banner{position:fixed;top:0;left:0;right:0;height:34px;z-index:var(--z-banner);
+  background:linear-gradient(90deg,#0891B2,#16A34A);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:12.5px;
+  font-family:var(--hd);font-weight:500;letter-spacing:.04em;text-align:center;padding:0 12px}
+
 #gl{position:fixed;inset:0;z-index:var(--z-canvas)}
 .veil{position:fixed;inset:0;z-index:var(--z-veil);pointer-events:none;
-  background:radial-gradient(ellipse at center,transparent 30%,rgba(2,12,15,.68) 100%)}
+  background:radial-gradient(ellipse at center,transparent 30%,rgba(2,6,9,.45) 75%,rgba(2,6,9,.85) 100%)}
 
-/* nav */
-.topnav{position:fixed;top:33px;left:0;right:0;z-index:var(--z-nav);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 6vw;backdrop-filter:blur(8px);background:rgba(4,23,27,.35);
-  border-bottom:1px solid rgba(15,59,68,.5)}
-.brand{display:flex;align-items:center;gap:11px;font-family:var(--head);font-weight:600;
-  font-size:1rem;color:var(--fg);text-decoration:none;letter-spacing:-.01em}
-.brand svg{flex-shrink:0}
-.brand span small{display:block;font-size:.62rem;font-weight:400;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
-.navlinks{display:flex;gap:26px;align-items:center}
-.navlinks a{color:var(--muted);text-decoration:none;font-family:var(--head);font-size:.9rem;font-weight:400;transition:color .2s}
-.navlinks a:hover{color:var(--secondary)}
-.nav-cta{background:var(--accent);color:#04171b !important;padding:9px 18px;border-radius:30px;font-weight:600 !important;transition:transform .2s,box-shadow .2s}
-.nav-cta:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(34,197,94,.4)}
-@media(max-width:820px){.navlinks a:not(.nav-cta){display:none}}
-
-/* HUD */
-.hud{position:fixed;inset:0;z-index:var(--z-hud);pointer-events:none;opacity:0;transition:opacity .5s ease}
-.hud.show{opacity:1}
-.hud .frame{position:absolute;left:50%;top:50%;width:min(56vw,440px);height:min(56vw,440px);transform:translate(-50%,-52%)}
-.br{position:absolute;width:28px;height:28px}
-.br.tl{top:0;left:0;border-top:1.5px solid var(--secondary);border-left:1.5px solid var(--secondary)}
-.br.tr{top:0;right:0;border-top:1.5px solid var(--secondary);border-right:1.5px solid var(--secondary)}
-.br.bl{bottom:0;left:0;border-bottom:1.5px solid var(--secondary);border-left:1.5px solid var(--secondary)}
-.br.br2{bottom:0;right:0;border-bottom:1.5px solid var(--secondary);border-right:1.5px solid var(--secondary)}
-.reticle{position:absolute;left:50%;top:50%;width:min(38vw,260px);height:min(38vw,260px);transform:translate(-50%,-50%);opacity:.45}
-.scanline{position:absolute;left:0;right:0;height:1px;top:0;
-  background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:scan 2.8s ease-in-out infinite}
-@keyframes scan{0%{top:2%}50%{top:96%}100%{top:2%}}
-.readout{position:absolute;right:8%;top:24%;background:rgba(4,23,27,.72);
-  border:1px solid var(--primary);backdrop-filter:blur(6px);padding:12px 16px;
-  font-family:var(--head);font-size:11px;letter-spacing:.05em;min-width:180px}
-.readout .row{display:flex;justify-content:space-between;gap:14px;padding:3px 0;color:var(--muted)}
-.readout .row b{color:var(--secondary);font-weight:500}
-.readout .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);
-  box-shadow:0 0 8px var(--accent);animation:pulse 1.4s ease-in-out infinite;margin-right:5px;vertical-align:middle}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-
-main{position:relative;z-index:var(--z-content)}
-.chapter{min-height:100vh;display:flex;align-items:center;padding:150px 6vw 120px;position:relative}
-.inner{position:relative;max-width:760px;z-index:2}
+.wrap{position:relative;z-index:var(--z-content);padding-top:34px}
+.chapter{min-height:100vh;display:flex;align-items:center;padding:9vh 6vw;position:relative}
+.inner{position:relative;max-width:1180px;width:100%;margin:0 auto}
 .inner::before{content:'';position:absolute;inset:-70px -90px;z-index:-1;
-  background:radial-gradient(closest-side,rgba(var(--bg-rgb),.84),rgba(var(--bg-rgb),.5) 60%,transparent);filter:blur(4px)}
-.chapter h1,.chapter h2{text-shadow:0 2px 30px rgba(0,0,0,.65)}
-.chapter p{text-shadow:0 1px 14px rgba(0,0,0,.6)}
+  background:radial-gradient(closest-side,rgba(var(--bg-rgb),.82),rgba(var(--bg-rgb),.48) 60%,transparent);filter:blur(4px)}
 
-.tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--head);
-  font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--secondary);margin-bottom:22px;font-weight:500}
-.tag::before{content:'';width:26px;height:1px;background:var(--secondary)}
+.tag{display:inline-flex;align-items:center;gap:9px;font-family:var(--hd);font-weight:500;
+  font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--secondary);
+  border:1px solid var(--border);border-radius:40px;padding:7px 16px;margin-bottom:26px;
+  background:rgba(8,145,178,.06)}
+.tag .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:pulseDot 1.6s infinite}
+@keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.3}}
 
-.hero .inner{max-width:880px}
-.hero h1{font-size:clamp(2.6rem,7vw,5.4rem);font-weight:700;margin-bottom:20px}
-.hero h1 .glow{color:var(--secondary);text-shadow:0 0 40px rgba(56,220,240,.5)}
-.hero .lead{font-size:clamp(1.05rem,2vw,1.4rem);color:var(--muted);max-width:580px;margin-bottom:34px}
+.h-hero{font-size:clamp(2.6rem,8vw,6rem);font-weight:700;line-height:.98;text-shadow:0 3px 40px rgba(0,0,0,.7)}
+.h-hero .spaced{display:block;font-size:clamp(1rem,2.6vw,1.7rem);font-weight:300;
+  letter-spacing:.5em;color:var(--secondary);margin:14px 0;text-transform:uppercase}
+.h-sec{font-size:clamp(1.9rem,4.6vw,3.4rem);font-weight:600;text-shadow:0 2px 30px rgba(0,0,0,.7);margin-bottom:22px}
+.lead{font-size:clamp(1.05rem,1.6vw,1.32rem);color:var(--fg);max-width:640px;text-shadow:0 2px 16px rgba(0,0,0,.8);font-weight:300}
+.muted{color:var(--muted)}
+p{text-shadow:0 2px 14px rgba(0,0,0,.6)}
 
-.chapter h2{font-size:clamp(2rem,4.5vw,3.4rem);margin-bottom:20px}
-.chapter .body{font-size:clamp(1rem,1.6vw,1.15rem);color:var(--muted);max-width:600px;margin-bottom:16px}
+.btn{display:inline-flex;align-items:center;gap:11px;cursor:pointer;text-decoration:none;
+  font-family:var(--hd);font-weight:500;font-size:15px;letter-spacing:.02em;
+  padding:15px 30px;border-radius:44px;border:none;min-height:48px;transition:transform .22s,box-shadow .22s,border-color .22s,color .22s}
+.btn-primary{background:linear-gradient(120deg,var(--primary),var(--accent));color:#fff;box-shadow:0 6px 30px rgba(8,145,178,.5)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 10px 40px rgba(8,145,178,.7)}
+.btn-ghost{background:rgba(8,145,178,.08);color:var(--fg);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--secondary);color:var(--secondary)}
+.btn:disabled{opacity:.6;cursor:progress}
+.hero-btns{display:flex;gap:16px;flex-wrap:wrap;margin-top:38px}
 
-.btn{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-family:var(--head);font-weight:500;
-  font-size:1rem;padding:15px 30px;border-radius:40px;border:none;text-decoration:none;min-height:44px;
-  transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
-.btn-primary{background:linear-gradient(120deg,var(--accent),#14934a);color:#04171b;font-weight:600;box-shadow:0 0 0 rgba(34,197,94,.5)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 34px rgba(34,197,94,.45)}
-.btn-ghost{background:transparent;color:var(--fg);border:1px solid var(--primary)}
-.btn-ghost:hover{background:rgba(8,145,178,.14);transform:translateY(-2px)}
-.btn-row{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.meta-row{display:flex;gap:30px;flex-wrap:wrap;margin-top:44px;font-size:14px;color:var(--muted)}
+.meta-row b{color:var(--fg);font-weight:600}
+.stars{color:#f5b53d;letter-spacing:2px}
 
-.scroll-cue{position:absolute;bottom:36px;left:6vw;font-family:var(--head);font-size:11px;
-  letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px}
-.scroll-cue .line{width:1px;height:40px;background:linear-gradient(var(--secondary),transparent);animation:drop 2s ease-in-out infinite}
-@keyframes drop{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
+.poster{position:absolute;z-index:-1;font-family:var(--hd);font-weight:700;
+  font-size:17vw;line-height:1;color:transparent;-webkit-text-stroke:1.5px rgba(34,211,238,.14);
+  white-space:nowrap;pointer-events:none;user-select:none;letter-spacing:.02em}
 
-.services{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:36px}
-.card{background:rgba(6,32,38,.72);border:1px solid var(--border);border-radius:18px;padding:26px;
-  backdrop-filter:blur(8px);transition:transform .25s ease,border-color .25s ease}
-.card:hover{transform:translateY(-5px);border-color:var(--primary)}
-.card svg{margin-bottom:14px}
-.card h3{font-size:1.15rem;margin-bottom:8px}
-.card p{font-size:.95rem;color:var(--muted)}
-.card.wide{grid-column:1/3}
+.grid{display:grid;gap:22px;margin-top:44px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.card{background:rgba(6,18,24,.72);border:1px solid var(--border);border-radius:18px;
+  padding:30px 26px;backdrop-filter:blur(8px);transition:transform .3s,border-color .3s,box-shadow .3s}
+.card:hover{transform:translateY(-6px);border-color:var(--primary);box-shadow:0 14px 44px rgba(8,145,178,.28)}
+.card h3{font-size:1.22rem;margin-bottom:9px}
+.card p{font-size:.96rem;color:var(--muted);text-shadow:none}
+.icoWrap{width:52px;height:52px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,rgba(8,145,178,.18),rgba(22,163,74,.12));border:1px solid var(--border);margin-bottom:16px}
 
-.poster{position:absolute;font-family:var(--head);font-weight:700;font-size:16vw;line-height:.8;color:transparent;
-  -webkit-text-stroke:1.5px rgba(56,220,240,.14);white-space:nowrap;z-index:0;pointer-events:none;user-select:none;letter-spacing:-.02em}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:20px}
+.stat{text-align:center}
+.stat .n{font-family:var(--hd);font-weight:700;font-size:clamp(2.2rem,5vw,3.6rem);
+  background:linear-gradient(120deg,var(--secondary),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.stat .l{font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:8px}
 
-.stats{display:flex;flex-wrap:wrap;gap:40px;margin-top:34px}
-.stat .num{font-family:var(--head);font-weight:700;font-size:clamp(2.4rem,6vw,3.6rem);color:var(--secondary);line-height:1}
-.stat .lbl{font-size:.9rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:6px}
+.split{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center}
+.pill-list{list-style:none;margin-top:26px;display:flex;flex-wrap:wrap;gap:11px}
+.pill-list li{font-size:.85rem;letter-spacing:.03em;padding:8px 15px;border:1px solid var(--border);
+  border-radius:30px;color:var(--secondary);background:rgba(8,145,178,.05)}
 
-.quotes{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:32px}
-.quote{background:rgba(6,32,38,.72);border:1px solid var(--border);border-radius:18px;padding:24px;backdrop-filter:blur(8px)}
-.quote p{font-size:1rem;color:var(--fg);margin-bottom:14px;font-style:italic}
-.quote .who{font-family:var(--head);font-size:.85rem;color:var(--muted)}
-.stars{display:flex;gap:3px;margin-bottom:10px}
-.stars svg{display:block}
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px}
+.quote{background:rgba(6,18,24,.72);border:1px solid var(--border);border-radius:18px;padding:28px;backdrop-filter:blur(8px)}
+.quote p{font-size:1rem;font-style:italic;color:var(--fg);text-shadow:none}
+.quote .who{margin-top:16px;font-family:var(--hd);font-weight:500;font-size:.9rem;color:var(--secondary)}
+.quote .stars{font-size:.85rem;margin-bottom:12px}
 
-.form-card{background:rgba(6,32,38,.82);border:1px solid var(--border);border-radius:24px;padding:34px;backdrop-filter:blur(10px);margin-top:32px;max-width:520px}
-.form-card label{display:block;font-family:var(--head);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
-.form-card input,.form-card select{width:100%;padding:13px 14px;border-radius:10px;border:1px solid var(--border);
-  background:rgba(2,12,15,.6);color:var(--fg);font-family:var(--body);font-size:16px;min-height:44px}
-.form-card input:focus,.form-card select:focus{outline:none;border-color:var(--secondary);box-shadow:0 0 0 3px rgba(56,220,240,.2)}
-.form-card .btn{margin-top:22px;width:100%;justify-content:center}
-.form-msg{margin-top:16px;padding:12px 14px;border-radius:10px;font-size:.92rem;display:none}
+.form{background:rgba(6,18,24,.8);border:1px solid var(--border);border-radius:22px;padding:38px;backdrop-filter:blur(10px);max-width:560px}
+.form label{display:block;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:16px 0 7px}
+.form input,.form select,.form textarea{width:100%;background:rgba(2,10,14,.72);border:1px solid var(--border);
+  border-radius:11px;padding:13px 15px;color:var(--fg);font-family:var(--bd);font-size:16px;outline:none;transition:border-color .2s}
+.form input:focus,.form select:focus,.form textarea:focus{border-color:var(--secondary)}
+.form .btn{margin-top:26px;width:100%;justify-content:center}
+.form-msg{margin-top:16px;font-size:.92rem;border-radius:10px;padding:12px 14px;display:none}
 .form-msg.show{display:block}
-.form-msg.ok{background:rgba(34,197,94,.14);border:1px solid var(--accent);color:#c7f5d8}
-.form-msg.err{background:rgba(220,80,80,.14);border:1px solid #e06b6b;color:#f6d0d0}
-.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(4,23,27,.4);border-top-color:#04171b;border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+.form-msg.ok{background:rgba(22,163,74,.14);border:1px solid var(--confirm);color:#a9f0c4}
+.form-msg.err{background:rgba(220,60,60,.14);border:1px solid #d94b4b;color:#f4b6b6}
 
-footer{position:relative;z-index:var(--z-content);background:rgba(2,12,15,.92);border-top:1px solid var(--border);padding:60px 6vw 40px;backdrop-filter:blur(10px)}
-.footcols{display:flex;flex-wrap:wrap;gap:48px;justify-content:space-between;max-width:1100px}
-.footcols h4{font-size:1.1rem;margin-bottom:14px;color:var(--secondary)}
-.footcols p,.footcols a{color:var(--muted);font-size:.95rem;text-decoration:none;display:block;margin-bottom:6px}
-.footcols a:hover{color:var(--fg)}
-.copyright{margin-top:40px;font-size:.82rem;color:var(--muted);border-top:1px solid var(--border);padding-top:22px;max-width:1100px}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start}
+.cinfo h4{font-size:1.05rem;margin-bottom:6px;color:var(--secondary)}
+.cinfo .blk{margin-bottom:26px}
+.cinfo p{color:var(--muted);font-size:.98rem}
+.cinfo a{text-decoration:none}
+.cinfo a:hover{color:var(--secondary)}
 
-@media(max-width:768px){
-  .services,.quotes{grid-template-columns:1fr}
-  .card.wide{grid-column:auto}
-  .hud{display:none}
-  .poster{font-size:24vw}
-  .chapter{padding:130px 7vw 100px}
-  body{font-size:16px}
+footer{position:relative;z-index:var(--z-content);padding:44px 6vw;border-top:1px solid var(--border);
+  background:rgba(2,6,9,.85);text-align:center;font-size:.86rem;color:var(--muted)}
+footer .fname{font-family:var(--hd);font-weight:600;color:var(--fg);font-size:1.1rem;margin-bottom:8px}
+
+.hud{position:fixed;inset:0;z-index:var(--z-hud);pointer-events:none;opacity:0;transition:opacity .5s}
+.hud.show{opacity:1}
+.brk{position:absolute;width:28px;height:28px}
+.brk.tl{top:22%;left:34%;border-top:1.5px solid var(--scan);border-left:1.5px solid var(--scan)}
+.brk.tr{top:22%;right:34%;border-top:1.5px solid var(--scan);border-right:1.5px solid var(--scan)}
+.brk.bl{bottom:22%;left:34%;border-bottom:1.5px solid var(--scan);border-left:1.5px solid var(--scan)}
+.brk.br{bottom:22%;right:34%;border-bottom:1.5px solid var(--scan);border-right:1.5px solid var(--scan)}
+.reticle{position:absolute;top:50%;left:50%;width:150px;height:150px;transform:translate(-50%,-50%);opacity:.5}
+.scanline{position:absolute;top:22%;left:34%;right:34%;height:1.5px;
+  background:linear-gradient(90deg,transparent,var(--scan),transparent);animation:scanMove 2.6s ease-in-out infinite}
+@keyframes scanMove{0%,100%{top:22%}50%{top:78%}}
+.readout{position:absolute;top:26%;right:12%;background:rgba(4,14,18,.72);border:1px solid var(--scan);
+  border-radius:9px;padding:14px 16px;backdrop-filter:blur(6px);font-family:var(--hd);font-size:11px;letter-spacing:.08em;min-width:180px}
+.readout .rr{display:flex;justify-content:space-between;gap:14px;margin:5px 0;color:var(--muted)}
+.readout .rr b{color:var(--secondary);font-weight:500}
+.readout .live{width:7px;height:7px;border-radius:50%;background:var(--confirm);
+  box-shadow:0 0 9px var(--confirm);display:inline-block;animation:pulseDot 1.4s infinite}
+
+@media(max-width:900px){
+  .split,.contact-grid{grid-template-columns:1fr;gap:34px}
+  .g3,.quotes{grid-template-columns:1fr}
+  .g2{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
 }
+@media(max-width:768px){.hud{display:none!important}}
+@media(max-width:480px){.chapter{padding:8vh 6vw}.meta-row{gap:18px}body{font-size:16px}}
+
 @media(prefers-reduced-motion:reduce){
   #gl{display:none}
+  body{background:radial-gradient(ellipse at top,#0a2530,#04090c 70%)}
   .hud{display:none}
-  html{scroll-behavior:auto}
-  body{background:radial-gradient(ellipse at 50% 15%,#0b323c,#04171b 70%)}
   *{animation:none!important;transition:none!important}
 }
 </style>
 </head>
 <body>
-<div class="preview-banner">Website Preview — conceptmockup voor Dental Implant Clinic Antwerp</div>
+<div class="preview-banner" role="note">Website Preview — concept mockup for Dental Implant Clinic Antwerp | Dental Clinics Group</div>
 
-<nav class="topnav">
-  <a class="brand" href="#top" aria-label="Dental Implant Clinic Antwerp startpagina">
-    <svg width="30" height="30" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-      <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#38DCF0"/><stop offset="1" stop-color="#22C55E"/></linearGradient></defs>
-      <path d="M24 5c-7 0-11 4.5-11 11 0 7 2.5 9.5 3.6 17.5.6 4 1.7 9.5 3.4 9.5s2.2-4.8 3-9.5c1.1-8 3.6-10.5 3.6-17.5 0-6.5-4-11-5.6-11z" transform="translate(2.4,0)" stroke="url(#lg)" stroke-width="2.2" fill="rgba(56,220,240,.08)"/>
-      <path d="M18 5c-7 0-11 4.5-11 11 0 7 2.5 9.5 3.6 17.5.6 4 1.7 9.5 3.4 9.5s2.2-4.8 3-9.5c1.1-8 3.6-10.5 3.6-17.5 0-6.5-4-11-5.6-11z" transform="translate(-2.4,0)" stroke="url(#lg)" stroke-width="2.2" fill="rgba(56,220,240,.08)"/>
-    </svg>
-    <span>Dental Implant Clinic<small>Antwerpen</small></span>
-  </a>
-  <div class="navlinks">
-    <a href="#filosofie">Aanpak</a>
-    <a href="#implantaat">Behandelingen</a>
-    <a href="#vertrouwen">Reviews</a>
-    <a href="#cta" class="nav-cta">Intake aanvragen</a>
-  </div>
-</nav>
-
-<div id="gl"></div>
-<div class="veil"></div>
+<div id="gl" aria-hidden="true"></div>
+<div class="veil" aria-hidden="true"></div>
 
 <div class="hud" id="hud" aria-hidden="true">
-  <div class="frame">
-    <div class="br tl"></div><div class="br tr"></div><div class="br bl"></div><div class="br br2"></div>
-    <div class="scanline"></div>
-  </div>
-  <svg class="reticle" viewBox="0 0 100 100" fill="none" stroke="#38DCF0" stroke-width="1">
-    <circle cx="50" cy="50" r="46"/><circle cx="50" cy="50" r="30"/>
-    <line x1="50" y1="8" x2="50" y2="24"/><line x1="50" y1="76" x2="50" y2="92"/>
-    <line x1="8" y1="50" x2="24" y2="50"/><line x1="76" y1="50" x2="92" y2="50"/>
+  <div class="brk tl"></div><div class="brk tr"></div><div class="brk bl"></div><div class="brk br"></div>
+  <svg class="reticle" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="46" fill="none" stroke="#22D3EE" stroke-width="1"/>
+    <circle cx="50" cy="50" r="30" fill="none" stroke="#22D3EE" stroke-width="1" stroke-dasharray="4 4"/>
+    <line x1="50" y1="10" x2="50" y2="90" stroke="#22D3EE" stroke-width="0.8"/>
+    <line x1="10" y1="50" x2="90" y2="50" stroke="#22D3EE" stroke-width="0.8"/>
   </svg>
+  <div class="scanline"></div>
   <div class="readout">
-    <div class="row"><span><span class="dot"></span>SCAN</span><b>ACTIEF</b></div>
-    <div class="row"><span>DOEL</span><b>IMPLANTAAT</b></div>
-    <div class="row"><span>VERANKERING</span><b>99,8%</b></div>
-    <div class="row"><span>PRECISIE</span><b>±0,1 MM</b></div>
+    <div class="rr"><span>SCAN</span><b>ACTIVE <span class="live"></span></b></div>
+    <div class="rr"><span>TARGET</span><b>MOLAR / IMPLANT</b></div>
+    <div class="rr"><span>SOURCE</span><b>SIRONA CONE BEAM</b></div>
+    <div class="rr"><span>PRECISION</span><b>±0.1 mm</b></div>
   </div>
 </div>
 
-<main id="top">
-  <!-- CH1 -->
-  <section class="chapter hero">
-    <div class="poster" style="top:8%;left:-4%">VERANKERD</div>
+<div class="wrap">
+
+  <!-- CH1 hero -->
+  <section class="chapter" id="top">
+    <div class="poster" style="top:6%;left:-4%;opacity:.5">DENTAL</div>
     <div class="inner">
-      <span class="tag">Dental Implant Clinic Antwerp · Belgiëlei</span>
-      <h1>Een vast gebit dat <span class="glow">blijft</span>.</h1>
-      <p class="lead">Vervang de angst voor een gat in uw lach door de rust van een blijvende, verankerde oplossing. Tandimplantaten die eruitzien, aanvoelen en functioneren als natuurlijke tanden — een leven lang.</p>
-      <div class="btn-row">
-        <a href="#cta" class="btn btn-primary">Gratis intakegesprek</a>
-        <a href="#filosofie" class="btn btn-ghost">Ontdek onze aanpak</a>
+      <span class="tag"><span class="dot"></span>Brussels · Antwerp · Since 1997</span>
+      <h1 class="h-hero">Your
+        <span class="spaced">multicultural</span>
+        dental destination<sup style="font-size:.3em;top:-1.4em;position:relative">®</sup>
+      </h1>
+      <p class="lead" style="margin-top:26px">We rebuild smiles with guided, sub-millimetre implant precision — and we understand you in your own language.</p>
+      <div class="hero-btns">
+        <a class="btn btn-primary" href="#appointment">Make an appointment
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#tech">Our technology</a>
+      </div>
+      <div class="meta-row">
+        <span><b class="stars" aria-hidden="true">★★★★½</b> 4.5 · 504 Google reviews</span>
+        <span><b>INAMI / RIZIV</b> accredited dentists</span>
+        <span><b>8+ languages</b> spoken daily</span>
       </div>
     </div>
-    <div class="scroll-cue"><span class="line"></span>Scroll</div>
   </section>
 
-  <!-- CH2 -->
-  <section class="chapter" id="filosofie">
+  <!-- CH2 team -->
+  <section class="chapter">
     <div class="inner">
-      <span class="tag">Onze filosofie</span>
-      <h2>Pijnloze, precieze implantologie in het hart van Antwerpen.</h2>
-      <p class="body">Bij Dental Implant Clinic Antwerp geloven wij dat een ingrijpende keuze rustig en zorgvuldig moet verlopen. Ons gespecialiseerde team combineert 3D-planning en digitale geleide chirurgie met oprechte aandacht voor uw comfort — zodat elke plaatsing exact en voorspelbaar is.</p>
-      <div class="services">
-        <div class="card">
-          <svg width="36" height="36" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-            <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#38DCF0"/><stop offset="1" stop-color="#22C55E"/></linearGradient></defs>
-            <path d="M24 6c-6 0-9 4-9 10 0 6 2 8 3 15 .5 3.5 1.5 8 3 8s2-4 3-8c1-7 3-9 3-15 0-6-3-10-9-10z" stroke="url(#g1)" stroke-width="2" fill="rgba(56,220,240,.06)"/>
-            <path d="M18 15c3-2 9-2 12 0" stroke="#22C55E" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <h3>Enkelvoudig implantaat</h3>
-          <p>Eén ontbrekende tand vervangen zonder de buurtanden aan te tasten.</p>
+      <div class="split">
+        <div>
+          <span class="tag"><span class="dot"></span>The genuine Dental Clinics</span>
+          <h2 class="h-sec">We recruit the best dentists — from all over the world.</h2>
+          <p class="lead muted">Founded in 1997 by dentist David Hatzkevich, we believe a multicultural society is our strength. Every dentist and assistant is accredited by INAMI/RIZIV, wears our uniform, and can care for you from a simple scaling to the most sophisticated dental implant.</p>
+          <ul class="pill-list">
+            <li>English</li><li>Nederlands</li><li>Français</li><li>Español</li><li>Português</li><li>Українська</li><li>Русский</li><li>Български</li><li>Ελληνικά</li><li>العربية</li>
+          </ul>
         </div>
-        <div class="card">
-          <svg width="36" height="36" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-            <defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#38DCF0"/><stop offset="1" stop-color="#22C55E"/></linearGradient></defs>
-            <path d="M8 22c2-4 5-4 8-4s5 0 8 0 6 0 8 0 4 0 5 3" stroke="url(#g2)" stroke-width="2" fill="none" stroke-linecap="round"/>
-            <rect x="12" y="20" width="24" height="9" rx="3" stroke="url(#g2)" stroke-width="2" fill="rgba(56,220,240,.06)"/>
-            <path d="M17 29v6M24 29v6M31 29v6" stroke="#22C55E" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <h3>Brug op implantaten</h3>
-          <p>Meerdere tanden vervangen met een stabiele, vaste brugconstructie.</p>
-        </div>
-        <div class="card">
-          <svg width="36" height="36" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-            <defs><linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#38DCF0"/><stop offset="1" stop-color="#22C55E"/></linearGradient></defs>
-            <path d="M10 24c0-8 6-13 14-13s14 5 14 13" stroke="url(#g3)" stroke-width="2" fill="rgba(56,220,240,.06)"/>
-            <path d="M10 24c0 5 3 8 6 8 3 0 3-3 8-3s5 3 8 3c3 0 6-3 6-8" stroke="#22C55E" stroke-width="2" fill="none"/>
-            <circle cx="16" cy="28" r="1.5" fill="#38DCF0"/><circle cx="24" cy="30" r="1.5" fill="#38DCF0"/><circle cx="32" cy="28" r="1.5" fill="#38DCF0"/>
-          </svg>
-          <h3>All-on-4 / All-on-6</h3>
-          <p>Een volledig vast gebit op slechts vier tot zes implantaten.</p>
-        </div>
-        <div class="card">
-          <svg width="36" height="36" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-            <defs><linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#38DCF0"/><stop offset="1" stop-color="#22C55E"/></linearGradient></defs>
-            <rect x="7" y="9" width="34" height="26" rx="3" stroke="url(#g4)" stroke-width="2" fill="rgba(56,220,240,.05)"/>
-            <path d="M12 27l6-9 5 6 4-5 9 8" stroke="#22C55E" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="18" cy="16" r="2" fill="#38DCF0"/><path d="M18 39h12" stroke="url(#g4)" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <h3>3D-planning &amp; scan</h3>
-          <p>Digitale geleide chirurgie voor een verankering tot op de tiende millimeter.</p>
-        </div>
-        <div class="card wide">
-          <svg width="36" height="36" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-            <defs><linearGradient id="g5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#38DCF0"/><stop offset="1" stop-color="#22C55E"/></linearGradient></defs>
-            <path d="M24 8c8 0 14 6 14 14 0 10-14 18-14 18S10 32 10 22c0-8 6-14 14-14z" stroke="url(#g5)" stroke-width="2" fill="rgba(56,220,240,.06)"/>
-            <path d="M18 22l4 4 8-8" stroke="#22C55E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <h3>Botopbouw &amp; sinuslift</h3>
-          <p>Onvoldoende kaakbot? Wij herstellen de basis zodat een implantaat alsnog veilig en duurzaam verankerd wordt.</p>
+        <div class="grid g2" style="margin-top:0">
+          <div class="card">
+            <div class="icoWrap">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><defs><linearGradient id="gA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22D3EE"/><stop offset="1" stop-color="#16A34A"/></linearGradient></defs><path d="M12 3c-2.5 0-4 1.4-4 3.3 0 1 .3 1.7.3 3 0 3.5-1.3 4.5-1.3 7.7 0 2 .8 3 1.6 3 1 0 1.2-1.3 1.5-3 .3-1.6.6-2.5 1.9-2.5s1.6.9 1.9 2.5c.3 1.7.5 3 1.5 3 .8 0 1.6-1 1.6-3 0-3.2-1.3-4.2-1.3-7.7 0-1.3.3-2 .3-3C16 4.4 14.5 3 12 3z" stroke="url(#gA)" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>Full spectrum</h3>
+            <p>From scaling to sophisticated implants — every discipline under one roof.</p>
+          </div>
+          <div class="card">
+            <div class="icoWrap">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2" stroke="#22D3EE" stroke-width="1.4"/><path d="M8 5V3M16 5V3M4 9h16" stroke="#22D3EE" stroke-width="1.4" stroke-linecap="round"/><path d="M9 13l2 2 4-4" stroke="#16A34A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>Orthodontics</h3>
+            <p>For children and adults — the care most in demand today.</p>
+          </div>
+          <div class="card">
+            <div class="icoWrap">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" stroke="#22D3EE" stroke-width="1.4"/><path d="M5 20c0-3.3 3-6 7-6s7 2.7 7 6" stroke="#22D3EE" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Uniformed team</h3>
+            <p>Led by Svetlana Lebon and Luiza Kachian — consistent, professional care.</p>
+          </div>
+          <div class="card">
+            <div class="icoWrap">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 7.8-7 9-4-1.2-7-4.5-7-9V6l7-3z" stroke="#22D3EE" stroke-width="1.4" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#16A34A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>Accredited</h3>
+            <p>All dentists INAMI/RIZIV recognised; X-rays approved by the AFCN/FANC.</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CH3 -->
-  <section class="chapter" id="implantaat">
-    <div class="poster" style="bottom:6%;right:-6%;-webkit-text-stroke-color:rgba(34,197,94,.13)">PRECISIE</div>
+  <!-- CH3 cone beam -->
+  <section class="chapter" id="tech">
+    <div class="poster" style="top:30%;right:-6%;opacity:.45">PRECISION</div>
     <div class="inner">
-      <span class="tag">Het implantaat vormt zich</span>
-      <h2>Van titanium verankering tot natuurlijke kroon.</h2>
-      <p class="body">Een tandimplantaat is meer dan een tandvervanging — het is een fundament. De titanium schroef groeit vast in uw kaakbot (osseo-integratie) en draagt een op maat gemaakte kroon die niet van echt te onderscheiden is. Stabiel. Blijvend. Onzichtbaar.</p>
-      <p class="body">Kijk mee terwijl de scan de plaatsing meet en het implantaat zich opbouwt tot een compleet, verankerd geheel.</p>
+      <span class="tag"><span class="dot"></span>Cone Beam 3D imaging</span>
+      <h2 class="h-sec" style="max-width:800px">Our Cone Beam produces 3D "cuts" of your maxillaries — guiding implants to within 1/10&nbsp;mm.</h2>
+      <p class="lead muted">Several SIRONA (ex-SIEMENS) Cone Beam scanners let us see your jaw in three dimensions, then plan and guide each implant with software precision. It is the difference between placing an implant — and placing it exactly where it belongs.</p>
+      <div class="grid g3">
+        <div class="card">
+          <div class="icoWrap">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="#22D3EE" stroke-width="1.4"/><circle cx="12" cy="12" r="3" stroke="#16A34A" stroke-width="1.4"/><path d="M12 4v3M12 17v3M4 12h3M17 12h3" stroke="#22D3EE" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </div>
+          <h3>3D Cone Beam cuts</h3>
+          <p>Volumetric imaging of your maxillaries for accurate diagnosis and planning.</p>
+        </div>
+        <div class="card">
+          <div class="icoWrap">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 8l8-4 8 4v8l-8 4-8-4V8z" stroke="#22D3EE" stroke-width="1.4" stroke-linejoin="round"/><path d="M12 4v16M4 8l8 4 8-4" stroke="#22D3EE" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Guided implants</h3>
+          <p>Software-guided rehabilitation accurate to within 1/10&nbsp;mm.</p>
+        </div>
+        <div class="card">
+          <div class="icoWrap">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3c-2 0-3.5 1.5-3.5 3.5 0 1 .3 1.6.3 2.8 0 3-1.1 3.8-1.1 6.5 0 1.7.7 2.7 1.4 2.7.8 0 1-1.1 1.3-2.5.2-1.4.5-2.2 1.6-2.2s1.4.8 1.6 2.2c.3 1.4.5 2.5 1.3 2.5.7 0 1.4-1 1.4-2.7 0-2.7-1.1-3.5-1.1-6.5 0-1.2.3-1.8.3-2.8C15.5 4.5 14 3 12 3z" stroke="#22D3EE" stroke-width="1.3" stroke-linejoin="round"/><path d="M18 4l2 2M18 6l2-2" stroke="#16A34A" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Minimal radiation</h3>
+          <p>Digital, AFCN/FANC-approved X-rays — low dose, instant, perfect images.</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- CH4 -->
-  <section class="chapter" id="vertrouwen">
+  <!-- CH4 scanners / crowns + stats -->
+  <section class="chapter">
     <div class="inner">
-      <span class="tag">Vertrouwen dat verankerd zit</span>
-      <h2>4,5 sterren uit 504 beoordelingen.</h2>
-      <p class="body">Onze patiënten kiezen ons voor de combinatie van vakmanschap en oprechte zorg. Dat vertrouwen laten wij niet los.</p>
-      <div class="stats">
-        <div class="stat"><div class="num">4,5★</div><div class="lbl">Google-beoordeling</div></div>
-        <div class="stat"><div class="num">504</div><div class="lbl">Patiëntbeoordelingen</div></div>
-        <div class="stat"><div class="num">99,8%</div><div class="lbl">Slagingspercentage</div></div>
+      <span class="tag"><span class="dot"></span>Digital dentistry</span>
+      <h2 class="h-sec" style="max-width:820px">SIRONA intra-oral scanners &amp; zirconium crowns — perfect fit, no more paste impressions.</h2>
+      <p class="lead muted" style="margin-bottom:8px">For fixed prosthetics we take digital impressions with intra-oral scanners, guaranteeing the perfect seat of your zirconium crowns and bridges. Our substantial turnover means we buy — and give you access to — the best German and American equipment.</p>
+      <div class="stats" style="margin-top:46px">
+        <div class="stat"><div class="n">1997</div><div class="l">Founded</div></div>
+        <div class="stat"><div class="n">1/10<span style="font-size:.5em">mm</span></div><div class="l">Guided precision</div></div>
+        <div class="stat"><div class="n">504</div><div class="l">Google reviews · 4.5★</div></div>
+        <div class="stat"><div class="n">8+</div><div class="l">Languages spoken</div></div>
       </div>
+    </div>
+  </section>
+
+  <!-- CH testimonials -->
+  <section class="chapter">
+    <div class="inner">
+      <span class="tag"><span class="dot"></span>What patients say</span>
+      <h2 class="h-sec">Care you can feel — in a language you understand.</h2>
       <div class="quotes">
         <div class="quote">
-          <div class="stars" role="img" aria-label="5 van de 5 sterren">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="#fbbf24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="#fbbf24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="#fbbf24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="#fbbf24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="#fbbf24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
-          </div>
-          <p>"Eindelijk durf ik weer voluit te lachen. De behandeling verliep rustig en compleet pijnloos. Het team nam alle tijd om mijn twijfels weg te nemen."</p>
-          <div class="who">— Katrien D., Antwerpen</div>
+          <div class="stars" aria-hidden="true">★★★★★</div>
+          <p>"They finally understood me in my own language and explained every step of my implant. Calm, professional, precise."</p>
+          <div class="who">— Elena, Antwerp</div>
         </div>
         <div class="quote">
-          <div class="stars" role="img" aria-label="5 van de 5 sterren">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="#fbbf24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="#fbbf24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="#fbbf24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="#fbbf24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="#fbbf24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>
-          </div>
-          <p>"Professioneel, deskundig en toch warm. Mijn All-on-4 voelt aan als mijn eigen gebit. Een aanrader voor iedereen die twijfelt."</p>
-          <div class="who">— Marc V., Berchem</div>
+          <div class="stars" aria-hidden="true">★★★★★</div>
+          <p>"The 3D scan showed me exactly what was happening. My zirconium crown fit perfectly the first time."</p>
+          <div class="who">— Mohammed, Berchem</div>
+        </div>
+        <div class="quote">
+          <div class="stars" aria-hidden="true">★★★★½</div>
+          <p>"Modern equipment, warm team in uniform, and no more messy impressions. A genuinely reassuring clinic."</p>
+          <div class="who">— Sofia, Antwerpen</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CH5 -->
-  <section class="chapter" id="cta">
+  <!-- CH5 CTA -->
+  <section class="chapter" id="appointment">
+    <div class="poster" style="bottom:6%;left:-3%;opacity:.4">SMILE</div>
     <div class="inner">
-      <span class="tag">Zet de eerste stap</span>
-      <h2>Boek uw gratis intakegesprek.</h2>
-      <p class="body">Tijdens een vrijblijvend intakegesprek bekijken wij samen uw situatie en bespreken wij de mogelijkheden. Zonder verplichtingen — enkel helderheid en rust.</p>
-      <div class="form-card">
-        <form id="intakeForm" novalidate>
-          <label for="naam">Naam</label>
-          <input id="naam" name="naam" type="text" autocomplete="name" placeholder="Uw volledige naam" required>
-          <label for="tel">Telefoon</label>
-          <input id="tel" name="tel" type="tel" autocomplete="tel" placeholder="Uw telefoonnummer" required>
-          <label for="behandeling">Interesse</label>
-          <select id="behandeling" name="behandeling">
-            <option>Enkelvoudig implantaat</option>
-            <option>Brug op implantaten</option>
-            <option>All-on-4 / All-on-6</option>
-            <option>Botopbouw &amp; sinuslift</option>
-            <option>Nog niet zeker</option>
+      <div class="contact-grid">
+        <div>
+          <span class="tag"><span class="dot"></span>Make an appointment</span>
+          <h2 class="h-sec">Let's rebuild your smile — in Antwerp.</h2>
+          <p class="lead muted">Book a consultation with our multicultural, accredited team. We'll take you through your Cone Beam scan and a fully guided treatment plan, step by step.</p>
+          <div class="cinfo" style="margin-top:34px">
+            <div class="blk">
+              <h4>Antwerp centre</h4>
+              <p>Belgiëlei 57/A, 2018 Antwerpen, Belgium</p>
+            </div>
+            <div class="blk">
+              <h4>Call us</h4>
+              <p><a href="tel:+3232398888">03 239 88 88</a></p>
+            </div>
+            <div class="blk">
+              <h4>Also in</h4>
+              <p>Brussels — one group, world-class equipment across both centres.</p>
+            </div>
+          </div>
+        </div>
+        <form class="form" id="apptForm" novalidate>
+          <label for="nm">Full name</label>
+          <input id="nm" name="name" type="text" placeholder="Your name" autocomplete="name" required>
+          <label for="ph">Phone</label>
+          <input id="ph" name="phone" type="tel" placeholder="03 000 00 00" autocomplete="tel" required>
+          <label for="ln">Preferred language</label>
+          <select id="ln" name="language">
+            <option>English</option><option>Nederlands</option><option>Français</option>
+            <option>Español</option><option>Português</option><option>Українська / Русский</option>
+            <option>Ελληνικά</option><option>العربية</option>
           </select>
-          <button class="btn btn-primary" id="submitBtn" type="submit">Vraag uw intake aan</button>
-          <div class="form-msg" id="formMsg" role="alert" aria-live="polite"></div>
+          <label for="tr">What can we help with?</label>
+          <textarea id="tr" name="topic" rows="3" placeholder="Dental implants, crowns, orthodontics, scaling…"></textarea>
+          <button class="btn btn-primary" type="submit" id="submitBtn">Request appointment
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="form-msg" id="formMsg" role="alert" aria-live="assertive"></div>
         </form>
-      </div>
-      <div class="btn-row" style="margin-top:26px">
-        <a href="tel:+3232398888" class="btn btn-ghost" aria-label="Bel Dental Implant Clinic Antwerp op 03 239 88 88">Bel direct · 03 239 88 88</a>
       </div>
     </div>
   </section>
-</main>
+</div>
 
 <footer>
-  <div class="footcols">
-    <div>
-      <h4>Dental Implant Clinic Antwerp</h4>
-      <p>Onderdeel van Dental Clinics Group</p>
-      <p>Belgiëlei 57/A</p>
-      <p>2018 Antwerpen, België</p>
-    </div>
-    <div>
-      <h4>Contact</h4>
-      <a href="tel:+3232398888">03 239 88 88</a>
-      <a href="https://www.dentalclinics.be/" target="_blank" rel="noopener">www.dentalclinics.be</a>
-    </div>
-    <div>
-      <h4>Behandelingen</h4>
-      <a href="#implantaat">Tandimplantaten</a>
-      <a href="#implantaat">All-on-4 / All-on-6</a>
-      <a href="#implantaat">Botopbouw &amp; sinuslift</a>
-      <a href="#implantaat">3D-planning</a>
-    </div>
-    <div>
-      <h4>Openingsuren</h4>
-      <p>Ma – Vr · 09:00 – 18:00</p>
-      <p>Za · Op afspraak</p>
-      <p>Zo · Gesloten</p>
-    </div>
-  </div>
-  <div class="copyright">© <span id="jaar"></span> Dental Implant Clinic Antwerp · Dental Clinics Group — Conceptmockup. Reviews zijn illustratief. Alle behandelingen worden uitgevoerd door bevoegde tandartsen en implantologen.</div>
+  <div class="fname">Dental Clinics Group — Dental Implant Clinic Antwerp</div>
+  <p>Belgiëlei 57/A, 2018 Antwerpen, Belgium · <a href="tel:+3232398888" style="color:var(--secondary);text-decoration:none">03 239 88 88</a></p>
+  <p style="margin-top:8px">Brussels · Antwerp — Your multicultural dental destination® · INAMI/RIZIV accredited · AFCN/FANC approved imaging</p>
+  <p style="margin-top:14px;opacity:.6">© 2026 Dental Clinics · Concept preview mockup — not the official website.</p>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -407,43 +388,36 @@ footer{position:relative;z-index:var(--z-content);background:rgba(2,12,15,.92);b
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
-document.getElementById('jaar').textContent=new Date().getFullYear();
-
-/* Form UX: label, loading, success, error */
+/* form handler (works regardless of WebGL) */
 (function(){
-  var form=document.getElementById('intakeForm');
-  if(!form)return;
-  var btn=document.getElementById('submitBtn'), msg=document.getElementById('formMsg');
-  form.addEventListener('submit',function(e){
+  var f=document.getElementById('apptForm'),btn=document.getElementById('submitBtn'),msg=document.getElementById('formMsg');
+  if(!f)return;
+  f.addEventListener('submit',function(e){
     e.preventDefault();
-    var naam=document.getElementById('naam'), tel=document.getElementById('tel');
-    msg.className='form-msg';
-    if(!naam.value.trim()||!tel.value.trim()){
-      msg.textContent='Vul uw naam en telefoonnummer in zodat wij u kunnen bereiken.';
-      msg.classList.add('show','err');
-      (naam.value.trim()?tel:naam).focus();
-      return;
+    var nm=document.getElementById('nm'),ph=document.getElementById('ph');
+    if(!nm.value.trim()||!ph.value.trim()){
+      msg.className='form-msg err show';msg.textContent='Please enter your name and phone number so we can call you back.';
+      (!nm.value.trim()?nm:ph).focus();return;
     }
-    btn.disabled=true;
-    var orig=btn.innerHTML;
-    btn.innerHTML='<span class="spinner" aria-hidden="true"></span> Versturen…';
+    btn.disabled=true;var orig=btn.textContent;btn.textContent='Sending…';
     setTimeout(function(){
-      btn.disabled=false;btn.innerHTML=orig;
-      msg.textContent='Bedankt — wij bellen u binnen één werkdag terug voor uw gratis intake.';
-      msg.classList.add('show','ok');
-      form.reset();
-    },1400);
+      btn.disabled=false;btn.textContent=orig;
+      msg.className='form-msg ok show';
+      msg.textContent='Thank you — we\'ve received your request and will call you back shortly. (Demo form: no data is sent.)';
+      f.reset();
+    },900);
   });
 })();
-
+</script>
+<script>
 (function(){
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function hasWebGL(){try{var c=document.createElement('canvas');return !!(c.getContext('webgl')||c.getContext('experimental-webgl'));}catch(e){return false;}}
+  function hasWebGL(){try{var c=document.createElement('canvas');return !!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl')));}catch(e){return false;}}
   if(reduce||!hasWebGL()||!window.THREE)return;
 
   try{
-    var BG=0x04171b, ACCENT=0x0891B2, ACCENT2=0x38DCF0, GREEN=0x22C55E;
-    var isMobile=innerWidth<768;
+    var BG=0x04090c, ACCENT=0x0891B2, ACCENT2=0x22D3EE, CONFIRM=0x16A34A, LIGHT=0xbdf3ff;
+    var isMobile=window.innerWidth<768;
 
     var scene=new THREE.Scene();
     scene.background=new THREE.Color(BG);
@@ -454,7 +428,7 @@ document.getElementById('jaar').textContent=new Date().getFullYear();
 
     var renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
     renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-    renderer.setSize(innerWidth,innerHeight);
+    renderer.setSize(window.innerWidth,window.innerHeight);
     document.getElementById('gl').appendChild(renderer.domElement);
 
     function makeSprite(){var c=document.createElement('canvas');c.width=c.height=64;
@@ -464,165 +438,174 @@ document.getElementById('jaar').textContent=new Date().getFullYear();
     var sprite=makeSprite();
 
     // universe
-    var N=isMobile?4200:8600, SPREAD=70;
+    var N=isMobile?4000:8600, SPREAD=90;
     var geo=new THREE.BufferGeometry(),pos=new Float32Array(N*3),col=new Float32Array(N*3);
     var ca=new THREE.Color(ACCENT),cb=new THREE.Color(ACCENT2),c=new THREE.Color();
     for(var i=0;i<N;i++){var r=SPREAD*Math.pow(Math.random(),0.5),th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
       pos[i*3]=r*Math.sin(ph)*Math.cos(th);pos[i*3+1]=r*Math.sin(ph)*Math.sin(th)*0.55;pos[i*3+2]=r*Math.cos(ph);
       c.copy(ca).lerp(cb,Math.random());col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;}
-    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
-    geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
     var universe=new THREE.Points(geo,new THREE.PointsMaterial({size:0.55,map:sprite,vertexColors:true,transparent:true,opacity:0.85,depthWrite:false,blending:THREE.AdditiveBlending}));
     scene.add(universe);
 
-    // twin helix strands
-    function helix(count,radius,height,turns,color){
-      var g=new THREE.BufferGeometry(),p=new Float32Array(count*3);
-      for(var i=0;i<count;i++){var t=i/count,a=t*Math.PI*2*turns,w=0.35*Math.sin(t*40);
-        p[i*3]=Math.cos(a)*(radius+w);p[i*3+1]=(t-0.5)*height;p[i*3+2]=Math.sin(a)*(radius+w);}
+    // helix strands (cone-beam sweep feel)
+    function makeStrand(rot){
+      var M=isMobile?800:1500, TURNS=5, RADIUS=7, HEIGHT=34;
+      var g=new THREE.BufferGeometry(),p=new Float32Array(M*3);
+      for(var i=0;i<M;i++){var t=i/M,a=t*Math.PI*2*TURNS,w=0.35*Math.sin(t*40);
+        p[i*3]=Math.cos(a)*(RADIUS+w);p[i*3+1]=(t-0.5)*HEIGHT;p[i*3+2]=Math.sin(a)*(RADIUS+w);}
       g.setAttribute('position',new THREE.BufferAttribute(p,3));
-      return new THREE.Points(g,new THREE.PointsMaterial({size:0.4,map:sprite,color:color,transparent:true,opacity:0.78,depthWrite:false,blending:THREE.AdditiveBlending}));
+      var pts=new THREE.Points(g,new THREE.PointsMaterial({size:0.34,map:sprite,color:ACCENT2,transparent:true,opacity:0.7,depthWrite:false,blending:THREE.AdditiveBlending}));
+      pts.rotation.y=rot;return pts;
     }
     var strandGroup=new THREE.Group();
-    var hc=isMobile?800:1500;
-    var s1=helix(hc,7,60,7,ACCENT2);
-    var s2=helix(hc,7,60,7,GREEN);s2.rotation.y=Math.PI;
-    strandGroup.add(s1);strandGroup.add(s2);
+    strandGroup.add(makeStrand(0));strandGroup.add(makeStrand(Math.PI));
     scene.add(strandGroup);
 
-    // centrepiece — octahedron stack (implant lattice)
+    // centrepiece: wireframe scan lattice + implant crown node + guide ring
     var centre=new THREE.Group();
-    var stack=new THREE.Group();
-    for(var k=0;k<4;k++){
-      var oct=new THREE.Mesh(new THREE.OctahedronGeometry(1.6-k*0.12,0),
-        new THREE.MeshBasicMaterial({color:ACCENT2,wireframe:true,transparent:true,opacity:0.5}));
-      oct.position.y=2.4-k*1.6;oct.scale.y=1.2;
-      stack.add(oct);
-    }
-    var core=new THREE.Mesh(new THREE.IcosahedronGeometry(1.1,0),
-      new THREE.MeshBasicMaterial({color:0xffffff,wireframe:true,transparent:true,opacity:0.85}));
-    core.position.y=3.4;stack.add(core);
-    var ring=new THREE.Mesh(new THREE.TorusGeometry(5.2,0.03,8,120),
-      new THREE.MeshBasicMaterial({color:GREEN,transparent:true,opacity:0.55}));
+    var lat=new THREE.Mesh(new THREE.IcosahedronGeometry(3.4,1),new THREE.MeshBasicMaterial({color:ACCENT,wireframe:true,transparent:true,opacity:0.5}));
+    var inner=new THREE.Mesh(new THREE.IcosahedronGeometry(1.9,0),new THREE.MeshBasicMaterial({color:0xffffff,wireframe:true,transparent:true,opacity:0.85}));
+    var ring=new THREE.Mesh(new THREE.TorusGeometry(5.2,0.03,8,120),new THREE.MeshBasicMaterial({color:ACCENT2,transparent:true,opacity:0.7}));
     ring.rotation.x=Math.PI/2.4;
-    centre.add(stack);centre.add(ring);
+    var crown=new THREE.Mesh(new THREE.IcosahedronGeometry(0.5,0),new THREE.MeshBasicMaterial({color:CONFIRM,transparent:true,opacity:0.95}));
+    crown.position.set(2.4,1.6,0.6);
+    centre.add(lat,inner,ring,crown);
     scene.add(centre);
 
-    // implant hologram (crown + threaded screw silhouette)
-    var full=new THREE.Shape();
-    full.moveTo(-2.2,4.4);
-    full.bezierCurveTo(-2.7,3.4,-2.5,2.5,-1.6,2.3);
-    full.lineTo(-1.0,1.5);
-    full.lineTo(-0.95,0.9);
-    for(var t=0;t<6;t++){var y=0.9-t*0.95;full.lineTo(0.95-((t%2)*0.35),y);full.lineTo(-0.95+((t%2)*0.35),y-0.42);}
-    full.lineTo(0,-5.4);
-    full.lineTo(0.95,-2.0);
-    full.lineTo(0.95,0.9);
-    full.lineTo(1.0,1.5);
-    full.lineTo(1.6,2.3);
-    full.bezierCurveTo(2.5,2.5,2.7,3.4,2.2,4.4);
-    full.bezierCurveTo(1.4,5.6,-1.4,5.6,-2.2,4.4);
+    // ---- RECIPE G: molar + implant hologram ----
+    function toothShape(){
+      var s=new THREE.Shape();
+      s.moveTo(-3,1);
+      s.bezierCurveTo(-3.6,3.2,-2.6,4.4,-1.6,3.9);
+      s.bezierCurveTo(-1.0,4.6,-0.4,4.6,0,3.9);
+      s.bezierCurveTo(0.4,4.6,1.0,4.6,1.6,3.9);
+      s.bezierCurveTo(2.6,4.4,3.6,3.2,3,1);
+      s.bezierCurveTo(3.4,-0.2,2.8,-0.8,2.2,-1);
+      s.lineTo(1.9,-3);
+      s.bezierCurveTo(1.9,-4.2,1.0,-4.2,1.0,-3);
+      s.lineTo(0.9,-1.4);
+      s.lineTo(0.55,-1.4);
+      s.lineTo(0.55,-4.2);
+      s.lineTo(0.85,-4.6);s.lineTo(0.4,-5.0);
+      s.lineTo(0.75,-5.4);s.lineTo(0.3,-5.8);
+      s.lineTo(0.6,-6.2);s.lineTo(0.15,-6.6);
+      s.lineTo(0.0,-7.1);
+      s.lineTo(-0.15,-6.6);s.lineTo(-0.6,-6.2);
+      s.lineTo(-0.3,-5.8);s.lineTo(-0.75,-5.4);
+      s.lineTo(-0.4,-5.0);s.lineTo(-0.85,-4.6);
+      s.lineTo(-0.55,-4.2);
+      s.lineTo(-0.55,-1.4);
+      s.lineTo(-0.9,-1.4);
+      s.lineTo(-1.0,-3);
+      s.bezierCurveTo(-1.0,-4.2,-1.9,-4.2,-1.9,-3);
+      s.lineTo(-2.2,-1);
+      s.bezierCurveTo(-2.8,-0.8,-3.4,-0.2,-3,1);
+      return s;
+    }
+    var shape=toothShape();
+    var HOLO_N=isMobile?2000:4000;
+    var fillN=Math.floor(HOLO_N*0.6), outN=HOLO_N-fillN;
 
-    var HN=isMobile?2400:4400;
-    var HFILL=Math.floor(HN*0.55), HOUT=HN-HFILL;
-    var SCALE=1.7;
-
-    var sgeo=new THREE.ShapeGeometry(full,24);
-    var sp=sgeo.attributes.position.array, idx=sgeo.index.array;
-    var tris=[],areas=[],total=0;
-    for(var f=0;f<idx.length;f+=3){
-      var a=idx[f],b=idx[f+1],cc=idx[f+2];
-      var ax=sp[a*3],ay=sp[a*3+1],bx=sp[b*3],by=sp[b*3+1],cx=sp[cc*3],cy=sp[cc*3+1];
+    var sg=new THREE.ShapeGeometry(shape,24);
+    var sPos=sg.attributes.position.array, sIdx=sg.index.array;
+    var tris=[], areas=[], total=0;
+    for(var t=0;t<sIdx.length;t+=3){
+      var a=sIdx[t]*3,b=sIdx[t+1]*3,cc=sIdx[t+2]*3;
+      var ax=sPos[a],ay=sPos[a+1],bx=sPos[b],by=sPos[b+1],cx=sPos[cc],cy=sPos[cc+1];
       var ar=Math.abs((bx-ax)*(cy-ay)-(cx-ax)*(by-ay))/2;
-      tris.push([ax,ay,bx,by,cx,cy]);total+=ar;areas.push(total);
+      tris.push([ax,ay,bx,by,cx,cy]);areas.push(ar);total+=ar;
     }
-    function pickTri(){var rr=Math.random()*total;for(var q=0;q<areas.length;q++)if(rr<=areas[q])return tris[q];return tris[tris.length-1];}
+    function pickTri(){var r=Math.random()*total,acc=0;for(var k=0;k<areas.length;k++){acc+=areas[k];if(r<=acc)return tris[k];}return tris[tris.length-1];}
+    var SCL=1.5;
+    function fillPt(){var T=pickTri();var u=Math.random(),v=Math.random();if(u+v>1){u=1-u;v=1-v;}
+      var x=T[0]+u*(T[2]-T[0])+v*(T[4]-T[0]);
+      var y=T[1]+u*(T[3]-T[1])+v*(T[5]-T[1]);
+      return [x*SCL,y*SCL,(Math.random()-0.5)*1.2];}
 
-    var fillTarget=new Float32Array(HFILL*3), fillCloud=new Float32Array(HFILL*3), fillCur=new Float32Array(HFILL*3);
-    for(var i=0;i<HFILL;i++){
-      var tr=pickTri();var u=Math.random(),v=Math.random();if(u+v>1){u=1-u;v=1-v;}
-      var x=tr[0]+u*(tr[2]-tr[0])+v*(tr[4]-tr[0]);
-      var y=tr[1]+u*(tr[3]-tr[1])+v*(tr[5]-tr[1]);
-      fillTarget[i*3]=x*SCALE;fillTarget[i*3+1]=y*SCALE;fillTarget[i*3+2]=(Math.random()-0.5)*1.2;
-      var rr=27+Math.random()*4,th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
-      fillCloud[i*3]=rr*Math.sin(ph)*Math.cos(th);fillCloud[i*3+1]=rr*Math.sin(ph)*Math.sin(th);fillCloud[i*3+2]=rr*Math.cos(ph);
-      fillCur[i*3]=fillCloud[i*3];fillCur[i*3+1]=fillCloud[i*3+1];fillCur[i*3+2]=fillCloud[i*3+2];
+    var outPts=shape.getPoints(240);
+    function outPt(){var q=outPts[Math.floor(Math.random()*outPts.length)];
+      return [q.x*SCL+(Math.random()-0.5)*0.24,q.y*SCL+(Math.random()-0.5)*0.24,(Math.random()-0.5)*0.5];}
+
+    function buildHolo(count,fn,color,size,op){
+      var g=new THREE.BufferGeometry();
+      var cloud=new Float32Array(count*3), target=new Float32Array(count*3), cur=new Float32Array(count*3);
+      for(var i=0;i<count;i++){
+        var rr=27+Math.random()*4,th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+        cloud[i*3]=rr*Math.sin(ph)*Math.cos(th);cloud[i*3+1]=rr*Math.sin(ph)*Math.sin(th);cloud[i*3+2]=rr*Math.cos(ph);
+        var p=fn();target[i*3]=p[0];target[i*3+1]=p[1];target[i*3+2]=p[2];
+        cur[i*3]=cloud[i*3];cur[i*3+1]=cloud[i*3+1];cur[i*3+2]=cloud[i*3+2];
+      }
+      g.setAttribute('position',new THREE.BufferAttribute(cur,3));
+      var pts=new THREE.Points(g,new THREE.PointsMaterial({size:size,map:sprite,color:color,transparent:true,opacity:op,depthWrite:false,blending:THREE.AdditiveBlending}));
+      pts.userData={cloud:cloud,target:target};
+      return pts;
     }
-    var fgeo=new THREE.BufferGeometry();fgeo.setAttribute('position',new THREE.BufferAttribute(fillCur,3));
-    var fillPts=new THREE.Points(fgeo,new THREE.PointsMaterial({size:0.24,map:sprite,color:ACCENT2,transparent:true,opacity:0.15,depthWrite:false,blending:THREE.AdditiveBlending}));
-
-    var outPts2d=full.getPoints(260);
-    var outTarget=new Float32Array(HOUT*3),outCloud=new Float32Array(HOUT*3),outCur=new Float32Array(HOUT*3);
-    for(var i=0;i<HOUT;i++){
-      var pp=outPts2d[Math.floor(Math.random()*outPts2d.length)];
-      outTarget[i*3]=pp.x*SCALE+(Math.random()-0.5)*0.24;
-      outTarget[i*3+1]=pp.y*SCALE+(Math.random()-0.5)*0.24;
-      outTarget[i*3+2]=(Math.random()-0.5)*0.5;
-      var rr=27+Math.random()*4,th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
-      outCloud[i*3]=rr*Math.sin(ph)*Math.cos(th);outCloud[i*3+1]=rr*Math.sin(ph)*Math.sin(th);outCloud[i*3+2]=rr*Math.cos(ph);
-      outCur[i*3]=outCloud[i*3];outCur[i*3+1]=outCloud[i*3+1];outCur[i*3+2]=outCloud[i*3+2];
-    }
-    var ogeo=new THREE.BufferGeometry();ogeo.setAttribute('position',new THREE.BufferAttribute(outCur,3));
-    var outMPts=new THREE.Points(ogeo,new THREE.PointsMaterial({size:0.4,map:sprite,color:0xbdf1ff,transparent:true,opacity:0.3,depthWrite:false,blending:THREE.AdditiveBlending}));
-
-    var holo=new THREE.Group();holo.add(fillPts);holo.add(outMPts);
-    scene.add(holo);
+    var holoGroup=new THREE.Group();
+    var holoFill=buildHolo(fillN,fillPt,ACCENT,0.24,0.5);
+    var holoOut=buildHolo(outN,outPt,LIGHT,0.4,0.95);
+    holoGroup.add(holoFill,holoOut);
+    holoGroup.position.y=1;
+    scene.add(holoGroup);
 
     // bloom
     var composer=new THREE.EffectComposer(renderer);
     composer.addPass(new THREE.RenderPass(scene,camera));
-    var bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.15,0.85,0.14);
+    var bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.2,0.85,0.12);
     composer.addPass(bloom);
 
-    // camera + morph timeline
     var cam={x:0,y:2,z:46,ry:0};
     var morph={t:0};
-    var hudEl=document.getElementById('hud');
+    var mouse={x:0,y:0};
+    var hud=document.getElementById('hud');
+
     gsap.registerPlugin(ScrollTrigger);
-
     var tl=gsap.timeline({scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:1.1}});
-    tl.to(cam,{z:24,y:1,ease:'none',duration:1},0)
-      .to(cam,{ry:Math.PI*0.55,x:-5,z:19,ease:'none',duration:1},1)
-      .to(morph,{t:1,ease:'power1.inOut',duration:0.9},1.15)
-      .to(stack.scale,{x:0.001,y:0.001,z:0.001,ease:'power1.in',duration:0.7},1.2)
-      .to(cam,{z:16,y:-1,ry:Math.PI*0.95,ease:'none',duration:1},2)
-      .to(cam,{z:18,y:0.5,ry:Math.PI*1.25,ease:'none',duration:1},3)
-      .to(strandGroup.rotation,{y:Math.PI*1.8,ease:'none',duration:4},0)
-      .to(bloom,{strength:1.4,ease:'none',duration:1},2);
-
-    ScrollTrigger.create({trigger:'#implantaat',start:'top 60%',end:'bottom 30%',
-      onEnter:function(){if(innerWidth>=768)hudEl.classList.add('show');},
-      onLeave:function(){hudEl.classList.remove('show');},
-      onEnterBack:function(){if(innerWidth>=768)hudEl.classList.add('show');},
-      onLeaveBack:function(){hudEl.classList.remove('show');}
-    });
+    tl.to(cam,{z:30,y:1.4,ease:'none',duration:1},0)
+      .to(cam,{z:24,ry:Math.PI*0.35,x:-4,ease:'none',duration:1},1)
+      .to(cam,{z:18,y:-0.6,ry:Math.PI*0.75,ease:'none',duration:1},2)
+      .to(cam,{z:16,y:-1.2,ry:Math.PI*0.95,ease:'none',duration:1},3)
+      .to(cam,{z:22,y:0.6,ry:Math.PI*1.15,ease:'none',duration:1},4)
+      .to(strandGroup.rotation,{y:Math.PI*1.8,ease:'none',duration:5},0)
+      .to(morph,{t:1,ease:'power1.inOut',duration:1.2,
+          onStart:function(){hud.classList.add('show');},
+          onReverseComplete:function(){hud.classList.remove('show');}},1.9)
+      .to(centre.scale,{x:0.001,y:0.001,z:0.001,ease:'power2.in',duration:1},1.9)
+      .to(centre.scale,{x:1,y:1,z:1,ease:'power2.out',duration:1},3.6)
+      .call(function(){hud.classList.remove('show');},null,3.5)
+      .to(bloom,{strength:1.45,ease:'none',duration:1},2)
+      .to(bloom,{strength:1.1,ease:'none',duration:1},4);
 
     document.querySelectorAll('.chapter .inner').forEach(function(el){
       gsap.from(el,{opacity:0,y:60,duration:1,ease:'power2.out',
         scrollTrigger:{trigger:el,start:'top 78%'}});
     });
 
-    var mouse={x:0,y:0};
     if(!isMobile){
       window.addEventListener('mousemove',function(e){
-        mouse.x=(e.clientX/innerWidth-0.5);
-        mouse.y=(e.clientY/innerHeight-0.5);
+        mouse.x=(e.clientX/innerWidth-0.5)*2;
+        mouse.y=(e.clientY/innerHeight-0.5)*2;
       });
     }
 
+    var clk=0;
     function animate(){
       requestAnimationFrame(animate);
+      clk+=0.005;
       universe.rotation.y+=0.0004;
       centre.rotation.y+=0.003;
-      var fa=fgeo.attributes.position.array;
-      for(var k=0;k<fa.length;k++)fa[k]=fillCloud[k]+(fillTarget[k]-fillCloud[k])*morph.t;
-      fgeo.attributes.position.needsUpdate=true;
-      var oa=ogeo.attributes.position.array;
-      for(var k=0;k<oa.length;k++)oa[k]=outCloud[k]+(outTarget[k]-outCloud[k])*morph.t;
-      ogeo.attributes.position.needsUpdate=true;
-      holo.quaternion.copy(camera.quaternion);
-      fillPts.material.opacity=0.15+0.35*morph.t;
-      outMPts.material.opacity=0.3+0.65*morph.t;
+      inner.rotation.x+=0.006;
+      ring.rotation.z+=0.004;
+      crown.position.y=1.6+Math.sin(clk*3)*0.15;
+
+      [holoFill,holoOut].forEach(function(pts){
+        var arr=pts.geometry.attributes.position.array;
+        var cl=pts.userData.cloud, tg=pts.userData.target;
+        for(var k=0;k<arr.length;k++){arr[k]=cl[k]+(tg[k]-cl[k])*morph.t;}
+        pts.geometry.attributes.position.needsUpdate=true;
+        pts.quaternion.copy(camera.quaternion);
+      });
+      holoGroup.rotation.y=(1-morph.t)*0.4;
 
       camera.position.z+=(cam.z-camera.position.z)*0.08;
       camera.position.x=Math.sin(cam.ry)*camera.position.z*0.35+mouse.x*2.2;
@@ -633,12 +616,15 @@ document.getElementById('jaar').textContent=new Date().getFullYear();
     animate();
 
     window.addEventListener('resize',function(){
-      camera.aspect=innerWidth/innerHeight;
-      camera.updateProjectionMatrix();
+      isMobile=window.innerWidth<768;
+      camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
       renderer.setSize(innerWidth,innerHeight);
       composer.setSize(innerWidth,innerHeight);
     });
-  }catch(e){console.warn('3D scene failed:',e);}
+  }catch(e){
+    var g=document.getElementById('gl');if(g)g.style.display='none';
+    document.body.style.background='radial-gradient(ellipse at top,#0a2530,#04090c 70%)';
+  }
 })();
 </script>
 </body>
