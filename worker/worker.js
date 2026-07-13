@@ -16,9 +16,10 @@
  * Deploy: see README.md.
  */
 
-import { designBrief, qaChecklist } from './design-knowledge.js';
+import { designBrief, qaChecklist, classifyDomain } from './design-knowledge.js';
 import { threeRecipes } from './three-recipes.js';
 import { captureFrames } from './screenshot.js';
+import { exemplarBlock } from './exemplars.js';
 
 const MODEL = 'claude-opus-4-8';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
@@ -293,11 +294,18 @@ export default {
       // Curated design intelligence (palettes/fonts/patterns/styles) matched to
       // the business type — extracted from the ui-ux-pro-max skill data.
       const brief = designBrief(place, branding);
+      // Worked concept exemplar matched to the same domain the brief uses — a
+      // few-shot taste anchor for the strategic decisions (offering, feeling,
+      // 3D story, chapters) before any code is written.
+      const domain = classifyDomain(
+        [place.name, place.category, branding && (branding.notes || '')].filter(Boolean).join(' ')
+      );
+      const exemplar = exemplarBlock(domain);
 
       // DESIGN pass
       let html = extractHtml(await callClaudeStream(
         env, designSystem(),
-        ctx + '\n\n' + brief + '\n\nNow build the complete website.'
+        ctx + '\n\n' + brief + '\n\n' + exemplar + '\n\nNow build the complete website.'
       ));
       if (!looksComplete(html)) throw new Error('Design pass produced incomplete HTML.');
 
