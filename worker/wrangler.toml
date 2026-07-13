@@ -1,7 +1,14 @@
 name = "designerprospector"
 main = "worker.js"
 compatibility_date = "2026-01-01"
+compatibility_flags = ["nodejs_compat"]
 
 # The Anthropic API key is NOT stored here. Set it as an encrypted secret:
 #   npx wrangler secret put ANTHROPIC_API_KEY
 # (see README.md)
+
+# Browser Rendering (Workers Paid) powers the vision-in-the-loop art-director
+# pass: the generated page is rendered and screenshotted so Claude critiques
+# what actually appears on screen. Remove this binding to disable the vision
+# pass — the review then falls back to text-only and nothing else breaks.
+browser = { binding = "BROWSER" }

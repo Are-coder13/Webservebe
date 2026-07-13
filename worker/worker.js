@@ -18,6 +18,7 @@
 
 import { designBrief, qaChecklist } from './design-knowledge.js';
 import { threeRecipes } from './three-recipes.js';
+import { captureFrames } from './screenshot.js';
 
 const MODEL = 'claude-opus-4-8';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
@@ -97,11 +98,37 @@ function designSystem() {
   ].join('\n');
 }
 
-function reviewSystem() {
+function reviewSystem(hasFrames) {
+  const visual = hasFrames ? [
+    '═══ VISUAL EVIDENCE — YOU CAN SEE THE RENDERED PAGE ═══',
+    '',
+    'Attached are real screenshots of this exact HTML rendered in a headless browser:',
+    'several desktop scroll positions (0% = hero, through to 100% = final CTA) and one',
+    'mobile hero at 390px wide. This is the actual output, not a mockup. TRUST YOUR EYES',
+    'over the code — judge what genuinely appears on screen, then fix it in the HTML.',
+    '',
+    'Look critically for, and FIX, anything the screenshots reveal:',
+    '- White-out / blown-out frames: bloom too strong, or the camera flew inside/through',
+    '  the geometry. If any frame is mostly white or washed out, lower bloom (0.8–1.4) and',
+    '  push the camera back (closest approach z >= 14) so the scene reads as glowing shapes.',
+    '- Text that is unreadable: low contrast against the 3D, missing/weak scrim, headings',
+    '  lost in the glow. Every text block visible in a frame must be crisply legible.',
+    '- An empty, dead, or black hero: the 0% frame must already show the signature 3D world',
+    '  plus the business name and promise — not a blank void waiting to load.',
+    '- Broken mobile: overflow, cramped or overlapping text, a hero that collapses, the',
+    '  preview banner overlapping content. The 390px frame must look intentional.',
+    '- Concept mismatch: the shapes on screen do not evoke THIS trade (see the CONCEPT comment).',
+    '- Flat / generic frames: if it looks like a plain brochure rather than a cinematic',
+    '  immersive scene, rebuild the immersion using the recipes.',
+    'If a frame looks broken, that is the FIRST thing to fix — a beautiful codebase that',
+    'renders as a white rectangle is a failure. Prioritise fixes by what the eyes see.',
+    '',
+  ] : [];
   return [
     'You are a senior art director and front-end lead reviewing a cinematic WebGL landing page before it is sent to a paying prospect.',
-    'You receive a complete HTML landing page. Critique it hard against the rubric below, then RETURN AN IMPROVED, COMPLETE HTML document.',
+    'You receive a complete HTML landing page' + (hasFrames ? ' AND screenshots of it rendered' : '') + '. Critique it hard against the rubric below, then RETURN AN IMPROVED, COMPLETE HTML document.',
     '',
+    ...visual,
     '═══ REVIEW RUBRIC (check each, fix every violation) ═══',
     '',
     '1. IMMERSION — is it a true full-page 3D experience (fixed WebGL canvas, scroll-driven camera chapters, bloom glow), or a flat page with a decorative header? If the latter, rebuild it as the former using the recipes below.',
@@ -143,7 +170,21 @@ function businessBlock(place, branding, scraped) {
 }
 
 // ── Anthropic streaming call (raw HTTP SSE; returns assembled text) ──────────
-async function callClaudeStream(env, system, userText) {
+// `frames` (optional) is an array of { label, data(base64 jpeg) } — when present
+// they are attached as image blocks before the text so the model critiques what
+// it can SEE, not just the code.
+async function callClaudeStream(env, system, userText, frames) {
+  let content;
+  if (frames && frames.length) {
+    content = [];
+    for (const f of frames) {
+      content.push({ type: 'text', text: `Screenshot — ${f.label}:` });
+      content.push({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: f.data } });
+    }
+    content.push({ type: 'text', text: userText });
+  } else {
+    content = userText;
+  }
   const res = await fetch(ANTHROPIC_URL, {
     method: 'POST',
     headers: {
@@ -157,7 +198,7 @@ async function callClaudeStream(env, system, userText) {
       stream: true,
       output_config: { effort: 'high' },
       system,
-      messages: [{ role: 'user', content: userText }],
+      messages: [{ role: 'user', content }],
     }),
   });
   if (!res.ok || !res.body) {
@@ -260,17 +301,24 @@ export default {
       ));
       if (!looksComplete(html)) throw new Error('Design pass produced incomplete HTML.');
 
+      // VISION-IN-THE-LOOP — render the design-pass HTML and screenshot a few
+      // frames so the art director critiques what actually renders. Returns []
+      // (and the review falls back to text-only) if Browser Rendering is off.
+      let frames = [];
+      try { frames = await captureFrames(env, html); } catch { frames = []; }
+
       // ART-DIRECTOR review/refine pass
       try {
         const reviewed = extractHtml(await callClaudeStream(
-          env, reviewSystem(),
+          env, reviewSystem(frames.length > 0),
           businessBlock(place, branding, scraped) + '\n\n' + qaChecklist() +
-            '\n\nHTML TO IMPROVE:\n' + html
+            '\n\nHTML TO IMPROVE:\n' + html,
+          frames
         ));
         if (looksComplete(reviewed) && reviewed.length > html.length * 0.6) html = reviewed;
       } catch { /* keep design-pass HTML if review fails */ }
 
-      return withCors(json({ html, scrapedChars: scraped.length }));
+      return withCors(json({ html, scrapedChars: scraped.length, framesSeen: frames.length }));
     } catch (err) {
       return withCors(json({ error: String((err && err.message) || err) }, 502));
     }
