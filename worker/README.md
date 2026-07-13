@@ -9,9 +9,15 @@ a **design/build** pass that builds to that locked concept, and a
 
 The **concept pass** decides the strategy first — the flagship offering, the
 feeling, the 3D metaphor (hologram silhouette, light-strand curve, centrepiece),
-the chapter storyboard, palette/font choice and language — as structured JSON,
-so the build pass spends its budget on flawless execution instead of inventing
-the concept and writing correct WebGL in the same breath.
+the chapter storyboard, palette/font choice, language and tone of voice — as
+structured JSON, so the build pass spends its budget on flawless execution
+instead of inventing the concept and writing correct WebGL in the same breath.
+
+When Brandfetch supplies real logo colours, the palette is **anchored to the
+brand's actual identity** (the dominant colour adapted into the scene's glow)
+rather than defaulting to a generic candidate palette, and the tone of voice
+inferred from the scraped copy (formal vs. warm, Dutch `u` vs. `je`) is enforced
+across every line of copy.
 
 The review is where the agent's judgment sharpens: instead of critiquing the code
 blind, it **sees** the generated page. The design-pass HTML is rendered in

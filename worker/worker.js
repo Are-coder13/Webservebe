@@ -121,8 +121,12 @@ function conceptSystem() {
     '  "palette": "which candidate palette you pick, and one line on why it fits the brand",',
     '  "fonts": "which candidate font pairing you pick, and one line on why",',
     '  "chapters": ["4-5 items, each formatted \'<message> — <camera move>\' and naming a REAL service/detail from the scrape"],',
-    '  "language": "the ONE language all visible text must use, detected from the scraped content (Dutch, French, or English)"',
+    '  "language": "the ONE language all visible text must use, detected from the scraped content (Dutch, French, or English)",',
+    '  "voice": "the tone of voice for ALL copy, inferred from the scraped content — e.g. \'warm and personal, Dutch je-form\', \'formal and authoritative, Dutch u-form\', \'playful and energetic\'; include the pronoun form for Dutch/French"',
     '}',
+    '',
+    'If BRAND colours are provided, anchor your "palette" choice to the real brand colours (adapt the',
+    'dominant one into the glow/accent), rather than simply naming a generic candidate palette.',
   ].join('\n');
 }
 
@@ -165,6 +169,7 @@ function conceptBrief(c) {
     `- palette: ${c.palette || ''}`,
     `- fonts: ${c.fonts || ''}`,
     `- language for ALL visible text: ${c.language || 'match the scraped content'}`,
+    `- voice — write EVERY line of copy in this tone: ${c.voice || 'match the scraped content'}`,
     '- chapters (pair each message with its camera move):',
     chapters,
   ].join('\n');
@@ -234,7 +239,13 @@ function businessBlock(place, branding, scraped) {
   if (branding && (branding.logoUrl || (branding.colors && branding.colors.length))) {
     parts.push('', 'BRAND:');
     if (branding.logoUrl) parts.push(`- Logo URL (you may use as <img>): ${branding.logoUrl}`);
-    if (branding.colors && branding.colors.length) parts.push(`- Brand colours: ${branding.colors.join(', ')}`);
+    if (branding.colors && branding.colors.length) {
+      parts.push(`- Brand colours (extracted from the real logo — these are the ACTUAL brand identity):`);
+      parts.push(`  ${branding.colors.join(', ')}`);
+      parts.push(`  ANCHOR the palette to these: adapt the dominant brand colour into the glow/accent of the`);
+      parts.push(`  dark cinematic scene, and echo a secondary brand colour, instead of defaulting to a generic`);
+      parts.push(`  candidate palette. The candidate palettes below are references for structure/contrast only.`);
+    }
   }
   parts.push('', 'SCRAPED WEBSITE CONTENT (may be empty or noisy — extract what is useful):');
   parts.push(scraped ? scraped.slice(0, 6000) : '(nothing scraped — design from the business name, category and city)');
