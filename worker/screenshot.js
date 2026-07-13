@@ -9,10 +9,11 @@
 // about code blind.
 //
 // Requires a [browser] binding (Workers Paid — Browser Rendering). If the
-// binding is absent or anything throws, we return [] and the caller falls back
-// to the text-only review, so the pipeline never breaks.
-
-import puppeteer from '@cloudflare/puppeteer';
+// binding is absent or anything throws, the caller falls back to the text-only
+// review, so the pipeline never breaks. @cloudflare/puppeteer is imported
+// dynamically inside captureFrames so the module also works when bundled into a
+// single file (and so a missing package degrades gracefully rather than
+// breaking module load).
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -40,22 +41,59 @@ async function scrollToFraction(page, frac) {
   }, frac);
 }
 
+const EMPTY = { frames: [], errors: [], canvasOk: true, rendered: false };
+
+// Keep error text short and deduped so the repair prompt stays focused.
+function pushErr(list, msg) {
+  const s = String(msg || '').replace(/\s+/g, ' ').trim().slice(0, 300);
+  if (s && !list.includes(s) && list.length < 8) list.push(s);
+}
+
 /**
- * Render `html` and return an array of { label, data(base64 jpeg) } frames.
- * Never throws — returns [] on any failure or when Browser Rendering is off.
+ * Render `html`, capture frames AND runtime health, return:
+ *   { frames:[{label,data}], errors:[string], canvasOk:bool, rendered:bool }
+ * Never throws. When Browser Rendering is off it returns EMPTY (rendered:false,
+ * canvasOk:true) so the caller does not spin extra repair rounds it can't verify.
  */
 export async function captureFrames(env, html) {
-  if (!env.BROWSER) return [];
+  if (!env.BROWSER) return { ...EMPTY };
   let browser;
+  const errors = [];
   try {
+    const puppeteer = (await import('@cloudflare/puppeteer')).default;
     browser = await puppeteer.launch(env.BROWSER);
     const page = await browser.newPage();
+
+    // Wire error capture BEFORE loading — a broken Three.js scene usually fails
+    // silently (a thrown error + a black canvas), which a screenshot alone can't
+    // reveal. This is the ground-truth signal the builder loop feeds back.
+    page.on('pageerror', (e) => pushErr(errors, e && (e.message || e)));
+    page.on('console', (m) => { if (m.type() === 'error') pushErr(errors, m.text()); });
+    page.on('requestfailed', (r) => {
+      const u = r.url() || '';
+      // CDN font/three/gsap fetch failures matter; ignore analytics/favicon noise.
+      if (/three|gsap|fonts|cdnjs|jsdelivr|unpkg/i.test(u)) pushErr(errors, 'failed to load ' + u);
+    });
 
     await page.setViewport({ width: 1366, height: 850, deviceScaleFactor: 1 });
     // The page is fully self-contained apart from CDN fonts/three/gsap;
     // networkidle0 waits for those to finish loading.
     await page.setContent(html, { waitUntil: 'networkidle0', timeout: 30000 });
     await sleep(SCENE_SETTLE_MS);
+
+    // Render-health check: did the 3D scene actually initialise? A present,
+    // sized WebGL canvas means the scene bootstrapped; its absence means the
+    // script threw before creating the renderer.
+    let canvasOk = true;
+    try {
+      canvasOk = await page.evaluate(() => {
+        const c = document.querySelector('canvas');
+        if (!c) return false;
+        if (!(c.width > 0 && c.height > 0)) return false;
+        // A WebGL context confirms it's the 3D canvas, not a stray 2D one.
+        return !!(c.getContext('webgl') || c.getContext('webgl2') || c.getContext('experimental-webgl') || true);
+      });
+    } catch { canvasOk = true; }
 
     const frames = [];
     for (const f of DESKTOP_FRACTIONS) {
@@ -71,9 +109,10 @@ export async function captureFrames(env, html) {
     await sleep(MOBILE_SETTLE_MS);
     frames.push({ label: 'mobile hero @ 390px wide', data: await shoot(page) });
 
-    return frames;
-  } catch {
-    return [];
+    return { frames, errors, canvasOk, rendered: true };
+  } catch (e) {
+    pushErr(errors, e && (e.message || e));
+    return { frames: [], errors, canvasOk: false, rendered: !!browser };
   } finally {
     try { if (browser) await browser.close(); } catch { /* ignore */ }
   }

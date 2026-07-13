@@ -110,6 +110,19 @@ camera.position.y+=((cam.y-mouse.y*1.6)-camera.position.y)*0.06;
 camera.lookAt(0,0,0); composer.render();
 Also gsap.from() each .chapter .inner (opacity 0, y:60) with its own ScrollTrigger at 'top 78%'.
 
+AMBIENT MOTION (MANDATORY — the scene must be visibly ALIVE the instant it loads,
+before any scroll or mouse movement; scroll-driven camera alone reads as a static
+image and is a failure). In animate() add a clock and drive continuous, autonomous
+motion every frame, independent of scroll:
+var t=performance.now()*0.001;
+- particle universe: points.rotation.y += 0.0009; points.rotation.x = Math.sin(t*0.15)*0.05;
+- light-strand group: strandGroup.rotation.y += 0.0016 (ADD to the scroll tween, don't replace it);
+- centrepiece: centre.rotation.y += 0.0022; centre.rotation.z = Math.sin(t*0.3)*0.08;
+- gentle bloom breathing: bloom.strength = base + Math.sin(t*0.8)*0.12 (keep within 0.8–1.6);
+- optional particle drift: bob a few systems with position.y = Math.sin(t*0.5)*0.4.
+This ambient layer runs ALWAYS (the scroll timeline adds camera moves on top). The
+page must never sit still. Keep speeds slow and weighty — this is a luxury idle, not a spin.
+
 RECIPE H — SCAN/TARGETING HUD (optional; use ONLY for precision/tech/security-coded
 trades — dental, auto diagnostics, legal, security, engineering, medical. Skip it
 entirely for warm/casual trades like restaurants, salons, cafes — it reads cold there):

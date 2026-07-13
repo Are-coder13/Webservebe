@@ -63,8 +63,9 @@ function designSystem() {
     '- Build an IMMERSIVE CINEMATIC page in the style of award-winning studio sites: ONE fixed full-viewport WebGL scene behind everything, with the content scrolling over it as "chapters" while a scroll-driven camera flies through the 3D world.',
     '- The 3D world is procedural and asset-free: a two-tone particle universe + a signature parametric light-strand + a glowing wireframe centrepiece, all glowing via UnrealBloom. Tune every colour to the brand palette; pick strand/centrepiece shapes that evoke the trade.',
     '- Choreograph 3-5 camera chapters across the scroll (push-in, orbit, close approach, settle on CTA). Motion must feel weighty and smooth: scrubbed timeline + eased camera + mouse parallax.',
+    '- ALIVE ON LOAD: the scene MUST have continuous ambient motion (slow rotation, particle drift, bloom breathing) that runs the instant the page opens, WITHOUT any scroll or mouse input — see the AMBIENT MOTION recipe. A page that only moves when you scroll reads as a static image and fails. This is non-negotiable.',
     '- Follow the tested recipes below for ALL Three.js code. They are proven to render correctly — adapt parameters and shapes creatively, but keep the architecture, guards, and API usage exactly as shown. DO NOT use Vanta.js, particles.js, or any other pre-built background effect library.',
-    '- Within chapters, vary the content layout (offset columns, bento, timeline, icon-left rows — not always centred stacks), and keep the bespoke SVG iconography rules above.',
+    '- LAYOUT VARIETY (mandatory — repeated centred stacks are the #1 thing that makes these pages look boring and templated): every chapter must use a DISTINCT layout, and no two consecutive chapters may share one. Draw from: full-bleed asymmetric hero; offset two-column (text left / visual right, then flip); bento grid of cards; vertical timeline with connector line; icon-left feature rows; big-number stat band; overlapping/staggered cards; a wide editorial pull-quote. At MOST one centred-stack chapter in the whole page. Vary alignment, column counts and rhythm deliberately.',
     '',
     'DESIGN PROCESS (do these steps IN ORDER — the concept comes before any code):',
     'STEP 1 — ANALYZE. From the scraped website, category, and reviews answer: What does this business actually sell? What is its ONE flagship product or service? Who is the customer and what do they feel (fear at the dentist, pride in their car, appetite, stress in a legal fight)? What are the brand colours, tone, language, and city?',
@@ -80,7 +81,7 @@ function designSystem() {
     '- Self-contained: all CSS in a <style> tag, all JS in a <script> tag.',
     '- You MAY use CDN <link>/<script> for Google Fonts and the exact Three.js/GSAP scripts listed in the recipes. Nothing else.',
     '- DO NOT reference any external image or photo files — none exist. Besides the WebGL scene, use CSS gradients, CSS shapes, and inline SVG. You may use the business LOGO URL if one is provided (as an <img>).',
-    '- Editorial poster moments: at 1-2 chapters, set a single giant display word (10-18vw, heavyweight, brand colour or outlined text) BEHIND the 3D/content layer, product-film style. It must relate to the trade (e.g. FRESH, PRECISION, SHINE) and stay partially cropped/clipped for tension.',
+    '- Editorial poster moments: at 1-2 chapters, set a single giant display word (10-18vw, heavyweight) product-film style, partially cropped/clipped for tension, relating to the trade (e.g. FRESH, PRECISION, SHINE). CRITICAL LEGIBILITY: on the near-black background it MUST be clearly visible — use EITHER a bright outlined treatment (transparent fill + 2px stroke via -webkit-text-stroke in a LIGHTENED brand/accent colour at 0.35-0.6 opacity) OR a solid fill in a light or accent tint at >=0.5 opacity. NEVER a dark-on-dark watermark, never opacity below 0.2 — if it is barely visible it is wrong. Place it above the vignette veil but behind the text content (z-index between them).',
     '- For product-led trades you may add an "exploded diagram" chapter: a layered inline SVG of the flagship product (5-8 stacked parts you draw yourself) whose parts translate apart on scroll (GSAP scrub), with thin leader lines labelling REAL services from the scrape.',
     '- For precision/tech-coded trades (dental, auto diagnostics, legal, security, medical, engineering — NOT restaurants/salons/cafes) you may frame the hologram moment (RECIPE G) with the scan/targeting HUD overlay (RECIPE H): corner brackets, reticle, scanline, and a small readout panel naming a real detail (a service, a precision stat) — fades in only while that hologram forms.',
     '- Ground all content in the scraped website: real service names, real tone, real city. No lorem ipsum, no generic filler ("Quality You Can Trust", "Your satisfaction is our priority").',
@@ -197,6 +198,9 @@ function reviewSystem(hasFrames) {
     '- Concept mismatch: the shapes on screen do not evoke THIS trade (see the CONCEPT comment).',
     '- Flat / generic frames: if it looks like a plain brochure rather than a cinematic',
     '  immersive scene, rebuild the immersion using the recipes.',
+    '- Runtime errors: if a RENDER DIAGNOSTICS section below lists JavaScript/console errors',
+    '  or reports that the 3D canvas did not initialise, FIX EVERY ONE first — they mean the',
+    '  scene is broken or half-rendered, which no amount of visual polish can compensate for.',
     'If a frame looks broken, that is the FIRST thing to fix — a beautiful codebase that',
     'renders as a white rectangle is a failure. Prioritise fixes by what the eyes see.',
     '',
@@ -214,7 +218,9 @@ function reviewSystem(hasFrames) {
     '4. 3D CORRECTNESS — Three.js r128 API only (no CapsuleGeometry, no THREE.Geometry); one renderer; geometry created once, never in animate(); composer.render() when bloom is used; WebGL + prefers-reduced-motion guards with a CSS fallback; resize updates camera, renderer AND composer. If the page loads Vanta.js, particles.js, or any pre-built effect library, REMOVE it and rebuild the effect from the recipes.',
     '5. SVG ARTWORK — every service/feature card uses a custom SVG icon via <path>, NOT a unicode character (◈ ◆ ◉ ✦ ▸ ● ■) and NOT an emoji; replace any you find with hand-drawn SVG icons relevant to that service. SVGs use gradients, filters, or animation — not flat single-colour shapes.',
     '6. LANGUAGE CONSISTENCY — all visible text in ONE language matching the business content. If the business content is Dutch, every heading, button, section tag, and label must be Dutch — no "Our Services" or "Get In Touch" on a Dutch page. Fix any mixed-language text.',
-    '7. MOTION QUALITY — scrubbed camera timeline with eased follow + mouse parallax; chapter content reveals on scroll; transitions 150-300ms; nothing janky or gratuitous.',
+    '7. MOTION QUALITY & ALIVE-ON-LOAD — the scene MUST visibly move the instant it loads, with NO scroll and NO mouse input: continuous ambient rotation/drift/bloom-breathing per the AMBIENT MOTION recipe. If the only motion is scroll-driven or mouse-parallax (i.e. it sits still on load), ADD ambient motion in animate() — this is the most common failure. Camera: scrubbed timeline, eased follow; content reveals on scroll; nothing janky.',
+    '8a. EDITORIAL WORD LEGIBILITY — if a giant display word is used, it MUST be clearly visible on the dark background (bright outlined stroke or a light/accent fill at >=0.5 opacity). If it is a dark-on-dark, barely-visible watermark, FIX IT: brighten the stroke/fill and raise opacity until it reads as an intentional poster word.',
+    '8b. LAYOUT VARIETY — if chapters are mostly centred stacks or look repetitive/templated, REBUILD them with distinct layouts (asymmetric hero, offset columns, bento, timeline, stat band, staggered cards). No two consecutive chapters share a layout; at most one centred stack total.',
     '8. HIERARCHY, BRAND & COPY — clear type-scale contrast; deliberate spacing rhythm; max 2 accent colours plus neutrals; hover states and focus rings on interactive elements; copy specific to this business — kill generic filler ("Quality You Can Trust", "We are committed to excellence").',
     '9. TECHNICAL — fully responsive 375px-1440px with no horizontal scroll and reduced particle counts on mobile; NO external image/photo files (only CSS/SVG/canvas/logo); cursor:pointer on clickables; prefers-reduced-motion respected; valid, complete, not truncated.',
     '',
@@ -226,6 +232,25 @@ function reviewSystem(hasFrames) {
     'Keep what already works; raise everything else. The page should look like it was designed',
     'by a different, better agency than the one that made the input — not a minor tweak.',
   ].join('\n');
+}
+
+// Format render diagnostics (runtime errors + canvas health) for the repair
+// pass. Empty string when the page wasn't rendered (Browser Rendering off).
+function renderReport(diag) {
+  if (!diag || !diag.rendered) return '';
+  const lines = ['', 'RENDER DIAGNOSTICS (from actually running this HTML in a headless browser):'];
+  if (!diag.canvasOk) {
+    lines.push('- ⚠ The 3D <canvas> did NOT initialise — the WebGL scene is missing or the script threw ' +
+      'before creating the renderer. Fix this FIRST: the page must render its cinematic scene, not a blank background.');
+  }
+  if (diag.errors && diag.errors.length) {
+    lines.push('- ⚠ JavaScript/console errors captured at runtime — FIX EVERY ONE (they usually mean the scene is broken):');
+    for (const e of diag.errors) lines.push('    • ' + e);
+  }
+  if (diag.canvasOk && (!diag.errors || !diag.errors.length)) {
+    lines.push('- No runtime errors and the 3D canvas initialised cleanly. Focus on visual/aesthetic refinement from the screenshots.');
+  }
+  return lines.join('\n');
 }
 
 function businessBlock(place, branding, scraped) {
@@ -403,26 +428,40 @@ export default {
       let html = extractHtml(await callClaudeStream(env, designSystem(), buildText));
       if (!looksComplete(html)) throw new Error('Design pass produced incomplete HTML.');
 
-      // VISION-IN-THE-LOOP — render the design-pass HTML and screenshot a few
-      // frames so the art director critiques what actually renders. Returns []
-      // (and the review falls back to text-only) if Browser Rendering is off.
-      let frames = [];
-      try { frames = await captureFrames(env, html); } catch { frames = []; }
-
-      // ART-DIRECTOR review/refine pass
-      try {
-        const reviewed = extractHtml(await callClaudeStream(
-          env, reviewSystem(frames.length > 0),
-          businessBlock(place, branding, scraped) + '\n\n' + qaChecklist() +
-            '\n\nHTML TO IMPROVE:\n' + html,
-          frames
-        ));
-        if (looksComplete(reviewed) && reviewed.length > html.length * 0.6) html = reviewed;
-      } catch { /* keep design-pass HTML if review fails */ }
+      // ITERATIVE RENDER → REVIEW LOOP — the pattern agentic site builders use:
+      // render the page, capture frames AND runtime errors, let the art director
+      // fix what it sees plus any errors, then RE-RENDER to verify. Stops early
+      // once a render is clean; capped at MAX_REVIEWS fix passes to bound cost.
+      // When Browser Rendering is off it collapses to a single text-only review.
+      const MAX_REVIEWS = 2;
+      let frames = [], reviews = 0;
+      let diag = { frames: [], errors: [], canvasOk: true, rendered: false };
+      for (let i = 0; i <= MAX_REVIEWS; i++) {
+        try { diag = await captureFrames(env, html); }
+        catch { diag = { frames: [], errors: [], canvasOk: true, rendered: false }; }
+        frames = diag.frames;
+        const clean = diag.canvasOk && (!diag.errors || diag.errors.length === 0);
+        if (i > 0 && clean) break;        // already fixed once and now renders clean → done
+        if (i === MAX_REVIEWS) break;     // out of fix budget; return the last render's HTML
+        try {
+          const reviewed = extractHtml(await callClaudeStream(
+            env, reviewSystem(frames.length > 0),
+            businessBlock(place, branding, scraped) + '\n\n' + qaChecklist() +
+              renderReport(diag) + '\n\nHTML TO IMPROVE:\n' + html,
+            frames
+          ));
+          if (looksComplete(reviewed) && reviewed.length > html.length * 0.6) html = reviewed;
+          reviews++;
+        } catch { break; /* keep last good html */ }
+        if (!diag.rendered) break;        // can't verify without rendering → one review only
+      }
 
       return withCors(json({
         html, scrapedChars: scraped.length,
         framesSeen: frames.length, conceptLocked: !!conceptBriefText,
+        reviewRounds: reviews,
+        renderClean: diag.canvasOk && (!diag.errors || diag.errors.length === 0),
+        renderErrors: (diag.errors || []).length,
       }));
     } catch (err) {
       return withCors(json({ error: String((err && err.message) || err) }, 502));
