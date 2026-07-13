@@ -99,6 +99,77 @@ function designSystem() {
   ].join('\n');
 }
 
+// CONCEPT pass — pure strategy, no code. Splitting this out means the build
+// pass isn't inventing the concept and writing 6k tokens of correct WebGL in
+// the same breath; it builds to a locked, considered brief.
+function conceptSystem() {
+  return [
+    'You are an award-winning creative director planning a bespoke, cinematic WebGL website for a local business.',
+    'Think hard about STRATEGY ONLY. Do NOT write any HTML, CSS, or JavaScript.',
+    'Ground every decision in the scraped website, category, reviews and city — no generic filler.',
+    '',
+    'Output ONLY a single JSON object (no prose, no markdown fences) with EXACTLY these keys:',
+    '{',
+    '  "offering": "the ONE flagship product or service this business is really selling",',
+    '  "feeling": "the core emotion the visitor should feel",',
+    '  "3d_story": "how a procedural, asset-free 3D world visualises that offering — the 3D is the pitch, not decoration",',
+    '  "silhouette": "the core product/service drawn as a single 2D shape for the hologram reveal (e.g. tooth, wrench, flacon, plate, gavel, house)",',
+    '  "strand_curve": "one of: helix | torus-knot | flat-spiral-galaxy | lissajous-ribbon (choose by brand mood)",',
+    '  "centrepiece": "the glowing wireframe hero geometry the camera flies around (e.g. icosahedron lattice, octahedron stack, torus-knot, sphere lattice)",',
+    '  "use_hud": true or false — true ONLY for precision/tech-coded trades (dental, auto diagnostics, legal, medical, engineering, security); false for warm trades (restaurant, salon, cafe, bakery)",',
+    '  "editorial_word": "the giant display word set behind the scene, written in the site language",',
+    '  "palette": "which candidate palette you pick, and one line on why it fits the brand",',
+    '  "fonts": "which candidate font pairing you pick, and one line on why",',
+    '  "chapters": ["4-5 items, each formatted \'<message> — <camera move>\' and naming a REAL service/detail from the scrape"],',
+    '  "language": "the ONE language all visible text must use, detected from the scraped content (Dutch, French, or English)"',
+    '}',
+  ].join('\n');
+}
+
+// Pull the first balanced JSON object out of the model's text.
+function extractJson(t) {
+  if (!t) return null;
+  const start = t.indexOf('{');
+  if (start < 0) return null;
+  let depth = 0, inStr = false, esc = false;
+  for (let i = start; i < t.length; i++) {
+    const c = t[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (c === '\\') esc = true;
+      else if (c === '"') inStr = false;
+    } else if (c === '"') inStr = true;
+    else if (c === '{') depth++;
+    else if (c === '}') { depth--; if (depth === 0) { try { return JSON.parse(t.slice(start, i + 1)); } catch { return null; } } }
+  }
+  return null;
+}
+
+// Render the approved concept as a locked brief for the build pass.
+function conceptBrief(c) {
+  if (!c) return '';
+  const chapters = Array.isArray(c.chapters) ? c.chapters.map((x, i) => `    ${i + 1}. ${x}`).join('\n') : '';
+  return [
+    'APPROVED CONCEPT — a creative director has already locked the strategy below.',
+    'BUILD TO IT FAITHFULLY. Do not re-invent it; spend your effort on flawless execution.',
+    'Reproduce it verbatim in the required <!-- CONCEPT: ... --> comment.',
+    '',
+    `- offering: ${c.offering || ''}`,
+    `- feeling: ${c.feeling || ''}`,
+    `- 3d story: ${c['3d_story'] || ''}`,
+    `- hologram silhouette (RECIPE G): ${c.silhouette || ''}`,
+    `- light-strand curve (RECIPE C): ${c.strand_curve || ''}`,
+    `- centrepiece geometry (RECIPE D): ${c.centrepiece || ''}`,
+    `- scan/targeting HUD (RECIPE H): ${c.use_hud ? 'YES — this is a precision/tech trade' : 'NO — warm/casual trade, do not use it'}`,
+    `- editorial poster word: ${c.editorial_word || ''}`,
+    `- palette: ${c.palette || ''}`,
+    `- fonts: ${c.fonts || ''}`,
+    `- language for ALL visible text: ${c.language || 'match the scraped content'}`,
+    '- chapters (pair each message with its camera move):',
+    chapters,
+  ].join('\n');
+}
+
 function reviewSystem(hasFrames) {
   const visual = hasFrames ? [
     '═══ VISUAL EVIDENCE — YOU CAN SEE THE RENDERED PAGE ═══',
@@ -174,7 +245,7 @@ function businessBlock(place, branding, scraped) {
 // `frames` (optional) is an array of { label, data(base64 jpeg) } — when present
 // they are attached as image blocks before the text so the model critiques what
 // it can SEE, not just the code.
-async function callClaudeStream(env, system, userText, frames) {
+async function callClaudeStream(env, system, userText, frames, maxTokens) {
   let content;
   if (frames && frames.length) {
     content = [];
@@ -195,7 +266,7 @@ async function callClaudeStream(env, system, userText, frames) {
     },
     body: JSON.stringify({
       model: MODEL,
-      max_tokens: MAX_TOKENS,
+      max_tokens: maxTokens || MAX_TOKENS,
       stream: true,
       output_config: { effort: 'high' },
       system,
@@ -302,11 +373,23 @@ export default {
       );
       const exemplar = exemplarBlock(domain);
 
-      // DESIGN pass
-      let html = extractHtml(await callClaudeStream(
-        env, designSystem(),
-        ctx + '\n\n' + brief + '\n\n' + exemplar + '\n\nNow build the complete website.'
-      ));
+      // CONCEPT pass — lock the strategy first (small, cheap, strategy-only).
+      let conceptBriefText = '';
+      try {
+        const concept = extractJson(await callClaudeStream(
+          env, conceptSystem(),
+          ctx + '\n\n' + brief + '\n\n' + exemplar +
+            '\n\nNow decide the concept. Output only the JSON object.',
+          null, 2000
+        ));
+        conceptBriefText = conceptBrief(concept);
+      } catch { /* concept pass optional — build pass still does STEP 1-3 itself */ }
+
+      // DESIGN / BUILD pass — builds to the locked concept when we have one.
+      const buildText = conceptBriefText
+        ? ctx + '\n\n' + brief + '\n\n' + conceptBriefText + '\n\nNow build the complete website to this concept.'
+        : ctx + '\n\n' + brief + '\n\n' + exemplar + '\n\nNow build the complete website.';
+      let html = extractHtml(await callClaudeStream(env, designSystem(), buildText));
       if (!looksComplete(html)) throw new Error('Design pass produced incomplete HTML.');
 
       // VISION-IN-THE-LOOP — render the design-pass HTML and screenshot a few
@@ -326,7 +409,10 @@ export default {
         if (looksComplete(reviewed) && reviewed.length > html.length * 0.6) html = reviewed;
       } catch { /* keep design-pass HTML if review fails */ }
 
-      return withCors(json({ html, scrapedChars: scraped.length, framesSeen: frames.length }));
+      return withCors(json({
+        html, scrapedChars: scraped.length,
+        framesSeen: frames.length, conceptLocked: !!conceptBriefText,
+      }));
     } catch (err) {
       return withCors(json({ error: String((err && err.message) || err) }, 502));
     }

@@ -2,9 +2,16 @@
 
 This Worker keeps your Anthropic API key **server-side** so it is never exposed in
 the public `prospector.html` on GitHub Pages. For each prospect it scrapes their
-real website, runs a Claude **design** pass, renders the result and screenshots it,
-then runs a **vision-in-the-loop review** pass, and returns a tailored design spec
-that `prospector.html` renders into the mockup.
+real website, then runs three Claude passes — a **concept** pass (strategy only),
+a **design/build** pass that builds to that locked concept, and a
+**vision-in-the-loop review** pass — and returns a tailored design spec that
+`prospector.html` renders into the mockup.
+
+The **concept pass** decides the strategy first — the flagship offering, the
+feeling, the 3D metaphor (hologram silhouette, light-strand curve, centrepiece),
+the chapter storyboard, palette/font choice and language — as structured JSON,
+so the build pass spends its budget on flawless execution instead of inventing
+the concept and writing correct WebGL in the same breath.
 
 The review is where the agent's judgment sharpens: instead of critiquing the code
 blind, it **sees** the generated page. The design-pass HTML is rendered in
@@ -72,8 +79,9 @@ falls back to the built-in deterministic template engine, so nothing breaks.
 
 ## Cost & latency
 
-Two Claude calls (`claude-opus-4-8`) per mockup — design + review — plus one
-scrape. Roughly **$0.30–0.70 and ~15–30s per mockup**. Only runs when you click
+Three Claude calls (`claude-opus-4-8`) per mockup — concept + design + review —
+plus one scrape and (when Browser Rendering is on) one render. The concept pass
+is small; roughly **$0.35–0.80 and ~20–40s per mockup**. Only runs when you click
 Build Mockup, so spend tracks exactly the prospects you pursue.
 
 ## Updating
