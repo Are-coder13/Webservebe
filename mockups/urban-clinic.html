@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<!-- CONCEPT: offering=premium urban physiotherapy & recovery — hands-on rehab and performance training in the heart of Antwerp; feeling=empowered restoration — a body being rebuilt, realigned and set back in motion; 3d-story=cool teal particle field (scattered muscle fibres) scroll-morphs into a glowing wireframe human spine/kinetic-chain, vertebrae snap into alignment on orbit, injury dissolves into fluid motion; hologram=stylised vertebral spine curve resolving into a striding figure; strand=helix; centrepiece=sphere lattice unwinding into vertebral helix; HUD=yes (precision trade); poster=HERSTEL; palette=Medical Clinic teal #0891B2 + green #16A34A; fonts=Lexend + Source Sans 3; lang=Dutch; chapters=1 wide drift, 2 push-in spine, 3 orbit alignment+HUD, 4 close approach reviews, 5 settle CTA -->
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Urban Clinic — Herstel in het hart van Antwerpen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#0891B2; --teal2:#22D3EE; --green:#16A34A; --lite:#8ff0ff;
+  --bg:#04141a; --bg-rgb:4,20,26;
+  --fg:#eafaff; --muted:#a9cdd6; --border:rgba(34,211,238,.24);
+  --z-canvas:0; --z-veil:10; --z-content:20; --z-hud:30; --z-banner:50;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Source Sans 3',sans-serif;
+  background:var(--bg); color:var(--fg);
+  overflow-x:hidden; line-height:1.65;
+}
+h1,h2,h3,.h{font-family:'Lexend',sans-serif;font-weight:600;line-height:1.1}
+
+.preview-banner{
+  position:fixed;top:0;left:0;right:0;z-index:var(--z-banner);
+  background:linear-gradient(90deg,#052029,#083845);
+  color:var(--teal2);
+  font-size:.78rem;letter-spacing:.05em;
+  text-align:center;padding:8px 12px;
+  border-bottom:1px solid var(--border);
+  font-family:'Lexend',sans-serif;font-weight:400;
+}
+#gl{position:fixed;inset:0;z-index:var(--z-canvas)}
+.veil{
+  position:fixed;inset:0;z-index:var(--z-veil);pointer-events:none;
+  background:radial-gradient(ellipse at 50% 42%,transparent 30%,rgba(2,10,14,.55) 78%,rgba(2,10,14,.9) 100%);
+}
+main{position:relative;z-index:var(--z-content);padding-top:34px}
+
+.chapter{
+  min-height:100vh;display:flex;align-items:center;
+  padding:9vh 7vw;position:relative;
+}
+.inner{position:relative;max-width:1180px;width:100%;margin:0 auto}
+.inner::before{
+  content:'';position:absolute;inset:-70px -90px;z-index:-1;
+  background:radial-gradient(closest-side,rgba(var(--bg-rgb),.82),rgba(var(--bg-rgb),.46) 60%,transparent);
+  filter:blur(4px);
+}
+.tag{
+  display:inline-block;font-family:'Lexend',sans-serif;font-weight:400;
+  font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--teal2);margin-bottom:1.4rem;
+  padding:.4rem .9rem;border:1px solid var(--border);border-radius:40px;
+  background:rgba(8,145,178,.10);
+}
+h1{font-size:clamp(2.6rem,7vw,5.4rem);letter-spacing:-.02em;text-shadow:0 2px 30px rgba(2,10,14,.95)}
+h2{font-size:clamp(2rem,4.6vw,3.4rem);letter-spacing:-.015em;text-shadow:0 2px 24px rgba(2,10,14,.95);margin-bottom:1.3rem}
+p{color:var(--muted);text-shadow:0 1px 14px rgba(2,10,14,.9)}
+.lead{font-size:clamp(1.05rem,1.8vw,1.35rem);max-width:60ch}
+
+.grad{background:linear-gradient(100deg,var(--teal2),var(--green));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+.btn{
+  display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;
+  font-family:'Lexend',sans-serif;font-weight:500;font-size:1rem;
+  min-height:48px;padding:.95rem 2rem;border-radius:50px;border:none;
+  background:linear-gradient(100deg,var(--teal),var(--green));
+  color:#fff;text-decoration:none;
+  box-shadow:0 8px 30px rgba(8,145,178,.4);
+  transition:transform .25s,box-shadow .25s;
+}
+.btn:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(22,163,74,.5)}
+.btn:focus-visible,.btn.ghost:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--teal2);outline-offset:3px}
+.btn.ghost{background:transparent;border:1px solid var(--border);color:var(--fg);box-shadow:none}
+.btn.ghost:hover{background:rgba(34,211,238,.08)}
+.btn:disabled{opacity:.6;cursor:progress}
+
+#hero .inner{max-width:1180px}
+.hero-flag{margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap}
+.hero-meta{margin-top:2.4rem;display:flex;gap:2rem;flex-wrap:wrap;font-size:.95rem;color:var(--muted)}
+.hero-meta strong{color:var(--fg);font-family:'Lexend',sans-serif;font-weight:500}
+
+.svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-top:2.6rem}
+.svc:nth-child(even){transform:translateY(1.6rem)}
+.svc{
+  background:linear-gradient(160deg,rgba(8,145,178,.12),rgba(4,20,26,.5));
+  border:1px solid var(--border);border-radius:16px;padding:1.6rem;
+  backdrop-filter:blur(6px);transition:transform .3s,border-color .3s;
+}
+.svc:hover{transform:translateY(-5px);border-color:var(--teal2)}
+.svc:nth-child(even):hover{transform:translateY(calc(1.6rem - 5px))}
+.svc svg{width:38px;height:38px;margin-bottom:.9rem}
+.svc h3{font-size:1.15rem;margin-bottom:.4rem}
+.svc p{font-size:.95rem}
+
+.poster{
+  position:absolute;z-index:1;pointer-events:none;
+  font-family:'Lexend',sans-serif;font-weight:700;
+  font-size:17vw;letter-spacing:-.03em;line-height:.8;
+  color:transparent;-webkit-text-stroke:2px rgba(34,211,238,.7);
+  left:-2vw;bottom:6vh;white-space:nowrap;opacity:.85;
+}
+
+#align .inner{max-width:1180px}
+.align-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:3rem;align-items:center}
+.chain-list{margin-top:2rem;border-left:2px solid var(--border);padding-left:0}
+.chain-item{
+  padding:1.1rem 0 1.1rem 1.6rem;position:relative;
+  border-bottom:1px solid rgba(34,211,238,.1);
+}
+.chain-item::before{
+  content:'';position:absolute;left:-7px;top:1.5rem;width:12px;height:12px;
+  border-radius:50%;background:var(--green);box-shadow:0 0 14px var(--green);
+}
+.chain-item h3{font-size:1.1rem;margin-bottom:.25rem}
+.chain-item p{font-size:.95rem}
+.statband{display:grid;grid-template-columns:1fr;gap:1.4rem}
+.stat{
+  background:linear-gradient(160deg,rgba(8,145,178,.1),rgba(4,20,26,.5));
+  border:1px solid var(--border);border-radius:16px;padding:1.4rem 1.6rem;
+  backdrop-filter:blur(6px);display:flex;align-items:baseline;gap:1rem;
+}
+.stat .num{font-family:'Lexend',sans-serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.8rem);
+  background:linear-gradient(120deg,var(--teal2),var(--green));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap}
+.stat .lbl{font-size:.92rem;color:var(--muted)}
+
+.rev-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:1.4rem;margin-top:2.4rem}
+.rev:first-child{grid-row:span 1}
+.rev{
+  background:linear-gradient(160deg,rgba(8,145,178,.12),rgba(4,20,26,.5));
+  border:1px solid var(--border);border-radius:16px;padding:1.6rem;backdrop-filter:blur(6px);
+}
+.rev .stars{display:flex;align-items:center;gap:.35rem;color:var(--green);font-size:.9rem;margin-bottom:.7rem;font-family:'Lexend',sans-serif}
+.rev .stars svg{width:16px;height:16px}
+.rev p{font-size:.98rem;color:var(--fg);margin-bottom:1rem}
+.rev .who{font-family:'Lexend',sans-serif;font-size:.85rem;color:var(--teal2)}
+.rev-lead{max-width:52ch}
+
+#cta .inner{max-width:760px;text-align:center}
+.form{
+  margin-top:2.4rem;display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;
+  background:linear-gradient(160deg,rgba(8,145,178,.12),rgba(4,20,26,.6));
+  border:1px solid var(--border);border-radius:20px;padding:2rem;backdrop-filter:blur(8px);text-align:left;
+}
+.form label{display:block;font-size:.78rem;color:var(--teal2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem;font-family:'Lexend',sans-serif}
+.form input,.form select{
+  width:100%;padding:.85rem 1rem;border-radius:10px;min-height:48px;
+  background:rgba(2,10,14,.6);border:1px solid var(--border);color:var(--fg);font-family:inherit;font-size:16px;
+}
+.form input:focus,.form select:focus{outline:none;border-color:var(--teal2);box-shadow:0 0 0 3px rgba(34,211,238,.25)}
+.form .full{grid-column:1/-1}
+.form-msg{grid-column:1/-1;font-size:.95rem;min-height:1.2rem}
+.form-msg.ok{color:var(--green)}
+.form-msg.err{color:#ff8080}
+
+footer{
+  position:relative;z-index:var(--z-content);text-align:center;padding:4rem 7vw 3rem;
+  border-top:1px solid var(--border);background:rgba(2,10,14,.7);backdrop-filter:blur(8px);
+}
+footer .fname{font-family:'Lexend',sans-serif;font-weight:600;font-size:1.3rem;margin-bottom:.6rem}
+footer p{font-size:.95rem}
+footer a{color:var(--teal2);text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+.hud{position:fixed;inset:0;z-index:var(--z-hud);pointer-events:none;opacity:0;transition:opacity .5s}
+.hud.show{opacity:1}
+.hud .brk{position:absolute;width:26px;height:26px}
+.hud .reticle{position:absolute;left:50%;top:50%;width:230px;height:230px;transform:translate(-50%,-50%)}
+.hud .reticle svg{width:100%;height:100%}
+.scanline{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:230px;height:230px;overflow:hidden}
+.scanline::after{content:'';position:absolute;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--teal2),transparent);
+  animation:scan 2.6s ease-in-out infinite}
+@keyframes scan{0%{top:0}50%{top:100%}100%{top:0}}
+.readout{
+  position:absolute;left:calc(50% + 150px);top:calc(50% - 60px);
+  font-family:'Lexend',sans-serif;font-size:.68rem;letter-spacing:.08em;
+  background:rgba(2,10,14,.6);border:1px solid var(--border);border-radius:8px;
+  padding:.7rem .9rem;backdrop-filter:blur(6px);min-width:150px;
+}
+.readout .row{display:flex;justify-content:space-between;gap:1rem;padding:.15rem 0;color:var(--muted)}
+.readout .row span:last-child{color:var(--teal2)}
+.readout .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 8px var(--green);animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+@media(max-width:900px){
+  .svc-grid,.rev-grid,.align-layout,.form{grid-template-columns:1fr}
+  .svc:nth-child(even){transform:none}
+  .svc:nth-child(even):hover{transform:translateY(-5px)}
+  .poster{font-size:26vw}
+}
+@media(max-width:768px){
+  .hud{display:none!important}
+  .form{grid-template-columns:1fr}
+  .hero-meta{gap:1rem;font-size:.9rem}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  #gl{display:none}
+  body{background:radial-gradient(ellipse at 50% 30%,#0a3543,#04141a 70%)}
+  .hud{display:none}
+  .scanline::after,.readout .dot{animation:none}
+}
+</style>
+</head>
+<body>
+<div class="preview-banner">Website Preview — concept mockup voor Urban Clinic</div>
+<div id="gl" aria-hidden="true"></div>
+<div class="veil" aria-hidden="true"></div>
+
+<div class="hud" id="hud" aria-hidden="true">
+  <div class="brk" style="border-top:1.5px solid var(--teal2);border-left:1.5px solid var(--teal2);left:calc(50% - 140px);top:calc(50% - 140px)"></div>
+  <div class="brk" style="border-top:1.5px solid var(--teal2);border-right:1.5px solid var(--teal2);left:calc(50% + 114px);top:calc(50% - 140px)"></div>
+  <div class="brk" style="border-bottom:1.5px solid var(--teal2);border-left:1.5px solid var(--teal2);left:calc(50% - 140px);top:calc(50% + 114px)"></div>
+  <div class="brk" style="border-bottom:1.5px solid var(--teal2);border-right:1.5px solid var(--teal2);left:calc(50% + 114px);top:calc(50% + 114px)"></div>
+  <div class="reticle">
+    <svg viewBox="0 0 100 100" fill="none" stroke="#22D3EE" stroke-width="0.6" opacity="0.5">
+      <circle cx="50" cy="50" r="46"/><circle cx="50" cy="50" r="30"/>
+      <line x1="50" y1="8" x2="50" y2="24"/><line x1="50" y1="76" x2="50" y2="92"/>
+      <line x1="8" y1="50" x2="24" y2="50"/><line x1="76" y1="50" x2="92" y2="50"/>
+    </svg>
+  </div>
+  <div class="scanline"></div>
+  <div class="readout">
+    <div class="row"><span>SCAN</span><span><span class="dot"></span> ACTIEF</span></div>
+    <div class="row"><span>DOEL</span><span>KINETISCHE KETEN</span></div>
+    <div class="row"><span>UITLIJNING</span><span>98.2%</span></div>
+  </div>
+</div>
+
+<main>
+
+  <!-- CH1 HERO -->
+  <section class="chapter" id="hero">
+    <div class="inner">
+      <span class="tag">Kinesitherapie · Antwerpen</span>
+      <h1>Herstel in het hart<br>van <span class="grad">Antwerpen</span></h1>
+      <p class="lead" style="margin-top:1.4rem">Bij Urban Clinic bouwen we elke beweging opnieuw op. Hands-on revalidatie en performance-training voor een lichaam dat weer in beweging komt — bewust, sterk en zonder pijn.</p>
+      <div class="hero-flag">
+        <a href="#cta" class="btn">Boek je afspraak
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#services" class="btn ghost">Onze behandelingen</a>
+      </div>
+      <div class="hero-meta">
+        <span><strong>4,1★</strong> Google-beoordeling</span>
+        <span><strong>Oudeleeuwenrui 34b</strong> · 2000 Antwerpen</span>
+        <span><strong>02 477 60 61</strong></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH2 SERVICES push-in -->
+  <section class="chapter" id="services">
+    <div class="poster">HERSTEL</div>
+    <div class="inner">
+      <span class="tag">Kinesitherapie &amp; manuele therapie</span>
+      <h2>Elke beweging opnieuw<br><span class="grad">opgebouwd</span></h2>
+      <p class="lead">Je klacht begint bij de kinetische keten. Wij analyseren hoe je beweegt, waar de spanning zit en welke schakel het overneemt — en zetten je stap voor stap terug in beweging.</p>
+      <div class="svc-grid">
+        <div class="svc">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22D3EE"/><stop offset="1" stop-color="#16A34A"/></linearGradient></defs><path d="M6 3v6a6 6 0 0012 0V3M6 21v-6a6 6 0 0112 0v6" stroke="url(#g1)" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="12" r="1.6" fill="#16A34A"/></svg>
+          <h3>Manuele therapie</h3>
+          <p>Gerichte mobilisaties en manipulaties om gewrichten en wervels weer vrij te laten bewegen.</p>
+        </div>
+        <div class="svc">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22D3EE"/><stop offset="1" stop-color="#16A34A"/></linearGradient></defs><path d="M4 14c3-4 5-8 8-8s5 4 8 8" stroke="url(#g2)" stroke-width="1.6" stroke-linecap="round"/><path d="M4 14l2 4M20 14l-2 4M12 6v14" stroke="url(#g2)" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <h3>Sportrevalidatie</h3>
+          <p>Van blessure terug naar prestatie — met opbouwende belasting en meetbaar herstel.</p>
+        </div>
+        <div class="svc">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><defs><linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22D3EE"/><stop offset="1" stop-color="#16A34A"/></linearGradient></defs><path d="M12 2v20M12 8l-4-3M12 8l4-3M12 14l-4 3M12 14l4 3" stroke="url(#g3)" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="12" r="2" fill="#16A34A"/></svg>
+          <h3>Dry needling</h3>
+          <p>Precies geplaatste naalden lossen diepe triggerpoints op en herstellen soepele spierwerking.</p>
+        </div>
+        <div class="svc">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><defs><linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22D3EE"/><stop offset="1" stop-color="#16A34A"/></linearGradient></defs><path d="M3 12h4l2-6 4 12 2-6h6" stroke="url(#g4)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>Performance-training</h3>
+          <p>Kracht, stabiliteit en houding — gericht opgebouwd zodat je klacht niet terugkomt.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH3 ALIGNMENT orbit + HUD -->
+  <section class="chapter" id="align">
+    <div class="inner">
+      <div class="align-layout">
+        <div>
+          <span class="tag">De kinetische keten</span>
+          <h2>Wervel voor wervel<br>weer <span class="grad">uitgelijnd</span></h2>
+          <p class="lead">Je lichaam werkt als één keten. Herstellen we één schakel, dan volgt de rest. Terwijl we je behandelen benoemen we elke stap — je weet altijd waarom we doen wat we doen.</p>
+          <div class="chain-list">
+            <div class="chain-item"><h3>Analyse &amp; screening</h3><p>We brengen je beweging, kracht en pijnpatroon volledig in kaart.</p></div>
+            <div class="chain-item"><h3>Manuele correctie</h3><p>Gewrichten en wervels komen terug in de juiste as.</p></div>
+            <div class="chain-item"><h3>Dry needling &amp; ontspanning</h3><p>Diepe spierspanning verdwijnt, de keten komt weer los.</p></div>
+            <div class="chain-item"><h3>Sportrevalidatie</h3><p>Progressieve belasting brengt je terug naar volledig herstel.</p></div>
+          </div>
+        </div>
+        <div class="statband">
+          <div class="stat"><div class="num">1&nbsp;op&nbsp;1</div><div class="lbl">Persoonlijke begeleiding, elke sessie</div></div>
+          <div class="stat"><div class="num">4</div><div class="lbl">Kernbehandelingen onder één dak</div></div>
+          <div class="stat"><div class="num">2000</div><div class="lbl">In het centrum van Antwerpen</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH4 TESTIMONIALS close approach -->
+  <section class="chapter" id="reviews">
+    <div class="inner">
+      <span class="tag">Bewezen door cliënten</span>
+      <h2>Persoonlijke begeleiding,<br><span class="grad">merkbaar resultaat</span></h2>
+      <p class="lead rev-lead">Onze cliënten waarderen Urban Clinic met een 4,1★. Wat ze vooral voelen: dat er écht naar ze geluisterd wordt.</p>
+      <div class="rev-grid">
+        <div class="rev">
+          <div class="stars"><svg viewBox="0 0 20 20" fill="#16A34A" aria-hidden="true"><path d="M10 1l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.1l1-5.8L1.5 7.2l5.9-.9z"/></svg><span aria-label="5 van 5 sterren">5,0</span></div>
+          <p>"Na maanden rugpijn eindelijk iemand die de oorzaak aanpakte in plaats van alleen de klacht. Elke sessie legden ze duidelijk uit wat ze deden."</p>
+          <div class="who">— Cliënt, Antwerpen</div>
+        </div>
+        <div class="rev">
+          <div class="stars"><svg viewBox="0 0 20 20" fill="#16A34A" aria-hidden="true"><path d="M10 1l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.1l1-5.8L1.5 7.2l5.9-.9z"/></svg><span aria-label="4 van 5 sterren">4,0</span></div>
+          <p>"Sportrevalidatie na mijn knieblessure. Stap voor stap terug op het veld, met een plan dat écht bij mij paste."</p>
+          <div class="who">— Cliënt, Antwerpen</div>
+        </div>
+        <div class="rev">
+          <div class="stars"><svg viewBox="0 0 20 20" fill="#16A34A" aria-hidden="true"><path d="M10 1l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.1l1-5.8L1.5 7.2l5.9-.9z"/></svg><span aria-label="5 van 5 sterren">5,0</span></div>
+          <p>"Dry needling was voor mij nieuw, maar het verschil was meteen voelbaar. Professioneel en persoonlijk in het hart van de stad."</p>
+          <div class="who">— Cliënt, Antwerpen</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH5 CTA settle -->
+  <section class="chapter" id="cta">
+    <div class="inner">
+      <span class="tag">Klaar om te herstellen</span>
+      <h2>Boek je <span class="grad">afspraak</span></h2>
+      <p class="lead" style="margin:0 auto">Vertel ons kort wat er speelt. We plannen samen je eerste sessie en zetten je terug in beweging.</p>
+      <form class="form" id="bookForm" novalidate>
+        <div><label for="f-name">Naam</label><input id="f-name" name="name" type="text" autocomplete="name" placeholder="Je naam" required></div>
+        <div><label for="f-tel">Telefoon</label><input id="f-tel" name="tel" type="tel" autocomplete="tel" placeholder="Je telefoonnummer" required></div>
+        <div class="full"><label for="f-mail">E-mail</label><input id="f-mail" name="email" type="email" autocomplete="email" placeholder="je@email.be" required></div>
+        <div class="full"><label for="f-svc">Waarvoor wil je komen?</label>
+          <select id="f-svc" name="service">
+            <option>Kinesitherapie &amp; manuele therapie</option>
+            <option>Sportrevalidatie</option>
+            <option>Dry needling</option>
+            <option>Performance-training</option>
+          </select>
+        </div>
+        <div class="form-msg" id="formMsg" role="alert" aria-live="polite"></div>
+        <div class="full"><button class="btn" type="submit" id="submitBtn" style="width:100%;justify-content:center">Verstuur aanvraag</button></div>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="fname">Urban Clinic</div>
+  <p>Oudeleeuwenrui 34b · 2000 Antwerpen · België</p>
+  <p><a href="tel:024776061">02 477 60 61</a> · <a href="http://www.urbanclinic.be/">www.urbanclinic.be</a></p>
+  <p style="margin-top:1rem;font-size:.8rem;color:var(--muted)">Kinesitherapie · Manuele therapie · Sportrevalidatie · Dry needling</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+/* form handler */
+(function(){
+  var form=document.getElementById('bookForm');
+  if(!form)return;
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var msg=document.getElementById('formMsg'),btn=document.getElementById('submitBtn');
+    var name=document.getElementById('f-name'),mail=document.getElementById('f-mail'),tel=document.getElementById('f-tel');
+    msg.className='form-msg';
+    if(!name.value.trim()||!mail.value.trim()||!tel.value.trim()){
+      msg.className='form-msg err';msg.textContent='Vul je naam, telefoon en e-mail in.';name.focus();return;
+    }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail.value)){
+      msg.className='form-msg err';msg.textContent='Controleer je e-mailadres.';mail.focus();return;
+    }
+    btn.disabled=true;btn.textContent='Versturen…';
+    setTimeout(function(){
+      btn.disabled=false;btn.textContent='Verstuur aanvraag';
+      msg.className='form-msg ok';msg.textContent='Bedankt! We nemen snel contact met je op om je eerste sessie in te plannen.';
+      form.reset();
+    },1100);
+  });
+})();
+</script>
+<script>
+(function(){
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function hasWebGL(){try{var c=document.createElement('canvas');return !!(c.getContext('webgl')||c.getContext('experimental-webgl'));}catch(e){return false;}}
+  if(reduce||!hasWebGL()||!window.THREE)return;
+
+  try{
+    var BG=0x04141a, ACCENT=0x0891B2, ACCENT2=0x22D3EE, GREEN=0x16A34A;
+    var isMobile=innerWidth<768;
+
+    var renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+    renderer.setSize(innerWidth,innerHeight);
+    document.getElementById('gl').appendChild(renderer.domElement);
+
+    var scene=new THREE.Scene();
+    scene.background=new THREE.Color(BG);
+    scene.fog=new THREE.FogExp2(BG,0.016);
+    var camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,400);
+    camera.position.set(0,2,46);
+
+    function makeSprite(){var c=document.createElement('canvas');c.width=c.height=64;
+      var g=c.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);
+      r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(0.35,'rgba(255,255,255,.6)');r.addColorStop(1,'rgba(255,255,255,0)');
+      g.fillStyle=r;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c);}
+    var sprite=makeSprite();
+
+    function envTex(){var c=document.createElement('canvas');c.width=64;c.height=32;
+      var g=c.getContext('2d'),gr=g.createLinearGradient(0,0,0,32);
+      gr.addColorStop(0,'#8ff0ff');gr.addColorStop(0.5,'#0891B2');gr.addColorStop(1,'#04141a');
+      g.fillStyle=gr;g.fillRect(0,0,64,32);var t=new THREE.CanvasTexture(c);
+      t.mapping=THREE.EquirectangularReflectionMapping;return t;}
+    var env=envTex(); scene.environment=env;
+    scene.add(new THREE.HemisphereLight(0xffffff,BG,0.55));
+    var key=new THREE.PointLight(ACCENT,2.0,140);key.position.set(9,11,15);scene.add(key);
+    var rim=new THREE.PointLight(GREEN,1.4,140);rim.position.set(-11,-5,-9);scene.add(rim);
+
+    // particle universe
+    var N=isMobile?4200:8500, SPREAD=60;
+    var geo=new THREE.BufferGeometry(),pos=new Float32Array(N*3),col=new Float32Array(N*3);
+    var ca=new THREE.Color(ACCENT),cb=new THREE.Color(ACCENT2),c=new THREE.Color();
+    for(var i=0;i<N;i++){var r=SPREAD*Math.pow(Math.random(),0.5),th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+      pos[i*3]=r*Math.sin(ph)*Math.cos(th);pos[i*3+1]=r*Math.sin(ph)*Math.sin(th)*0.55;pos[i*3+2]=r*Math.cos(ph);
+      c.copy(ca).lerp(cb,Math.random());col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;}
+    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+    geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+    var universe=new THREE.Points(geo,new THREE.PointsMaterial({size:0.55,map:sprite,vertexColors:true,transparent:true,opacity:0.9,depthWrite:false,blending:THREE.AdditiveBlending}));
+    scene.add(universe);
+
+    // helix strands
+    var strandGroup=new THREE.Group();
+    function helix(rot){
+      var SN=isMobile?900:1600, TURNS=5, RADIUS=6.5, HEIGHT=26;
+      var g=new THREE.BufferGeometry(),p=new Float32Array(SN*3);
+      for(var i=0;i<SN;i++){var t=i/SN,a=t*Math.PI*2*TURNS+rot,w=0.35*Math.sin(t*40);
+        p[i*3]=Math.cos(a)*(RADIUS+w);p[i*3+1]=(t-0.5)*HEIGHT;p[i*3+2]=Math.sin(a)*(RADIUS+w);}
+      g.setAttribute('position',new THREE.BufferAttribute(p,3));
+      return new THREE.Points(g,new THREE.PointsMaterial({size:0.4,map:sprite,color:ACCENT2,transparent:true,opacity:0.75,depthWrite:false,blending:THREE.AdditiveBlending}));
+    }
+    strandGroup.add(helix(0));strandGroup.add(helix(Math.PI));
+    scene.add(strandGroup);
+
+    // centrepiece
+    var centre=new THREE.Group();
+    var shell=new THREE.Mesh(new THREE.IcosahedronGeometry(3.4,1),new THREE.MeshBasicMaterial({color:ACCENT,wireframe:true,transparent:true,opacity:0.5}));
+    centre.add(shell);
+    var coreMat=new THREE.MeshStandardMaterial({color:0x0b1418,metalness:0.85,roughness:0.22,envMap:env,envMapIntensity:1.1,emissive:new THREE.Color(ACCENT),emissiveIntensity:0.32});
+    var core=new THREE.Mesh(new THREE.IcosahedronGeometry(1.9,0),coreMat);
+    centre.add(core);
+    var fres=new THREE.ShaderMaterial({transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,
+      uniforms:{c:{value:new THREE.Color(ACCENT2)},p:{value:2.8}},
+      vertexShader:'varying float vF;uniform float p;void main(){vec3 n=normalize(normalMatrix*normal);vec4 mv=modelViewMatrix*vec4(position,1.0);vec3 v=normalize(-mv.xyz);vF=pow(1.0-abs(dot(n,v)),p);gl_Position=projectionMatrix*mv;}',
+      fragmentShader:'varying float vF;uniform vec3 c;void main(){gl_FragColor=vec4(c*vF,vF);}'});
+    var fresMesh=new THREE.Mesh(new THREE.IcosahedronGeometry(1.9,0),fres);
+    fresMesh.scale.set(1.06,1.06,1.06);centre.add(fresMesh);
+    var ring=new THREE.Mesh(new THREE.TorusGeometry(5.2,0.03,8,120),new THREE.MeshBasicMaterial({color:GREEN,transparent:true,opacity:0.7}));
+    ring.rotation.x=Math.PI/2.4;centre.add(ring);
+    scene.add(centre);
+
+    // spine hologram
+    var spineShape=new THREE.Shape();
+    (function(){
+      var s=spineShape;
+      s.moveTo(-0.6,-6);
+      s.bezierCurveTo(1.2,-3.5,-1.2,-1.5,0.8,1.0);
+      s.bezierCurveTo(2.0,3.0,0.0,4.5,0.6,6.5);
+      s.lineTo(1.4,6.5);
+      s.bezierCurveTo(0.8,4.5,2.8,3.0,1.6,1.0);
+      s.bezierCurveTo(-0.4,-1.5,2.0,-3.5,0.2,-6);
+      s.lineTo(-0.6,-6);
+    })();
+    var MP=isMobile?2200:4200;
+    var fillGeo=new THREE.ShapeGeometry(spineShape,24);
+    var fpos=fillGeo.attributes.position.array, fidx=fillGeo.index.array;
+    var tris=fidx.length/3, cum=[], total=0;
+    for(var t2=0;t2<tris;t2++){
+      var a0=fidx[t2*3],a1=fidx[t2*3+1],a2=fidx[t2*3+2];
+      var ax=fpos[a0*3],ay=fpos[a0*3+1],bx=fpos[a1*3],by=fpos[a1*3+1],cx=fpos[a2*3],cy=fpos[a2*3+1];
+      var ar=Math.abs((bx-ax)*(cy-ay)-(cx-ax)*(by-ay))*0.5;total+=ar;cum.push(total);
+    }
+    var fillTarget=new Float32Array(MP*3), fillCloud=new Float32Array(MP*3);
+    for(var i=0;i<MP;i++){
+      var rr=Math.random()*total, ti=0; while(ti<cum.length-1&&rr>cum[ti])ti++;
+      var i0=fidx[ti*3],i1=fidx[ti*3+1],i2=fidx[ti*3+2];
+      var u=Math.random(),v=Math.random(); if(u+v>1){u=1-u;v=1-v;}
+      var px=fpos[i0*3]+u*(fpos[i1*3]-fpos[i0*3])+v*(fpos[i2*3]-fpos[i0*3]);
+      var py=fpos[i0*3+1]+u*(fpos[i1*3+1]-fpos[i0*3+1])+v*(fpos[i2*3+1]-fpos[i0*3+1]);
+      fillTarget[i*3]=px*1.5;fillTarget[i*3+1]=py*1.5;fillTarget[i*3+2]=(Math.random()-0.5)*1.2;
+      var R=27+Math.random()*4,th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+      fillCloud[i*3]=R*Math.sin(ph)*Math.cos(th);fillCloud[i*3+1]=R*Math.sin(ph)*Math.sin(th);fillCloud[i*3+2]=R*Math.cos(ph);
+    }
+    var fg=new THREE.BufferGeometry();fg.setAttribute('position',new THREE.BufferAttribute(fillCloud.slice(),3));
+    var fillPts=new THREE.Points(fg,new THREE.PointsMaterial({size:0.24,map:sprite,color:ACCENT,transparent:true,opacity:0.5,depthWrite:false,blending:THREE.AdditiveBlending}));
+    scene.add(fillPts);
+
+    var OP=isMobile?600:900;
+    var outlinePts2=spineShape.getPoints(240);
+    var outTarget=new Float32Array(OP*3),outCloud=new Float32Array(OP*3);
+    for(var i=0;i<OP;i++){
+      var pt=outlinePts2[Math.floor(Math.random()*outlinePts2.length)];
+      outTarget[i*3]=pt.x*1.5+(Math.random()-0.5)*0.12;
+      outTarget[i*3+1]=pt.y*1.5+(Math.random()-0.5)*0.12;
+      outTarget[i*3+2]=(Math.random()-0.5)*0.5;
+      var R=27+Math.random()*4,th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+      outCloud[i*3]=R*Math.sin(ph)*Math.cos(th);outCloud[i*3+1]=R*Math.sin(ph)*Math.sin(th);outCloud[i*3+2]=R*Math.cos(ph);
+    }
+    var og=new THREE.BufferGeometry();og.setAttribute('position',new THREE.BufferAttribute(outCloud.slice(),3));
+    var outPts=new THREE.Points(og,new THREE.PointsMaterial({size:0.4,map:sprite,color:0x8ff0ff,transparent:true,opacity:0.95,depthWrite:false,blending:THREE.AdditiveBlending}));
+    scene.add(outPts);
+
+    var morph={t:0};
+
+    var composer=new THREE.EffectComposer(renderer);
+    composer.addPass(new THREE.RenderPass(scene,camera));
+    var bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.2,0.85,0.12);
+    var bloomBase={v:1.2};
+    composer.addPass(bloom);
+
+    var cam={x:0,y:2,z:46,ry:0};
+    var mouse={x:0,y:0};
+    if(!isMobile){window.addEventListener('mousemove',function(e){mouse.x=(e.clientX/innerWidth-0.5)*2;mouse.y=(e.clientY/innerHeight-0.5)*2;});}
+
+    gsap.registerPlugin(ScrollTrigger);
+    var hud=document.getElementById('hud');
+    var tl=gsap.timeline({scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:1.1}});
+    tl.to(cam,{z:30,y:1.5,ease:'power2.inOut',duration:1},0)
+      .to(cam,{z:22,y:0.5,ease:'power2.inOut',duration:1},1)
+      .to(morph,{t:1,ease:'power2.inOut',duration:1},1)
+      .to(centre.scale,{x:0.001,y:0.001,z:0.001,ease:'power2.inOut',duration:1},1)
+      .to(cam,{ry:Math.PI*0.6,x:-5,z:20,ease:'power1.inOut',duration:1.2},2)
+      .to(cam,{z:17,y:-1,ry:Math.PI*0.85,ease:'power2.inOut',duration:1},3.2)
+      .to(cam,{z:24,y:0.5,ry:Math.PI*1.0,ease:'power2.inOut',duration:1},4.2)
+      .to(strandGroup.rotation,{y:Math.PI*1.6,ease:'none',duration:5},0)
+      .to(bloomBase,{v:1.45,ease:'none',duration:1},2)
+      .to(bloomBase,{v:1.1,ease:'none',duration:1},4);
+
+    ScrollTrigger.create({trigger:'#align',start:'top 60%',end:'bottom 40%',
+      onEnter:function(){hud.classList.add('show');},
+      onLeave:function(){hud.classList.remove('show');},
+      onEnterBack:function(){hud.classList.add('show');},
+      onLeaveBack:function(){hud.classList.remove('show');}});
+
+    document.querySelectorAll('.chapter .inner').forEach(function(el){
+      gsap.from(el,{opacity:0,y:60,duration:1,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 78%'}});
+    });
+
+    var fillAttr=fillPts.geometry.attributes.position.array;
+    var outAttr=outPts.geometry.attributes.position.array;
+    function animate(){
+      requestAnimationFrame(animate);
+      var tm=performance.now()*0.001;
+      universe.rotation.y+=0.0009; universe.rotation.x=Math.sin(tm*0.15)*0.05;
+      strandGroup.rotation.y+=0.0016;
+      centre.rotation.y+=0.0022; centre.rotation.z=Math.sin(tm*0.3)*0.08;
+
+      var bs=bloomBase.v+Math.sin(tm*0.8)*0.12;
+      if(bs<0.8)bs=0.8; if(bs>1.6)bs=1.6; bloom.strength=bs;
+
+      var mt=morph.t;
+      for(var k=0;k<MP*3;k++){fillAttr[k]=fillCloud[k]+(fillTarget[k]-fillCloud[k])*mt;}
+      for(var k=0;k<OP*3;k++){outAttr[k]=outCloud[k]+(outTarget[k]-outCloud[k])*mt;}
+      fillPts.geometry.attributes.position.needsUpdate=true;
+      outPts.geometry.attributes.position.needsUpdate=true;
+      fillPts.quaternion.copy(camera.quaternion);
+      outPts.quaternion.copy(camera.quaternion);
+      fillPts.rotation.z=Math.sin(tm*0.5)*0.04*mt;
+      outPts.rotation.z=Math.sin(tm*0.5)*0.04*mt;
+
+      camera.position.z+=(cam.z-camera.position.z)*0.08;
+      camera.position.x=Math.sin(cam.ry)*camera.position.z*0.35+mouse.x*2.2;
+      camera.position.y+=((cam.y-mouse.y*1.6)-camera.position.y)*0.06;
+      camera.lookAt(0,0,0);
+      composer.render();
+    }
+    animate();
+
+    window.addEventListener('resize',function(){
+      isMobile=innerWidth<768;
+      camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);
+    });
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
