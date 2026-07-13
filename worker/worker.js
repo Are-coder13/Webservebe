@@ -18,7 +18,7 @@
 
 import { designBrief, qaChecklist, classifyDomain } from './design-knowledge.js';
 import { threeRecipes } from './three-recipes.js';
-import { captureFrames } from './screenshot.js';
+import { captureFrames, extractSiteBrand } from './screenshot.js';
 import { exemplarBlock } from './exemplars.js';
 
 const MODEL = 'claude-opus-4-8';
@@ -406,11 +406,29 @@ export default {
     let body;
     try { body = await request.json(); } catch { return withCors(json({ error: 'Invalid JSON body' }, 400)); }
     const place = body.place || {};
-    const branding = body.branding || null;
+    let branding = body.branding || null;
     if (!place.name) return withCors(json({ error: 'place.name is required' }, 400));
 
     try {
-      const scraped = await scrape(place.website);
+      let scraped = await scrape(place.website);
+
+      // Read the REAL client page for branding (logo + colours sampled from the
+      // logo's pixels) and core text. This is the reliable path — it looks at
+      // the actual site instead of a brand database. Page-extracted logo/colours
+      // fill in whatever the client (Brandfetch) didn't supply. No-op if Browser
+      // Rendering is off.
+      let brandSource = 'client';
+      const site = await extractSiteBrand(env, place.website).catch(() => ({}));
+      if (site && (site.logoUrl || (site.colors && site.colors.length))) {
+        const merged = { ...(branding || {}) };
+        if (!merged.logoUrl && site.logoUrl) merged.logoUrl = site.logoUrl;
+        if ((!merged.colors || !merged.colors.length) && site.colors && site.colors.length) merged.colors = site.colors;
+        branding = merged;
+        brandSource = (branding.colors && branding.colors.length) ? 'page' : brandSource;
+      }
+      // If the markdown scrape was thin, fall back to the browser-read page text.
+      if ((!scraped || scraped.length < 400) && site && site.voiceText) scraped = site.voiceText;
+
       const ctx = businessBlock(place, branding, scraped);
       // Curated design intelligence (palettes/fonts/patterns/styles) matched to
       // the business type — extracted from the ui-ux-pro-max skill data.
@@ -476,6 +494,9 @@ export default {
         reviewRounds: reviews,
         renderClean: diag.canvasOk && (!diag.errors || diag.errors.length === 0),
         renderErrors: (diag.errors || []).length,
+        brandSource,
+        logoFound: !!(branding && branding.logoUrl),
+        brandColors: (branding && branding.colors) || [],
       }));
     } catch (err) {
       return withCors(json({ error: String((err && err.message) || err) }, 502));
