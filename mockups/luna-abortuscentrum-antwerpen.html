@@ -1,25 +1,27 @@
 <!DOCTYPE html>
-<!-- CONCEPT: offering=veilige, professionele en niet-oordelende abortuszorg en begeleiding; feeling=kalm, veilig, gedragen — je bent niet alleen, je bent in zorgzame handen; 3d-story=een donker verspreid deeltjesveld drijft langzaam samen tot één warm gloeiende sphere lattice met lichtende kern — verwarring en isolatie lossen op in één kalm, beschermd centrum; camera ademt met trage orbits; hologram=beschermende open hand die een klein cirkeltje cupt; strand=flat-spiral-galaxy; centrepiece=sphere lattice met warme luminous core; HUD=NEE (warme zorg); poster=RUST; palette=trust teal #0F766E op donkere cinematische basis; fonts=Poppins/Open Sans; lang=NL; chapters: 1 wide reveal, 2 push-in samendrijven, 3 orbit kern gloeit, 4 settle Antwerpen, 5 close-in CTA, 6 03 226 25 25 -->
+<!-- CONCEPT: offering=vertrouwelijke, professionele zwangerschapsafbreking en onbevooroordeelde begeleiding in een veilige medische omgeving; feeling=kalm, gedragen, gerustgesteld; 3d-story=een zacht veld van drijvende deeltjes verzamelt zich tot een stabiele gloeiende halo van licht die een warm kernpunt koestert — een omhelzing, geen machine; hologram=beschermende open ring die een centraal lichtpunt cradelt; chapters=1 veilig&welkom (wide fade-in), 2 vertrouwelijke begeleiding (push-in), 3 halo vormt zich/jouw keuze (orbit+hologram), 4 deskundige zorg in Antwerpen (close approach), 5 contact (settle). NOTE: warm/casual-coded care trade — NO scan/targeting HUD. -->
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LUNA abortuscentrum Antwerpen — veilige, warme zorg</title>
+<title>LUNA abortuscentrum Antwerpen — veilig, vertrouwelijk, zonder oordeel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#05100f;
-  --bg-rgb:5,16,15;
-  --surface-rgb:8,24,22;
-  --accent:#2dd4bf;
-  --accent2:#5eead4;
-  --teal:#0f766e;
-  --fg:#f0fffb;
-  --muted:#b6ddd6;
-  --border:rgba(94,234,212,0.24);
-  --z-canvas:0; --z-veil:1; --z-content:2; --z-hud:5; --z-banner:50;
+  --bg:#0a1f1c;
+  --bg-rgb:10,31,28;
+  --accent:#2DD4BF;
+  --accent2:#38BDF8;
+  --accent-light:#7FF0DE;
+  --primary:#0F766E;
+  --fg:#EDFBF7;
+  --muted:#B4D8D0;
+  --border:rgba(127,240,222,.24);
+  --z-veil:1;
+  --z-content:2;
+  --z-nav:50;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -28,374 +30,457 @@ body{
   background:var(--bg);
   color:var(--fg);
   overflow-x:hidden;
-  line-height:1.65;
+  line-height:1.7;
 }
-h1,h2,h3,.pop{font-family:'Poppins',sans-serif;}
+h1,h2,h3,.pop{font-family:'Poppins',sans-serif;font-weight:600;line-height:1.15}
 
 .preview-banner{
-  position:fixed;top:0;left:0;right:0;height:38px;z-index:var(--z-banner);
-  background:rgba(15,118,110,0.94);
-  backdrop-filter:blur(8px);
-  display:flex;align-items:center;justify-content:center;
-  font-size:0.78rem;letter-spacing:0.06em;color:#eafff9;
-  font-family:'Poppins',sans-serif;font-weight:500;
-  border-bottom:1px solid var(--border);text-align:center;padding:0 1rem;
+  position:fixed;top:0;left:0;right:0;z-index:var(--z-nav);
+  background:rgba(10,31,28,.94);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+  color:var(--muted);
+  font-size:12.5px;letter-spacing:.04em;
+  text-align:center;padding:9px 14px;
+  font-family:'Poppins',sans-serif;
 }
-#gl{position:fixed;inset:0;z-index:var(--z-canvas);top:38px}
-.veil{
-  position:fixed;inset:0;z-index:var(--z-veil);pointer-events:none;top:38px;
-  background:radial-gradient(ellipse at 50% 45%,transparent 30%,rgba(var(--bg-rgb),0.55) 78%,rgba(var(--bg-rgb),0.9) 100%);
-}
-main{position:relative;z-index:var(--z-content);padding-top:38px}
+.preview-banner b{color:var(--accent-light);font-weight:600}
 
+#gl{position:fixed;inset:0;z-index:0}
+.veil{
+  position:fixed;inset:0;z-index:var(--z-veil);pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%,transparent 28%,rgba(4,14,12,.5) 78%,rgba(4,14,12,.9) 100%);
+}
+
+main{position:relative;z-index:var(--z-content)}
 .chapter{
   min-height:100vh;
-  display:flex;align-items:center;
-  padding:9vh 6vw;
+  display:flex;
+  align-items:center;
+  padding:120px 7vw 90px;
   position:relative;
 }
 .inner{position:relative;max-width:1180px;margin:0 auto;width:100%}
 .inner::before{
   content:'';position:absolute;inset:-70px -90px;z-index:-1;
-  background:radial-gradient(closest-side,rgba(var(--bg-rgb),0.82),rgba(var(--bg-rgb),0.45) 62%,transparent);
-  filter:blur(6px);
+  background:radial-gradient(closest-side,rgba(10,31,28,.84),rgba(10,31,28,.5) 60%,transparent);
+  filter:blur(4px);
 }
+h1,h2,p{text-shadow:0 2px 26px rgba(4,14,12,.78)}
+
 .tag{
-  display:inline-block;font-family:'Poppins',sans-serif;font-weight:500;
-  font-size:0.72rem;letter-spacing:0.22em;text-transform:uppercase;
-  color:var(--accent2);margin-bottom:1.4rem;
-  padding:0.4rem 0.9rem;border:1px solid var(--border);border-radius:99px;
-  background:rgba(15,118,110,0.2);
+  display:inline-block;
+  font-family:'Poppins',sans-serif;
+  font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--accent-light);
+  border:1px solid var(--border);
+  border-radius:40px;
+  padding:7px 18px;
+  margin-bottom:26px;
+  background:rgba(10,31,28,.55);
 }
-h1{
-  font-size:clamp(2.4rem,6vw,4.6rem);font-weight:600;line-height:1.05;
-  letter-spacing:-0.01em;
-  text-shadow:0 3px 40px rgba(0,0,0,0.8);
+
+/* HERO — asymmetric */
+.hero .inner{max-width:1240px}
+.hero-grid{display:grid;grid-template-columns:1.5fr .9fr;gap:50px;align-items:center}
+.hero h1{
+  font-size:clamp(2.6rem,7vw,5.2rem);
+  font-weight:600;
+  letter-spacing:-.02em;
+  max-width:16ch;
 }
-h2{
-  font-size:clamp(1.9rem,4.2vw,3.1rem);font-weight:600;line-height:1.12;
-  text-shadow:0 3px 34px rgba(0,0,0,0.72);margin-bottom:1.3rem;
+.hero h1 span{color:var(--accent-light)}
+.hero p.lead{
+  margin-top:26px;font-size:clamp(1.05rem,2vw,1.3rem);
+  max-width:44ch;color:var(--muted);font-weight:300;
 }
-h3{font-size:1.2rem;font-weight:600;margin-bottom:0.5rem;color:var(--fg)}
-.lead{
-  font-size:clamp(1.05rem,1.7vw,1.35rem);color:var(--fg);
-  max-width:620px;font-weight:300;
-  text-shadow:0 2px 20px rgba(0,0,0,0.7);
+.hero-cta{margin-top:40px;display:flex;gap:16px;flex-wrap:wrap}
+.assure{
+  border-left:2px solid var(--border);
+  padding-left:24px;
+  display:flex;flex-direction:column;gap:22px;
 }
-p{color:var(--muted);text-shadow:0 1px 14px rgba(0,0,0,0.6)}
-.accent{color:var(--accent2)}
+.assure .a-item{display:flex;gap:14px;align-items:flex-start}
+.assure .a-item svg{width:30px;height:30px;flex:0 0 30px;margin-top:2px}
+.assure h4{font-family:'Poppins',sans-serif;font-size:1rem;font-weight:600;margin-bottom:2px}
+.assure p{font-size:.9rem;color:var(--muted);font-weight:300}
 
 .btn{
-  display:inline-flex;align-items:center;gap:0.6rem;
-  font-family:'Poppins',sans-serif;font-weight:500;font-size:1rem;
-  padding:0.95rem 1.8rem;border-radius:99px;cursor:pointer;min-height:48px;
-  background:linear-gradient(120deg,var(--teal),var(--accent));
-  color:#04100e;border:none;text-decoration:none;
-  box-shadow:0 8px 34px rgba(45,212,191,0.28);
-  transition:transform .25s ease,box-shadow .25s ease;
+  cursor:pointer;
+  font-family:'Poppins',sans-serif;font-weight:500;font-size:15px;
+  padding:15px 30px;border-radius:44px;min-height:44px;
+  text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  transition:transform .25s ease,box-shadow .25s ease,background .25s ease;
+  border:1px solid transparent;
 }
-.btn:hover{transform:translateY(-3px);box-shadow:0 14px 44px rgba(45,212,191,0.42)}
-.btn:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,button:focus-visible{
-  outline:3px solid var(--accent2);outline-offset:3px;border-radius:8px;
+.btn:focus-visible{outline:3px solid var(--accent-light);outline-offset:3px}
+.btn-primary{
+  background:linear-gradient(120deg,var(--accent),var(--primary));
+  color:#04211d;box-shadow:0 6px 34px rgba(45,212,191,.35);font-weight:600;
 }
-.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--border);box-shadow:none}
-.btn.ghost:hover{background:rgba(45,212,191,0.14)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 44px rgba(45,212,191,.5)}
+.btn-ghost{
+  background:rgba(10,31,28,.5);color:var(--fg);border-color:var(--border);
+  backdrop-filter:blur(8px);
+}
+.btn-ghost:hover{transform:translateY(-3px);border-color:var(--accent-light)}
 
-.hero-inner{display:grid;gap:1.4rem;max-width:760px}
-.hero-cta{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1rem}
-
+/* giant poster word — sparse chapter only, bright stroke */
 .poster-word{
-  position:absolute;z-index:-2;left:-1vw;bottom:2vh;
+  position:absolute;
+  left:50%;top:38%;
+  transform:translate(-50%,-50%);
   font-family:'Poppins',sans-serif;font-weight:700;
-  font-size:30vw;line-height:0.8;
+  font-size:clamp(7rem,24vw,20rem);
+  letter-spacing:-.03em;
   color:transparent;
-  -webkit-text-stroke:2px rgba(94,234,212,0.6);
-  pointer-events:none;user-select:none;letter-spacing:-0.02em;
+  -webkit-text-stroke:2px rgba(127,240,222,.55);
+  z-index:-2;
+  white-space:nowrap;
+  pointer-events:none;
+  user-select:none;
 }
 
-.two-col{display:grid;grid-template-columns:1.1fr 0.9fr;gap:4vw;align-items:center}
-.two-col.flip{grid-template-columns:0.9fr 1.1fr}
+/* two-column layout */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.two-col.flip .colB{order:-1}
+h2{font-size:clamp(1.9rem,4vw,3rem);letter-spacing:-.01em}
+.section-lead{color:var(--muted);font-size:1.08rem;margin-top:20px;font-weight:300;max-width:46ch}
 
-.grid-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.4rem;margin-top:2.4rem}
+/* cards — near-opaque */
+.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:34px}
 .card{
-  background:rgba(var(--surface-rgb),0.94);
+  background:rgba(9,26,24,.94);
   backdrop-filter:blur(14px);
   border:1px solid var(--border);
-  border-radius:18px;padding:1.8rem;
+  border-radius:20px;
+  padding:30px 26px;
   transition:transform .3s ease,border-color .3s ease;
 }
-.card:hover{transform:translateY(-6px);border-color:rgba(94,234,212,0.55)}
-.card svg{margin-bottom:1rem}
-.card p{font-size:0.95rem}
+.card:hover{transform:translateY(-6px);border-color:var(--accent-light)}
+.card .ic{width:46px;height:46px;margin-bottom:18px;display:block}
+.card h3{font-size:1.18rem;margin-bottom:10px}
+.card p{color:var(--muted);font-size:.97rem;font-weight:300}
 
-.stat-band{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2rem;margin-top:2.5rem}
-.stat{border-left:2px solid var(--accent);padding-left:1.2rem}
-.stat .num{font-family:'Poppins',sans-serif;font-weight:700;font-size:clamp(2.4rem,5vw,3.6rem);color:var(--accent2);line-height:1}
-.stat .lbl{font-size:0.9rem;color:var(--muted);margin-top:0.4rem}
+/* feature rows */
+.rows{display:flex;flex-direction:column;gap:14px;margin-top:14px}
+.frow{
+  display:flex;gap:20px;align-items:flex-start;
+  background:rgba(9,26,24,.92);
+  border:1px solid var(--border);
+  border-radius:16px;padding:22px 24px;
+  backdrop-filter:blur(12px);
+}
+.frow .ic{width:40px;height:40px;flex:0 0 40px}
+.frow h3{font-size:1.1rem;margin-bottom:5px}
+.frow p{color:var(--muted);font-size:.95rem;font-weight:300}
 
-.timeline{margin-top:2.6rem;position:relative;padding-left:2rem}
-.timeline::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--accent),transparent)}
-.tl-item{position:relative;margin-bottom:2rem}
-.tl-item::before{content:'';position:absolute;left:-1.72rem;top:6px;width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px var(--accent)}
-.tl-item h3{margin-bottom:0.3rem}
-.tl-item p{font-size:0.95rem}
-.tl-item .step{font-family:'Poppins';font-size:0.72rem;letter-spacing:0.14em;color:var(--accent2);text-transform:uppercase}
+/* stat band */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:34px}
+.stat{
+  text-align:center;
+  background:rgba(9,26,24,.9);border:1px solid var(--border);
+  border-radius:20px;padding:34px 20px;backdrop-filter:blur(12px);
+}
+.stat .num{font-family:'Poppins',sans-serif;font-weight:700;font-size:clamp(2rem,4.6vw,3.2rem);color:var(--accent-light)}
+.stat .lbl{color:var(--muted);font-size:.92rem;margin-top:6px}
 
-.panel{
-  background:rgba(var(--surface-rgb),0.95);backdrop-filter:blur(14px);
-  border:1px solid var(--border);border-radius:20px;padding:2rem;
+/* quote */
+.pullquote{max-width:900px}
+.pullquote blockquote{
+  font-family:'Poppins',sans-serif;font-weight:500;
+  font-size:clamp(1.5rem,3.6vw,2.5rem);line-height:1.35;
+  letter-spacing:-.01em;
 }
-.panel .row{display:flex;gap:0.9rem;align-items:flex-start;margin-bottom:1.2rem}
-.panel .row:last-child{margin-bottom:0}
-.panel .row svg{flex-shrink:0;margin-top:2px}
-.panel .row strong{font-family:'Poppins',sans-serif;font-weight:500;display:block;color:var(--fg)}
-.panel .row span{font-size:0.92rem;color:var(--muted)}
+.pullquote blockquote span{color:var(--accent-light)}
+.pullquote cite{display:block;margin-top:26px;color:var(--muted);font-style:normal;font-size:1rem}
 
-.quote{max-width:900px}
-.quote blockquote{
-  font-family:'Poppins',sans-serif;font-weight:400;
-  font-size:clamp(1.5rem,3.4vw,2.6rem);line-height:1.3;
-  color:var(--fg);text-shadow:0 3px 30px rgba(0,0,0,0.7);
+/* contact */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start}
+.form{
+  background:rgba(9,26,24,.95);border:1px solid var(--border);
+  border-radius:22px;padding:34px;backdrop-filter:blur(16px);
 }
-.quote blockquote .q{color:var(--accent2)}
-.quote cite{display:block;margin-top:1.6rem;font-style:normal;color:var(--muted);font-size:0.95rem}
+.form label{display:block;font-size:.85rem;color:var(--fg);margin:16px 0 6px;font-family:'Poppins',sans-serif;letter-spacing:.02em}
+.form input,.form textarea{
+  width:100%;background:rgba(255,255,255,.06);
+  border:1px solid var(--border);border-radius:12px;
+  padding:13px 15px;color:var(--fg);font-family:inherit;font-size:16px;min-height:44px;
+}
+.form input:focus,.form textarea:focus{outline:3px solid var(--accent-light);outline-offset:1px;border-color:var(--accent-light)}
+.form .btn{margin-top:24px;width:100%}
+.form .btn:disabled{opacity:.6;cursor:progress}
+.form-status{margin-top:14px;font-size:.9rem;min-height:1.2em}
+.form-status.ok{color:var(--accent-light)}
+.form-status.err{color:#FCA5A5}
+.contact-info h3{font-size:1.3rem;margin-bottom:18px}
+.ci-item{display:flex;gap:16px;align-items:flex-start;margin-bottom:22px}
+.ci-item .ic{width:34px;height:34px;flex:0 0 34px;margin-top:2px}
+.ci-item .lbl{font-size:.8rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.ci-item .val{font-size:1.08rem;color:var(--fg);font-family:'Poppins',sans-serif}
+.ci-item a{color:var(--accent-light);text-decoration:none}
+.ci-item a:hover{text-decoration:underline}
+.big-phone{
+  display:inline-flex;align-items:center;gap:14px;margin-top:8px;min-height:44px;
+  font-family:'Poppins',sans-serif;font-weight:600;
+  font-size:clamp(1.6rem,4vw,2.4rem);color:var(--accent-light);text-decoration:none;
+}
+.big-phone:focus-visible{outline:3px solid var(--accent-light);outline-offset:4px;border-radius:8px}
 
-.form-wrap{
-  background:rgba(var(--surface-rgb),0.96);backdrop-filter:blur(16px);
-  border:1px solid var(--border);border-radius:22px;padding:2.4rem;
-  max-width:520px;
-}
-.form-wrap label{display:block;font-size:0.86rem;color:var(--fg);margin-bottom:0.4rem;font-family:'Poppins',sans-serif}
-.form-wrap input,.form-wrap textarea{
-  width:100%;background:rgba(255,255,255,0.06);border:1px solid var(--border);
-  border-radius:12px;padding:0.85rem 1rem;color:var(--fg);font-family:'Open Sans',sans-serif;
-  font-size:16px;margin-bottom:1.1rem;min-height:48px;
-}
-.form-wrap input:focus,.form-wrap textarea:focus{outline:none;border-color:var(--accent)}
-.form-msg{font-size:0.9rem;margin-top:0.8rem;min-height:1.2em}
-.form-msg.ok{color:var(--accent2)}
-.form-msg.err{color:#ffb4a8}
-.phone-big{
-  font-family:'Poppins',sans-serif;font-weight:700;
-  font-size:clamp(2rem,5vw,3.4rem);color:var(--accent2);
-  text-shadow:0 0 40px rgba(45,212,191,0.4);letter-spacing:0.01em;
-  text-decoration:none;display:inline-block;margin-top:0.6rem;
-}
-.phone-big:hover{color:var(--accent)}
+.divider{position:relative;z-index:var(--z-content);line-height:0}
+.divider svg{width:100%;height:80px;display:block}
 
 footer{
   position:relative;z-index:var(--z-content);
-  background:rgba(3,12,11,0.94);backdrop-filter:blur(10px);
   border-top:1px solid var(--border);
-  padding:3rem 6vw 2rem;
+  padding:50px 7vw;
+  background:rgba(4,14,12,.82);
+  backdrop-filter:blur(12px);
 }
-.foot-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:2rem}
-.foot-grid h4{font-family:'Poppins',sans-serif;font-weight:600;margin-bottom:0.8rem;color:var(--fg)}
-.foot-grid p,.foot-grid a{font-size:0.9rem;color:var(--muted);text-decoration:none;display:block;margin-bottom:0.4rem}
-.foot-grid a:hover{color:var(--accent2)}
-.foot-bottom{max-width:1180px;margin:2rem auto 0;padding-top:1.4rem;border-top:1px solid rgba(94,234,212,0.14);font-size:0.8rem;color:var(--muted)}
+.foot-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px}
+footer h4{font-family:'Poppins',sans-serif;font-size:1.1rem;margin-bottom:14px}
+footer p,footer a{color:var(--muted);font-size:.92rem;font-weight:300;text-decoration:none;display:block;margin-bottom:6px}
+footer a:hover{color:var(--accent-light)}
+footer a:focus-visible{outline:2px solid var(--accent-light);outline-offset:2px}
+.foot-note{max-width:1180px;margin:36px auto 0;padding-top:22px;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
 
-.divider{width:100%;height:80px;position:relative;z-index:var(--z-content)}
-
-@media(max-width:768px){
-  body{font-size:16px}
-  .two-col,.two-col.flip{grid-template-columns:1fr;gap:2rem}
+@media(max-width:900px){
+  .hero-grid,.two-col,.contact-grid{grid-template-columns:1fr;gap:34px}
+  .two-col.flip .colB{order:0}
+  .bento{grid-template-columns:1fr 1fr}
   .foot-grid{grid-template-columns:1fr}
-  .poster-word{font-size:46vw}
-  .chapter{padding:11vh 7vw}
-  .btn,.form-wrap input,.form-wrap textarea{min-height:52px}
 }
-
+@media(max-width:600px){
+  .chapter{padding:104px 6vw 66px}
+  .bento,.stats{grid-template-columns:1fr}
+  .poster-word{font-size:36vw}
+}
 @media(prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
   #gl{display:none}
-  body{background:radial-gradient(ellipse at 50% 30%,#0b2320,#05100f 70%)}
-  *{animation:none!important;transition:none!important}
+  body{background:radial-gradient(ellipse at 50% 30%,#123d37,#0a1f1c 70%)}
+  html{scroll-behavior:auto}
+  .poster-word{position:static;transform:none;display:block;text-align:center;margin:0 auto 20px}
 }
 </style>
 </head>
 <body>
 
-<div class="preview-banner">Website Preview — conceptontwerp voor LUNA abortuscentrum Antwerpen</div>
+<div class="preview-banner">Websitevoorbeeld — conceptontwerp voor <b>LUNA abortuscentrum Antwerpen</b></div>
 
 <div id="gl" aria-hidden="true"></div>
 <div class="veil"></div>
 
 <main>
-
-  <!-- CH1 HERO -->
-  <section class="chapter" id="ch1">
-    <div class="poster-word" aria-hidden="true">RUST</div>
-    <div class="inner hero-inner">
-      <span class="tag">LUNA abortuscentrum · Antwerpen</span>
-      <h1>Je staat er<br>niet alleen voor.</h1>
-      <p class="lead">Bij LUNA vind je een rustige, veilige plek waar je terecht kunt met al je vragen. Zonder oordeel, in vertrouwen, met mensen die naast je staan.</p>
-      <div class="hero-cta">
-        <a href="#ch5" class="btn">Maak een afspraak</a>
-        <a href="tel:032262525" class="btn ghost" aria-label="Bel LUNA op nul drie, tweehonderd zesentwintig, vijfentwintig, vijfentwintig">Bel 03 226 25 25</a>
-      </div>
-    </div>
-  </section>
-
-  <svg class="divider" viewBox="0 0 1200 80" preserveAspectRatio="none" aria-hidden="true">
-    <defs><linearGradient id="dg1" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#2dd4bf" stop-opacity="0"/>
-      <stop offset="0.5" stop-color="#2dd4bf" stop-opacity="0.5"/>
-      <stop offset="1" stop-color="#2dd4bf" stop-opacity="0"/>
-    </linearGradient></defs>
-    <path d="M0,40 C300,10 500,70 600,40 C700,10 900,70 1200,40" fill="none" stroke="url(#dg1)" stroke-width="1.5"/>
-  </svg>
-
-  <!-- CH2 BEGELEIDING (offset columns) -->
-  <section class="chapter" id="ch2">
-    <div class="inner two-col">
-      <div>
-        <span class="tag">Vertrouwelijke begeleiding</span>
-        <h2>Een gesprek<br>zonder oordeel.</h2>
-        <p>Voor je een beslissing neemt, nemen we alle tijd voor jou. In een rustig gesprek luisteren we naar je verhaal, beantwoorden we je vragen en leggen we alles helder uit. Je bepaalt zelf het tempo — wij begeleiden je stap voor stap.</p>
-        <p style="margin-top:1rem">Alles wat je met ons bespreekt, blijft strikt vertrouwelijk.</p>
-      </div>
-      <div>
-        <div class="grid-cards" style="grid-template-columns:1fr;margin-top:0">
-          <div class="card">
-            <svg width="38" height="38" viewBox="0 0 40 40" fill="none" aria-hidden="true"><defs><linearGradient id="ic1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5eead4"/><stop offset="1" stop-color="#0f766e"/></linearGradient></defs><path d="M34 22a4 4 0 0 1-4 4H14l-7 7V11a4 4 0 0 1 4-4h19a4 4 0 0 1 4 4z" stroke="url(#ic1)" stroke-width="2" stroke-linejoin="round"/><path d="M14 15h13M14 20h9" stroke="#5eead4" stroke-width="2" stroke-linecap="round"/></svg>
-            <h3>Persoonlijk gesprek</h3>
-            <p>Een rustig, vertrouwelijk gesprek waarin er ruimte is voor al je twijfels en vragen.</p>
+  <!-- CH1 HERO — asymmetric -->
+  <section class="chapter hero" id="ch1">
+    <div class="inner">
+      <div class="hero-grid">
+        <div>
+          <span class="tag">LUNA · Antwerpen</span>
+          <h1>Je bent hier <span>veilig</span> en welkom.</h1>
+          <p class="lead">Bij LUNA vind je een luisterend oor, deskundige zorg en alle tijd die je nodig hebt. Geen oordeel — alleen rust, respect en ruimte voor jouw keuze.</p>
+          <div class="hero-cta">
+            <a href="#ch5" class="btn btn-primary">Neem vrijblijvend contact op</a>
+            <a href="#ch2" class="btn btn-ghost">Ontdek hoe we je helpen</a>
           </div>
-          <div class="card">
-            <svg width="38" height="38" viewBox="0 0 40 40" fill="none" aria-hidden="true"><defs><linearGradient id="ic2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5eead4"/><stop offset="1" stop-color="#0f766e"/></linearGradient></defs><path d="M20 34s-13-7-13-19a8 8 0 0 1 13-6 8 8 0 0 1 13 6c0 12-13 19-13 19z" stroke="url(#ic2)" stroke-width="2" stroke-linejoin="round"/><path d="M16 20l3 3 6-6" stroke="#5eead4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <h3>Nazorg en steun</h3>
-            <p>Ook na je bezoek kun je bij ons terecht. We laten je nooit alleen met je gevoelens.</p>
+        </div>
+        <div class="assure">
+          <div class="a-item">
+            <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7FF0DE"/><stop offset="1" stop-color="#38BDF8"/></linearGradient></defs><path d="M24 6l14 6v10c0 9-6 15-14 18-8-3-14-9-14-18V12z" stroke="url(#g1)" stroke-width="2" stroke-linejoin="round"/><path d="M18 24l4 4 8-9" stroke="url(#g1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><h4>Volledig vertrouwelijk</h4><p>Alles blijft tussen jou en LUNA.</p></div>
+          </div>
+          <div class="a-item">
+            <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 40c-9-6-16-11-16-19a9 9 0 0116-5 9 9 0 0116 5c0 8-7 13-16 19z" stroke="url(#g1)" stroke-width="2" stroke-linejoin="round"/></svg>
+            <div><h4>Zonder oordeel</h4><p>Wat je ook voelt — het mag er zijn.</p></div>
+          </div>
+          <div class="a-item">
+            <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="15" stroke="url(#g1)" stroke-width="2"/><path d="M24 15v9l6 4" stroke="url(#g1)" stroke-width="2" stroke-linecap="round"/></svg>
+            <div><h4>Jouw tempo</h4><p>Zoveel tijd als je nodig hebt.</p></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CH3 VEILIGE ZORG (bento cards) -->
+  <!-- CH2 offset two-column -->
+  <section class="chapter" id="ch2">
+    <div class="inner">
+      <div class="two-col flip">
+        <div class="colA">
+          <span class="tag">Zonder oordeel</span>
+          <h2>Vertrouwelijke begeleiding en een luisterend oor.</h2>
+          <p class="section-lead">Wat je ook voelt of denkt — je mag het hier delen. Onze hulpverleners nemen de tijd voor je verhaal en helpen je rustig alles op een rij te zetten. In alle vertrouwen, in jouw tempo, en altijd met respect voor jouw beslissing.</p>
+        </div>
+        <div class="colB">
+          <div class="rows">
+            <div class="frow">
+              <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 40c-9-6-16-11-16-19a9 9 0 0116-5 9 9 0 0116 5c0 8-7 13-16 19z" stroke="var(--accent-light)" stroke-width="2" stroke-linejoin="round"/></svg>
+              <div><h3>Warm en menselijk onthaal</h3><p>Je wordt ontvangen door mensen die luisteren zonder te oordelen.</p></div>
+            </div>
+            <div class="frow">
+              <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="9" y="14" width="30" height="22" rx="4" stroke="var(--accent-light)" stroke-width="2"/><path d="M16 14v-3a8 8 0 0116 0v3" stroke="var(--accent-light)" stroke-width="2"/><circle cx="24" cy="25" r="3" fill="var(--accent-light)"/></svg>
+              <div><h3>Volledig vertrouwelijk</h3><p>Alles wat je met ons deelt blijft strikt tussen jou en LUNA.</p></div>
+            </div>
+            <div class="frow">
+              <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="15" stroke="var(--accent-light)" stroke-width="2"/><path d="M24 15v9l6 4" stroke="var(--accent-light)" stroke-width="2" stroke-linecap="round"/></svg>
+              <div><h3>Jouw tempo, jouw ruimte</h3><p>Niets moet. We gaan pas verder wanneer jij er klaar voor bent.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><svg viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 C360,10 720,70 1080,40 1440,10 1440,10 1440,10" stroke="rgba(127,240,222,.28)" stroke-width="1.5" fill="none"/><circle cx="720" cy="52" r="3" fill="var(--accent-light)"/></svg></div>
+
+  <!-- CH3 bento services -->
   <section class="chapter" id="ch3">
     <div class="inner">
-      <div style="max-width:640px">
-        <span class="tag">Veilige medische zorg</span>
-        <h2>Deskundige zorg,<br>zacht en zorgvuldig.</h2>
-        <p>Alles gebeurt in een erkend en veilig medisch centrum, door een team van ervaren artsen, verpleegkundigen en psychologen. Je wordt met warmte en respect begeleid — van je eerste vraag tot de nazorg.</p>
-      </div>
-      <div class="grid-cards">
+      <span class="tag">Jouw keuze, jouw tempo</span>
+      <h2>Deskundige zorg, van begeleiding tot behandeling.</h2>
+      <p class="section-lead">Bij LUNA kun je terecht voor het volledige traject — van een eerste, vrijblijvend gesprek tot zorgvuldige medische begeleiding en nazorg.</p>
+      <div class="bento">
         <div class="card">
-          <svg width="38" height="38" viewBox="0 0 40 40" fill="none" aria-hidden="true"><defs><linearGradient id="ic3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5eead4"/><stop offset="1" stop-color="#0f766e"/></linearGradient></defs><path d="M20 4 7 9v10c0 8 6 13 13 17 7-4 13-9 13-17V9z" stroke="url(#ic3)" stroke-width="2" stroke-linejoin="round"/><path d="M15 20l3.5 3.5L26 16" stroke="#5eead4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <h3>Erkend centrum</h3>
-          <p>Een officieel erkend en gespecialiseerd abortuscentrum met alle medische waarborgen.</p>
+          <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><defs><linearGradient id="c1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7FF0DE"/><stop offset="1" stop-color="#38BDF8"/></linearGradient></defs><path d="M10 34V16a4 4 0 014-4h20a4 4 0 014 4v14a4 4 0 01-4 4H20l-8 6v-6z" stroke="url(#c1)" stroke-width="2" stroke-linejoin="round"/><circle cx="19" cy="24" r="1.6" fill="#7FF0DE"/><circle cx="24" cy="24" r="1.6" fill="#7FF0DE"/><circle cx="29" cy="24" r="1.6" fill="#7FF0DE"/></svg>
+          <h3>Onbevooroordeeld gesprek</h3>
+          <p>Een rustig gesprek waarin je alle vragen kunt stellen en alle opties kunt bekijken — zonder druk.</p>
         </div>
         <div class="card">
-          <svg width="38" height="38" viewBox="0 0 40 40" fill="none" aria-hidden="true"><defs><linearGradient id="ic4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5eead4"/><stop offset="1" stop-color="#0f766e"/></linearGradient></defs><path d="M20 8c-2-3-6-4-9-2-3 2-4 6-2 9l11 15 11-15c2-3 1-7-2-9-3-2-7-1-9 2z" stroke="url(#ic4)" stroke-width="2" stroke-linejoin="round"/><circle cx="20" cy="16" r="2.5" fill="#5eead4"/></svg>
-          <h3>Warme begeleiding</h3>
-          <p>Een team dat er echt voor je is, met tijd, aandacht en menselijke nabijheid.</p>
+          <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 8c-6 6-11 10-11 18a11 11 0 0022 0c0-8-5-12-11-18z" stroke="url(#c1)" stroke-width="2" stroke-linejoin="round"/><path d="M20 27a4 4 0 004 4" stroke="#7FF0DE" stroke-width="2" stroke-linecap="round"/></svg>
+          <h3>Medische begeleiding</h3>
+          <p>Veilige, professionele zwangerschapsafbreking door een ervaren, zorgzaam team.</p>
         </div>
         <div class="card">
-          <svg width="38" height="38" viewBox="0 0 40 40" fill="none" aria-hidden="true"><defs><linearGradient id="ic5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5eead4"/><stop offset="1" stop-color="#0f766e"/></linearGradient></defs><circle cx="20" cy="20" r="15" stroke="url(#ic5)" stroke-width="2"/><path d="M20 11v9l6 5" stroke="#5eead4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <h3>Snel terecht</h3>
-          <p>We plannen een afspraak op korte termijn, zodat je niet lang met vragen blijft zitten.</p>
+          <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="14" stroke="url(#c1)" stroke-width="2"/><path d="M17 24l5 5 10-11" stroke="#7FF0DE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>Zorgvuldige nazorg</h3>
+          <p>Ook ná je behandeling staan we voor je klaar met een gesprek of extra begeleiding.</p>
+        </div>
+        <div class="card">
+          <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 30c-7-4-12-8-12-14a6 6 0 0112-3 6 6 0 0112 3c0 6-5 10-12 14z" stroke="url(#c1)" stroke-width="2" stroke-linejoin="round"/><path d="M14 36h20" stroke="#7FF0DE" stroke-width="2" stroke-linecap="round"/></svg>
+          <h3>Anticonceptie-advies</h3>
+          <p>Persoonlijk advies over de anticonceptie die het best bij jouw leven past.</p>
+        </div>
+        <div class="card">
+          <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="10" y="12" width="28" height="24" rx="3" stroke="url(#c1)" stroke-width="2"/><path d="M10 20h28" stroke="#7FF0DE" stroke-width="2"/><path d="M17 8v6M31 8v6" stroke="#7FF0DE" stroke-width="2" stroke-linecap="round"/></svg>
+          <h3>Snel een afspraak</h3>
+          <p>We plannen zo snel mogelijk een afspraak, zodat je niet onnodig hoeft te wachten.</p>
+        </div>
+        <div class="card">
+          <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="18" cy="18" r="6" stroke="url(#c1)" stroke-width="2"/><circle cx="32" cy="20" r="5" stroke="url(#c1)" stroke-width="2"/><path d="M8 38c0-6 4-10 10-10s10 4 10 10M28 38c0-4 3-7 7-7s7 3 7 7" stroke="#7FF0DE" stroke-width="2" stroke-linecap="round"/></svg>
+          <h3>Steun voor je omgeving</h3>
+          <p>Je partner, familie of vriend(in) mag mee — samen sta je er niet alleen voor.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CH timeline: hoe verloopt het -->
-  <section class="chapter" id="chtl">
-    <div class="inner" style="max-width:720px">
-      <span class="tag">Zo verloopt het</span>
-      <h2>Stap voor stap,<br>op jouw tempo.</h2>
-      <div class="timeline">
-        <div class="tl-item"><span class="step">Stap 1</span><h3>Je neemt contact op</h3><p>Bel of stuur een bericht. We plannen samen een eerste afspraak, zonder dat je iets vooraf hoeft te weten.</p></div>
-        <div class="tl-item"><span class="step">Stap 2</span><h3>Een rustig gesprek</h3><p>We luisteren, informeren en beantwoorden al je vragen. Jij houdt de regie over je beslissing.</p></div>
-        <div class="tl-item"><span class="step">Stap 3</span><h3>Veilige medische zorg</h3><p>De behandeling gebeurt zorgvuldig in ons erkend centrum, met warme begeleiding op elk moment.</p></div>
-        <div class="tl-item"><span class="step">Stap 4</span><h3>Nazorg wanneer je wil</h3><p>Ook nadien blijf je welkom voor een gesprek of vragen. Je staat er nooit alleen voor.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CH quote + stat band -->
-  <section class="chapter" id="chq">
-    <div class="inner quote">
-      <span class="tag">Wat mensen ervaren</span>
-      <blockquote>“Ik werd hier <span class="q">rustig en met respect</span> ontvangen. Geen oordeel, alleen mensen die luisterden en me door alles heen hielpen.”</blockquote>
-      <cite>— een bezoeker van LUNA Antwerpen</cite>
-      <div class="stat-band">
-        <div class="stat"><div class="num">100%</div><div class="lbl">vertrouwelijk &amp; discreet</div></div>
-        <div class="stat"><div class="num">4★</div><div class="lbl">op basis van bezoekersreviews</div></div>
-        <div class="stat"><div class="num">0</div><div class="lbl">oordeel — altijd</div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CH4 PRAKTISCH -->
+  <!-- CH4 stats + quote + poster word (sparse) -->
   <section class="chapter" id="ch4">
-    <div class="inner two-col flip">
-      <div class="panel">
-        <div class="row">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5eead4" stroke-width="1.6" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <div><strong>Franklin Rooseveltplaats 12</strong><span>2060 Antwerpen — in het hart van de stad</span></div>
-        </div>
-        <div class="row">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5eead4" stroke-width="1.6" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
-          <div><strong>03 226 25 25</strong><span>Bel ons gerust — we helpen je graag verder</span></div>
-        </div>
-        <div class="row">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5eead4" stroke-width="1.6" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-          <div><strong>Op afspraak</strong><span>We plannen samen een moment dat voor jou past</span></div>
-        </div>
+    <div class="poster-word" aria-hidden="true">RUST</div>
+    <div class="inner">
+      <span class="tag">In het hart van Antwerpen</span>
+      <h2>Deskundige medische zorg, dichtbij.</h2>
+      <p class="section-lead">Aan de Franklin Rooseveltplaats, midden in de stad en makkelijk bereikbaar — een plek waar deskundigheid en warmte samenkomen.</p>
+      <div class="stats">
+        <div class="stat"><div class="num">100%</div><div class="lbl">Vertrouwelijk &amp; zonder oordeel</div></div>
+        <div class="stat"><div class="num">4★</div><div class="lbl">Gewaardeerd door bezoekers</div></div>
+        <div class="stat"><div class="num">Jouw tempo</div><div class="lbl">Zoveel tijd als je nodig hebt</div></div>
       </div>
-      <div>
-        <span class="tag">Praktisch</span>
-        <h2>Goed bereikbaar,<br>midden in Antwerpen.</h2>
-        <p>Je vindt ons aan de Franklin Rooseveltplaats, vlot bereikbaar met tram, bus en trein. Een centrale, discrete plek waar je makkelijk naartoe kunt komen wanneer je dat wil.</p>
+      <div class="pullquote" style="margin-top:70px">
+        <blockquote>"Hier telt niet wat wij vinden, maar <span>jouw</span> keuze — en die maak je in alle rust, met steun die je verdient."</blockquote>
+        <cite>— Het team van LUNA Antwerpen</cite>
       </div>
     </div>
   </section>
 
-  <!-- CH5 CTA -->
+  <div class="divider"><svg viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 C360,70 720,10 1080,40 1440,70 1440,70 1440,70" stroke="rgba(127,240,222,.28)" stroke-width="1.5" fill="none"/><circle cx="720" cy="30" r="3" fill="var(--accent-light)"/></svg></div>
+
+  <!-- CH5 contact -->
   <section class="chapter" id="ch5">
-    <div class="inner two-col">
-      <div>
-        <span class="tag">Neem contact op</span>
-        <h2>Bel ons of maak<br>een afspraak.</h2>
-        <p>Heb je vragen of wil je een afspraak maken? We staan voor je klaar en helpen je in alle rust verder. Je hoeft niets vooraf te weten — begin gewoon met een gesprek.</p>
-        <a href="tel:032262525" class="phone-big" aria-label="Bel nul drie, tweehonderd zesentwintig, vijfentwintig, vijfentwintig">03 226 25 25</a>
+    <div class="inner">
+      <span class="tag">Neem contact op</span>
+      <h2>Zet gerust de eerste stap.</h2>
+      <p class="section-lead">Bel ons of laat je gegevens achter — vrijblijvend en vertrouwelijk. We nemen rustig de tijd voor je.</p>
+      <div class="contact-grid" style="margin-top:40px">
+        <div class="contact-info">
+          <a href="tel:+3232262525" class="big-phone" aria-label="Bel LUNA Antwerpen op 03 226 25 25">
+            <svg width="34" height="34" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M14 8l6 2 2 8-4 3c2 5 6 9 11 11l3-4 8 2 2 6c0 3-2 5-5 5C24 41 7 24 7 12c0-3 2-4 5-4z" stroke="var(--accent-light)" stroke-width="2" stroke-linejoin="round"/></svg>
+            03 226 25 25
+          </a>
+          <div class="ci-item" style="margin-top:34px">
+            <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 42c8-9 13-15 13-22a13 13 0 10-26 0c0 7 5 13 13 22z" stroke="var(--accent-light)" stroke-width="2" stroke-linejoin="round"/><circle cx="24" cy="20" r="4.5" stroke="var(--accent-light)" stroke-width="2"/></svg>
+            <div><div class="lbl">Adres</div><div class="val">Franklin Rooseveltplaats 12<br>2060 Antwerpen</div></div>
+          </div>
+          <div class="ci-item">
+            <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="8" y="12" width="32" height="24" rx="3" stroke="var(--accent-light)" stroke-width="2"/><path d="M9 15l15 11 15-11" stroke="var(--accent-light)" stroke-width="2" stroke-linejoin="round"/></svg>
+            <div><div class="lbl">Website</div><div class="val"><a href="https://www.abortus.be/" target="_blank" rel="noopener">www.abortus.be</a></div></div>
+          </div>
+          <div class="ci-item">
+            <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="15" stroke="var(--accent-light)" stroke-width="2"/><path d="M24 15v9l6 4" stroke="var(--accent-light)" stroke-width="2" stroke-linecap="round"/></svg>
+            <div><div class="lbl">Bereikbaarheid</div><div class="val">Op werkdagen — bel ons voor een afspraak</div></div>
+          </div>
+        </div>
+        <form class="form" id="cform" novalidate>
+          <label for="n">Je naam (mag ook een voornaam zijn)</label>
+          <input id="n" name="naam" type="text" placeholder="Bijv. Sara" autocomplete="given-name">
+          <label for="t">Telefoonnummer</label>
+          <input id="t" name="tel" type="tel" placeholder="Waarop we je discreet kunnen bereiken" autocomplete="tel">
+          <label for="m">Je vraag of bericht</label>
+          <textarea id="m" name="bericht" rows="4" placeholder="Vertel gerust waar je mee zit — je hoeft nog niets te beslissen."></textarea>
+          <button class="btn btn-primary" type="submit" id="csubmit">Verstuur vertrouwelijk</button>
+          <p class="form-status" id="cstatus" role="status" aria-live="polite"></p>
+          <p style="font-size:.78rem;color:var(--muted);margin-top:8px;font-weight:300">Dit is een conceptformulier en verstuurt geen gegevens. Bel gerust rechtstreeks naar 03 226 25 25.</p>
+        </form>
       </div>
-      <form class="form-wrap" id="contactForm" novalidate>
-        <label for="naam">Je naam (optioneel)</label>
-        <input id="naam" name="naam" type="text" placeholder="Voornaam" autocomplete="given-name">
-        <label for="tel">Telefoonnummer</label>
-        <input id="tel" name="tel" type="tel" placeholder="Zodat we je kunnen terugbellen" autocomplete="tel" aria-describedby="formMsg">
-        <label for="ber">Je vraag</label>
-        <textarea id="ber" name="ber" rows="3" placeholder="Waarmee kunnen we je helpen?" aria-describedby="formMsg"></textarea>
-        <button type="submit" class="btn" id="submitBtn" style="width:100%;justify-content:center">Verstuur in vertrouwen</button>
-        <p class="form-msg" id="formMsg" role="status" aria-live="polite">Dit is een conceptformulier. Bel ons gerust rechtstreeks.</p>
-      </form>
     </div>
   </section>
-
 </main>
 
 <footer>
   <div class="foot-grid">
     <div>
       <h4>LUNA abortuscentrum Antwerpen</h4>
-      <p>Een warme, veilige plek voor vertrouwelijke begeleiding en veilige medische zorg — zonder oordeel.</p>
+      <p>Een veilige, vertrouwelijke plek voor begeleiding en zorg — zonder oordeel, in jouw tempo.</p>
     </div>
     <div>
       <h4>Contact</h4>
-      <a href="tel:032262525">03 226 25 25</a>
-      <a href="https://www.abortus.be/" target="_blank" rel="noopener">abortus.be</a>
+      <a href="tel:+3232262525">03 226 25 25</a>
+      <p>Franklin Rooseveltplaats 12</p>
+      <p>2060 Antwerpen</p>
     </div>
     <div>
-      <h4>Adres</h4>
-      <p>Franklin Rooseveltplaats 12<br>2060 Antwerpen<br>België</p>
+      <h4>Meer info</h4>
+      <a href="https://www.abortus.be/" target="_blank" rel="noopener">www.abortus.be</a>
+      <a href="#ch2">Begeleiding</a>
+      <a href="#ch3">Onze zorg</a>
+      <a href="#ch5">Afspraak maken</a>
     </div>
   </div>
-  <div class="foot-bottom">© LUNA abortuscentrum Antwerpen — conceptmockup. Alle gesprekken zijn strikt vertrouwelijk.</div>
+  <div class="foot-note">Conceptmockup ter illustratie · Geen officiële website. © LUNA abortuscentrum Antwerpen.</div>
 </footer>
 
+<script>
+// Concept-form: geen echte verzending — toont laad- en successtatus
+(function(){
+  var f=document.getElementById('cform');
+  if(!f)return;
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var btn=document.getElementById('csubmit'),st=document.getElementById('cstatus');
+    var naam=document.getElementById('n').value.trim();
+    if(!naam){st.className='form-status err';st.textContent='Vul minstens een naam of voornaam in.';document.getElementById('n').focus();return;}
+    btn.disabled=true;btn.textContent='Bezig met versturen…';st.className='form-status';st.textContent='';
+    setTimeout(function(){
+      btn.disabled=false;btn.textContent='Verstuur vertrouwelijk';
+      st.className='form-status ok';
+      st.textContent='Bedankt — in een echte site nemen we discreet contact op. Bel gerust naar 03 226 25 25.';
+      f.reset();
+    },900);
+  });
+})();
+</script>
+
+<!-- Three.js + GSAP -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/EffectComposer.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/RenderPass.js"></script>
@@ -406,44 +491,14 @@ footer{
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
-/* form handler */
 (function(){
-  var f=document.getElementById('contactForm');
-  if(!f)return;
-  f.addEventListener('submit',function(e){
-    e.preventDefault();
-    var msg=document.getElementById('formMsg');
-    var btn=document.getElementById('submitBtn');
-    var tel=document.getElementById('tel');
-    if(!tel.value.trim()){
-      msg.className='form-msg err';
-      msg.textContent='Vul een telefoonnummer in, dan kunnen we je terugbellen.';
-      tel.focus();
-      return;
-    }
-    btn.disabled=true;
-    var orig=btn.textContent;
-    btn.textContent='Bezig met versturen…';
-    msg.className='form-msg';
-    msg.textContent='';
-    setTimeout(function(){
-      btn.disabled=false;
-      btn.textContent=orig;
-      msg.className='form-msg ok';
-      msg.textContent='Dankjewel — dit is een concept. Bel ons gerust rechtstreeks op 03 226 25 25.';
-      f.reset();
-    },900);
-  });
-})();
-</script>
-<script>
-(function(){
-  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function hasWebGL(){try{var c=document.createElement('canvas');return !!(c.getContext('webgl')||c.getContext('experimental-webgl'));}catch(e){return false;}}
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function hasWebGL(){try{var c=document.createElement('canvas');return !!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl')));}catch(e){return false;}}
   if(reduce||!hasWebGL()||!window.THREE)return;
+
   try{
-    var BG=0x05100f, ACCENT=0x2dd4bf, ACCENT2=0x5eead4;
-    var isMobile = innerWidth < 768;
+    var BG=0x0a1f1c, ACCENT=0x2DD4BF, ACCENT2=0x38BDF8, ACCENTL=0x7FF0DE;
+    var isMobile=innerWidth<768;
 
     var scene=new THREE.Scene();
     scene.background=new THREE.Color(BG);
@@ -455,7 +510,6 @@ footer{
     var renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
     renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
     renderer.setSize(innerWidth,innerHeight);
-    renderer.outputEncoding=THREE.sRGBEncoding;
     document.getElementById('gl').appendChild(renderer.domElement);
 
     function makeSprite(){var c=document.createElement('canvas');c.width=c.height=64;
@@ -466,133 +520,108 @@ footer{
 
     function envTex(){var c=document.createElement('canvas');c.width=64;c.height=32;
       var g=c.getContext('2d'),gr=g.createLinearGradient(0,0,0,32);
-      gr.addColorStop(0,'#bff7ee');gr.addColorStop(0.5,'#2dd4bf');gr.addColorStop(1,'#05100f');
+      gr.addColorStop(0,'#bff7ec');gr.addColorStop(0.5,'#2DD4BF');gr.addColorStop(1,'#0a1f1c');
       g.fillStyle=gr;g.fillRect(0,0,64,32);var t=new THREE.CanvasTexture(c);
       t.mapping=THREE.EquirectangularReflectionMapping;return t;}
     var env=envTex(); scene.environment=env;
 
-    scene.add(new THREE.HemisphereLight(0xffffff,BG,0.55));
+    scene.add(new THREE.HemisphereLight(0xffffff,BG,0.5));
     var key=new THREE.PointLight(ACCENT,2.0,140); key.position.set(9,11,15); scene.add(key);
     var rim=new THREE.PointLight(ACCENT2,1.4,140); rim.position.set(-11,-5,-9); scene.add(rim);
 
     // particle universe
-    var N=isMobile?4500:9000, SPREAD=70;
+    var N=isMobile?4200:9000, SPREAD=70;
     var geo=new THREE.BufferGeometry(),pos=new Float32Array(N*3),col=new Float32Array(N*3);
-    var ca=new THREE.Color(ACCENT),cb=new THREE.Color(ACCENT2),c0=new THREE.Color();
+    var ca=new THREE.Color(ACCENT),cb=new THREE.Color(ACCENT2),c=new THREE.Color();
     for(var i=0;i<N;i++){var r=SPREAD*Math.pow(Math.random(),0.5),th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
       pos[i*3]=r*Math.sin(ph)*Math.cos(th);pos[i*3+1]=r*Math.sin(ph)*Math.sin(th)*0.55;pos[i*3+2]=r*Math.cos(ph);
-      c0.copy(ca).lerp(cb,Math.random());col[i*3]=c0.r;col[i*3+1]=c0.g;col[i*3+2]=c0.b;}
-    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
-    geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+      c.copy(ca).lerp(cb,Math.random());col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;}
+    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
     var universe=new THREE.Points(geo,new THREE.PointsMaterial({size:0.55,map:sprite,vertexColors:true,transparent:true,opacity:0.9,depthWrite:false,blending:THREE.AdditiveBlending}));
     scene.add(universe);
 
-    // flat spiral galaxy strand
+    // soft spiral light-field (an embrace, not a machine)
     var strandGroup=new THREE.Group();
-    function makeSpiral(offset,color){
-      var SN=isMobile?900:1700, sg=new THREE.BufferGeometry(), sp=new Float32Array(SN*3), TURNS=3.2;
-      for(var i=0;i<SN;i++){var t=i/SN,a=t*Math.PI*2*TURNS+offset,rad=t*14+2;
-        sp[i*3]=Math.cos(a)*rad;sp[i*3+1]=Math.sin(t*30)*0.5*(1-t);sp[i*3+2]=Math.sin(a)*rad;}
-      sg.setAttribute('position',new THREE.BufferAttribute(sp,3));
-      return new THREE.Points(sg,new THREE.PointsMaterial({size:0.4,map:sprite,color:color,transparent:true,opacity:0.75,depthWrite:false,blending:THREE.AdditiveBlending}));
+    function makeSpiral(rot){
+      var SN=isMobile?1400:2600, sp=new Float32Array(SN*3);
+      var TURNS=3.2, MAXR=15;
+      for(var i=0;i<SN;i++){var t=i/SN;var a=t*Math.PI*2*TURNS;var rr=MAXR*Math.pow(t,0.62);
+        var w=0.5*Math.sin(t*30);
+        sp[i*3]=Math.cos(a)*(rr+w);
+        sp[i*3+1]=(Math.random()-0.5)*0.9*(1-t*0.5);
+        sp[i*3+2]=Math.sin(a)*(rr+w);}
+      var sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.BufferAttribute(sp,3));
+      var pts=new THREE.Points(sg,new THREE.PointsMaterial({size:0.4,map:sprite,color:ACCENTL,transparent:true,opacity:0.65,depthWrite:false,blending:THREE.AdditiveBlending}));
+      pts.rotation.y=rot; return pts;
     }
-    strandGroup.add(makeSpiral(0,ACCENT));
-    strandGroup.add(makeSpiral(Math.PI,ACCENT2));
-    strandGroup.rotation.x=0.5;
+    strandGroup.add(makeSpiral(0));
+    strandGroup.add(makeSpiral(Math.PI));
+    strandGroup.rotation.x=-0.35;
     scene.add(strandGroup);
 
-    // sphere lattice centrepiece with warm luminous core
+    // centrepiece — halo cradling a warm core
     var centre=new THREE.Group();
     var shell=new THREE.Mesh(new THREE.IcosahedronGeometry(3.6,1),
-      new THREE.MeshBasicMaterial({color:ACCENT,wireframe:true,transparent:true,opacity:0.5}));
+      new THREE.MeshBasicMaterial({color:ACCENT,wireframe:true,transparent:true,opacity:0.4}));
     centre.add(shell);
-    var shell2=new THREE.Mesh(new THREE.IcosahedronGeometry(2.6,1),
-      new THREE.MeshBasicMaterial({color:ACCENT2,wireframe:true,transparent:true,opacity:0.35}));
-    centre.add(shell2);
-    var coreGeo=new THREE.IcosahedronGeometry(1.7,1);
-    var coreMat=new THREE.MeshStandardMaterial({color:0x0b1a18,metalness:0.85,roughness:0.22,
-      envMap:env,envMapIntensity:1.1,emissive:new THREE.Color(ACCENT),emissiveIntensity:0.4});
-    var core=new THREE.Mesh(coreGeo,coreMat);
+    var halo=new THREE.Mesh(new THREE.TorusGeometry(5.4,0.05,10,140),
+      new THREE.MeshBasicMaterial({color:ACCENTL,transparent:true,opacity:0.85}));
+    halo.rotation.x=Math.PI/2.3;
+    centre.add(halo);
+    var halo2=new THREE.Mesh(new THREE.TorusGeometry(4.6,0.03,10,140),
+      new THREE.MeshBasicMaterial({color:ACCENT2,transparent:true,opacity:0.6}));
+    halo2.rotation.x=Math.PI/2.1; halo2.rotation.y=0.4;
+    centre.add(halo2);
+    var core=new THREE.Mesh(new THREE.IcosahedronGeometry(1.5,1),
+      new THREE.MeshStandardMaterial({color:0x0b1a18,metalness:0.85,roughness:0.22,envMap:env,envMapIntensity:1.1,emissive:new THREE.Color(ACCENT),emissiveIntensity:0.36}));
     centre.add(core);
     var fres=new THREE.ShaderMaterial({transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,
-      uniforms:{c:{value:new THREE.Color(ACCENT2)},p:{value:2.8}},
+      uniforms:{c:{value:new THREE.Color(ACCENTL)},p:{value:2.6}},
       vertexShader:'varying float vF;uniform float p;void main(){vec3 n=normalize(normalMatrix*normal);vec4 mv=modelViewMatrix*vec4(position,1.0);vec3 v=normalize(-mv.xyz);vF=pow(1.0-abs(dot(n,v)),p);gl_Position=projectionMatrix*mv;}',
       fragmentShader:'varying float vF;uniform vec3 c;void main(){gl_FragColor=vec4(c*vF,vF);}'});
-    var rimMesh=new THREE.Mesh(coreGeo.clone(),fres); rimMesh.scale.setScalar(1.08); centre.add(rimMesh);
-    var ring=new THREE.Mesh(new THREE.TorusGeometry(5.2,0.03,8,120),new THREE.MeshBasicMaterial({color:ACCENT2,transparent:true,opacity:0.6}));
-    ring.rotation.x=Math.PI/2.4; centre.add(ring);
+    var fresMesh=new THREE.Mesh(new THREE.IcosahedronGeometry(1.5,1),fres);
+    fresMesh.scale.setScalar(1.12);
+    centre.add(fresMesh);
     scene.add(centre);
 
-    // hologram: protective open hand cupping a small circle
-    var hand=new THREE.Shape();
-    hand.moveTo(-4,-1);
-    hand.bezierCurveTo(-4.2,1.5,-3,3.4,-1.4,3.8);
-    hand.bezierCurveTo(-1.2,4.6,-0.8,5.2,-0.2,5.3);
-    hand.bezierCurveTo(0.4,5.2,0.8,4.6,1,3.8);
-    hand.bezierCurveTo(2.6,3.4,3.8,1.5,3.6,-1);
-    hand.bezierCurveTo(3.5,-2.4,2.2,-3.2,0,-3.4);
-    hand.bezierCurveTo(-2.2,-3.2,-3.5,-2.4,-4,-1);
-    var holoGroup=new THREE.Group();
-    holoGroup.scale.setScalar(1.5);
-
-    var shapeGeo=new THREE.ShapeGeometry(hand,20);
-    var sPos=shapeGeo.attributes.position.array, sIdx=shapeGeo.index.array;
-    var tris=[], areas=[], totA=0;
-    for(var tI=0;tI<sIdx.length;tI+=3){
-      var a=sIdx[tI],b=sIdx[tI+1],cc=sIdx[tI+2];
-      var ax=sPos[a*3],ay=sPos[a*3+1],bx=sPos[b*3],by=sPos[b*3+1],cx=sPos[cc*3],cy=sPos[cc*3+1];
-      var ar=Math.abs((bx-ax)*(cy-ay)-(cx-ax)*(by-ay))*0.5;
-      tris.push([ax,ay,bx,by,cx,cy]); areas.push(ar); totA+=ar;
-    }
-    var FN=isMobile?1400:2600;
-    var fillTarget=new Float32Array(FN*3), fillCloud=new Float32Array(FN*3);
-    for(var i=0;i<FN;i++){
-      var rA=Math.random()*totA, acc=0, pick=0;
-      for(var j=0;j<areas.length;j++){acc+=areas[j];if(rA<=acc){pick=j;break;}}
-      var T=tris[pick], u=Math.random(),v=Math.random();
-      if(u+v>1){u=1-u;v=1-v;}
-      fillTarget[i*3]=T[0]+u*(T[2]-T[0])+v*(T[4]-T[0]);
-      fillTarget[i*3+1]=T[1]+u*(T[3]-T[1])+v*(T[5]-T[1]);
-      fillTarget[i*3+2]=(Math.random()-0.5)*1.2;
-      var rr=27,tt=Math.random()*Math.PI*2,pp=Math.acos(2*Math.random()-1);
-      fillCloud[i*3]=rr*Math.sin(pp)*Math.cos(tt);fillCloud[i*3+1]=rr*Math.sin(pp)*Math.sin(tt);fillCloud[i*3+2]=rr*Math.cos(pp);
-    }
-    var fillGeo=new THREE.BufferGeometry();
-    fillGeo.setAttribute('position',new THREE.BufferAttribute(fillCloud.slice(),3));
-    var fillPts=new THREE.Points(fillGeo,new THREE.PointsMaterial({size:0.24,map:sprite,color:ACCENT,transparent:true,opacity:0.5,depthWrite:false,blending:THREE.AdditiveBlending}));
-    holoGroup.add(fillPts);
-
-    var handPts=hand.getPoints(200);
-    var ON=isMobile?1200:2100;
-    var outTarget=new Float32Array(ON*3), outCloud=new Float32Array(ON*3);
-    for(var i=0;i<ON;i++){
-      var px,py;
-      if(i%5===0){
-        var ang=Math.random()*Math.PI*2, rc=1.0;
-        px=Math.cos(ang)*rc; py=0.3+Math.sin(ang)*rc;
+    // hologram — cradling open ring around a central warm point
+    var holo=new THREE.Group();
+    scene.add(holo);
+    var HM=isMobile?2600:4600;
+    var cloud=new Float32Array(HM*3), target=new Float32Array(HM*3), hpos=new Float32Array(HM*3);
+    for(var i=0;i<HM;i++){
+      var rr=26+Math.random()*6, th=Math.random()*Math.PI*2, ph=Math.acos(2*Math.random()-1);
+      cloud[i*3]=rr*Math.sin(ph)*Math.cos(th);
+      cloud[i*3+1]=rr*Math.sin(ph)*Math.sin(th);
+      cloud[i*3+2]=rr*Math.cos(ph);
+      if(i<HM*0.14){
+        var cr=0.9*Math.pow(Math.random(),0.5), ca2=Math.random()*Math.PI*2;
+        target[i*3]=Math.cos(ca2)*cr; target[i*3+1]=Math.sin(ca2)*cr; target[i*3+2]=(Math.random()-0.5)*0.6;
       } else {
-        var p=handPts[Math.floor(Math.random()*handPts.length)];
-        px=p.x+(Math.random()-0.5)*0.24; py=p.y+(Math.random()-0.5)*0.24;
+        var a=Math.random()*Math.PI*2;
+        var base=6.2, scal=0.55*Math.sin(a*8);
+        var band=(Math.random()-0.5)*0.9;
+        var R=base+scal+band;
+        target[i*3]=Math.cos(a)*R;
+        target[i*3+1]=Math.sin(a)*R;
+        target[i*3+2]=(Math.random()-0.5)*0.7;
       }
-      outTarget[i*3]=px;outTarget[i*3+1]=py;outTarget[i*3+2]=(Math.random()-0.5)*0.5;
-      var rr=29,tt=Math.random()*Math.PI*2,pp=Math.acos(2*Math.random()-1);
-      outCloud[i*3]=rr*Math.sin(pp)*Math.cos(tt);outCloud[i*3+1]=rr*Math.sin(pp)*Math.sin(tt);outCloud[i*3+2]=rr*Math.cos(pp);
+      hpos[i*3]=cloud[i*3];hpos[i*3+1]=cloud[i*3+1];hpos[i*3+2]=cloud[i*3+2];
     }
-    var outGeo=new THREE.BufferGeometry();
-    outGeo.setAttribute('position',new THREE.BufferAttribute(outCloud.slice(),3));
-    var outPts=new THREE.Points(outGeo,new THREE.PointsMaterial({size:0.4,map:sprite,color:0xbff7ee,transparent:true,opacity:0.95,depthWrite:false,blending:THREE.AdditiveBlending}));
-    holoGroup.add(outPts);
-    holoGroup.visible=false;
-    scene.add(holoGroup);
+    var hgeo=new THREE.BufferGeometry();
+    hgeo.setAttribute('position',new THREE.BufferAttribute(hpos,3));
+    var hmat=new THREE.PointsMaterial({size:0.34,map:sprite,color:ACCENTL,transparent:true,opacity:0.0,depthWrite:false,blending:THREE.AdditiveBlending});
+    var holoPts=new THREE.Points(hgeo,hmat);
+    holo.add(holoPts);
 
-    var morph={t:0};
-
+    // bloom
     var composer=new THREE.EffectComposer(renderer);
     composer.addPass(new THREE.RenderPass(scene,camera));
-    var bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.2,0.85,0.12);
+    var bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.15,0.85,0.12);
     composer.addPass(bloom);
 
     var cam={x:0,y:2,z:46,ry:0};
+    var morph={t:0};
     var mouse={x:0,y:0};
     if(!isMobile){
       window.addEventListener('mousemove',function(e){
@@ -602,66 +631,56 @@ footer{
     }
 
     gsap.registerPlugin(ScrollTrigger);
-    var tl=gsap.timeline({scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:1.2}});
+    var tl=gsap.timeline({scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:1.1}});
     tl.to(cam,{z:30,y:1.4,ease:'power2.inOut',duration:1},0)
-      .to(cam,{ry:Math.PI*0.5,x:-5,z:22,y:0.5,ease:'power2.inOut',duration:1.4},1)
-      .to(morph,{t:1,ease:'power1.inOut',duration:1},1.6)
-      .to(cam,{ry:Math.PI*0.85,z:24,y:-0.5,ease:'power2.inOut',duration:1.2},3)
-      .to(cam,{ry:Math.PI*1.05,z:18,y:0.4,x:2,ease:'power2.inOut',duration:1.2},4.4)
-      .to(strandGroup.rotation,{y:Math.PI*1.4,ease:'none',duration:6},0)
-      .to(bloom,{strength:1.45,ease:'power1.inOut',duration:1.4},1.6)
-      .to(centre.scale,{x:0.001,y:0.001,z:0.001,ease:'power2.in',duration:0.8},1.7)
-      .to(centre.scale,{x:1,y:1,z:1,ease:'power2.out',duration:1},3);
+      .to(cam,{z:24,y:0.6,ease:'power2.inOut',duration:1},1)
+      .to(cam,{ry:Math.PI*0.55,x:-4,z:22,ease:'power2.inOut',duration:1},2)
+      .to(morph,{t:1,ease:'power2.inOut',duration:1},2)
+      .to(hmat,{opacity:0.9,ease:'none',duration:0.5},2)
+      .to(centre.scale,{x:0.4,y:0.4,z:0.4,ease:'power2.inOut',duration:1},2)
+      .to(cam,{z:17,y:-0.8,ry:Math.PI*0.85,ease:'power2.inOut',duration:1},3)
+      .to(hmat,{opacity:0.4,ease:'none',duration:1},3)
+      .to(centre.scale,{x:1,y:1,z:1,ease:'power2.inOut',duration:1},3)
+      .to(cam,{z:20,y:0.2,ry:Math.PI*1.0,x:0,ease:'power2.inOut',duration:1},4)
+      .to(strandGroup.rotation,{y:Math.PI*1.4,ease:'none',duration:5},0)
+      .to(bloom,{strength:1.4,ease:'none',duration:1},3);
 
-    document.querySelectorAll('.chapter').forEach(function(ch){
-      gsap.from(ch.querySelector('.inner'),{opacity:0,y:60,duration:1,ease:'power2.out',
-        scrollTrigger:{trigger:ch,start:'top 78%'}});
+    document.querySelectorAll('.chapter .inner').forEach(function(el){
+      gsap.from(el,{opacity:0,y:60,duration:1,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 78%'}});
     });
 
+    var baseBloom=1.15;
     function animate(){
       requestAnimationFrame(animate);
       var t=performance.now()*0.001;
-
-      universe.rotation.y+=0.0009;
-      universe.rotation.x=Math.sin(t*0.15)*0.05;
-      strandGroup.rotation.y+=0.0016;
-      centre.rotation.y+=0.0022;
-      centre.rotation.z=Math.sin(t*0.3)*0.08;
-      ring.rotation.z+=0.003;
-
-      bloom.strength=1.2+Math.sin(t*0.8)*0.12;
-
-      if(morph.t>0.001){
-        holoGroup.visible=true;
-        var fa=fillPts.geometry.attributes.position.array;
-        for(var k=0;k<fa.length;k++) fa[k]=fillCloud[k]+(fillTarget[k]-fillCloud[k])*morph.t;
-        fillPts.geometry.attributes.position.needsUpdate=true;
-        var oa=outPts.geometry.attributes.position.array;
-        for(var k=0;k<oa.length;k++) oa[k]=outCloud[k]+(outTarget[k]-outCloud[k])*morph.t;
-        outPts.geometry.attributes.position.needsUpdate=true;
-        holoGroup.quaternion.copy(camera.quaternion);
-      } else {
-        holoGroup.visible=false;
-      }
-
-      camera.position.z+=(cam.z-camera.position.z)*0.06;
-      var targetX=Math.sin(cam.ry)*camera.position.z*0.35+mouse.x*2.0+cam.x;
-      camera.position.x+=(targetX-camera.position.x)*0.06;
+      universe.rotation.y+=0.0008;
+      universe.rotation.x=Math.sin(t*0.14)*0.05;
+      strandGroup.rotation.y+=0.0014;
+      centre.rotation.y+=0.0020;
+      centre.rotation.z=Math.sin(t*0.3)*0.07;
+      halo.rotation.z+=0.0016;
+      halo2.rotation.z-=0.0012;
+      bloom.strength=baseBloom+Math.sin(t*0.8)*0.1;
+      var arr=hgeo.attributes.position.array;
+      for(var k=0;k<HM*3;k++){arr[k]=cloud[k]+(target[k]-cloud[k])*morph.t;}
+      hgeo.attributes.position.needsUpdate=true;
+      holoPts.quaternion.copy(camera.quaternion);
+      holo.position.y=Math.sin(t*0.5)*0.3;
+      camera.position.z+=(cam.z-camera.position.z)*0.08;
+      var tx=Math.sin(cam.ry)*camera.position.z*0.35+mouse.x*2.0;
+      camera.position.x+=(tx-camera.position.x)*0.08;
       camera.position.y+=((cam.y-mouse.y*1.4)-camera.position.y)*0.06;
       camera.lookAt(0,0,0);
-
       composer.render();
     }
     animate();
 
     window.addEventListener('resize',function(){
-      isMobile=innerWidth<768;
-      camera.aspect=innerWidth/innerHeight;
-      camera.updateProjectionMatrix();
+      camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
       renderer.setSize(innerWidth,innerHeight);
       composer.setSize(innerWidth,innerHeight);
     });
-  }catch(e){console.log('scene error',e);}
+  }catch(e){}
 })();
 </script>
 </body>
