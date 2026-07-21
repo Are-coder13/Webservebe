@@ -1600,11 +1600,11 @@ const Agent = {
   get configured() { return !!this.url; },
 };
 
-async function designWithAgent(p, branding) {
+async function designWithAgent(p, branding, direction = '') {
   const res = await fetch(Agent.url, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ place: p, branding }),
+    body: JSON.stringify({ place: p, branding, direction }),
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok || (!data.html && !data.spec)) throw new Error(data.error || ('Agent error ' + res.status));
@@ -1716,7 +1716,7 @@ async function scanWebsite(website) {
 let revProspect = null;
 let revMockupUrl = null;
 
-async function buildMockup(prospectId) {
+async function buildMockup(prospectId, direction = '') {
   if (!GH.configured) { Settings.open(); toast('Set up GitHub first', 'err'); return; }
   const p = Store.getAll().find(x => x.id === prospectId);
   if (!p) return;
@@ -1754,7 +1754,7 @@ async function buildMockup(prospectId) {
   if (Agent.configured) {
     if (stepEl) stepEl.textContent = 'AI AGENT DESIGNING & REVIEWING...';
     try {
-      const data = await designWithAgent(p, branding);
+      const data = await designWithAgent(p, branding, direction);
       if (data.html) {
         agentHtml = data.html;
         engine = 'agent';
@@ -1816,7 +1816,15 @@ async function buildMockup(prospectId) {
           <label>Draft Email (includes mockup link)</label>
           <textarea class="rev-etarea" id="revEmail">${emailWithLink}</textarea>
         </div>
+      </div>
+      <div class="rev-direction" style="margin-top:14px;border-top:1px solid var(--border,#222);padding-top:14px">
+        <label style="display:block;font-family:var(--head);font-size:11px;letter-spacing:1px;color:var(--dim);margin-bottom:6px">ART DIRECTION (optional) — steer the redesign, then rebuild${engine==='agent' ? '' : ' (needs the AI agent)'}</label>
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <textarea id="revDirection" class="rev-etarea" style="min-height:58px;flex:1" placeholder="e.g. dark luxury, gold accents, editorial type, lead with implants"></textarea>
+          <button class="btn btn-g btn-s" onclick="RevModal.rebuild()">↻ Rebuild</button>
+        </div>
       </div>`;
+    const dEl = document.getElementById('revDirection'); if (dEl) dEl.value = direction;
     document.getElementById('revFoot').style.display = 'flex';
 
     Store.patch(prospectId, { mockup_url: url });
@@ -1830,6 +1838,12 @@ async function buildMockup(prospectId) {
 const RevModal = {
   close() { document.getElementById('revModal').classList.remove('show'); },
   openPreview() { if (revMockupUrl) window.open(revMockupUrl, '_blank'); },
+  rebuild() {
+    const dEl = document.getElementById('revDirection');
+    const direction = dEl ? dEl.value.trim() : '';
+    if (!Agent.configured) { toast('Art direction needs the AI agent — set the Worker URL in ⚙ Settings', 'err'); return; }
+    if (revProspect) buildMockup(revProspect.id, direction);
+  },
   async copyEmail() {
     const ta = document.getElementById('revEmail');
     if (!ta) return;

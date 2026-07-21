@@ -120,6 +120,7 @@ function conceptSystem() {
     'You are an award-winning creative director planning a bespoke, cinematic WebGL website for a local business.',
     'Think hard about STRATEGY ONLY. Do NOT write any HTML, CSS, or JavaScript.',
     'Ground every decision in the scraped website, category, reviews and city — no generic filler.',
+    'If a USER ART DIRECTION block is provided, it is an explicit brief from the operator and TAKES PRECEDENCE over your inferred palette, mood, motif and copy choices wherever they conflict (still honour real brand colours and scraped facts).',
     '',
     'Output ONLY a single JSON object (no prose, no markdown fences) with EXACTLY these keys:',
     '{',
@@ -410,6 +411,14 @@ export default {
     try { body = await request.json(); } catch { return withCors(json({ error: 'Invalid JSON body' }, 400)); }
     const place = body.place || {};
     let branding = body.branding || null;
+    // Optional operator-supplied art direction. Blank = full auto (default).
+    const direction = (typeof body.direction === 'string' ? body.direction : '').trim().slice(0, 600);
+    const directionBlock = direction
+      ? 'USER ART DIRECTION (an explicit brief from the operator — this OVERRIDES the ' +
+        "agent's inferred palette, mood, motif and copy choices wherever they conflict. Still " +
+        'honour the real brand colours and the scraped facts; do not invent services that are not ' +
+        'in the scrape):\n' + direction
+      : '';
     if (!place.name) return withCors(json({ error: 'place.name is required' }, 400));
 
     try {
@@ -449,7 +458,8 @@ export default {
       try {
         const concept = extractJson(await callClaudeStream(
           env, conceptSystem(),
-          ctx + '\n\n' + brief + '\n\n' + exemplar + '\n\n' + motifBlock(domain) +
+          (directionBlock ? directionBlock + '\n\n' : '') +
+            ctx + '\n\n' + brief + '\n\n' + exemplar + '\n\n' + motifBlock(domain) +
             '\n\nNow decide the concept. Output only the JSON object.',
           null, 2000
         ));
@@ -457,9 +467,10 @@ export default {
       } catch { /* concept pass optional — build pass still does STEP 1-3 itself */ }
 
       // DESIGN / BUILD pass — builds to the locked concept when we have one.
+      const dirPrefix = directionBlock ? directionBlock + '\n\n' : '';
       const buildText = conceptBriefText
-        ? ctx + '\n\n' + brief + '\n\n' + conceptBriefText + '\n\nNow build the complete website to this concept.'
-        : ctx + '\n\n' + brief + '\n\n' + exemplar + '\n\nNow build the complete website.';
+        ? dirPrefix + ctx + '\n\n' + brief + '\n\n' + conceptBriefText + '\n\nNow build the complete website to this concept.'
+        : dirPrefix + ctx + '\n\n' + brief + '\n\n' + exemplar + '\n\nNow build the complete website.';
       let html = extractHtml(await callClaudeStream(env, designSystem(), buildText));
       if (!looksComplete(html)) throw new Error('Design pass produced incomplete HTML.');
 
@@ -500,6 +511,7 @@ export default {
         brandSource,
         logoFound: !!(branding && branding.logoUrl),
         brandColors: (branding && branding.colors) || [],
+        directionUsed: !!direction,
       }));
     } catch (err) {
       return withCors(json({ error: String((err && err.message) || err) }, 502));
