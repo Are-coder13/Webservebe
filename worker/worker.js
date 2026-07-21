@@ -22,6 +22,7 @@ import { captureFrames, extractSiteBrand } from './screenshot.js';
 import { exemplarBlock } from './exemplars.js';
 import { motifBlock } from './motifs.js';
 import { cleanBrief } from './sections.js';
+import { fetchSiteHtml, extractFromHtml } from './extract.js';
 
 const MODEL = 'claude-opus-4-8';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
@@ -159,6 +160,8 @@ function cleanSystem() {
     '',
     'LANGUAGE RULE: detect the language of the scraped content. If Dutch, write ALL visible text in Dutch;',
     'if French, in French; English only if the site is English or nothing was scraped. Never mix languages.',
+    'VOICE: infer the brand tone from the scraped copy (formal vs warm vs playful; for Dutch, the "u" vs',
+    '"je" form) and write EVERY line in that voice. Echo the business\'s own phrases where natural.',
     '',
     'If a USER ART DIRECTION block is provided, it OVERRIDES your inferred palette/mood/layout/copy choices',
     'wherever they conflict (still honour real brand colours and scraped facts).',
@@ -517,24 +520,32 @@ export default {
     if (!place.name) return withCors(json({ error: 'place.name is required' }, 400));
 
     try {
-      let scraped = await scrape(place.website);
+      // ── Resolve brand + content from ALL sources (browser-free first) ──
+      // Order of preference. None of these require Browser Rendering except the
+      // last (pixel-accurate logo colours), which is a pure enhancement.
+      const baseUrl = place.website
+        ? (place.website.startsWith('http') ? place.website : 'https://' + place.website)
+        : '';
+      let scraped = await scrape(place.website);                   // Jina markdown (handles JS/SPAs)
+      const rawHtml = await fetchSiteHtml(place.website);          // raw HTML — works on any plan
+      const fromHtml = extractFromHtml(rawHtml, baseUrl);          // logo + theme/CSS colours + text
+      const fromBrowser = await extractSiteBrand(env, place.website).catch(() => ({})); // pixel colours (paid, optional)
 
-      // Read the REAL client page for branding (logo + colours sampled from the
-      // logo's pixels) and core text. This is the reliable path — it looks at
-      // the actual site instead of a brand database. Page-extracted logo/colours
-      // fill in whatever the client (Brandfetch) didn't supply. No-op if Browser
-      // Rendering is off.
-      let brandSource = 'client';
-      const site = await extractSiteBrand(env, place.website).catch(() => ({}));
-      if (site && (site.logoUrl || (site.colors && site.colors.length))) {
-        const merged = { ...(branding || {}) };
-        if (!merged.logoUrl && site.logoUrl) merged.logoUrl = site.logoUrl;
-        if ((!merged.colors || !merged.colors.length) && site.colors && site.colors.length) merged.colors = site.colors;
-        branding = merged;
-        brandSource = (branding.colors && branding.colors.length) ? 'page' : brandSource;
+      branding = branding || {};
+      let colorSource = (branding.colors && branding.colors.length) ? 'client' : 'none';
+      // logo: client → raw-HTML → browser
+      if (!branding.logoUrl) branding.logoUrl = fromHtml.logoUrl || (fromBrowser && fromBrowser.logoUrl) || null;
+      // colours: client → raw-HTML (theme-color / CSS vars) → browser pixel sampling
+      if (!branding.colors || !branding.colors.length) {
+        if (fromHtml.colors && fromHtml.colors.length) { branding.colors = fromHtml.colors; colorSource = 'html'; }
+        else if (fromBrowser && fromBrowser.colors && fromBrowser.colors.length) { branding.colors = fromBrowser.colors; colorSource = 'browser'; }
       }
-      // If the markdown scrape was thin, fall back to the browser-read page text.
-      if ((!scraped || scraped.length < 400) && site && site.voiceText) scraped = site.voiceText;
+      // content/voice: use the richest text available so the scrape is never empty
+      // when the site is reachable (drives real services + tone in both modes).
+      for (const t of [fromHtml.voiceText, fromBrowser && fromBrowser.voiceText]) {
+        if ((t || '').length > (scraped || '').length) scraped = t;
+      }
+      const brandSource = (branding.colors && branding.colors.length) ? colorSource : 'none';
 
       const ctx = businessBlock(place, branding, scraped);
       // Curated design intelligence (palettes/fonts/patterns/styles) matched to
@@ -606,13 +617,32 @@ export default {
         if (!diag.rendered) break;        // can't verify without rendering → one review only
       }
 
+      const renderClean = (style === 'clean' ? true : diag.canvasOk) && (!diag.errors || diag.errors.length === 0);
+
+      // Embed a self-documenting diagnostics comment so every mockup reveals
+      // exactly what the pipeline captured (paste this one line for instant
+      // triage). framesSeen>0 also confirms Browser Rendering is enabled.
+      const diagComment = '<!-- BUILD DIAG: style=' + style +
+        ' scrapedChars=' + scraped.length +
+        ' brandSource=' + brandSource +
+        ' colorSource=' + colorSource +
+        ' logoFound=' + (!!branding.logoUrl) +
+        ' brandColors=' + ((branding.colors || []).join('|') || 'none') +
+        ' framesSeen=' + frames.length +
+        ' renderClean=' + renderClean +
+        ' reviewRounds=' + reviews +
+        ' directionUsed=' + (!!direction) + ' -->';
+      html = /<!doctype html>/i.test(html)
+        ? html.replace(/<!doctype html>/i, (m) => m + '\n' + diagComment)
+        : diagComment + '\n' + html;
+
       return withCors(json({
         html, scrapedChars: scraped.length,
         framesSeen: frames.length, conceptLocked: !!conceptBriefText,
         reviewRounds: reviews,
-        renderClean: (style === 'clean' ? true : diag.canvasOk) && (!diag.errors || diag.errors.length === 0),
+        renderClean,
         renderErrors: (diag.errors || []).length,
-        brandSource,
+        brandSource, colorSource,
         logoFound: !!(branding && branding.logoUrl),
         brandColors: (branding && branding.colors) || [],
         directionUsed: !!direction,

@@ -1747,6 +1747,7 @@ async function buildMockup(prospectId, direction = '', style = 'cinematic') {
   let scan = null;
   let spec = null;
   let agentHtml = null;
+  let agentDiag = null;
   // Engine provenance — surfaced in the result modal so it is always obvious
   // which pipeline produced the mockup (no more silent template fallbacks).
   let engine = 'template';
@@ -1755,6 +1756,7 @@ async function buildMockup(prospectId, direction = '', style = 'cinematic') {
     if (stepEl) stepEl.textContent = 'AI AGENT DESIGNING & REVIEWING...';
     try {
       const data = await designWithAgent(p, branding, direction, style);
+      agentDiag = data;
       if (data.html) {
         agentHtml = data.html;
         engine = 'agent';
@@ -1811,6 +1813,13 @@ async function buildMockup(prospectId, direction = '', style = 'cinematic') {
             <a href="${url}" target="_blank" id="revUrl">${url}</a>
             <button class="btn btn-p btn-s" onclick="window.open('${url}','_blank')">Open ↗</button>
           </div>
+          ${agentDiag ? `<div style="margin-top:10px;font-family:var(--head);font-size:10px;letter-spacing:.5px;line-height:1.7;color:var(--dim)">
+            <span style="color:${(agentDiag.scrapedChars>200)?'var(--green)':'var(--warn)'}">content ${agentDiag.scrapedChars||0} chars</span> ·
+            <span style="color:${(agentDiag.brandColors&&agentDiag.brandColors.length)?'var(--green)':'var(--warn)'}">brand ${(agentDiag.brandColors&&agentDiag.brandColors.length)?agentDiag.brandColors.join(' '):'none'} (${agentDiag.colorSource||'none'})</span> ·
+            <span style="color:${agentDiag.logoFound?'var(--green)':'var(--warn)'}">logo ${agentDiag.logoFound?'✓':'✗'}</span> ·
+            <span style="color:${(agentDiag.framesSeen>0)?'var(--green)':'var(--dim)'}">render ${(agentDiag.framesSeen>0)?('on, '+(agentDiag.renderClean?'clean':'issues')):'off (free plan)'}</span> ·
+            <span>style ${agentDiag.style||'—'}</span>
+          </div>` : ''}
         </div>
         <div class="rev-email-wrap">
           <label>Draft Email (includes mockup link)</label>
