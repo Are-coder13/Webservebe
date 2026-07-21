@@ -21,6 +21,7 @@ import { threeRecipes } from './three-recipes.js';
 import { captureFrames, extractSiteBrand } from './screenshot.js';
 import { exemplarBlock } from './exemplars.js';
 import { motifBlock } from './motifs.js';
+import { cleanBrief } from './sections.js';
 
 const MODEL = 'claude-opus-4-8';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
@@ -112,6 +113,60 @@ function designSystem() {
   ].join('\n');
 }
 
+// CLEAN / PROFESSIONAL design system — the "Webild-quality" path. Produces a
+// polished, modern, conversion-focused conventional business site composed from
+// the section blueprints (no WebGL). This is the reliable, high-end look most
+// service businesses actually want.
+function cleanSystem() {
+  return [
+    'You are an award-winning web designer and front-end developer at a top studio.',
+    'You build clean, modern, high-converting marketing sites for real businesses — the kind a',
+    'premium agency ships: confident typography, generous whitespace, a restrained brand-led palette,',
+    'tasteful motion, flawless on mobile. Think Webild / Framer / Relume quality, not a template.',
+    '',
+    'Produce a COMPLETE, self-contained, single-file HTML5 landing page for the specific local business.',
+    '',
+    'OUTPUT RULES (critical):',
+    '- Output ONLY the HTML document. Start with <!DOCTYPE html> and end with </html>.',
+    '- No markdown, no code fences, no commentary before or after.',
+    '',
+    'HOW TO BUILD (compose, do not free-invent):',
+    '- Assemble the page from the SECTION BLUEPRINTS provided below, filled with the real business',
+    '  content and brand. Follow the MODERN DESIGN PRINCIPLES and COMPOSITION RULES in that brief.',
+    '- Define one design system in :root (CSS custom properties): colours, type scale, spacing, radius, shadows.',
+    '',
+    'BRAND COLOURS WIN: if brand colours are provided, build the palette from them (a primary + one',
+    'accent for CTAs + neutrals). Do not default to a generic hue. Choose a LIGHT scheme (off-white bg,',
+    'dark ink) for most professional/service brands, or a refined dark scheme for luxury/tech — commit fully.',
+    '',
+    'VISUALS (asset-free): NO external image/photo files. Use tasteful CSS gradients/mesh, soft shadows,',
+    'rounded cards, and BESPOKE inline <svg> artwork — a custom SVG icon per service (via <path>, brand',
+    'accent), and at least one substantial hero/section SVG illustration relevant to the trade. NEVER',
+    'unicode symbols or emoji as icons. You MAY use the business LOGO url (as <img>) if provided, and CDN',
+    'Google Fonts (two typefaces max: a distinctive display heading + a clean body).',
+    '',
+    'MOTION: subtle, tasteful micro-interactions only — fade/slide-up reveals on scroll via',
+    'IntersectionObserver (150–300ms), hover lifts on cards/buttons, a count-up on the stats band.',
+    'Respect prefers-reduced-motion (disable transforms/animations under it). No WebGL, no heavy libraries;',
+    'plain CSS + a little vanilla JS. You may load NO external JS libraries.',
+    '',
+    'QUALITY BAR: bold oversized display headlines; deliberate type-scale contrast; roomy section padding;',
+    'a clear max-width container; strong visual hierarchy; real trust/social-proof (stats, ratings, years);',
+    'clear hover + focus states; cursor:pointer on clickables; a prominent primary CTA (book/call/quote).',
+    '- Fully responsive (375 / 768 / 1024 / 1440), mobile-first, 16px+ body, 44px+ touch targets, no h-scroll.',
+    '- Ground everything in the scrape: real service names, real tone, real city. No lorem, no generic filler.',
+    '- Add a fixed top banner: "Website Preview — concept mockup for <business name>"; offset the page so it does not overlap.',
+    '',
+    'LANGUAGE RULE: detect the language of the scraped content. If Dutch, write ALL visible text in Dutch;',
+    'if French, in French; English only if the site is English or nothing was scraped. Never mix languages.',
+    '',
+    'If a USER ART DIRECTION block is provided, it OVERRIDES your inferred palette/mood/layout/copy choices',
+    'wherever they conflict (still honour real brand colours and scraped facts).',
+    '',
+    'Aim for the reaction: "this looks like a real, expensive, professionally-built website."',
+  ].join('\n');
+}
+
 // CONCEPT pass — pure strategy, no code. Splitting this out means the build
 // pass isn't inventing the concept and writing 6k tokens of correct WebGL in
 // the same breath; it builds to a locked, considered brief.
@@ -191,7 +246,45 @@ function conceptBrief(c) {
   ].join('\n');
 }
 
-function reviewSystem(hasFrames) {
+// Art-director review for CLEAN / PROFESSIONAL mode (no 3D checks).
+function cleanReviewSystem(hasFrames) {
+  const visual = hasFrames ? [
+    '═══ VISUAL EVIDENCE — YOU CAN SEE THE RENDERED PAGE ═══',
+    'Attached are real screenshots of this HTML rendered in a browser: several desktop scroll',
+    'positions and one mobile hero at 390px. TRUST YOUR EYES over the code. Look for and FIX:',
+    '- Weak/cramped layout: not enough whitespace, timid typography, everything the same size.',
+    '  Push display headlines bigger and bolder; open up section padding; create real hierarchy.',
+    '- Bleed-through / low contrast: text over a busy background with no clean surface; unreadable copy.',
+    '- Repetitive/templated feel: identical centred stacks section after section. Vary layouts.',
+    '- Broken mobile: overflow, overlap, collapsed hero, tiny text, banner overlapping content.',
+    '- Wrong brand hue: if brand colours were provided, the page must read in them.',
+    '- Flat/cheap visuals: default single-colour icons, no gradients/shadows/SVG craft.',
+    '',
+  ] : [];
+  return [
+    'You are a senior art director and front-end lead reviewing a clean, professional business',
+    'landing page' + (hasFrames ? ' AND screenshots of it rendered' : '') + ' before it goes to a paying prospect.',
+    'Critique it hard against the rubric, then RETURN AN IMPROVED, COMPLETE HTML document.',
+    '',
+    ...visual,
+    '═══ REVIEW RUBRIC (fix every violation) ═══',
+    '1. TYPOGRAPHY & HIERARCHY — bold oversized display headlines, deliberate type-scale contrast, clean readable body. If it looks timid or uniform, raise it.',
+    '2. WHITESPACE & RHYTHM — generous, calm section padding and a clear max-width container. Fix crowding.',
+    '3. LAYOUT VARIETY — distinct, well-composed sections (hero, services, features, stats, testimonials/FAQ, CTA, footer); no repeated identical centred stacks; vary alignment/columns.',
+    '4. BRAND & COLOUR — anchored to real brand colours; ONE accent used sparingly for CTAs; committed light OR dark scheme; WCAG AA contrast. Re-tint if it drifted to a generic hue.',
+    '5. LEGIBILITY / NO BLEED — every text block on a clean surface; cards opaque enough; nothing unreadable.',
+    '6. VISUAL CRAFT — bespoke inline SVG icons (not unicode/emoji), tasteful gradients/mesh, soft shadows, rounded cards; at least one substantial hero SVG illustration.',
+    '7. MOTION — tasteful reveals on scroll + hover states + focus rings; 150–300ms; prefers-reduced-motion respected; nothing janky; NO WebGL / no external JS libraries.',
+    '8. TRUST & COPY — real stats/ratings/credentials surfaced; a prominent primary CTA; copy specific to THIS business (kill generic filler); language consistent (one language, matching the content).',
+    '9. TECHNICAL — responsive 375–1440 mobile-first, no horizontal scroll, 44px+ touch targets, 16px+ body; NO external image/photo files (CSS/SVG/logo only); cursor:pointer on clickables; valid, complete, not truncated.',
+    '',
+    'OUTPUT RULES: Output ONLY the improved HTML document. Start with <!DOCTYPE html>, end with </html>. No markdown, no commentary.',
+    'Keep what works; raise everything else. It should look like a different, better agency built it.',
+  ].join('\n');
+}
+
+function reviewSystem(hasFrames, style) {
+  if (style === 'clean') return cleanReviewSystem(hasFrames);
   const visual = hasFrames ? [
     '═══ VISUAL EVIDENCE — YOU CAN SEE THE RENDERED PAGE ═══',
     '',
@@ -254,10 +347,10 @@ function reviewSystem(hasFrames) {
 
 // Format render diagnostics (runtime errors + canvas health) for the repair
 // pass. Empty string when the page wasn't rendered (Browser Rendering off).
-function renderReport(diag) {
+function renderReport(diag, style) {
   if (!diag || !diag.rendered) return '';
   const lines = ['', 'RENDER DIAGNOSTICS (from actually running this HTML in a headless browser):'];
-  if (!diag.canvasOk) {
+  if (style !== 'clean' && !diag.canvasOk) {
     lines.push('- ⚠ The 3D <canvas> did NOT initialise — the WebGL scene is missing or the script threw ' +
       'before creating the renderer. Fix this FIRST: the page must render its cinematic scene, not a blank background.');
   }
@@ -413,6 +506,8 @@ export default {
     let branding = body.branding || null;
     // Optional operator-supplied art direction. Blank = full auto (default).
     const direction = (typeof body.direction === 'string' ? body.direction : '').trim().slice(0, 600);
+    // Design style: 'cinematic' (immersive WebGL, default) or 'clean' (Webild-style pro site).
+    const style = body.style === 'clean' ? 'clean' : 'cinematic';
     const directionBlock = direction
       ? 'USER ART DIRECTION (an explicit brief from the operator — this OVERRIDES the ' +
         "agent's inferred palette, mood, motif and copy choices wherever they conflict. Still " +
@@ -452,26 +547,33 @@ export default {
         [place.name, place.category, branding && (branding.notes || '')].filter(Boolean).join(' ')
       );
       const exemplar = exemplarBlock(domain);
-
-      // CONCEPT pass — lock the strategy first (small, cheap, strategy-only).
-      let conceptBriefText = '';
-      try {
-        const concept = extractJson(await callClaudeStream(
-          env, conceptSystem(),
-          (directionBlock ? directionBlock + '\n\n' : '') +
-            ctx + '\n\n' + brief + '\n\n' + exemplar + '\n\n' + motifBlock(domain) +
-            '\n\nNow decide the concept. Output only the JSON object.',
-          null, 2000
-        ));
-        conceptBriefText = conceptBrief(concept);
-      } catch { /* concept pass optional — build pass still does STEP 1-3 itself */ }
-
-      // DESIGN / BUILD pass — builds to the locked concept when we have one.
       const dirPrefix = directionBlock ? directionBlock + '\n\n' : '';
-      const buildText = conceptBriefText
-        ? dirPrefix + ctx + '\n\n' + brief + '\n\n' + conceptBriefText + '\n\nNow build the complete website to this concept.'
-        : dirPrefix + ctx + '\n\n' + brief + '\n\n' + exemplar + '\n\nNow build the complete website.';
-      let html = extractHtml(await callClaudeStream(env, designSystem(), buildText));
+
+      let html, conceptBriefText = '';
+      if (style === 'clean') {
+        // CLEAN / PROFESSIONAL — compose from the section blueprints. No 3D
+        // concept pass (that is cinematic-only); build straight from the brief.
+        const cleanText = dirPrefix + ctx + '\n\n' + brief + '\n\n' + cleanBrief(domain) +
+          '\n\nNow build the complete website.';
+        html = extractHtml(await callClaudeStream(env, cleanSystem(), cleanText));
+      } else {
+        // CINEMATIC — CONCEPT pass (lock strategy) then build to it.
+        try {
+          const concept = extractJson(await callClaudeStream(
+            env, conceptSystem(),
+            dirPrefix +
+              ctx + '\n\n' + brief + '\n\n' + exemplar + '\n\n' + motifBlock(domain) +
+              '\n\nNow decide the concept. Output only the JSON object.',
+            null, 2000
+          ));
+          conceptBriefText = conceptBrief(concept);
+        } catch { /* concept pass optional — build pass still does STEP 1-3 itself */ }
+
+        const buildText = conceptBriefText
+          ? dirPrefix + ctx + '\n\n' + brief + '\n\n' + conceptBriefText + '\n\nNow build the complete website to this concept.'
+          : dirPrefix + ctx + '\n\n' + brief + '\n\n' + exemplar + '\n\nNow build the complete website.';
+        html = extractHtml(await callClaudeStream(env, designSystem(), buildText));
+      }
       if (!looksComplete(html)) throw new Error('Design pass produced incomplete HTML.');
 
       // ITERATIVE RENDER → REVIEW LOOP — the pattern agentic site builders use:
@@ -486,14 +588,16 @@ export default {
         try { diag = await captureFrames(env, html); }
         catch { diag = { frames: [], errors: [], canvasOk: true, rendered: false }; }
         frames = diag.frames;
-        const clean = diag.canvasOk && (!diag.errors || diag.errors.length === 0);
-        if (i > 0 && clean) break;        // already fixed once and now renders clean → done
+        // Clean mode has no WebGL canvas, so canvasOk is irrelevant there.
+        const canvasOk = style === 'clean' ? true : diag.canvasOk;
+        const renderOk = canvasOk && (!diag.errors || diag.errors.length === 0);
+        if (i > 0 && renderOk) break;     // already fixed once and now renders clean → done
         if (i === MAX_REVIEWS) break;     // out of fix budget; return the last render's HTML
         try {
           const reviewed = extractHtml(await callClaudeStream(
-            env, reviewSystem(frames.length > 0),
+            env, reviewSystem(frames.length > 0, style),
             businessBlock(place, branding, scraped) + '\n\n' + qaChecklist() +
-              renderReport(diag) + '\n\nHTML TO IMPROVE:\n' + html,
+              renderReport(diag, style) + '\n\nHTML TO IMPROVE:\n' + html,
             frames
           ));
           if (looksComplete(reviewed) && reviewed.length > html.length * 0.6) html = reviewed;
@@ -506,12 +610,13 @@ export default {
         html, scrapedChars: scraped.length,
         framesSeen: frames.length, conceptLocked: !!conceptBriefText,
         reviewRounds: reviews,
-        renderClean: diag.canvasOk && (!diag.errors || diag.errors.length === 0),
+        renderClean: (style === 'clean' ? true : diag.canvasOk) && (!diag.errors || diag.errors.length === 0),
         renderErrors: (diag.errors || []).length,
         brandSource,
         logoFound: !!(branding && branding.logoUrl),
         brandColors: (branding && branding.colors) || [],
         directionUsed: !!direction,
+        style,
       }));
     } catch (err) {
       return withCors(json({ error: String((err && err.message) || err) }, 502));

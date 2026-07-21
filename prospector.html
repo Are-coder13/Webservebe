@@ -1600,11 +1600,11 @@ const Agent = {
   get configured() { return !!this.url; },
 };
 
-async function designWithAgent(p, branding, direction = '') {
+async function designWithAgent(p, branding, direction = '', style = 'cinematic') {
   const res = await fetch(Agent.url, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ place: p, branding, direction }),
+    body: JSON.stringify({ place: p, branding, direction, style }),
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok || (!data.html && !data.spec)) throw new Error(data.error || ('Agent error ' + res.status));
@@ -1716,7 +1716,7 @@ async function scanWebsite(website) {
 let revProspect = null;
 let revMockupUrl = null;
 
-async function buildMockup(prospectId, direction = '') {
+async function buildMockup(prospectId, direction = '', style = 'cinematic') {
   if (!GH.configured) { Settings.open(); toast('Set up GitHub first', 'err'); return; }
   const p = Store.getAll().find(x => x.id === prospectId);
   if (!p) return;
@@ -1754,7 +1754,7 @@ async function buildMockup(prospectId, direction = '') {
   if (Agent.configured) {
     if (stepEl) stepEl.textContent = 'AI AGENT DESIGNING & REVIEWING...';
     try {
-      const data = await designWithAgent(p, branding, direction);
+      const data = await designWithAgent(p, branding, direction, style);
       if (data.html) {
         agentHtml = data.html;
         engine = 'agent';
@@ -1818,13 +1818,18 @@ async function buildMockup(prospectId, direction = '') {
         </div>
       </div>
       <div class="rev-direction" style="margin-top:14px;border-top:1px solid var(--border,#222);padding-top:14px">
-        <label style="display:block;font-family:var(--head);font-size:11px;letter-spacing:1px;color:var(--dim);margin-bottom:6px">ART DIRECTION (optional) — steer the redesign, then rebuild${engine==='agent' ? '' : ' (needs the AI agent)'}</label>
+        <label style="display:block;font-family:var(--head);font-size:11px;letter-spacing:1px;color:var(--dim);margin-bottom:6px">STYLE & ART DIRECTION (optional) — steer the redesign, then rebuild${engine==='agent' ? '' : ' (needs the AI agent)'}</label>
         <div style="display:flex;gap:8px;align-items:flex-start">
+          <select id="revStyle" class="rev-etarea" style="flex:0 0 200px;min-height:0;height:38px;padding:8px 10px">
+            <option value="cinematic">Cinematic 3D (immersive)</option>
+            <option value="clean">Clean Professional (Webild-style)</option>
+          </select>
           <textarea id="revDirection" class="rev-etarea" style="min-height:58px;flex:1" placeholder="e.g. dark luxury, gold accents, editorial type, lead with implants"></textarea>
           <button class="btn btn-g btn-s" onclick="RevModal.rebuild()">↻ Rebuild</button>
         </div>
       </div>`;
     const dEl = document.getElementById('revDirection'); if (dEl) dEl.value = direction;
+    const sEl = document.getElementById('revStyle'); if (sEl) sEl.value = style;
     document.getElementById('revFoot').style.display = 'flex';
 
     Store.patch(prospectId, { mockup_url: url });
@@ -1840,9 +1845,11 @@ const RevModal = {
   openPreview() { if (revMockupUrl) window.open(revMockupUrl, '_blank'); },
   rebuild() {
     const dEl = document.getElementById('revDirection');
+    const sEl = document.getElementById('revStyle');
     const direction = dEl ? dEl.value.trim() : '';
-    if (!Agent.configured) { toast('Art direction needs the AI agent — set the Worker URL in ⚙ Settings', 'err'); return; }
-    if (revProspect) buildMockup(revProspect.id, direction);
+    const style = sEl ? sEl.value : 'cinematic';
+    if (!Agent.configured) { toast('Rebuild needs the AI agent — set the Worker URL in ⚙ Settings', 'err'); return; }
+    if (revProspect) buildMockup(revProspect.id, direction, style);
   },
   async copyEmail() {
     const ta = document.getElementById('revEmail');
