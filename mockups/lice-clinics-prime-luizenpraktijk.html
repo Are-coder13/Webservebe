@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<!-- CONCEPT: offering=gegarandeerde luizenbehandeling in één bezoek met het gecertificeerde AirAllé warmtelucht-apparaat, geen chemische shampoos; feeling=opluchting en waardigheid — jeuk, schaamte en eindeloos kammen lossen op in klinische zekerheid dat het vandaag voorbij is; 3d-story=zwerm koele nit-achtige deeltjes drijft onrustig, warme droogluchtstraal veegt erdoorheen, zwerm klapt samen tot één schone gloeiende haarstreng — parasiet weg, camera orbiteert langs de vlekkeloze filament; chapters=1 hero orbit nit-zwerm / 2 push-in luchtstraal ontsteekt / 3 orbit+HUD zwerm klapt tot streng 99,2% / 4 close approach gloeiende filament reviews / 5 settle CTA -->
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LICE CLINICS Prime® Luizenpraktijk — Luizen weg in één behandeling — Antwerpen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#031318;--bg-rgb:3,19,24;
+  --accent:#0891B2;--accent-glow:#22D3EE;
+  --accent2:#16A34A;--accent2-glow:#34D97A;
+  --fg:#EAF8FA;--muted:#a9cdd3;--border:rgba(34,211,238,.30);
+  --card:rgba(5,25,31,.92);
+  --z-canvas:0;--z-veil:1;--z-content:2;--z-hud:5;--z-nav:20;--z-banner:30;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:'Source Sans 3',sans-serif;line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.dw{font-family:'Lexend',sans-serif;font-weight:600;line-height:1.1}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent-glow);outline-offset:3px;border-radius:6px}
+
+.preview-banner{position:fixed;top:0;left:0;right:0;height:34px;background:linear-gradient(90deg,#062026,#0891B2);color:#fff;
+  font-family:'Lexend',sans-serif;font-size:12.5px;font-weight:500;letter-spacing:.4px;display:flex;align-items:center;justify-content:center;
+  z-index:var(--z-banner);border-bottom:1px solid rgba(255,255,255,.15);padding:0 12px;text-align:center}
+
+/* top nav */
+.nav{position:fixed;top:34px;left:0;right:0;z-index:var(--z-nav);display:flex;align-items:center;justify-content:space-between;
+  padding:14px 6vw;background:linear-gradient(180deg,rgba(3,19,24,.9),transparent)}
+.nav .brand{font-family:'Lexend',sans-serif;font-weight:700;font-size:1rem;color:var(--fg);letter-spacing:.3px;text-decoration:none}
+.nav .brand span{color:var(--accent-glow)}
+.nav .navlinks{display:flex;gap:26px;align-items:center}
+.nav .navlinks a{color:var(--muted);text-decoration:none;font-family:'Lexend',sans-serif;font-size:.9rem;font-weight:500}
+.nav .navlinks a:hover{color:var(--fg)}
+.nav .navcall{background:var(--accent-glow);color:#04222a;padding:9px 18px;border-radius:30px;font-weight:600!important;min-height:40px;display:inline-flex;align-items:center}
+@media(max-width:760px){.nav .navlinks a:not(.navcall){display:none}}
+
+#gl{position:fixed;inset:0;z-index:var(--z-canvas)}
+.veil{position:fixed;inset:0;z-index:var(--z-veil);pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%,transparent 30%,rgba(3,19,24,.55) 75%,rgba(3,19,24,.92) 100%)}
+
+main{position:relative;z-index:var(--z-content);padding-top:34px}
+.chapter{min-height:100vh;display:flex;align-items:center;padding:12vh 6vw 9vh;position:relative}
+.inner{position:relative;max-width:1180px;width:100%;margin:0 auto}
+.inner::before{content:'';position:absolute;inset:-70px -90px;z-index:-1;
+  background:radial-gradient(closest-side,rgba(var(--bg-rgb),.82),rgba(var(--bg-rgb),.5) 60%,transparent);filter:blur(4px)}
+h1,h2,p{text-shadow:0 2px 24px rgba(3,19,24,.9)}
+
+.tag{display:inline-flex;align-items:center;gap:8px;font-family:'Lexend',sans-serif;font-size:12px;font-weight:500;
+  letter-spacing:2.4px;text-transform:uppercase;color:var(--accent-glow);margin-bottom:20px}
+.tag::before{content:'';width:26px;height:1px;background:var(--accent-glow)}
+
+h1{font-size:clamp(2.4rem,6.2vw,4.6rem);font-weight:700;letter-spacing:-.5px}
+h2{font-size:clamp(1.9rem,4.2vw,3rem);font-weight:600;letter-spacing:-.3px}
+.lead{font-size:clamp(1.05rem,1.7vw,1.35rem);color:var(--muted);max-width:620px;margin-top:22px;font-weight:300}
+p.body{color:var(--muted);margin-top:14px;max-width:560px}
+
+.btn{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-family:'Lexend',sans-serif;font-weight:500;font-size:1rem;
+  padding:15px 30px;border-radius:40px;border:none;text-decoration:none;transition:transform .25s,box-shadow .25s;margin-top:34px;min-height:48px}
+.btn-primary{background:linear-gradient(120deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 8px 40px rgba(8,145,178,.4)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 14px 54px rgba(22,163,74,.5)}
+.btn-primary:disabled{opacity:.65;cursor:wait;transform:none}
+.btn-ghost{border:1px solid var(--border);color:var(--fg);background:rgba(5,25,31,.55)}
+.btn-ghost:hover{border-color:var(--accent-glow);transform:translateY(-3px)}
+
+.hero-badges{display:flex;gap:26px;flex-wrap:wrap;margin-top:40px;align-items:center}
+.badge{display:flex;align-items:center;gap:9px;font-size:.9rem;color:var(--muted)}
+.badge svg{flex-shrink:0}
+.stars{color:#F5C542;letter-spacing:2px;font-size:1rem}
+
+.poster{position:absolute;z-index:0;left:-1vw;bottom:5vh;font-size:clamp(4.5rem,16vw,14rem);font-weight:700;
+  letter-spacing:-.02em;color:transparent;-webkit-text-stroke:2px rgba(52,217,122,.6);pointer-events:none;user-select:none;line-height:.85;opacity:.85}
+
+.two-col{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center}
+.two-col.flip{grid-template-columns:.95fr 1.05fr}
+.diagram{position:relative}
+
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:12px}
+.card{background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--border);border-radius:18px;padding:30px 26px;transition:transform .3s,border-color .3s}
+.card:hover{transform:translateY(-6px);border-color:var(--accent-glow)}
+.card .ic{width:52px;height:52px;border-radius:12px;background:rgba(8,145,178,.16);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.card h3{font-size:1.18rem;margin-bottom:8px;font-weight:600}
+.card p{color:var(--muted);font-size:.96rem}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:30px}
+.stat{background:var(--card);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:16px;padding:28px 20px;text-align:center}
+.stat .n{font-family:'Lexend',sans-serif;font-weight:700;font-size:clamp(1.9rem,3.5vw,2.9rem);
+  background:linear-gradient(120deg,var(--accent-glow),var(--accent2-glow));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat .l{color:var(--muted);font-size:.9rem;margin-top:6px}
+
+.timeline{position:relative;margin-top:30px;padding-left:36px;max-width:640px}
+.timeline::before{content:'';position:absolute;left:9px;top:6px;bottom:6px;width:2px;
+  background:linear-gradient(180deg,var(--accent),var(--accent2))}
+.tstep{position:relative;margin-bottom:34px}
+.tstep::before{content:'';position:absolute;left:-33px;top:4px;width:16px;height:16px;border-radius:50%;
+  background:var(--bg);border:3px solid var(--accent-glow);box-shadow:0 0 18px var(--accent-glow)}
+.tstep h3{font-size:1.15rem;font-weight:600}
+.tstep p{color:var(--muted);font-size:.96rem;margin-top:4px}
+
+.reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:30px}
+.review{background:var(--card);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:18px;padding:28px}
+.review .stars{font-size:.95rem}
+.review p{color:var(--fg);font-size:1rem;margin:14px 0}
+.review .who{color:var(--muted);font-size:.88rem;font-weight:600;font-family:'Lexend',sans-serif}
+
+.formwrap{background:var(--card);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:22px;padding:38px;max-width:520px}
+.formwrap label{display:block;font-family:'Lexend',sans-serif;font-size:.85rem;color:var(--fg);margin:16px 0 6px;letter-spacing:.4px}
+.formwrap input,.formwrap select{width:100%;background:rgba(3,19,24,.8);border:1px solid var(--border);border-radius:10px;
+  padding:14px 15px;color:var(--fg);font-family:inherit;font-size:16px;min-height:48px}
+.formwrap input:focus,.formwrap select:focus{outline:none;border-color:var(--accent-glow);box-shadow:0 0 0 3px rgba(34,211,238,.2)}
+.formstatus{margin-top:16px;font-size:.95rem;min-height:1.4em}
+.formstatus.ok{color:var(--accent2-glow)}
+.formstatus.err{color:#ff9a9a}
+
+footer{position:relative;z-index:var(--z-content);background:rgba(2,14,18,.95);border-top:1px solid var(--border);padding:54px 6vw 60px}
+.foot-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+footer h4{font-family:'Lexend',sans-serif;font-size:.85rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-glow);margin-bottom:16px}
+footer p,footer a{color:var(--muted);font-size:.95rem;text-decoration:none;display:block;margin-bottom:8px}
+footer a:hover{color:var(--fg)}
+.foot-logo{font-family:'Lexend',sans-serif;font-weight:700;font-size:1.3rem;color:var(--fg);margin-bottom:12px}
+.copy{max-width:1180px;margin:38px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.07);color:var(--muted);font-size:.82rem}
+
+.hud{position:fixed;inset:0;z-index:var(--z-hud);pointer-events:none;opacity:0;transition:opacity .5s}
+.hud.show{opacity:1}
+.hud .corner{position:absolute;width:26px;height:26px}
+.hud .reticle{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);width:min(46vh,320px);height:min(46vh,320px);opacity:.5}
+.hud .scanline{position:absolute;left:50%;top:calc(48% - min(23vh,160px));transform:translateX(-50%);
+  width:min(40vh,290px);height:1px;background:linear-gradient(90deg,transparent,var(--accent2-glow),transparent);
+  animation:scan 2.6s ease-in-out infinite}
+@keyframes scan{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,min(46vh,320px))}}
+.hud .readout{position:absolute;right:8vw;top:34%;background:rgba(3,19,24,.82);backdrop-filter:blur(8px);
+  border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:'Lexend',sans-serif;font-size:11px;letter-spacing:.6px;min-width:196px}
+.hud .rrow{display:flex;justify-content:space-between;gap:16px;margin:5px 0;color:var(--muted)}
+.hud .rrow b{color:var(--accent2-glow);font-weight:500}
+.hud .dot{width:8px;height:8px;border-radius:50%;background:var(--accent2-glow);box-shadow:0 0 10px var(--accent2-glow);
+  align-self:center;animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+@media(max-width:900px){
+  .two-col,.two-col.flip{grid-template-columns:1fr;gap:36px}
+  .cards{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .reviews{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr;gap:30px}
+  .hud{display:none}
+  .poster{opacity:.55}
+}
+@media(prefers-reduced-motion:reduce){
+  #gl{display:none}
+  body{background:radial-gradient(ellipse at 50% 30%,#0a3b47,#031318 70%)}
+  .hud,.scanline{display:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="preview-banner">Website Preview — conceptmockup voor LICE CLINICS Prime® Luizenpraktijk</div>
+
+<nav class="nav">
+  <a class="brand" href="#ch1">LICE CLINICS <span>Prime®</span></a>
+  <div class="navlinks">
+    <a href="#ch2">Methode</a>
+    <a href="#ch4">Behandelingen</a>
+    <a href="#ch5">Reviews</a>
+    <a class="navcall" href="tel:0495545560" aria-label="Bel LICE CLINICS Prime op 0495 54 55 60">Bel 0495 54 55 60</a>
+  </div>
+</nav>
+
+<div id="gl"></div>
+<div class="veil"></div>
+
+<div class="hud" id="hud" aria-hidden="true">
+  <div class="corner" id="c1" style="border-top:1.5px solid var(--accent2-glow);border-left:1.5px solid var(--accent2-glow)"></div>
+  <div class="corner" id="c2" style="border-top:1.5px solid var(--accent2-glow);border-right:1.5px solid var(--accent2-glow)"></div>
+  <div class="corner" id="c3" style="border-bottom:1.5px solid var(--accent2-glow);border-left:1.5px solid var(--accent2-glow)"></div>
+  <div class="corner" id="c4" style="border-bottom:1.5px solid var(--accent2-glow);border-right:1.5px solid var(--accent2-glow)"></div>
+  <svg class="reticle" viewBox="0 0 100 100" fill="none" stroke="var(--accent2-glow)" stroke-width="0.6">
+    <circle cx="50" cy="50" r="46"/><circle cx="50" cy="50" r="30"/>
+    <line x1="50" y1="0" x2="50" y2="18"/><line x1="50" y1="82" x2="50" y2="100"/>
+    <line x1="0" y1="50" x2="18" y2="50"/><line x1="82" y1="50" x2="100" y2="50"/>
+  </svg>
+  <div class="scanline"></div>
+  <div class="readout">
+    <div class="rrow"><span>SCAN</span><b>ACTIEF</b></div>
+    <div class="rrow"><span>DOEL</span><b>AirAllé®</b></div>
+    <div class="rrow"><span>LUIZEN + NETEN</span><b>99,2% GEDOOD</b></div>
+    <div class="rrow"><span>STATUS</span><span style="display:flex;gap:8px;align-items:center"><b>DROGEN</b><span class="dot"></span></span></div>
+  </div>
+</div>
+
+<main>
+  <!-- CHAPTER 1 -->
+  <section class="chapter" id="ch1">
+    <div class="poster">LUISVRIJ</div>
+    <div class="inner">
+      <span class="tag">LICE CLINICS Prime® · Antwerpen</span>
+      <h1>Luizen weg in<br>één behandeling.</h1>
+      <p class="lead">Geen weken kammen, geen schaamte, geen giftige shampoos. Bij onze luizenpraktijk vlakbij Centraal Station ben je vandaag nog verlost — klinisch zeker.</p>
+      <div class="hero-badges">
+        <a class="btn btn-primary" href="#cta">Boek je afspraak</a>
+        <div class="badge"><span class="stars" aria-hidden="true">★★★★½</span> 4,5 uit 24 reviews</div>
+        <div class="badge">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34D97A" stroke-width="2" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+          Medisch gecertificeerd
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 2 -->
+  <section class="chapter" id="ch2">
+    <div class="inner">
+      <div class="two-col">
+        <div>
+          <span class="tag">De AirAllé® methode</span>
+          <h2>Geen giftige shampoos —<br>maar gecertificeerde warmtebehandeling.</h2>
+          <p class="body">Waar drogisterijproducten steeds minder werken tegen resistente luizen, kiezen wij voor een medisch gevalideerd apparaat. Het AirAllé®-behandelhoofd blaast gecontroleerde, gedoseerde warme lucht door het haar.</p>
+          <p class="body">Geen chemie op de hoofdhuid van je kind. Alleen precisie, comfort en zekerheid — in de handen van een opgeleide behandelaar.</p>
+          <a class="btn btn-ghost" href="#ch3">Zo werkt het →</a>
+        </div>
+        <div class="diagram">
+          <svg width="100%" viewBox="0 0 320 300" fill="none" role="img" aria-label="Schematische weergave van het AirAllé warmteluchtapparaat dat lucht door een haarstreng blaast">
+            <defs>
+              <linearGradient id="beam" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#22D3EE"/><stop offset="1" stop-color="#34D97A"/>
+              </linearGradient>
+              <radialGradient id="warm" cx="0.5" cy="0.5" r="0.5">
+                <stop offset="0" stop-color="#34D97A" stop-opacity="0.5"/><stop offset="1" stop-color="#34D97A" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <circle cx="230" cy="150" r="120" fill="url(#warm)"/>
+            <rect x="30" y="120" width="120" height="60" rx="16" fill="none" stroke="url(#beam)" stroke-width="2.5"/>
+            <rect x="52" y="134" width="70" height="14" rx="7" fill="none" stroke="#22D3EE" stroke-width="1.5" opacity="0.7"/>
+            <circle cx="66" cy="163" r="6" fill="none" stroke="#34D97A" stroke-width="1.5"/>
+            <path d="M150 132 L200 118 L200 182 L150 168 Z" fill="none" stroke="url(#beam)" stroke-width="2.5"/>
+            <path d="M200 130 Q250 128 290 122" stroke="#34D97A" stroke-width="1.5" opacity="0.8"/>
+            <path d="M200 150 Q250 150 292 150" stroke="#34D97A" stroke-width="1.5" opacity="0.9"/>
+            <path d="M200 170 Q250 172 290 178" stroke="#34D97A" stroke-width="1.5" opacity="0.8"/>
+            <path d="M260 60 Q245 150 270 240" stroke="#22D3EE" stroke-width="2" opacity="0.9"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 3 -->
+  <section class="chapter" id="ch3">
+    <div class="inner">
+      <span class="tag">Zo droogt de warme lucht luizen én neten uit</span>
+      <h2>99,2% gedood — in één sessie.</h2>
+      <p class="lead">De klinische kracht van AirAllé® zit in uitdroging: luizen en, cruciaal, hun neten overleven het warmteverlies niet. Daardoor is nakammen weken later meestal niet meer nodig.</p>
+      <div class="timeline">
+        <div class="tstep"><h3>1 · Grondige controle</h3><p>We inspecteren het haar en bepalen de mate van besmetting — eerlijk en zonder oordeel.</p></div>
+        <div class="tstep"><h3>2 · AirAllé®-behandeling</h3><p>Gedoseerde warme lucht wordt sectie per sectie door het haar geleid. Comfortabel en pijnvrij.</p></div>
+        <div class="tstep"><h3>3 · Uitkammen &amp; controle</h3><p>Een afsluitende comb-out verwijdert de uitgedroogde resten. We tonen je het resultaat.</p></div>
+        <div class="tstep"><h3>4 · Luisvrij naar huis</h3><p>In de meeste gevallen ben je na één bezoek klaar — met heldere nazorg-instructies.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 4 -->
+  <section class="chapter" id="ch4">
+    <div class="inner">
+      <span class="tag">Onze behandelingen</span>
+      <h2>Rustig, klinisch en professioneel.</h2>
+      <div class="cards">
+        <div class="card">
+          <div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22D3EE" stroke-width="1.6" aria-hidden="true"><path d="M4 14c0-4 3-8 8-8s8 4 8 8"/><path d="M7 14c0-2 2-4 5-4"/><path d="M10 18l4 2 4-3"/><circle cx="12" cy="17" r="1.4" fill="#34D97A" stroke="none"/></svg></div>
+          <h3>AirAllé® hoofdbehandeling</h3>
+          <p>De volledige warmteluchtbehandeling die luizen en neten uitdroogt — onze kernbehandeling.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22D3EE" stroke-width="1.6" aria-hidden="true"><path d="M5 4v6M5 14v6M4 10h2M4 12h2M9 4v6M9 14v6M8 10h2M8 12h2M13 4v6M13 14v6M12 10h2M12 12h2M17 4v16"/></svg></div>
+          <h3>Professioneel uitkammen</h3>
+          <p>Zorgvuldige comb-out met een fijntandige metalen kam voor een grondig eindresultaat.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22D3EE" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M16 16l5 5"/><path d="M11 8v6M8 11h6"/></svg></div>
+          <h3>Controle voor het hele gezin</h3>
+          <p>Snelle inspectie van gezinsleden zodat je zeker weet wie behandeld moet worden.</p>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="n">99,2%</div><div class="l">luizen &amp; neten gedood</div></div>
+        <div class="stat"><div class="n">1</div><div class="l">bezoek, meestal genoeg</div></div>
+        <div class="stat"><div class="n">4,5★</div><div class="l">van 24 beoordelingen</div></div>
+        <div class="stat"><div class="n">0</div><div class="l">giftige shampoos</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 5 -->
+  <section class="chapter" id="ch5">
+    <div class="inner">
+      <span class="tag">Vlakbij Centraal Station Antwerpen</span>
+      <h2>4,5 sterren van opgeluchte<br>Antwerpse ouders.</h2>
+      <div class="reviews">
+        <div class="review">
+          <span class="stars" aria-label="5 van 5 sterren">★★★★★</span>
+          <p>“Na weken kammen eindelijk verlost. Eén behandeling en klaar. Zo vriendelijk en geruststellend voor mijn dochter.”</p>
+          <div class="who">— Bezorgde mama, Antwerpen</div>
+        </div>
+        <div class="review">
+          <span class="stars" aria-label="5 van 5 sterren">★★★★★</span>
+          <p>“Geen chemische shampoos meer op mijn kind. Professioneel, proper en heel duidelijke uitleg. Aanrader.”</p>
+          <div class="who">— Ouder uit Berchem</div>
+        </div>
+        <div class="review">
+          <span class="stars" aria-label="4,5 van 5 sterren">★★★★½</span>
+          <p>“Makkelijk te bereiken vanaf het station. Rustige, klinische aanpak — echt een opluchting na alle stress.”</p>
+          <div class="who">— Papa van twee</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 6 (CTA) -->
+  <section class="chapter" id="cta">
+    <div class="inner">
+      <div class="two-col flip">
+        <div>
+          <span class="tag">Boek je afspraak</span>
+          <h2>Vandaag nog<br>luisvrij naar huis.</h2>
+          <p class="body">Bel of plan je bezoek in. We nemen de tijd, stellen je gerust en behandelen zorgvuldig — zodat de jeuk, het kammen en de zorgen vandaag stoppen.</p>
+          <p class="body" style="font-weight:600;color:var(--fg);font-size:1.1rem"><a href="tel:0495545560" style="color:var(--accent-glow);text-decoration:none">Bel direct: 0495 54 55 60</a></p>
+        </div>
+        <div class="formwrap">
+          <form id="bookform" novalidate>
+            <label for="nm">Naam</label>
+            <input id="nm" name="nm" type="text" placeholder="Je naam" required autocomplete="name">
+            <label for="tel">Telefoon</label>
+            <input id="tel" name="tel" type="tel" placeholder="Je telefoonnummer" required autocomplete="tel">
+            <label for="ppl">Aantal personen</label>
+            <select id="ppl" name="ppl"><option>1 persoon</option><option>2 personen</option><option>3 personen</option><option>Heel het gezin</option></select>
+            <button class="btn btn-primary" id="submitbtn" type="submit" style="width:100%;justify-content:center;margin-top:26px">Afspraak aanvragen</button>
+            <div class="formstatus" id="formstatus" role="status" aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot-grid">
+    <div>
+      <div class="foot-logo">LICE CLINICS Prime®</div>
+      <p>Gecertificeerde luizenpraktijk met de medische AirAllé®-warmtebehandeling. Luizen weg in één bezoek — zonder giftige shampoos.</p>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <a href="tel:0495545560">0495 54 55 60</a>
+      <a href="https://www.luizenpraktijk.be/" target="_blank" rel="noopener">luizenpraktijk.be</a>
+    </div>
+    <div>
+      <h4>Adres</h4>
+      <p>Pelikaanstraat 3, bus 3/1230<br>2018 Antwerpen<br>(nabij Centraal Station)</p>
+    </div>
+  </div>
+  <div class="copy">© <span id="yr"></span> LICE CLINICS Prime® Luizenpraktijk — Antwerpen. Website conceptmockup.</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+document.getElementById('yr').textContent=new Date().getFullYear();
+
+/* form UX: loading -> success */
+(function(){
+  var f=document.getElementById('bookform');if(!f)return;
+  var btn=document.getElementById('submitbtn'),st=document.getElementById('formstatus');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var nm=document.getElementById('nm'),tel=document.getElementById('tel');
+    st.className='formstatus err';
+    if(!nm.value.trim()){st.textContent='Vul je naam in.';nm.focus();return;}
+    if(!tel.value.trim()){st.textContent='Vul je telefoonnummer in.';tel.focus();return;}
+    btn.disabled=true;var orig=btn.textContent;btn.textContent='Versturen…';
+    st.className='formstatus';st.textContent='';
+    setTimeout(function(){
+      btn.disabled=false;btn.textContent=orig;
+      st.className='formstatus ok';
+      st.textContent='Bedankt! We bellen je snel terug om je afspraak te bevestigen.';
+      f.reset();
+    },1100);
+  });
+})();
+
+(function(){
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function hasWebGL(){try{var c=document.createElement('canvas');return !!(c.getContext('webgl')||c.getContext('experimental-webgl'));}catch(e){return false;}}
+  if(reduce||!hasWebGL()||!window.THREE)return;
+
+  try{
+    var BG=0x031318, ACCENT=0x0891B2, ACCENT_G=0x22D3EE, ACCENT2=0x16A34A, ACCENT2_G=0x34D97A;
+    var scene=new THREE.Scene();
+    scene.background=new THREE.Color(BG);
+    scene.fog=new THREE.FogExp2(BG,0.015);
+    var camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,400);
+    camera.position.set(0,2,46);
+
+    var renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+    renderer.setSize(innerWidth,innerHeight);
+    document.getElementById('gl').appendChild(renderer.domElement);
+
+    var mobile=innerWidth<768;
+
+    function makeSprite(){var c=document.createElement('canvas');c.width=c.height=64;
+      var g=c.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);
+      r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(0.35,'rgba(255,255,255,.6)');r.addColorStop(1,'rgba(255,255,255,0)');
+      g.fillStyle=r;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c);}
+    var sprite=makeSprite();
+
+    function envTex(){var c=document.createElement('canvas');c.width=64;c.height=32;
+      var g=c.getContext('2d'),gr=g.createLinearGradient(0,0,0,32);
+      gr.addColorStop(0,'#9ff5ff');gr.addColorStop(0.5,'#0891B2');gr.addColorStop(1,'#031318');
+      g.fillStyle=gr;g.fillRect(0,0,64,32);var t=new THREE.CanvasTexture(c);
+      t.mapping=THREE.EquirectangularReflectionMapping;return t;}
+    var env=envTex();scene.environment=env;
+    scene.add(new THREE.HemisphereLight(0xffffff,BG,0.55));
+    var key=new THREE.PointLight(ACCENT_G,2.0,140);key.position.set(9,11,15);scene.add(key);
+    var rim=new THREE.PointLight(ACCENT2_G,1.4,140);rim.position.set(-11,-5,-9);scene.add(rim);
+
+    // particle universe (koele nit-zwerm)
+    var N=mobile?4000:8500,SPREAD=70;
+    var geo=new THREE.BufferGeometry(),pos=new Float32Array(N*3),col=new Float32Array(N*3);
+    var ca=new THREE.Color(ACCENT),cb=new THREE.Color(ACCENT_G),c=new THREE.Color();
+    for(var i=0;i<N;i++){var r=SPREAD*Math.pow(Math.random(),0.5),th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+      pos[i*3]=r*Math.sin(ph)*Math.cos(th);pos[i*3+1]=r*Math.sin(ph)*Math.sin(th)*0.55;pos[i*3+2]=r*Math.cos(ph);
+      c.copy(ca).lerp(cb,Math.random());col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;}
+    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+    var universe=new THREE.Points(geo,new THREE.PointsMaterial({size:0.55,map:sprite,vertexColors:true,transparent:true,opacity:0.85,depthWrite:false,blending:THREE.AdditiveBlending}));
+    scene.add(universe);
+
+    // helix light-strand (schone haarstreng)
+    var strandGroup=new THREE.Group();
+    function makeHelix(rot){
+      var SN=mobile?900:1600,sp=new Float32Array(SN*3),TURNS=7,RADIUS=1.4,HEIGHT=22;
+      for(var i=0;i<SN;i++){var t=i/SN,a=t*Math.PI*2*TURNS,w=0.32*Math.sin(t*40);
+        sp[i*3]=Math.cos(a)*(RADIUS+w);sp[i*3+1]=(t-0.5)*HEIGHT;sp[i*3+2]=Math.sin(a)*(RADIUS+w);}
+      var sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.BufferAttribute(sp,3));
+      var pts=new THREE.Points(sg,new THREE.PointsMaterial({size:0.4,map:sprite,color:ACCENT2_G,transparent:true,opacity:0.9,depthWrite:false,blending:THREE.AdditiveBlending}));
+      pts.rotation.y=rot;return pts;
+    }
+    strandGroup.add(makeHelix(0));strandGroup.add(makeHelix(Math.PI));
+    scene.add(strandGroup);
+
+    // centrepiece (reflectieve kern + wireframe schil + fresnel rim)
+    var centre=new THREE.Group();
+    var shellMat=new THREE.MeshBasicMaterial({color:ACCENT,wireframe:true,transparent:true,opacity:0.5});
+    var shell=new THREE.Mesh(new THREE.IcosahedronGeometry(3.4,1),shellMat);
+    centre.add(shell);
+    var coreGeo=new THREE.IcosahedronGeometry(1.9,0);
+    var coreMat=new THREE.MeshStandardMaterial({color:0x0b1418,metalness:0.85,roughness:0.22,envMap:env,envMapIntensity:1.1,emissive:new THREE.Color(ACCENT),emissiveIntensity:0.32});
+    var core=new THREE.Mesh(coreGeo,coreMat);centre.add(core);
+    var fres=new THREE.ShaderMaterial({transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,
+      uniforms:{c:{value:new THREE.Color(ACCENT2_G)},p:{value:2.8}},
+      vertexShader:'varying float vF;uniform float p;void main(){vec3 n=normalize(normalMatrix*normal);vec4 mv=modelViewMatrix*vec4(position,1.0);vec3 v=normalize(-mv.xyz);vF=pow(1.0-abs(dot(n,v)),p);gl_Position=projectionMatrix*mv;}',
+      fragmentShader:'varying float vF;uniform vec3 c;void main(){gl_FragColor=vec4(c*vF,vF);}'});
+    var fresh=new THREE.Mesh(coreGeo.clone(),fres);fresh.scale.setScalar(1.08);centre.add(fresh);
+    var ring=new THREE.Mesh(new THREE.TorusGeometry(5.2,0.03,8,120),new THREE.MeshBasicMaterial({color:ACCENT2,transparent:true,opacity:0.8}));
+    ring.rotation.x=Math.PI/2.4;centre.add(ring);
+    scene.add(centre);
+
+    // hologram: haarstreng silhouet
+    var hairShape=new THREE.Shape();
+    hairShape.moveTo(-0.6,-8);
+    hairShape.bezierCurveTo(0.4,-3,-0.8,2,0.3,8);
+    hairShape.lineTo(0.9,8);
+    hairShape.bezierCurveTo(-0.2,2,1.0,-3,0.0,-8);
+    hairShape.lineTo(-0.6,-8);
+    hairShape.holes=[];
+
+    var MN=mobile?1800:3200;
+    function buildHologram(){
+      var sg=new THREE.ShapeGeometry(hairShape,20);
+      var idx=sg.index.array,vp=sg.attributes.position.array;
+      var tris=[],areas=[],tot=0;
+      for(var t=0;t<idx.length;t+=3){
+        var a=idx[t]*3,b=idx[t+1]*3,cc=idx[t+2]*3;
+        var ax=vp[a],ay=vp[a+1],bx=vp[b],by=vp[b+1],cx=vp[cc],cy=vp[cc+1];
+        var ar=Math.abs((bx-ax)*(cy-ay)-(cx-ax)*(by-ay))*0.5;
+        tris.push([ax,ay,bx,by,cx,cy]);areas.push(ar);tot+=ar;
+      }
+      var fillN=Math.floor(MN*0.55);
+      var fillTarget=new Float32Array(fillN*3),fillStart=new Float32Array(fillN*3);
+      for(var i=0;i<fillN;i++){
+        var pick=Math.random()*tot,acc=0,ti=0;
+        for(var k=0;k<areas.length;k++){acc+=areas[k];if(acc>=pick){ti=k;break;}}
+        var tr=tris[ti],u=Math.random(),v=Math.random();if(u+v>1){u=1-u;v=1-v;}
+        var x=tr[0]+u*(tr[2]-tr[0])+v*(tr[4]-tr[0]);
+        var y=tr[1]+u*(tr[3]-tr[1])+v*(tr[5]-tr[1]);
+        fillTarget[i*3]=x*1.5;fillTarget[i*3+1]=y*1.5;fillTarget[i*3+2]=(Math.random()-0.5)*1.2;
+        var rr=27+Math.random()*4,th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+        fillStart[i*3]=rr*Math.sin(ph)*Math.cos(th);fillStart[i*3+1]=rr*Math.sin(ph)*Math.sin(th);fillStart[i*3+2]=rr*Math.cos(ph);
+      }
+      var fg=new THREE.BufferGeometry();
+      fg.setAttribute('position',new THREE.BufferAttribute(fillStart.slice(),3));
+      var fill=new THREE.Points(fg,new THREE.PointsMaterial({size:0.24,map:sprite,color:ACCENT,transparent:true,opacity:0.5,depthWrite:false,blending:THREE.AdditiveBlending}));
+
+      var opts=hairShape.getPoints(240);
+      var outN=MN-fillN;
+      var outTarget=new Float32Array(outN*3),outStart=new Float32Array(outN*3);
+      for(var i=0;i<outN;i++){
+        var p=opts[Math.floor(Math.random()*opts.length)];
+        outTarget[i*3]=p.x*1.5+(Math.random()-0.5)*0.12;
+        outTarget[i*3+1]=p.y*1.5+(Math.random()-0.5)*0.12;
+        outTarget[i*3+2]=(Math.random()-0.5)*0.5;
+        var rr=27+Math.random()*4,th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+        outStart[i*3]=rr*Math.sin(ph)*Math.cos(th);outStart[i*3+1]=rr*Math.sin(ph)*Math.sin(th);outStart[i*3+2]=rr*Math.cos(ph);
+      }
+      var og=new THREE.BufferGeometry();
+      og.setAttribute('position',new THREE.BufferAttribute(outStart.slice(),3));
+      var outline=new THREE.Points(og,new THREE.PointsMaterial({size:0.4,map:sprite,color:ACCENT2_G,transparent:true,opacity:0.95,depthWrite:false,blending:THREE.AdditiveBlending}));
+
+      return {fill:fill,outline:outline,fillStart:fillStart,fillTarget:fillTarget,outStart:outStart,outTarget:outTarget};
+    }
+    var holo=buildHologram();
+    var holoGroup=new THREE.Group();holoGroup.add(holo.fill);holoGroup.add(holo.outline);
+    holoGroup.visible=false;
+    scene.add(holoGroup);
+    var morph={t:0};
+
+    // bloom
+    var composer=new THREE.EffectComposer(renderer);
+    composer.addPass(new THREE.RenderPass(scene,camera));
+    var bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.2,0.85,0.12);
+    composer.addPass(bloom);
+
+    // scroll camera
+    var cam={x:0,y:2,z:46,ry:0};
+    var mouse={x:0,y:0};
+    if(!mobile){window.addEventListener('mousemove',function(e){mouse.x=(e.clientX/innerWidth-0.5);mouse.y=(e.clientY/innerHeight-0.5);});}
+
+    gsap.registerPlugin(ScrollTrigger);
+    var hudEl=document.getElementById('hud');
+    var tl=gsap.timeline({scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:1.1}});
+    tl.to(cam,{z:28,y:1,ease:'power2.inOut',duration:1},0)
+      .to(cam,{ry:Math.PI*0.4,x:-5,z:22,ease:'power2.inOut',duration:1},1)
+      .call(function(){holoGroup.visible=true;hudEl.classList.add('show');},null,1.6)
+      .to(morph,{t:1,ease:'power2.inOut',duration:1},1.7)
+      .to(centre.scale,{x:0.001,y:0.001,z:0.001,ease:'power2.inOut',duration:1},1.7)
+      .call(function(){hudEl.classList.remove('show');},null,2.9)
+      .to(cam,{ry:Math.PI*0.85,x:2,z:17,y:-1,ease:'power2.inOut',duration:1},3)
+      .to(cam,{ry:Math.PI*1.05,x:0,z:20,y:1.5,ease:'power3.inOut',duration:1},4)
+      .to(morph,{t:0.7,ease:'power1.inOut',duration:1},4)
+      .to(strandGroup.rotation,{y:Math.PI*1.6,ease:'none',duration:5},0);
+
+    ScrollTrigger.create({trigger:'#ch2',start:'top center',onLeaveBack:function(){holoGroup.visible=false;hudEl.classList.remove('show');centre.scale.setScalar(1);}});
+
+    document.querySelectorAll('.chapter .inner').forEach(function(el){
+      gsap.from(el,{opacity:0,y:60,duration:1,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 78%'}});
+    });
+
+    function updateHolo(){
+      if(!holoGroup.visible)return;
+      var fp=holo.fill.geometry.attributes.position.array;
+      for(var k=0;k<fp.length;k++){fp[k]=holo.fillStart[k]+(holo.fillTarget[k]-holo.fillStart[k])*morph.t;}
+      holo.fill.geometry.attributes.position.needsUpdate=true;
+      var op=holo.outline.geometry.attributes.position.array;
+      for(var k=0;k<op.length;k++){op[k]=holo.outStart[k]+(holo.outTarget[k]-holo.outStart[k])*morph.t;}
+      holo.outline.geometry.attributes.position.needsUpdate=true;
+      holo.fill.quaternion.copy(camera.quaternion);
+      holo.outline.quaternion.copy(camera.quaternion);
+    }
+
+    function animate(){
+      requestAnimationFrame(animate);
+      var t=performance.now()*0.001;
+      universe.rotation.y+=0.0009;
+      universe.rotation.x=Math.sin(t*0.15)*0.05;
+      strandGroup.rotation.y+=0.0016;
+      centre.rotation.y+=0.0022;
+      centre.rotation.z=Math.sin(t*0.3)*0.08;
+      ring.rotation.z+=0.003;
+      bloom.strength=1.25+Math.sin(t*0.8)*0.12;
+      updateHolo();
+
+      camera.position.z+=(cam.z-camera.position.z)*0.08;
+      camera.position.x=Math.sin(cam.ry)*camera.position.z*0.35+mouse.x*2.2;
+      camera.position.y+=((cam.y-mouse.y*1.6)-camera.position.y)*0.06;
+      camera.lookAt(0,0,0);
+      composer.render();
+    }
+    animate();
+
+    window.addEventListener('resize',function(){
+      camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);
+    });
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
