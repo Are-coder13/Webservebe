@@ -96,7 +96,7 @@ function designSystem() {
     '',
     '- Self-contained: all CSS in a <style> tag, all JS in a <script> tag.',
     '- You MAY use CDN <link>/<script> for Google Fonts and the exact Three.js/GSAP scripts listed in the recipes. Nothing else.',
-    '- DO NOT reference any external image or photo files — none exist. Besides the WebGL scene, use CSS gradients, CSS shapes, and inline SVG. You may use the business LOGO URL if one is provided (as an <img>).',
+    '- USE THE CLIENT\'S REAL PHOTOS: if the BUSINESS block lists REAL PHOTOS, use them (as <img> or CSS background-image) in content chapters — product/collection cards, a gallery, an about strip — to make the page genuinely branded; the fixed WebGL scene itself stays procedural behind them. For a product brand, show the actual product photos. Do NOT invent or hotlink any OTHER external images. For everything else use CSS gradients/shapes + inline SVG. You may use the business LOGO URL (as an <img>). Give every real image a graceful colour/gradient behind it and loading="lazy" in case one fails.',
     '- Editorial poster moments: at 1-2 chapters, set a single giant display word (10-18vw, heavyweight) product-film style, partially cropped/clipped for tension, relating to the trade (e.g. FRESH, PRECISION, SHINE). CRITICAL LEGIBILITY: on the near-black background it MUST be clearly visible — use EITHER a bright outlined treatment (transparent fill + 2px stroke via -webkit-text-stroke in a LIGHTENED brand/accent colour at 0.35-0.6 opacity) OR a solid fill in a light or accent tint at >=0.5 opacity. NEVER a dark-on-dark watermark, never opacity below 0.2 — if it is barely visible it is wrong.',
     '- PLACEMENT of the giant word (critical — it must NEVER collide with readable content): put it ONLY in a SPARSE chapter (the hero, or a short transition with one line of text). NEVER place it behind a card grid, a dense paragraph block, or any chapter with multiple text elements. Its z-index sits BELOW all chapter content, and the content above it must have opaque backgrounds (see card rule) so the word can never bleed through text. If a chapter has cards or lots of copy, do not put the giant word there.',
     '- For product-led trades you may add an "exploded diagram" chapter: a layered inline SVG of the flagship product (5-8 stacked parts you draw yourself) whose parts translate apart on scroll (GSAP scrub), with thin leader lines labelling REAL services from the scrape.',
@@ -147,7 +147,11 @@ function cleanSystem() {
     'Never hardcode a hex/rgb outside :root. The palette is already brand-matched and scheme-appropriate —',
     'do not substitute a generic hue.',
     '',
-    'VISUALS (asset-free): NO external image/photo files. Use tasteful CSS gradients/mesh, soft shadows,',
+    'VISUALS: USE the CLIENT\'S REAL PHOTOS listed in the BUSINESS block (their own images) as hero',
+    'backgrounds, product/collection cards, and gallery — real imagery is what makes it convincing, and for',
+    'a product brand the products SHOULD be shown as real photos. Give each a graceful colour/gradient behind',
+    'it + loading="lazy". Do NOT invent or hotlink any OTHER external images. Where no photo fits, use',
+    'tasteful CSS gradients/mesh, soft shadows,',
     'rounded cards, and BESPOKE inline <svg> artwork — a custom SVG icon per service (via <path>, brand',
     'accent), and at least one substantial hero/section SVG illustration relevant to the trade. NEVER',
     'unicode symbols or emoji as icons. You MAY use the business LOGO url (as <img>) if provided, and CDN',
@@ -319,7 +323,7 @@ function cleanReviewSystem(hasFrames) {
     '6. VISUAL CRAFT — bespoke inline SVG icons (not unicode/emoji), tasteful gradients/mesh, soft shadows, rounded cards; at least one substantial hero SVG illustration.',
     '7. MOTION — tasteful reveals on scroll + hover states + focus rings; 150–300ms; prefers-reduced-motion respected; nothing janky; NO WebGL / no external JS libraries.',
     '8. TRUST & COPY — real stats/ratings/credentials surfaced; a prominent primary CTA; copy specific to THIS business (kill generic filler); language consistent (one language, matching the content).',
-    '9. TECHNICAL — responsive 375–1440 mobile-first, no horizontal scroll, 44px+ touch targets, 16px+ body; NO external image/photo files (CSS/SVG/logo only); cursor:pointer on clickables; valid, complete, not truncated.',
+    '9. TECHNICAL & IMAGERY — responsive 375–1440 mobile-first, no horizontal scroll, 44px+ touch targets, 16px+ body; the client\'s REAL photos SHOULD be used (hero/products/gallery) — if they were provided but the page shows none, add them; do NOT invent other external images; CSS/SVG for everything else; cursor:pointer on clickables; valid, complete, not truncated.',
     '10. CARD ALIGNMENT — cards in any row must be EQUAL size and aligned on both axes (grid repeat(N,1fr) + align-items:stretch + flex-column cards with CTAs pushed down). Fix any ragged/unequal cards.',
     '11. HERO FIT — the page makes the right thing the star. If archetype is product-brand, the products must be showcased as crafted artefacts (detailed SVG, spotlit, grouped by collection), flagship largest — NOT a generic icon grid. If products are missing/generic, rebuild that section.',
     '',
@@ -377,7 +381,7 @@ function reviewSystem(hasFrames, style) {
     '8a. EDITORIAL WORD LEGIBILITY — if a giant display word is used, it MUST be clearly visible on the dark background (bright outlined stroke or a light/accent fill at >=0.5 opacity). If it is a dark-on-dark, barely-visible watermark, FIX IT: brighten the stroke/fill and raise opacity until it reads as an intentional poster word.',
     '8b. LAYOUT VARIETY — if chapters are mostly centred stacks or look repetitive/templated, REBUILD them with distinct layouts (asymmetric hero, offset columns, bento, timeline, stat band, staggered cards). No two consecutive chapters share a layout; at most one centred stack total.',
     '8. HIERARCHY, BRAND & COPY — clear type-scale contrast; deliberate spacing rhythm; max 2 accent colours plus neutrals; hover states and focus rings on interactive elements; copy specific to this business — kill generic filler ("Quality You Can Trust", "We are committed to excellence").',
-    '9. TECHNICAL — fully responsive 375px-1440px with no horizontal scroll and reduced particle counts on mobile; NO external image/photo files (only CSS/SVG/canvas/logo); cursor:pointer on clickables; prefers-reduced-motion respected; valid, complete, not truncated.',
+    '9. TECHNICAL & IMAGERY — fully responsive 375px-1440px, no horizontal scroll, reduced particle counts on mobile; the client\'s REAL photos SHOULD appear in content chapters (products/gallery) if they were provided — add them if missing; the WebGL scene stays procedural; no OTHER invented external images; cursor:pointer on clickables; prefers-reduced-motion respected; valid, complete, not truncated.',
     '10. MATERIAL & LIGHT CRAFT (expensive vs junior) — the SOLID centrepiece should use real materials + lighting + reflections and a GLSL fresnel rim (RECIPE I/J), so it looks lit and dimensional, NOT flat single-colour MeshBasicMaterial. Motion should feel weighty and restrained (long eases, one signature hero beat with holds), not busy/uniform junior spinning. If the centrepiece is flat-shaded or the motion is constant and shallow, upgrade it. (Particles/wireframes stay MeshBasic — that is correct.)',
     '11. CARD ALIGNMENT — cards in any row must be EQUAL size and aligned on both axes (grid repeat(N,1fr) + align-items:stretch + flex-column cards). Fix any ragged/unequal-height cards.',
     '12. HERO FIT — the page must make the right thing the star. If the concept archetype is product-brand, the products must be showcased as crafted artefacts (detailed SVG, spotlit, grouped by collection) with the flagship as hero — not buried in a generic grid. If products are missing or generic, rebuild that section.',
@@ -429,6 +433,14 @@ function businessBlock(place, branding, scraped) {
       parts.push(`  dark cinematic scene, and echo a secondary brand colour, instead of defaulting to a generic`);
       parts.push(`  candidate palette. The candidate palettes below are references for structure/contrast only.`);
     }
+  }
+  if (branding && branding.images && branding.images.length) {
+    parts.push('', 'REAL PHOTOS from the client\'s own website (USE THESE — they are the actual brand imagery):');
+    branding.images.forEach((u, i) => parts.push(`  ${i + 1}. ${u}`));
+    parts.push('  Use these real images in the mockup (hero background, product/collection cards, gallery, about).');
+    parts.push('  The FIRST is usually the strongest hero/product shot. Add loading="lazy" and a graceful');
+    parts.push('  background/colour behind each in case one fails to load. Prefer real photos over abstract');
+    parts.push('  fillers wherever a photo tells the story better — especially product/collection imagery.');
   }
   parts.push('', 'SCRAPED WEBSITE CONTENT (may be empty or noisy — extract what is useful):');
   parts.push(scraped ? scraped.slice(0, 6000) : '(nothing scraped — design from the business name, category and city)');
@@ -603,6 +615,8 @@ export default {
       for (const t of [fromHtml.voiceText, fromBrowser && fromBrowser.voiceText]) {
         if ((t || '').length > (scraped || '').length) scraped = t;
       }
+      // real photos from the client's site — used in the mockup (hero, products, gallery)
+      if (!branding.images || !branding.images.length) branding.images = (fromHtml.images || []);
       const brandSource = (branding.colors && branding.colors.length) ? colorSource : 'none';
 
       const ctx = businessBlock(place, branding, scraped);
@@ -705,6 +719,7 @@ export default {
         ' palette=' + pal.vars['--brand'] + '/' + pal.vars['--accent'] +
         ' archetype=' + ((concept && concept.archetype) || 'n/a') +
         ' products=' + ((concept && Array.isArray(concept.products) && concept.products.length) || 0) +
+        ' imagesFound=' + ((branding.images && branding.images.length) || 0) +
         ' framesSeen=' + frames.length +
         ' renderClean=' + renderClean +
         ' reviewRounds=' + reviews +
@@ -724,6 +739,7 @@ export default {
         palette: { brand: pal.vars['--brand'], accent: pal.vars['--accent'], bg: pal.vars['--bg'] },
         archetype: (concept && concept.archetype) || null,
         productCount: (concept && Array.isArray(concept.products) && concept.products.length) || 0,
+        imagesFound: (branding && branding.images && branding.images.length) || 0,
         logoFound: !!(branding && branding.logoUrl),
         brandColors: (branding && branding.colors) || [],
         directionUsed: !!direction,

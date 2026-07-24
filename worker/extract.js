@@ -54,7 +54,7 @@ function keepBrandHex(hex) {
  * in a Worker. Best-effort: returns whatever it can find.
  */
 export function extractFromHtml(html, baseUrl) {
-  const out = { logoUrl: null, colors: [], voiceText: '' };
+  const out = { logoUrl: null, colors: [], voiceText: '', images: [] };
   if (!html) return out;
 
   // ---- logo ----
@@ -113,5 +113,27 @@ export function extractFromHtml(html, baseUrl) {
     .replace(/\s+/g, ' ')
     .trim();
   out.voiceText = [title, ogTitle, desc, ogDesc, body].filter(Boolean).join('\n').slice(0, 4000);
+
+  // ---- real content images (photos to actually use in the mockup) ----
+  const images = [];
+  const pushImg = (u) => {
+    if (!u) return;
+    const a = abs(u, baseUrl);
+    if (!a || /^data:/i.test(a)) return;
+    if (/sprite|favicon|icon|logo|placeholder|pixel|blank|spacer|1x1/i.test(a)) return;
+    if (/\.svg(\?|$)/i.test(a)) return;
+    if (a === out.logoUrl || images.includes(a) || images.length >= 8) return;
+    images.push(a);
+  };
+  // og:image is the strongest hero candidate — front of the list
+  const ogImg = html.match(/<meta[^>]+property=["']og:image["'][^>]*>/i);
+  if (ogImg) pushImg(attr(ogImg[0], 'content'));
+  for (const t of (html.match(/<img\b[^>]*>/gi) || [])) {
+    if (/icon|logo|sprite|avatar/i.test(t)) continue; // skip chrome/icons
+    let src = attr(t, 'src') || attr(t, 'data-src') || attr(t, 'data-lazy-src') || attr(t, 'data-original');
+    if (!src) { const ss = attr(t, 'srcset'); if (ss) src = ss.split(',')[0].trim().split(' ')[0]; }
+    pushImg(src);
+  }
+  out.images = images;
   return out;
 }

@@ -1817,6 +1817,8 @@ async function buildMockup(prospectId, direction = '', style = 'cinematic') {
             <span style="color:${(agentDiag.scrapedChars>200)?'var(--green)':'var(--warn)'}">content ${agentDiag.scrapedChars||0} chars</span> ·
             <span style="color:${(agentDiag.brandColors&&agentDiag.brandColors.length)?'var(--green)':'var(--warn)'}">brand ${(agentDiag.brandColors&&agentDiag.brandColors.length)?agentDiag.brandColors.join(' '):'none'} (${agentDiag.colorSource||'none'})</span> ·
             <span style="color:${agentDiag.logoFound?'var(--green)':'var(--warn)'}">logo ${agentDiag.logoFound?'✓':'✗'}</span> ·
+            <span style="color:${(agentDiag.imagesFound>0)?'var(--green)':'var(--warn)'}">photos ${agentDiag.imagesFound||0}</span> ·
+            <span>${agentDiag.archetype||'—'}</span> ·
             <span style="color:${(agentDiag.framesSeen>0)?'var(--green)':'var(--dim)'}">render ${(agentDiag.framesSeen>0)?('on, '+(agentDiag.renderClean?'clean':'issues')):'off (free plan)'}</span> ·
             <span>style ${agentDiag.style||'—'}</span>
           </div>` : ''}
