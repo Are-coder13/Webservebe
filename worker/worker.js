@@ -23,6 +23,7 @@ import { exemplarBlock } from './exemplars.js';
 import { motifBlock } from './motifs.js';
 import { cleanBrief } from './sections.js';
 import { fetchSiteHtml, extractFromHtml } from './extract.js';
+import { buildPalette, paletteBrief } from './palette.js';
 
 const MODEL = 'claude-opus-4-8';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
@@ -56,6 +57,9 @@ function designSystem() {
     '- NEVER use unicode symbols (◈ ◆ ◉ ✦ ▸ ● ■) as icons. NEVER use emoji as icons.',
     '',
     'COLOUR & TYPOGRAPHY:',
+    '- PALETTE IS DECIDED: a PALETTE block gives you the exact CSS custom properties to use. Put it in',
+    '  :root verbatim and reference ONLY those tokens for every colour (var(--brand), var(--accent), …).',
+    '  Never hardcode a hex/rgb outside :root. This palette is already brand-matched — do not substitute.',
     '- BRAND COLOURS WIN (hard rule): if the BUSINESS/BRAND block gives brand colours, they are the',
     '  identity — you MUST build the palette from them. Set --accent (and the scene glow) to the',
     '  dominant brand colour, lightened/saturated as needed to glow on near-black; echo a second brand',
@@ -136,9 +140,10 @@ function cleanSystem() {
     '  content and brand. Follow the MODERN DESIGN PRINCIPLES and COMPOSITION RULES in that brief.',
     '- Define one design system in :root (CSS custom properties): colours, type scale, spacing, radius, shadows.',
     '',
-    'BRAND COLOURS WIN: if brand colours are provided, build the palette from them (a primary + one',
-    'accent for CTAs + neutrals). Do not default to a generic hue. Choose a LIGHT scheme (off-white bg,',
-    'dark ink) for most professional/service brands, or a refined dark scheme for luxury/tech — commit fully.',
+    'PALETTE IS DECIDED: a PALETTE block gives you the exact CSS custom properties to use. Put it in :root',
+    'verbatim and reference ONLY those tokens for every colour (var(--brand), var(--accent), var(--bg), …).',
+    'Never hardcode a hex/rgb outside :root. The palette is already brand-matched and scheme-appropriate —',
+    'do not substitute a generic hue.',
     '',
     'VISUALS (asset-free): NO external image/photo files. Use tasteful CSS gradients/mesh, soft shadows,',
     'rounded cards, and BESPOKE inline <svg> artwork — a custom SVG icon per service (via <path>, brand',
@@ -560,11 +565,17 @@ export default {
       const exemplar = exemplarBlock(domain);
       const dirPrefix = directionBlock ? directionBlock + '\n\n' : '';
 
+      // Deterministic palette: computed in code from the real brand colour (or a
+      // domain-correct default — beauty=rose, never blue), handed to the model as
+      // the only colours it may use, and locked into the output below.
+      const pal = buildPalette(branding.colors, domain, style);
+      const palBlock = paletteBrief(pal);
+
       let html, conceptBriefText = '';
       if (style === 'clean') {
         // CLEAN / PROFESSIONAL — compose from the section blueprints. No 3D
         // concept pass (that is cinematic-only); build straight from the brief.
-        const cleanText = dirPrefix + ctx + '\n\n' + brief + '\n\n' + cleanBrief(domain) +
+        const cleanText = dirPrefix + ctx + '\n\n' + palBlock + '\n\n' + brief + '\n\n' + cleanBrief(domain) +
           '\n\nNow build the complete website.';
         html = extractHtml(await callClaudeStream(env, cleanSystem(), cleanText));
       } else {
@@ -581,8 +592,8 @@ export default {
         } catch { /* concept pass optional — build pass still does STEP 1-3 itself */ }
 
         const buildText = conceptBriefText
-          ? dirPrefix + ctx + '\n\n' + brief + '\n\n' + conceptBriefText + '\n\nNow build the complete website to this concept.'
-          : dirPrefix + ctx + '\n\n' + brief + '\n\n' + exemplar + '\n\nNow build the complete website.';
+          ? dirPrefix + ctx + '\n\n' + palBlock + '\n\n' + brief + '\n\n' + conceptBriefText + '\n\nNow build the complete website to this concept.'
+          : dirPrefix + ctx + '\n\n' + palBlock + '\n\n' + brief + '\n\n' + exemplar + '\n\nNow build the complete website.';
         html = extractHtml(await callClaudeStream(env, designSystem(), buildText));
       }
       if (!looksComplete(html)) throw new Error('Design pass produced incomplete HTML.');
@@ -619,6 +630,14 @@ export default {
 
       const renderClean = (style === 'clean' ? true : diag.canvasOk) && (!diag.errors || diag.errors.length === 0);
 
+      // BRAND LOCK — inject the computed palette as the LAST style in <head> so
+      // the tokens hold the brand values regardless of what the model wrote in
+      // :root. Anything referencing the tokens now renders in brand colour.
+      const brandLock = '<style id="brand-lock">' + pal.css + '</style>';
+      html = /<\/head>/i.test(html)
+        ? html.replace(/<\/head>/i, brandLock + '</head>')
+        : html.replace(/(<body[^>]*>)/i, brandLock + '$1');
+
       // Embed a self-documenting diagnostics comment so every mockup reveals
       // exactly what the pipeline captured (paste this one line for instant
       // triage). framesSeen>0 also confirms Browser Rendering is enabled.
@@ -628,6 +647,8 @@ export default {
         ' colorSource=' + colorSource +
         ' logoFound=' + (!!branding.logoUrl) +
         ' brandColors=' + ((branding.colors || []).join('|') || 'none') +
+        ' paletteSource=' + pal.source +
+        ' palette=' + pal.vars['--brand'] + '/' + pal.vars['--accent'] +
         ' framesSeen=' + frames.length +
         ' renderClean=' + renderClean +
         ' reviewRounds=' + reviews +
@@ -643,6 +664,8 @@ export default {
         renderClean,
         renderErrors: (diag.errors || []).length,
         brandSource, colorSource,
+        paletteSource: pal.source,
+        palette: { brand: pal.vars['--brand'], accent: pal.vars['--accent'], bg: pal.vars['--bg'] },
         logoFound: !!(branding && branding.logoUrl),
         brandColors: (branding && branding.colors) || [],
         directionUsed: !!direction,
