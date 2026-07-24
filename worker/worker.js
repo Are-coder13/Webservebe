@@ -451,46 +451,60 @@ async function callClaudeStream(env, system, userText, frames, maxTokens) {
   } else {
     content = userText;
   }
-  const res = await fetch(ANTHROPIC_URL, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'x-api-key': env.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      max_tokens: maxTokens || MAX_TOKENS,
-      stream: true,
-      output_config: { effort: 'high' },
-      system,
-      messages: [{ role: 'user', content }],
-    }),
+  const body = JSON.stringify({
+    model: MODEL,
+    max_tokens: maxTokens || MAX_TOKENS,
+    stream: true,
+    output_config: { effort: 'high' },
+    system,
+    messages: [{ role: 'user', content }],
   });
-  if (!res.ok || !res.body) {
-    const detail = await res.text().catch(() => '');
-    throw new Error(`Anthropic ${res.status}: ${detail.slice(0, 300)}`);
-  }
-  const reader = res.body.getReader();
-  const dec = new TextDecoder();
-  let buf = '', out = '', stop = null;
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buf += dec.decode(value, { stream: true });
-    let nl;
-    while ((nl = buf.indexOf('\n')) >= 0) {
-      const line = buf.slice(0, nl); buf = buf.slice(nl + 1);
-      if (!line.startsWith('data:')) continue;
-      const data = line.slice(5).trim();
-      if (!data || data === '[DONE]') continue;
-      let ev; try { ev = JSON.parse(data); } catch { continue; }
-      if (ev.type === 'content_block_delta' && ev.delta && ev.delta.type === 'text_delta') out += ev.delta.text;
-      else if (ev.type === 'message_delta' && ev.delta && ev.delta.stop_reason) stop = ev.delta.stop_reason;
+  // Retry transient failures (overload/rate-limit/5xx/network). With up to four
+  // Claude calls per mockup, a single 429/529 would otherwise fail the whole
+  // build and drop the client to the template. 3 attempts, 1s→2s backoff.
+  const transient = (s) => s === 408 || s === 409 || s === 425 || s === 429 || s === 500 || s === 502 || s === 503 || s === 529;
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  let lastErr = null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    if (attempt) await sleep(1000 * attempt);
+    let res;
+    try {
+      res = await fetch(ANTHROPIC_URL, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+        body,
+      });
+    } catch (e) { lastErr = e; continue; } // network error → retry
+    if (!res.ok || !res.body) {
+      const detail = await res.text().catch(() => '');
+      lastErr = new Error(`Anthropic ${res.status}: ${detail.slice(0, 300)}`);
+      if (transient(res.status)) continue;  // retry transient
+      throw lastErr;                         // permanent (400/401/403/…) → fail fast
     }
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let buf = '', out = '', stop = null;
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += dec.decode(value, { stream: true });
+        let nl;
+        while ((nl = buf.indexOf('\n')) >= 0) {
+          const line = buf.slice(0, nl); buf = buf.slice(nl + 1);
+          if (!line.startsWith('data:')) continue;
+          const data = line.slice(5).trim();
+          if (!data || data === '[DONE]') continue;
+          let ev; try { ev = JSON.parse(data); } catch { continue; }
+          if (ev.type === 'content_block_delta' && ev.delta && ev.delta.type === 'text_delta') out += ev.delta.text;
+          else if (ev.type === 'message_delta' && ev.delta && ev.delta.stop_reason) stop = ev.delta.stop_reason;
+        }
+      }
+    } catch (e) { lastErr = e; continue; } // mid-stream drop → retry
+    if (stop === 'refusal') throw new Error('Model refused this request.');
+    return out;
   }
-  if (stop === 'refusal') throw new Error('Model refused this request.');
-  return out;
+  throw lastErr || new Error('Anthropic request failed after retries');
 }
 
 // Pull a clean HTML document out of the model's text (handles any stray preamble/fences)
