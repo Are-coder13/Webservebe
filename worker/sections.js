@@ -21,6 +21,7 @@ const PRINCIPLES = [
   'TRUST & SOCIAL PROOF: surface real stats, ratings, review counts, credentials, guarantees — "Join 5,000+…", star ratings, years in business. Credibility fast.',
   'MOBILE-FIRST: >75% of traffic is mobile. Every section must be flawless at 375px; stack columns, keep 16px+ body text, 44px+ touch targets, no horizontal scroll.',
   'BESPOKE SVG: custom inline <svg> icons per service (via <path>, with the brand accent), tasteful CSS gradient/mesh backdrops and soft shadows. No emoji, no unicode icons, no external images.',
+  'CARD ALIGNMENT (non-negotiable): any multi-card row uses CSS grid with EQUAL columns (grid-template-columns: repeat(N, 1fr); align-items: stretch) so all cards are the SAME size and align on both axes. Make each card display:flex; flex-direction:column so titles, bodies and footers/CTAs line up across cards regardless of text length (push CTAs down with margin-top:auto). No ragged heights, no misaligned rows.',
   'REAL CONTENT ONLY: real service names, real tone, real city from the scrape. No lorem, no generic filler ("Quality You Can Trust").',
 ];
 
@@ -31,6 +32,7 @@ const BLUEPRINTS = [
   ['Hero — centered statement', 'One huge centered display headline over a subtle gradient/mesh backdrop, tight subhead, one CTA. Confident and minimal — good for premium/luxury brands.'],
   ['Hero — offset editorial', 'Asymmetric: oversized headline spanning wide, supporting copy in a narrow column, a floating accent shape. Magazine feel.'],
   ['Trust bar', 'A slim strip directly under the hero: 3–5 real stats/badges/ratings, or "trusted by / years of experience". Small, quiet, credibility-building.'],
+  ['Product / collection showcase', 'THE centrepiece for a product brand. A grid grouped by collection where EACH product is a bespoke crafted ARTEFACT — a detailed inline-SVG rendering of the actual item (bottle, garment, jewel, dish…), spotlit in an equal-size card with its real name + one line, subtle float/hover. The flagship product gets a larger hero treatment. Never a generic icon grid.'],
   ['Services — bento grid', 'An asymmetric bento of cards (mixed sizes) for the core offerings, each with a bespoke SVG icon, title, one line. Apple-style, modern.'],
   ['Services — 3-up cards', 'A clean 3-column card row (stacks on mobile) with SVG icon, service name, short benefit. Hover lift.'],
   ['Feature rows — alternating', 'Alternating image-left / image-right rows (the "image" is a bespoke SVG/gradient composition), each pairing one real service with a benefit-led paragraph. Great for depth.'],

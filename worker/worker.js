@@ -106,6 +106,8 @@ function designSystem() {
     '- Chapters to include (adapt to the business): cinematic hero with name + tagline; services/offerings; a why-us or stats moment; testimonials; and a final CTA chapter with a (non-functional) contact form or booking button. Footer with real address/phone.',
     '- Text must stay readable over the 3D at every scroll position: scrims + text-shadows per the recipes, WCAG AA contrast.',
     '- CARDS / PANELS MUST BE OPAQUE ENOUGH TO MASK WHAT IS BEHIND THEM: any card, panel, or content box sitting over the 3D scene (or over the giant editorial word) must have a near-solid background — background: rgba(<bg>, 0.80) or higher, plus backdrop-filter: blur(10px) and a 1px border. NEVER ship fully transparent cards: the particle field or the giant poster word bleeding through card text is a bug that makes it unreadable. Each card is its own clean surface.',
+    '- CARD ALIGNMENT (non-negotiable): any multi-card row uses CSS grid with EQUAL columns (grid-template-columns: repeat(N, 1fr); align-items: stretch) so cards are the SAME size and align on both axes; make each card display:flex; flex-direction:column with CTAs pushed down (margin-top:auto) so content lines up across cards regardless of text length. No ragged heights.',
+    '- PRODUCT BRANDS: if the concept archetype is product-brand, the PRODUCTS are the hero — showcase each as a crafted, spotlit artefact (a detailed bespoke inline SVG of the actual item), grouped by collection, flagship largest. In cinematic mode the flagship product is the hologram (RECIPE G). Do not bury products in a generic feature grid.',
     '- Fully mobile-responsive (375px, 768px, 1024px, 1440px breakpoints); reduce particle counts and disable parallax on small screens.',
     '- Use cursor:pointer on all clickable elements.',
     '- Respect prefers-reduced-motion: disable animations, parallax, and the 3D scene under that media query (CSS gradient fallback per the recipes).',
@@ -160,6 +162,8 @@ function cleanSystem() {
     'a clear max-width container; strong visual hierarchy; real trust/social-proof (stats, ratings, years);',
     'clear hover + focus states; cursor:pointer on clickables; a prominent primary CTA (book/call/quote).',
     '- Fully responsive (375 / 768 / 1024 / 1440), mobile-first, 16px+ body, 44px+ touch targets, no h-scroll.',
+    '- CARD ALIGNMENT: multi-card rows use CSS grid with equal columns (repeat(N,1fr); align-items:stretch) and each card is a flex column (CTAs pushed down with margin-top:auto) so all cards are the same size and align on both axes.',
+    '- PRODUCT BRANDS: if the strategy archetype is product-brand, lead with a product/collection showcase where each product is a crafted, spotlit artefact (detailed bespoke inline SVG of the item), flagship largest — not a generic icon grid.',
     '- Ground everything in the scrape: real service names, real tone, real city. No lorem, no generic filler.',
     '- Add a fixed top banner: "Website Preview — concept mockup for <business name>"; offset the page so it does not overlap.',
     '',
@@ -175,36 +179,49 @@ function cleanSystem() {
   ].join('\n');
 }
 
-// CONCEPT pass — pure strategy, no code. Splitting this out means the build
-// pass isn't inventing the concept and writing 6k tokens of correct WebGL in
-// the same breath; it builds to a locked, considered brief.
-function conceptSystem() {
+// STRATEGY pass — pure design thinking, no code. First the expert-designer
+// questions (what IS this business, what must the page make the hero, how do we
+// showcase it), then the mode-specific creative direction. Run for BOTH styles
+// so the build always executes a considered decision, not a fixed template.
+function conceptSystem(style) {
+  const cinematic = style !== 'clean';
+  const threeD = cinematic ? [
+    '  "3d_story": "how a procedural, asset-free 3D world visualises the hero_subject — the 3D is the pitch, not decoration",',
+    '  "silhouette": "the hologram subject as a single 2D shape. If archetype is product-brand, this MUST be the FLAGSHIP PRODUCT itself. Otherwise choose from the MOTIF SELECTION angles to reflect THIS client\'s specific specialty, never the generic trade default.",',
+    '  "silhouette_rationale": "one line: why THIS shape for THIS client",',
+    '  "strand_curve": "one of: helix | torus-knot | flat-spiral-galaxy | lissajous-ribbon (by brand mood)",',
+    '  "centrepiece": "the glowing wireframe hero geometry the camera flies around",',
+    '  "use_hud": true or false — true ONLY for precision/tech trades (dental, auto diagnostics, legal, medical, engineering); false for warm trades",',
+    '  "editorial_word": "the giant display word behind the scene, in the site language",',
+    '  "chapters": ["4-5 items \'<message> — <camera move>\' naming REAL services/products from the scrape; include a dedicated product/collection chapter if archetype is product-brand"],',
+  ] : [
+    '  "sections": ["the ordered section blueprints to use (see SECTION BLUEPRINTS), chosen for THIS business; if archetype is product-brand a product/collection showcase MUST be near the top"],',
+  ];
   return [
-    'You are an award-winning creative director planning a bespoke, cinematic WebGL website for a local business.',
-    'Think hard about STRATEGY ONLY. Do NOT write any HTML, CSS, or JavaScript.',
+    'You are an award-winning creative director. Think like an EXPERT DESIGNER: before any layout, decide',
+    'WHAT this business is and WHAT the page must make the hero. Think hard about STRATEGY ONLY — no code.',
     'Ground every decision in the scraped website, category, reviews and city — no generic filler.',
-    'If a USER ART DIRECTION block is provided, it is an explicit brief from the operator and TAKES PRECEDENCE over your inferred palette, mood, motif and copy choices wherever they conflict (still honour real brand colours and scraped facts).',
+    'If a USER ART DIRECTION block is provided, it TAKES PRECEDENCE over your inferred choices (still honour real brand colours and scraped facts).',
     '',
-    'Output ONLY a single JSON object (no prose, no markdown fences) with EXACTLY these keys:',
+    'FIRST ask yourself (this is the thinking that separates expert from generic):',
+    '- What ARCHETYPE is this? product-brand (sells named products/collections) · service · practice · hospitality · retail · portfolio · trade.',
+    '- What is the ONE thing the visitor must remember — and what deserves to be the visual HERO?',
+    '- If they sell their OWN products/collections, the PRODUCTS are the story: they must be showcased as crafted artefacts (a detailed, spotlit rendering of each), the flagship product given the hero treatment — not buried in a generic feature grid.',
+    '',
+    'Output ONLY a single JSON object (no prose, no fences) with EXACTLY these keys:',
     '{',
-    '  "offering": "the ONE flagship product or service this business is really selling",',
+    '  "archetype": "product-brand | service | practice | hospitality | retail | portfolio | trade",',
+    '  "hero_subject": "the ONE thing the page makes the star (e.g. \'the fragrance collection\' for a product brand; \'the signature treatment/outcome\' for a service)",',
+    '  "products": ["REAL product or collection names found in the scrape; [] if none"],',
+    '  "showcase": "how to feature the hero_subject concretely (e.g. \'artefact gallery: each product a crafted spotlit SVG card grouped by collection; flagship product as the centrepiece\')",',
+    '  "offering": "the ONE flagship product or service",',
     '  "feeling": "the core emotion the visitor should feel",',
-    '  "3d_story": "how a procedural, asset-free 3D world visualises that offering — the 3D is the pitch, not decoration",',
-    '  "silhouette": "the hologram subject as a single 2D shape — chosen from the MOTIF SELECTION angles to reflect THIS client\'s specific flagship/specialty, NOT the generic trade default. Do not pick a motif that would fit any competitor equally (e.g. not just a plain tooth for a dentist — an implant clinic gets an implant, an orthodontist gets an aligner, a whitening studio gets a radiant smile). State the specific shape.",',
-    '  "silhouette_rationale": "one line: why THIS shape for THIS client — which service/specialty/differentiator from the scrape it comes from",',
-    '  "strand_curve": "one of: helix | torus-knot | flat-spiral-galaxy | lissajous-ribbon (choose by brand mood)",',
-    '  "centrepiece": "the glowing wireframe hero geometry the camera flies around (e.g. icosahedron lattice, octahedron stack, torus-knot, sphere lattice)",',
-    '  "use_hud": true or false — true ONLY for precision/tech-coded trades (dental, auto diagnostics, legal, medical, engineering, security); false for warm trades (restaurant, salon, cafe, bakery)",',
-    '  "editorial_word": "the giant display word set behind the scene, written in the site language",',
-    '  "palette": "which candidate palette you pick, and one line on why it fits the brand",',
-    '  "fonts": "which candidate font pairing you pick, and one line on why",',
-    '  "chapters": ["4-5 items, each formatted \'<message> — <camera move>\' and naming a REAL service/detail from the scrape"],',
-    '  "language": "the ONE language all visible text must use, detected from the scraped content (Dutch, French, or English)",',
-    '  "voice": "the tone of voice for ALL copy, inferred from the scraped content — e.g. \'warm and personal, Dutch je-form\', \'formal and authoritative, Dutch u-form\', \'playful and energetic\'; include the pronoun form for Dutch/French"',
+    ...threeD,
+    '  "palette": "one line on the brand-matched palette direction",',
+    '  "fonts": "which font pairing and why",',
+    '  "language": "the ONE language all visible text must use (Dutch, French, or English), detected from the scrape",',
+    '  "voice": "tone for ALL copy from the scrape — e.g. \'warm, Dutch je-form\' / \'formal, Dutch u-form\'; include pronoun form"',
     '}',
-    '',
-    'If BRAND colours are provided, anchor your "palette" choice to the real brand colours (adapt the',
-    'dominant one into the glow/accent), rather than simply naming a generic candidate palette.',
   ].join('\n');
 }
 
@@ -227,31 +244,49 @@ function extractJson(t) {
   return null;
 }
 
-// Render the approved concept as a locked brief for the build pass.
-function conceptBrief(c) {
+// Render the approved strategy as a locked brief for the build pass.
+function conceptBrief(c, style) {
   if (!c) return '';
-  const chapters = Array.isArray(c.chapters) ? c.chapters.map((x, i) => `    ${i + 1}. ${x}`).join('\n') : '';
-  return [
-    'APPROVED CONCEPT — a creative director has already locked the strategy below.',
+  const cinematic = style !== 'clean';
+  const products = Array.isArray(c.products) && c.products.length ? c.products.join(', ') : '(none found)';
+  const lines = [
+    'APPROVED STRATEGY — a creative director has already locked the thinking below.',
     'BUILD TO IT FAITHFULLY. Do not re-invent it; spend your effort on flawless execution.',
-    'Reproduce it verbatim in the required <!-- CONCEPT: ... --> comment.',
+    (cinematic ? 'Reproduce it verbatim in the required <!-- CONCEPT: ... --> comment.' : ''),
     '',
+    `- archetype: ${c.archetype || ''}`,
+    `- HERO (make this the star of the page): ${c.hero_subject || c.offering || ''}`,
+    `- products/collections (REAL — feature these): ${products}`,
+    `- showcase (how to feature the hero): ${c.showcase || ''}`,
+    (c.archetype === 'product-brand'
+      ? '  → This is a PRODUCT BRAND: the products ARE the story. Showcase each as a crafted, spotlit artefact (a detailed bespoke SVG rendering), grouped by collection, with the flagship given the hero treatment. Do NOT bury them in a generic feature grid.'
+      : ''),
     `- offering: ${c.offering || ''}`,
     `- feeling: ${c.feeling || ''}`,
-    `- 3d story: ${c['3d_story'] || ''}`,
-    `- hologram silhouette (RECIPE G): ${c.silhouette || ''}`,
-    c.silhouette_rationale ? `  (why this shape: ${c.silhouette_rationale})` : '',
-    `- light-strand curve (RECIPE C): ${c.strand_curve || ''}`,
-    `- centrepiece geometry (RECIPE D): ${c.centrepiece || ''}`,
-    `- scan/targeting HUD (RECIPE H): ${c.use_hud ? 'YES — this is a precision/tech trade' : 'NO — warm/casual trade, do not use it'}`,
-    `- editorial poster word: ${c.editorial_word || ''}`,
+  ];
+  if (cinematic) {
+    const chapters = Array.isArray(c.chapters) ? c.chapters.map((x, i) => `    ${i + 1}. ${x}`).join('\n') : '';
+    lines.push(
+      `- 3d story: ${c['3d_story'] || ''}`,
+      `- hologram silhouette (RECIPE G): ${c.silhouette || ''}`,
+      c.silhouette_rationale ? `  (why this shape: ${c.silhouette_rationale})` : '',
+      `- light-strand curve (RECIPE C): ${c.strand_curve || ''}`,
+      `- centrepiece geometry (RECIPE D): ${c.centrepiece || ''}`,
+      `- scan/targeting HUD (RECIPE H): ${c.use_hud ? 'YES — precision/tech trade' : 'NO — warm/casual trade, do not use it'}`,
+      `- editorial poster word: ${c.editorial_word || ''}`,
+      '- chapters (pair each message with its camera move):',
+      chapters,
+    );
+  } else if (Array.isArray(c.sections) && c.sections.length) {
+    lines.push('- section order to build: ' + c.sections.join(' → '));
+  }
+  lines.push(
     `- palette: ${c.palette || ''}`,
     `- fonts: ${c.fonts || ''}`,
     `- language for ALL visible text: ${c.language || 'match the scraped content'}`,
     `- voice — write EVERY line of copy in this tone: ${c.voice || 'match the scraped content'}`,
-    '- chapters (pair each message with its camera move):',
-    chapters,
-  ].join('\n');
+  );
+  return lines.filter((x) => x !== '').join('\n');
 }
 
 // Art-director review for CLEAN / PROFESSIONAL mode (no 3D checks).
@@ -285,6 +320,8 @@ function cleanReviewSystem(hasFrames) {
     '7. MOTION — tasteful reveals on scroll + hover states + focus rings; 150–300ms; prefers-reduced-motion respected; nothing janky; NO WebGL / no external JS libraries.',
     '8. TRUST & COPY — real stats/ratings/credentials surfaced; a prominent primary CTA; copy specific to THIS business (kill generic filler); language consistent (one language, matching the content).',
     '9. TECHNICAL — responsive 375–1440 mobile-first, no horizontal scroll, 44px+ touch targets, 16px+ body; NO external image/photo files (CSS/SVG/logo only); cursor:pointer on clickables; valid, complete, not truncated.',
+    '10. CARD ALIGNMENT — cards in any row must be EQUAL size and aligned on both axes (grid repeat(N,1fr) + align-items:stretch + flex-column cards with CTAs pushed down). Fix any ragged/unequal cards.',
+    '11. HERO FIT — the page makes the right thing the star. If archetype is product-brand, the products must be showcased as crafted artefacts (detailed SVG, spotlit, grouped by collection), flagship largest — NOT a generic icon grid. If products are missing/generic, rebuild that section.',
     '',
     'OUTPUT RULES: Output ONLY the improved HTML document. Start with <!DOCTYPE html>, end with </html>. No markdown, no commentary.',
     'Keep what works; raise everything else. It should look like a different, better agency built it.',
@@ -342,6 +379,8 @@ function reviewSystem(hasFrames, style) {
     '8. HIERARCHY, BRAND & COPY — clear type-scale contrast; deliberate spacing rhythm; max 2 accent colours plus neutrals; hover states and focus rings on interactive elements; copy specific to this business — kill generic filler ("Quality You Can Trust", "We are committed to excellence").',
     '9. TECHNICAL — fully responsive 375px-1440px with no horizontal scroll and reduced particle counts on mobile; NO external image/photo files (only CSS/SVG/canvas/logo); cursor:pointer on clickables; prefers-reduced-motion respected; valid, complete, not truncated.',
     '10. MATERIAL & LIGHT CRAFT (expensive vs junior) — the SOLID centrepiece should use real materials + lighting + reflections and a GLSL fresnel rim (RECIPE I/J), so it looks lit and dimensional, NOT flat single-colour MeshBasicMaterial. Motion should feel weighty and restrained (long eases, one signature hero beat with holds), not busy/uniform junior spinning. If the centrepiece is flat-shaded or the motion is constant and shallow, upgrade it. (Particles/wireframes stay MeshBasic — that is correct.)',
+    '11. CARD ALIGNMENT — cards in any row must be EQUAL size and aligned on both axes (grid repeat(N,1fr) + align-items:stretch + flex-column cards). Fix any ragged/unequal-height cards.',
+    '12. HERO FIT — the page must make the right thing the star. If the concept archetype is product-brand, the products must be showcased as crafted artefacts (detailed SVG, spotlit, grouped by collection) with the flagship as hero — not buried in a generic grid. If products are missing or generic, rebuild that section.',
     '',
     'A UX CHECKLIST follows the HTML — verify each item.',
     '',
@@ -571,26 +610,27 @@ export default {
       const pal = buildPalette(branding.colors, domain, style);
       const palBlock = paletteBrief(pal);
 
-      let html, conceptBriefText = '';
+      // STRATEGY pass (BOTH modes) — expert design thinking: archetype, what to
+      // feature (products vs service), how to showcase it — locked before build.
+      let concept = null, conceptBriefText = '';
+      try {
+        concept = extractJson(await callClaudeStream(
+          env, conceptSystem(style),
+          dirPrefix + ctx + '\n\n' + brief + '\n\n' +
+            (style === 'clean' ? cleanBrief(domain) : (exemplar + '\n\n' + motifBlock(domain))) +
+            '\n\nNow decide the strategy. Output only the JSON object.',
+          null, 2200
+        ));
+        conceptBriefText = conceptBrief(concept, style);
+      } catch { /* strategy optional — build reasons inline if it fails */ }
+
+      let html;
       if (style === 'clean') {
-        // CLEAN / PROFESSIONAL — compose from the section blueprints. No 3D
-        // concept pass (that is cinematic-only); build straight from the brief.
-        const cleanText = dirPrefix + ctx + '\n\n' + palBlock + '\n\n' + brief + '\n\n' + cleanBrief(domain) +
+        const cleanText = dirPrefix + ctx + '\n\n' + palBlock + '\n\n' +
+          (conceptBriefText ? conceptBriefText + '\n\n' : '') + brief + '\n\n' + cleanBrief(domain) +
           '\n\nNow build the complete website.';
         html = extractHtml(await callClaudeStream(env, cleanSystem(), cleanText));
       } else {
-        // CINEMATIC — CONCEPT pass (lock strategy) then build to it.
-        try {
-          const concept = extractJson(await callClaudeStream(
-            env, conceptSystem(),
-            dirPrefix +
-              ctx + '\n\n' + brief + '\n\n' + exemplar + '\n\n' + motifBlock(domain) +
-              '\n\nNow decide the concept. Output only the JSON object.',
-            null, 2000
-          ));
-          conceptBriefText = conceptBrief(concept);
-        } catch { /* concept pass optional — build pass still does STEP 1-3 itself */ }
-
         const buildText = conceptBriefText
           ? dirPrefix + ctx + '\n\n' + palBlock + '\n\n' + brief + '\n\n' + conceptBriefText + '\n\nNow build the complete website to this concept.'
           : dirPrefix + ctx + '\n\n' + palBlock + '\n\n' + brief + '\n\n' + exemplar + '\n\nNow build the complete website.';
@@ -649,6 +689,8 @@ export default {
         ' brandColors=' + ((branding.colors || []).join('|') || 'none') +
         ' paletteSource=' + pal.source +
         ' palette=' + pal.vars['--brand'] + '/' + pal.vars['--accent'] +
+        ' archetype=' + ((concept && concept.archetype) || 'n/a') +
+        ' products=' + ((concept && Array.isArray(concept.products) && concept.products.length) || 0) +
         ' framesSeen=' + frames.length +
         ' renderClean=' + renderClean +
         ' reviewRounds=' + reviews +
@@ -666,6 +708,8 @@ export default {
         brandSource, colorSource,
         paletteSource: pal.source,
         palette: { brand: pal.vars['--brand'], accent: pal.vars['--accent'], bg: pal.vars['--bg'] },
+        archetype: (concept && concept.archetype) || null,
+        productCount: (concept && Array.isArray(concept.products) && concept.products.length) || 0,
         logoFound: !!(branding && branding.logoUrl),
         brandColors: (branding && branding.colors) || [],
         directionUsed: !!direction,
