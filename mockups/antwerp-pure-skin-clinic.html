@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<!-- BUILD DIAG: style=cinematic scrapedChars=75 brandSource=html colorSource=html logoFound=true brandColors=#f6bbe0|#bb5b07|#ff3131|#304254 paletteSource=brand palette=#f53d3d/#f53d3d archetype=practice products=0 imagesFound=0 framesSeen=0 renderClean=true reviewRounds=1 directionUsed=false -->
+<!-- CONCEPT: offering=geavanceerde medische huidbehandelingen voor een zuivere, heldere teint; feeling=klinische zuiverheid en stille zekerheid dat je huid in expertehanden is; 3d-story=een veld koele deeltjes klontert tot een zacht golvend huidoppervlak met glimmende micro-textuur dat bij het scrollen/orbiten glad wordt tot een stralend licht-vangend vlak — de huid gezuiverd en vernieuwd; centrepiece=glowing wireframe skin-surface + serum-droplet zwevend erboven (RECIPE D+G+I+J), light-strand=flat-spiral-galaxy (RECIPE C), hologram=luminous serum droplet boven huid-curve met analyse-HUD (RECIPE H); chapters=1 hero naam+belofte wide drift, 2 klinische aanpak push-in, 3 huid-hologram orbit met HUD, 4 ruw->stralend close approach, 5 boek consultatie settle CTA -->
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Antwerp Pure Skin Clinic — Zuivere, gezonde huid</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brand:#f6bbe0;--brand-2:#bb5b07;--accent:#f6bbe0;--accent-2:#bb5b07;
+  --bg:#0f0709;--ink:#f6eef1;--muted:rgba(246,238,241,0.68);--border:rgba(246,187,224,0.18);
+  --on-brand:#2a0f1e;--slate:#304254;--alert:#ff3131;
+  --z-bg:0;--z-veil:1;--z-content:2;--z-hud:5;--z-banner:50;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Raleway',sans-serif;font-weight:300;line-height:1.6;overflow-x:hidden}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:600;line-height:1.12}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--brand);outline-offset:3px;border-radius:4px}
+
+#gl{position:fixed;inset:0;z-index:var(--z-bg)}
+.veil{position:fixed;inset:0;z-index:var(--z-veil);pointer-events:none;background:radial-gradient(ellipse at center,transparent 28%,rgba(15,7,9,0.6) 100%)}
+
+.banner{position:fixed;top:0;left:0;right:0;z-index:var(--z-banner);background:rgba(48,66,84,0.94);backdrop-filter:blur(8px);color:var(--ink);text-align:center;font-size:12px;letter-spacing:0.5px;padding:8px 12px;border-bottom:1px solid var(--border)}
+
+.content{position:relative;z-index:var(--z-content)}
+.chapter{min-height:100vh;display:flex;align-items:center;padding:130px 6vw 100px;position:relative}
+.inner{position:relative;max-width:1180px;margin:0 auto;width:100%}
+.inner::before{content:'';position:absolute;inset:-70px -90px;z-index:-1;background:radial-gradient(closest-side,rgba(15,7,9,0.82),rgba(15,7,9,0.5) 60%,transparent);filter:blur(4px)}
+
+.tag{font-family:'Raleway',sans-serif;font-weight:600;font-size:12px;letter-spacing:3.5px;text-transform:uppercase;color:var(--brand);margin-bottom:22px;display:inline-block;text-shadow:0 0 20px rgba(246,187,224,0.45)}
+h1{font-size:clamp(3rem,8vw,6rem);letter-spacing:-0.01em;text-shadow:0 2px 40px rgba(15,7,9,0.95)}
+h2{font-size:clamp(2.3rem,5vw,3.9rem);letter-spacing:-0.01em;text-shadow:0 2px 30px rgba(15,7,9,0.95)}
+p{color:var(--muted);text-shadow:0 1px 18px rgba(15,7,9,0.85)}
+.lead{font-size:clamp(1.05rem,1.8vw,1.35rem);max-width:640px;color:var(--ink);opacity:0.94}
+
+.logo-row{display:flex;align-items:center;gap:16px;margin-bottom:30px}
+.logo-row img{height:70px;width:auto;filter:drop-shadow(0 4px 22px rgba(246,187,224,0.35))}
+
+.btn{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:600;font-size:15px;letter-spacing:0.5px;padding:15px 32px;border-radius:40px;border:none;transition:transform .25s ease,box-shadow .25s ease;min-height:48px}
+.btn-primary{background:linear-gradient(120deg,var(--brand),var(--brand-2));color:var(--on-brand);box-shadow:0 8px 30px rgba(246,187,224,0.28)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(246,187,224,0.42)}
+.btn-ghost{background:rgba(48,66,84,0.4);color:var(--ink);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--brand);transform:translateY(-3px)}
+.cta-row{display:flex;gap:16px;flex-wrap:wrap;margin-top:38px}
+
+.hero-inner{display:grid;grid-template-columns:1fr;gap:14px}
+.rating{display:inline-flex;align-items:center;gap:8px;margin-top:32px;font-size:14px;color:var(--muted)}
+.stars{color:var(--brand);letter-spacing:2px}
+
+.poster{position:absolute;z-index:-2;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(7rem,26vw,20rem);letter-spacing:-.02em;color:transparent;-webkit-text-stroke:2px rgba(246,187,224,0.55);pointer-events:none;white-space:nowrap;line-height:.8}
+
+.two-col{display:grid;grid-template-columns:1.05fr 0.95fr;gap:64px;align-items:center}
+.two-col.flip{grid-template-columns:0.95fr 1.05fr}
+.svg-frame{display:flex;justify-content:center}
+
+.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch;margin-top:52px}
+.card{background:rgba(20,10,14,0.92);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:18px;padding:32px 28px;display:flex;flex-direction:column;transition:transform .3s ease,border-color .3s ease}
+.card:hover{transform:translateY(-6px);border-color:var(--brand)}
+.card .ico{margin-bottom:20px}
+.card h3{font-size:1.55rem;margin-bottom:10px}
+.card p{font-size:.96rem}
+.card .span2{grid-column:span 2}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;margin-top:44px;align-items:stretch}
+.stat{background:rgba(20,10,14,0.85);border:1px solid var(--border);border-radius:16px;padding:26px 22px;backdrop-filter:blur(10px)}
+.stat .num{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(2.6rem,5vw,4rem);color:var(--brand);text-shadow:0 0 30px rgba(246,187,224,0.4);line-height:1}
+.stat .lbl{font-size:.88rem;color:var(--muted);margin-top:10px;letter-spacing:1px}
+
+.feat-row{display:flex;gap:24px;align-items:flex-start;margin-top:26px;background:rgba(20,10,14,0.85);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:16px;padding:26px 28px}
+.feat-row .ico{flex-shrink:0}
+.feat-row h3{font-size:1.5rem;margin-bottom:5px}
+.feat-row p{font-size:.95rem}
+
+.quote{max-width:860px}
+.quote blockquote{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.6vw,2.9rem);font-weight:500;color:var(--ink);line-height:1.3;text-shadow:0 2px 30px rgba(15,7,9,0.95)}
+.quote cite{display:block;margin-top:28px;font-style:normal;font-size:.95rem;color:var(--brand);letter-spacing:1.5px}
+
+.cta-card{background:rgba(20,10,14,0.94);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:24px;padding:44px;max-width:560px}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.field input,.field textarea,.field select{width:100%;background:rgba(48,66,84,0.32);border:1px solid var(--border);border-radius:10px;padding:14px 15px;color:var(--ink);font-family:'Raleway',sans-serif;font-size:16px}
+.field input:focus,.field textarea:focus,.field select:focus{outline:2px solid var(--brand);outline-offset:1px;border-color:var(--brand)}
+.form-msg{display:none;margin-top:14px;padding:12px 14px;border-radius:10px;font-size:14px}
+.form-msg.ok{display:block;background:rgba(246,187,224,0.14);border:1px solid var(--brand);color:var(--ink)}
+
+.footer{position:relative;z-index:var(--z-content);background:rgba(15,7,9,0.95);border-top:1px solid var(--border);padding:64px 6vw 40px}
+.footer-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px}
+.footer h4{color:var(--brand);font-size:1.4rem;margin-bottom:16px}
+.footer p,.footer a{font-size:.92rem;color:var(--muted);display:block;margin-bottom:8px}
+.footer a:hover{color:var(--brand)}
+.footer-bot{max-width:1180px;margin:40px auto 0;padding-top:24px;border-top:1px solid var(--border);font-size:.82rem;color:var(--muted)}
+
+.hud{position:fixed;inset:0;z-index:var(--z-hud);pointer-events:none;opacity:0;transition:opacity .5s}
+.hud.show{opacity:1}
+.hud .brk{position:absolute;width:28px;height:28px}
+.hud .reticle{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:340px;height:340px;opacity:.5}
+.hud .scanline{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:340px;height:1px;background:linear-gradient(90deg,transparent,var(--brand),transparent);animation:scan 2.6s ease-in-out infinite}
+@keyframes scan{0%{margin-top:-170px}50%{margin-top:170px}100%{margin-top:-170px}}
+.hud .readout{position:absolute;left:calc(50% + 200px);top:calc(50% - 90px);background:rgba(15,7,9,0.85);backdrop-filter:blur(8px);border:1px solid var(--brand);border-radius:10px;padding:16px 18px;font-family:'Raleway',sans-serif;font-size:11px;letter-spacing:1.5px;min-width:190px}
+.hud .readout .r{display:flex;justify-content:space-between;gap:16px;margin-bottom:8px;color:var(--muted)}
+.hud .readout .r span{color:var(--brand)}
+.hud .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--brand);box-shadow:0 0 10px var(--brand);animation:pulse 1.4s ease-in-out infinite;vertical-align:middle}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+@media(max-width:900px){
+  .two-col,.two-col.flip{grid-template-columns:1fr;gap:40px}
+  .bento{grid-template-columns:1fr}
+  .card .span2{grid-column:span 1}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr}
+  .hud{display:none}
+  .chapter{padding:110px 7vw 80px}
+}
+@media(max-width:480px){
+  body{font-size:16px}
+  .stats{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  #gl{display:none}
+  body{background:radial-gradient(ellipse at 50% 25%,rgba(187,91,7,0.22),var(--bg) 60%)}
+  .hud{display:none}
+  *{animation:none!important}
+}
+</style>
+<style id="brand-lock">:root{--brand:#f53d3d;--brand-2:#f58d47;--accent:#f53d3d;--bg:#110909;--ink:#f4f5f7;--muted:rgba(244,245,247,0.66);--border:rgba(244,245,247,0.14);--on-brand:#0a0a0f;--on-accent:#0a0a0f}</style></head>
+<body>
+
+<div class="banner">Websitevoorbeeld — conceptontwerp voor Antwerp Pure Skin Clinic</div>
+
+<div id="gl"></div>
+<div class="veil"></div>
+
+<div class="hud" id="hud" aria-hidden="true">
+  <div class="brk" style="left:calc(50% - 170px);top:calc(50% - 170px);border-top:1.5px solid var(--brand);border-left:1.5px solid var(--brand)"></div>
+  <div class="brk" style="left:calc(50% + 142px);top:calc(50% - 170px);border-top:1.5px solid var(--brand);border-right:1.5px solid var(--brand)"></div>
+  <div class="brk" style="left:calc(50% - 170px);top:calc(50% + 142px);border-bottom:1.5px solid var(--brand);border-left:1.5px solid var(--brand)"></div>
+  <div class="brk" style="left:calc(50% + 142px);top:calc(50% + 142px);border-bottom:1.5px solid var(--brand);border-right:1.5px solid var(--brand)"></div>
+  <svg class="reticle" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="none" stroke="#f6bbe0" stroke-width="0.5"/><circle cx="50" cy="50" r="30" fill="none" stroke="#f6bbe0" stroke-width="0.5"/><line x1="50" y1="10" x2="50" y2="90" stroke="#f6bbe0" stroke-width="0.4"/><line x1="10" y1="50" x2="90" y2="50" stroke="#f6bbe0" stroke-width="0.4"/></svg>
+  <div class="scanline"></div>
+  <div class="readout">
+    <div class="r">SCAN <span>ACTIEF</span></div>
+    <div class="r">DOEL <span>HUIDANALYSE</span></div>
+    <div class="r">PRECISIE <span>99.2%</span></div>
+    <div class="r">STATUS <span><span class="dot"></span></span></div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- CH1 HERO -->
+  <section class="chapter" id="hero">
+    <div class="poster" style="left:-4vw;bottom:5vh">PURE</div>
+    <div class="inner hero-inner">
+      <div class="logo-row">
+        <img src="https://www.antwerppureskinclinic.be/images/2d0b56e7e51cf11036ad8734bdb67e2d.png" alt="Antwerp Pure Skin Clinic — logo van de huidkliniek">
+      </div>
+      <span class="tag">Huidkliniek · Hartje Antwerpen</span>
+      <h1>Zuivere, gezonde<br>huid begint hier.</h1>
+      <p class="lead">Bij Antwerp Pure Skin Clinic breng je je huid terug naar haar helderste, gezondste staat. Geavanceerde medische huidbehandelingen — met de rust dat je in ervaren, deskundige handen bent.</p>
+      <div class="cta-row">
+        <a href="#cta" class="btn btn-primary">Boek je consultatie</a>
+        <a href="#aanpak" class="btn btn-ghost">Onze aanpak</a>
+      </div>
+      <div class="rating"><span class="stars" aria-hidden="true">★★★★★</span> <span>5,0 op Google · Klapdorp 22a, 2000 Antwerpen</span></div>
+    </div>
+  </section>
+
+  <!-- CH2 AANPAK — offset two-col -->
+  <section class="chapter" id="aanpak">
+    <div class="inner two-col">
+      <div>
+        <span class="tag">Onze klinische aanpak</span>
+        <h2>Eerst begrijpen we jouw huid.</h2>
+        <p class="lead" style="margin-top:22px">Elke huid is anders. Daarom starten we altijd met een grondige huidanalyse en persoonlijk advies — zodat je behandeling precies aansluit op wat jouw huid écht nodig heeft. Geen standaardaanpak, wel doordachte, medisch onderbouwde zorg.</p>
+        <div class="cta-row">
+          <a href="#cta" class="btn btn-ghost">Plan een huidanalyse</a>
+        </div>
+      </div>
+      <div class="svg-frame">
+        <svg width="320" height="320" viewBox="0 0 320 320" aria-hidden="true">
+          <defs>
+            <radialGradient id="g1" cx="50%" cy="45%" r="60%">
+              <stop offset="0%" stop-color="#f6bbe0" stop-opacity="0.6"/>
+              <stop offset="100%" stop-color="#304254" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#f6bbe0"/>
+              <stop offset="100%" stop-color="#bb5b07"/>
+            </linearGradient>
+          </defs>
+          <circle cx="160" cy="150" r="130" fill="url(#g1)"/>
+          <circle cx="160" cy="150" r="98" fill="none" stroke="url(#g2)" stroke-width="1.5" opacity="0.85"/>
+          <circle cx="160" cy="150" r="66" fill="none" stroke="#f6bbe0" stroke-width="1" opacity="0.55"/>
+          <path d="M120 150 Q160 120 200 150 Q160 180 120 150 Z" fill="none" stroke="#f6bbe0" stroke-width="1.5"/>
+          <circle cx="160" cy="150" r="14" fill="none" stroke="#f6bbe0" stroke-width="2"/>
+          <circle cx="160" cy="150" r="5" fill="#f6bbe0"/>
+          <line x1="160" y1="20" x2="160" y2="52" stroke="#f6bbe0" stroke-width="1" opacity="0.6"/>
+          <line x1="160" y1="248" x2="160" y2="280" stroke="#f6bbe0" stroke-width="1" opacity="0.6"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH3 SERVICES BENTO -->
+  <section class="chapter" id="behandelingen">
+    <div class="inner">
+      <span class="tag">Behandelingen</span>
+      <h2>Zorg op maat van jouw huid.</h2>
+      <div class="bento">
+        <div class="card span2">
+          <div class="ico">
+            <svg width="42" height="42" viewBox="0 0 42 42" fill="none" aria-hidden="true"><defs><linearGradient id="i1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6bbe0"/><stop offset="1" stop-color="#bb5b07"/></linearGradient></defs><circle cx="18" cy="18" r="11" stroke="url(#i1)" stroke-width="1.8"/><line x1="26" y1="26" x2="36" y2="36" stroke="#f6bbe0" stroke-width="2" stroke-linecap="round"/><path d="M13 18a5 5 0 015-5" stroke="#f6bbe0" stroke-width="1.4" opacity="0.7"/></svg>
+          </div>
+          <h3>Persoonlijke huidanalyse</h3>
+          <p>We brengen je huidtype, textuur en behoeften nauwkeurig in kaart en bouwen daarrond een behandelplan dat écht bij je past.</p>
+        </div>
+        <div class="card">
+          <div class="ico">
+            <svg width="42" height="42" viewBox="0 0 42 42" fill="none" aria-hidden="true"><defs><linearGradient id="i2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6bbe0"/><stop offset="1" stop-color="#bb5b07"/></linearGradient></defs><circle cx="21" cy="21" r="14" stroke="url(#i2)" stroke-width="1.8"/><path d="M21 7v6M21 29v6M7 21h6M29 21h6" stroke="#bb5b07" stroke-width="1.6"/><circle cx="21" cy="21" r="4.5" fill="#f6bbe0"/></svg>
+          </div>
+          <h3>Gerichte huidverfijning</h3>
+          <p>Behandelingen die poriën verkleinen, textuur verfijnen en de huid zichtbaar gladder en frisser maken.</p>
+        </div>
+        <div class="card">
+          <div class="ico">
+            <svg width="42" height="42" viewBox="0 0 42 42" fill="none" aria-hidden="true"><defs><linearGradient id="i3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6bbe0"/><stop offset="1" stop-color="#bb5b07"/></linearGradient></defs><path d="M21 6C15 14 11 18 11 25a10 10 0 0020 0c0-7-4-11-10-19z" stroke="url(#i3)" stroke-width="1.7" fill="none"/><path d="M16 25a5 5 0 005 5" stroke="#f6bbe0" stroke-width="1.4" opacity="0.7"/></svg>
+          </div>
+          <h3>Herstel &amp; hydratatie</h3>
+          <p>Intensieve verzorging die de huidbarrière herstelt en zorgt voor een diep gehydrateerde, stralende teint.</p>
+        </div>
+        <div class="card">
+          <div class="ico">
+            <svg width="42" height="42" viewBox="0 0 42 42" fill="none" aria-hidden="true"><defs><linearGradient id="i4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6bbe0"/><stop offset="1" stop-color="#bb5b07"/></linearGradient></defs><rect x="9" y="9" width="24" height="24" rx="7" stroke="url(#i4)" stroke-width="1.8"/><circle cx="16" cy="17" r="2.4" fill="#bb5b07"/><circle cx="25" cy="24" r="1.8" fill="#f6bbe0" opacity="0.8"/><path d="M15 21l4 4 7-9" stroke="#f6bbe0" stroke-width="1.8" fill="none" opacity="0.5"/></svg>
+          </div>
+          <h3>Pigment &amp; onzuiverheden</h3>
+          <p>Doelgerichte aanpak van pigmentvlekken en onzuiverheden voor een egale, zuivere huidtint.</p>
+        </div>
+        <div class="card">
+          <div class="ico">
+            <svg width="42" height="42" viewBox="0 0 42 42" fill="none" aria-hidden="true"><defs><linearGradient id="i5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6bbe0"/><stop offset="1" stop-color="#bb5b07"/></linearGradient></defs><path d="M21 7c8 0 14 6 14 14s-6 14-14 14" stroke="url(#i5)" stroke-width="1.8" fill="none"/><path d="M21 35C13 35 7 29 7 21S13 7 21 7" stroke="#bb5b07" stroke-width="1.7" fill="none" opacity="0.7"/><circle cx="21" cy="21" r="3.4" fill="#f6bbe0"/></svg>
+          </div>
+          <h3>Anti-aging zorg</h3>
+          <p>Verfijnde behandelingen die fijne lijntjes verzachten en de huid steviger en jonger laten aanvoelen.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH4 STATS BAND -->
+  <section class="chapter" id="waarom">
+    <div class="inner">
+      <span class="tag">Waarom Pure Skin</span>
+      <h2>Klinische precisie, warme zorg.</h2>
+      <div class="stats">
+        <div class="stat"><div class="num">5,0★</div><div class="lbl">Google-beoordeling</div></div>
+        <div class="stat"><div class="num">100%</div><div class="lbl">Persoonlijk advies</div></div>
+        <div class="stat"><div class="num">1&#8202;op&#8202;1</div><div class="lbl">Individuele begeleiding</div></div>
+        <div class="stat"><div class="num">2000</div><div class="lbl">Hartje Antwerpen</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH5 TRANSFORM — feature rows -->
+  <section class="chapter" id="resultaat">
+    <div class="poster" style="right:-6vw;top:8vh;-webkit-text-stroke:2px rgba(187,91,7,0.55)">HUID</div>
+    <div class="inner">
+      <span class="tag">Van ruw naar stralend</span>
+      <h2>Het zichtbare resultaat.</h2>
+      <div class="feat-row">
+        <div class="ico"><svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true"><defs><linearGradient id="r1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6bbe0"/><stop offset="1" stop-color="#bb5b07"/></linearGradient></defs><circle cx="17" cy="17" r="13" stroke="url(#r1)" stroke-width="1.7"/><path d="M10 17l4.5 4.5L25 11" stroke="#f6bbe0" stroke-width="2.2" fill="none"/></svg></div>
+        <div><h3>Een gladdere, gelijkmatige textuur</h3><p>Waar de huid eerst ruw en oneffen aanvoelde, ontstaat een zichtbaar verfijnd, egaal oppervlak dat het licht mooi vangt.</p></div>
+      </div>
+      <div class="feat-row">
+        <div class="ico"><svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true"><defs><linearGradient id="r2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6bbe0"/><stop offset="1" stop-color="#bb5b07"/></linearGradient></defs><path d="M17 5C12 12 9 15 9 20a8 8 0 0016 0c0-5-3-8-8-15z" stroke="url(#r2)" stroke-width="1.7"/><path d="M13 20a4 4 0 004 4" stroke="#f6bbe0" stroke-width="1.4" opacity="0.7"/></svg></div>
+        <div><h3>Diep gehydrateerd, gezond ogend</h3><p>Een herstelde huidbarrière betekent een huid die voller, veerkrachtiger en van binnenuit stralend aanvoelt.</p></div>
+      </div>
+      <div class="feat-row">
+        <div class="ico"><svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true"><defs><linearGradient id="r3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6bbe0"/><stop offset="1" stop-color="#bb5b07"/></linearGradient></defs><path d="M17 4l2.8 7.4L27 13l-5.6 5 1.7 8.4L17 22.5 10.9 26.4 12.6 18 7 13l7.2-1.6z" stroke="url(#r3)" stroke-width="1.5" fill="none"/></svg></div>
+        <div><h3>Zuivere, heldere teint</h3><p>Pigment en onzuiverheden vervagen, zodat je huid terugkeert naar haar meest pure, natuurlijke gloed.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH6 QUOTE -->
+  <section class="chapter" id="ervaring">
+    <div class="inner quote">
+      <span class="tag">Wat klanten zeggen</span>
+      <blockquote>"Eindelijk een kliniek die écht naar mijn huid kijkt. Deskundig advies, een rustige aanpak en een resultaat waar ik elke ochtend blij van word."</blockquote>
+      <cite>— Tevreden klant · 5,0★ op Google</cite>
+    </div>
+  </section>
+
+  <!-- CH7 CTA -->
+  <section class="chapter" id="cta">
+    <div class="inner two-col flip">
+      <div class="svg-frame">
+        <svg width="300" height="300" viewBox="0 0 300 300" aria-hidden="true">
+          <defs><radialGradient id="drop" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#f6bbe0"/><stop offset="100%" stop-color="#bb5b07"/></radialGradient></defs>
+          <path d="M150 40C120 90 100 120 100 155a50 50 0 00100 0c0-35-20-65-50-115z" fill="url(#drop)" opacity="0.88"/>
+          <ellipse cx="130" cy="130" rx="16" ry="24" fill="#fff" opacity="0.55"/>
+          <path d="M60 250 Q150 210 240 250" fill="none" stroke="#f6bbe0" stroke-width="2" opacity="0.6"/>
+        </svg>
+      </div>
+      <div>
+        <span class="tag">Boek jouw consultatie</span>
+        <h2>Klaar voor een zuiverdere huid?</h2>
+        <div class="cta-card" style="margin-top:26px">
+          <form id="bookForm" novalidate>
+            <div class="field"><label for="f-name">Naam</label><input id="f-name" name="name" type="text" placeholder="Je naam" required autocomplete="name"></div>
+            <div class="field"><label for="f-contact">E-mail of telefoon</label><input id="f-contact" name="contact" type="text" placeholder="Zodat we je kunnen bereiken" required autocomplete="email"></div>
+            <div class="field"><label for="f-goal">Wat wil je bereiken?</label><select id="f-goal" name="goal"><option>Huidanalyse &amp; advies</option><option>Huidverfijning</option><option>Herstel &amp; hydratatie</option><option>Pigment &amp; onzuiverheden</option><option>Anti-aging zorg</option></select></div>
+            <div class="field"><label for="f-msg">Bericht</label><textarea id="f-msg" name="message" rows="3" placeholder="Vertel ons kort over je huid"></textarea></div>
+            <button class="btn btn-primary" style="width:100%;justify-content:center" type="submit" id="submitBtn">Consultatie aanvragen</button>
+            <div class="form-msg" id="formMsg" role="alert" aria-live="polite">Bedankt! We nemen snel contact met je op.</div>
+            <p style="font-size:12px;margin-top:14px;text-align:center">Of bel ons direct: <a href="tel:0479302051" style="color:var(--brand);font-weight:600">0479 30 20 51</a></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <h4>Antwerp Pure Skin Clinic</h4>
+      <p>Geavanceerde medische huidbehandelingen voor een zuivere, gezonde en stralende huid — in het hart van Antwerpen.</p>
+      <p style="margin-top:14px"><span class="stars" style="color:var(--brand)" aria-hidden="true">★★★★★</span> 5,0 op Google</p>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <p>Klapdorp 22a<br>2000 Antwerpen, België</p>
+      <a href="tel:0479302051">0479 30 20 51</a>
+      <a href="https://www.antwerppureskinclinic.be/" target="_blank" rel="noopener">antwerppureskinclinic.be</a>
+    </div>
+    <div>
+      <h4>Behandelingen</h4>
+      <a href="#behandelingen">Huidanalyse</a>
+      <a href="#behandelingen">Huidverfijning</a>
+      <a href="#behandelingen">Herstel &amp; hydratatie</a>
+      <a href="#behandelingen">Pigment &amp; onzuiverheden</a>
+      <a href="#behandelingen">Anti-aging zorg</a>
+    </div>
+  </div>
+  <div class="footer-bot">© <span id="yr"></span> Antwerp Pure Skin Clinic · Conceptontwerp — websitevoorbeeld</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+document.getElementById('yr').textContent=new Date().getFullYear();
+
+// form feedback
+(function(){
+  var form=document.getElementById('bookForm');
+  if(!form)return;
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var btn=document.getElementById('submitBtn'),msg=document.getElementById('formMsg');
+    if(!form.checkValidity()){form.reportValidity();return;}
+    btn.disabled=true;btn.textContent='Verzenden…';
+    setTimeout(function(){
+      btn.disabled=false;btn.textContent='Consultatie aanvragen';
+      msg.classList.add('ok');form.reset();
+    },900);
+  });
+})();
+
+(function(){
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function hasWebGL(){try{var c=document.createElement('canvas');return !!(c.getContext('webgl')||c.getContext('experimental-webgl'));}catch(e){return false;}}
+  if(reduce||!hasWebGL()||!window.THREE)return;
+
+  try{
+  var BG=0x0f0709, ACCENT=0xf6bbe0, ACCENT2=0xbb5b07, SLATE=0x304254;
+  var scene=new THREE.Scene();
+  scene.background=new THREE.Color(BG);
+  scene.fog=new THREE.FogExp2(BG,0.015);
+
+  var camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,400);
+  camera.position.set(0,2,46);
+
+  var renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(innerWidth,innerHeight);
+  document.getElementById('gl').appendChild(renderer.domElement);
+
+  function makeSprite(){var c=document.createElement('canvas');c.width=c.height=64;
+    var g=c.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);
+    r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(0.35,'rgba(255,255,255,.6)');r.addColorStop(1,'rgba(255,255,255,0)');
+    g.fillStyle=r;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c);}
+  var sprite=makeSprite();
+
+  var mobile=innerWidth<768;
+
+  function envTex(){var c=document.createElement('canvas');c.width=64;c.height=32;
+    var g=c.getContext('2d'),gr=g.createLinearGradient(0,0,0,32);
+    gr.addColorStop(0,'#ffe4f2');gr.addColorStop(0.5,'#bb5b07');gr.addColorStop(1,'#0f0709');
+    g.fillStyle=gr;g.fillRect(0,0,64,32);var t=new THREE.CanvasTexture(c);
+    t.mapping=THREE.EquirectangularReflectionMapping;return t;}
+  var env=envTex(); scene.environment=env;
+  scene.add(new THREE.HemisphereLight(0xffffff,BG,0.55));
+  var key=new THREE.PointLight(ACCENT,2.0,140); key.position.set(9,11,15); scene.add(key);
+  var rim=new THREE.PointLight(ACCENT2,1.4,140); rim.position.set(-11,-5,-9); scene.add(rim);
+
+  // B — particle universe
+  var N=mobile?4000:9000, SPREAD=60;
+  var geo=new THREE.BufferGeometry(),pos=new Float32Array(N*3),col=new Float32Array(N*3);
+  var ca=new THREE.Color(ACCENT),cb=new THREE.Color(SLATE),cc=new THREE.Color();
+  for(var i=0;i<N;i++){var r=SPREAD*Math.pow(Math.random(),0.5),th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+    pos[i*3]=r*Math.sin(ph)*Math.cos(th);pos[i*3+1]=r*Math.sin(ph)*Math.sin(th)*0.55;pos[i*3+2]=r*Math.cos(ph);
+    cc.copy(ca).lerp(cb,Math.random());col[i*3]=cc.r;col[i*3+1]=cc.g;col[i*3+2]=cc.b;}
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+  var universe=new THREE.Points(geo,new THREE.PointsMaterial({size:0.55,map:sprite,vertexColors:true,transparent:true,opacity:0.9,depthWrite:false,blending:THREE.AdditiveBlending}));
+  scene.add(universe);
+
+  // C — flat spiral galaxy light-strand
+  function makeStrand(){
+    var M=mobile?1400:2600, sgeo=new THREE.BufferGeometry(), sp=new Float32Array(M*3);
+    var TURNS=4;
+    for(var i=0;i<M;i++){var t=i/M,a=t*Math.PI*2*TURNS,rad=2+t*13,w=0.5*Math.sin(t*30);
+      sp[i*3]=Math.cos(a)*(rad+w);
+      sp[i*3+1]=Math.sin(t*Math.PI*2*2)*1.2;
+      sp[i*3+2]=Math.sin(a)*(rad+w);}
+    sgeo.setAttribute('position',new THREE.BufferAttribute(sp,3));
+    return new THREE.Points(sgeo,new THREE.PointsMaterial({size:0.4,map:sprite,color:ACCENT,transparent:true,opacity:0.75,depthWrite:false,blending:THREE.AdditiveBlending}));
+  }
+  var strandGroup=new THREE.Group();
+  var s1=makeStrand(); strandGroup.add(s1);
+  var s2=makeStrand(); s2.rotation.z=Math.PI; strandGroup.add(s2);
+  strandGroup.rotation.x=-0.5;
+  scene.add(strandGroup);
+
+  // D+I+J — centrepiece
+  var centre=new THREE.Group();
+  var planeGeo=new THREE.PlaneGeometry(11,11,26,26);
+  var pp=planeGeo.attributes.position;
+  var baseZ=[];
+  for(var i=0;i<pp.count;i++){var x=pp.getX(i),y=pp.getY(i);var z=Math.sin(x*0.8)*Math.cos(y*0.8)*0.9+Math.sin(x*2.1)*0.25;baseZ.push(z);pp.setZ(i,z);}
+  planeGeo.computeVertexNormals();
+  var skin=new THREE.Mesh(planeGeo,new THREE.MeshBasicMaterial({color:ACCENT,wireframe:true,transparent:true,opacity:0.55}));
+  skin.rotation.x=-Math.PI/2.3;
+  centre.add(skin);
+  var rough={t:0};
+
+  var coreMat=new THREE.MeshStandardMaterial({color:0x160910,metalness:0.85,roughness:0.22,envMap:env,envMapIntensity:1.1,emissive:new THREE.Color(ACCENT),emissiveIntensity:0.32});
+  var core=new THREE.Mesh(new THREE.SphereGeometry(1.5,32,32),coreMat);
+  core.position.y=2.6; centre.add(core);
+  var fres=new THREE.ShaderMaterial({transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,
+    uniforms:{c:{value:new THREE.Color(ACCENT2)},p:{value:2.8}},
+    vertexShader:'varying float vF;uniform float p;void main(){vec3 n=normalize(normalMatrix*normal);vec4 mv=modelViewMatrix*vec4(position,1.0);vec3 v=normalize(-mv.xyz);vF=pow(1.0-abs(dot(n,v)),p);gl_Position=projectionMatrix*mv;}',
+    fragmentShader:'varying float vF;uniform vec3 c;void main(){gl_FragColor=vec4(c*vF,vF);}'});
+  var shell=new THREE.Mesh(new THREE.SphereGeometry(1.5*1.06,32,32),fres);
+  shell.position.y=2.6; centre.add(shell);
+  scene.add(centre);
+
+  // G — hologram serum droplet
+  var holoGroup=new THREE.Group();
+  scene.add(holoGroup);
+  var shape=new THREE.Shape();
+  shape.moveTo(0,4.5);
+  shape.bezierCurveTo(2.6,0.5,2.6,-1.5,0,-3);
+  shape.bezierCurveTo(-2.6,-1.5,-2.6,0.5,0,4.5);
+  var sgeo2=new THREE.ShapeGeometry(shape,24);
+  var FILL=mobile?900:1800;
+  var idx=sgeo2.index.array, vp=sgeo2.attributes.position;
+  var tris=[],areas=[],total=0;
+  for(var t=0;t<idx.length;t+=3){
+    var a=idx[t],b=idx[t+1],c2=idx[t+2];
+    var ax=vp.getX(a),ay=vp.getY(a),bx=vp.getX(b),by=vp.getY(b),cx=vp.getX(c2),cy=vp.getY(c2);
+    var ar=Math.abs((bx-ax)*(cy-ay)-(cx-ax)*(by-ay))*0.5;
+    tris.push([ax,ay,bx,by,cx,cy]);areas.push(ar);total+=ar;
+  }
+  function pickTri(){var r=Math.random()*total,acc=0;for(var i=0;i<areas.length;i++){acc+=areas[i];if(r<=acc)return tris[i];}return tris[tris.length-1];}
+  var fillTarget=new Float32Array(FILL*3), fillCloud=new Float32Array(FILL*3), fillCur=new Float32Array(FILL*3);
+  for(var i=0;i<FILL;i++){
+    var tr=pickTri(),u=Math.random(),v=Math.random();if(u+v>1){u=1-u;v=1-v;}
+    var px=tr[0]+u*(tr[2]-tr[0])+v*(tr[4]-tr[0]);
+    var py=tr[1]+u*(tr[3]-tr[1])+v*(tr[5]-tr[1]);
+    fillTarget[i*3]=px*1.5; fillTarget[i*3+1]=py*1.5; fillTarget[i*3+2]=(Math.random()-0.5)*1.2;
+    var rr=27+Math.random()*4,th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+    fillCloud[i*3]=rr*Math.sin(ph)*Math.cos(th);fillCloud[i*3+1]=rr*Math.sin(ph)*Math.sin(th);fillCloud[i*3+2]=rr*Math.cos(ph);
+    fillCur[i*3]=fillCloud[i*3];fillCur[i*3+1]=fillCloud[i*3+1];fillCur[i*3+2]=fillCloud[i*3+2];
+  }
+  var fgeo=new THREE.BufferGeometry();fgeo.setAttribute('position',new THREE.BufferAttribute(fillCur,3));
+  var fillPts=new THREE.Points(fgeo,new THREE.PointsMaterial({size:0.24,map:sprite,color:ACCENT,transparent:true,opacity:0.0,depthWrite:false,blending:THREE.AdditiveBlending}));
+  holoGroup.add(fillPts);
+  var OUT=mobile?600:1100;
+  var opts=shape.getPoints(240);
+  var outTarget=new Float32Array(OUT*3),outCloud=new Float32Array(OUT*3),outCur=new Float32Array(OUT*3);
+  for(var i=0;i<OUT;i++){
+    var pt=opts[Math.floor(Math.random()*opts.length)];
+    outTarget[i*3]=pt.x*1.5+(Math.random()-0.5)*0.24;
+    outTarget[i*3+1]=pt.y*1.5+(Math.random()-0.5)*0.24;
+    outTarget[i*3+2]=(Math.random()-0.5)*0.5;
+    var rr=27+Math.random()*4,th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+    outCloud[i*3]=rr*Math.sin(ph)*Math.cos(th);outCloud[i*3+1]=rr*Math.sin(ph)*Math.sin(th);outCloud[i*3+2]=rr*Math.cos(ph);
+    outCur[i*3]=outCloud[i*3];outCur[i*3+1]=outCloud[i*3+1];outCur[i*3+2]=outCloud[i*3+2];
+  }
+  var ogeo=new THREE.BufferGeometry();ogeo.setAttribute('position',new THREE.BufferAttribute(outCur,3));
+  var outPts=new THREE.Points(ogeo,new THREE.PointsMaterial({size:0.4,map:sprite,color:0xffd9ee,transparent:true,opacity:0.0,depthWrite:false,blending:THREE.AdditiveBlending}));
+  holoGroup.add(outPts);
+  var morph={t:0};
+
+  // E — bloom
+  var composer=new THREE.EffectComposer(renderer);
+  composer.addPass(new THREE.RenderPass(scene,camera));
+  var bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.2,0.85,0.12);
+  composer.addPass(bloom);
+
+  // F — camera chapters
+  var cam={x:0,y:2,z:46,ry:0};
+  var mouse={x:0,y:0};
+  if(!mobile){
+    window.addEventListener('mousemove',function(e){mouse.x=(e.clientX/innerWidth-0.5)*2;mouse.y=(e.clientY/innerHeight-0.5)*2;});
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+  var hud=document.getElementById('hud');
+  var bloomBase={v:1.2};
+  var tl=gsap.timeline({scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:1.1}});
+  tl.to(cam,{z:26,y:1.4,ease:'power1.inOut',duration:1},0)
+    .to(cam,{ry:Math.PI*0.5,x:-6,z:22,ease:'power1.inOut',duration:1.4},1)
+    .to(morph,{t:1,ease:'power2.inOut',duration:1},1.1)
+    .to(centre.scale,{x:0.4,y:0.4,z:0.4,ease:'power2.inOut',duration:1},1.1)
+    .to(rough,{t:1,ease:'power2.inOut',duration:1.4},2.4)
+    .to(cam,{z:17,y:-1.2,ry:Math.PI*0.85,x:-3,ease:'power1.inOut',duration:1.2},2.4)
+    .to(morph,{t:0,ease:'power2.in',duration:0.8},3.2)
+    .to(centre.scale,{x:1,y:1,z:1,ease:'power2.inOut',duration:1},3.2)
+    .to(cam,{z:30,y:2,ry:Math.PI*1.15,x:0,ease:'power2.inOut',duration:1.2},4)
+    .to(strandGroup.rotation,{y:Math.PI*1.6,ease:'none',duration:5},0)
+    .to(bloomBase,{v:1.4,ease:'none',duration:1},2.4);
+
+  ScrollTrigger.create({trigger:'#behandelingen',start:'top 70%',end:'bottom 40%',
+    onEnter:function(){if(!mobile)hud.classList.add('show');},
+    onLeave:function(){hud.classList.remove('show');},
+    onEnterBack:function(){if(!mobile)hud.classList.add('show');},
+    onLeaveBack:function(){hud.classList.remove('show');}});
+
+  document.querySelectorAll('.chapter .inner').forEach(function(el){
+    gsap.from(el,{opacity:0,y:60,duration:1,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 78%'}});
+  });
+
+  function animate(){
+    requestAnimationFrame(animate);
+    var t=performance.now()*0.001;
+
+    universe.rotation.y+=0.0009;
+    universe.rotation.x=Math.sin(t*0.15)*0.05;
+    strandGroup.rotation.y+=0.0016;
+    centre.rotation.y+=0.0022;
+    centre.rotation.z=Math.sin(t*0.3)*0.08;
+    core.rotation.y+=0.005;
+    core.position.y=2.6+Math.sin(t*0.6)*0.15; shell.position.y=core.position.y;
+
+    bloom.strength=Math.min(1.6,Math.max(0.8,bloomBase.v+Math.sin(t*0.8)*0.12));
+
+    for(var i=0;i<pp.count;i++){pp.setZ(i,baseZ[i]*(1-rough.t*0.92));}
+    pp.needsUpdate=true;
+
+    for(var k=0;k<FILL*3;k++){fillCur[k]=fillCloud[k]+(fillTarget[k]-fillCloud[k])*morph.t;}
+    fgeo.attributes.position.needsUpdate=true;
+    for(var k=0;k<OUT*3;k++){outCur[k]=outCloud[k]+(outTarget[k]-outCloud[k])*morph.t;}
+    ogeo.attributes.position.needsUpdate=true;
+    fillPts.quaternion.copy(camera.quaternion);
+    outPts.quaternion.copy(camera.quaternion);
+    fillPts.material.opacity=0.5*morph.t;
+    outPts.material.opacity=0.95*morph.t;
+
+    camera.position.z+=(cam.z-camera.position.z)*0.08;
+    camera.position.x=Math.sin(cam.ry)*camera.position.z*0.35+mouse.x*2.2;
+    camera.position.y+=((cam.y-mouse.y*1.6)-camera.position.y)*0.06;
+    camera.lookAt(0,0,0);
+
+    composer.render();
+  }
+  animate();
+
+  window.addEventListener('resize',function(){
+    mobile=innerWidth<768;
+    camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);
+  });
+
+  }catch(e){console.warn('3D scene failed:',e);}
+})();
+</script>
+</body>
+</html>
