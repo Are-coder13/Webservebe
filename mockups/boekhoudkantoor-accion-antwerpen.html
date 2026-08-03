@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<!-- BUILD DIAG: style=cinematic scrapedChars=2383 brandSource=none colorSource=none logoFound=true brandColors=none paletteSource=domain-default palette=#5c81d6/#5c81d6 archetype=practice products=7 imagesFound=5 framesSeen=0 renderClean=true reviewRounds=1 directionUsed=false -->
+<!-- CONCEPT: offering=all-in boekhouding, fiscaliteit en advies tegen een vast marktconform tarief via het AccBooks portaal; feeling=kalme controle en persoonlijk vertrouwen — complexe boekhouding helder en gezellig gemaakt; 3d-story=een wolk verspreide documentdeeltjes drijft in het donker en klikt dan samen tot een geordend grootboekraster (dashboardpaneel) dat oprijst tot financiele balken — ACCION maakt real-time gedigitaliseerde chaos helder; chapters=1 wide establishing drift; 2 push-in + hologram-morph op het AccBooks paneel met HUD-scan (precisie/tech-coded: boekhouding is precisie); 3 orbit langs de service-tiers; 4 warme benadering, de persoon centraal (GEEN HUD hier); 5 settle op het embleem + CTA -->
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boekhoudkantoor ACCION Antwerpen — Uw boekhouder in Antwerpen centrum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+ --brand:#6a90e6;--brand-2:#8a7bf0;--accent:#6a90e6;
+ --bg:#080a10;--bg-rgb:8,10,16;
+ --ink:#f4f5f7;--muted:rgba(244,245,247,0.68);--border:rgba(244,245,247,0.14);
+ --on-brand:#060810;
+ --z-canvas:0;--z-veil:1;--z-content:2;--z-hud:6;--z-nav:50;--z-banner:100;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Open Sans',sans-serif;line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,.disp{font-family:'Poppins',sans-serif;font-weight:600;line-height:1.12;letter-spacing:-0.01em}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+::selection{background:var(--brand);color:var(--on-brand)}
+:focus-visible{outline:2px solid var(--brand);outline-offset:3px;border-radius:4px}
+
+.pvbanner{position:fixed;top:0;left:0;right:0;z-index:var(--z-banner);background:rgba(var(--bg-rgb),0.94);border-bottom:1px solid var(--border);
+ color:var(--muted);font-size:12.5px;letter-spacing:.04em;text-align:center;padding:8px 14px;backdrop-filter:blur(8px)}
+.pvbanner b{color:var(--brand);font-weight:600}
+
+#gl{position:fixed;inset:0;z-index:var(--z-canvas)}
+.veil{position:fixed;inset:0;z-index:var(--z-veil);pointer-events:none;
+ background:radial-gradient(ellipse at 50% 42%,transparent 30%,rgba(var(--bg-rgb),0.5) 78%,rgba(var(--bg-rgb),0.9) 100%)}
+
+.nav{position:fixed;top:33px;left:0;right:0;z-index:var(--z-nav);display:flex;align-items:center;justify-content:space-between;
+ padding:14px 5vw;transition:background .3s,padding .3s}
+.nav.scrolled{background:rgba(var(--bg-rgb),0.85);backdrop-filter:blur(12px);padding:10px 5vw;border-bottom:1px solid var(--border)}
+.nav .brand{display:flex;align-items:center;gap:11px;font-family:'Poppins';font-weight:700;font-size:18px;letter-spacing:.02em}
+.nav .brand .mk{width:32px;height:32px;flex:0 0 auto}
+.nav .links{display:flex;gap:26px;font-size:14px;color:var(--muted)}
+.nav .links a{transition:color .2s;padding:4px 0}
+.nav .links a:hover{color:var(--brand)}
+.nav .navcta{padding:10px 18px;min-height:44px;display:inline-flex;align-items:center;border:1px solid var(--brand);border-radius:40px;color:var(--brand);font-size:13.5px;
+ font-weight:600;cursor:pointer;transition:.2s}
+.nav .navcta:hover{background:var(--brand);color:var(--on-brand)}
+@media(max-width:860px){.nav .links{display:none}}
+
+.chapter{position:relative;z-index:var(--z-content);min-height:100vh;display:flex;align-items:center;padding:120px 5vw}
+.inner{position:relative;max-width:1180px;width:100%;margin:0 auto}
+.inner::before{content:'';position:absolute;inset:-70px -90px;z-index:-1;
+ background:radial-gradient(closest-side,rgba(var(--bg-rgb),0.82),rgba(var(--bg-rgb),0.42) 60%,transparent);filter:blur(4px)}
+.tag{display:inline-flex;align-items:center;gap:8px;font-family:'Poppins';font-size:12px;font-weight:600;letter-spacing:.18em;
+ text-transform:uppercase;color:var(--brand);margin-bottom:22px}
+.tag::before{content:'';width:26px;height:1px;background:var(--brand)}
+h1{font-size:clamp(38px,6.6vw,84px);text-shadow:0 4px 40px rgba(0,0,0,0.9)}
+h2{font-size:clamp(30px,4.4vw,52px);text-shadow:0 3px 30px rgba(0,0,0,0.9)}
+p{text-shadow:0 2px 16px rgba(0,0,0,0.7)}
+.lead{font-size:clamp(16px,1.9vw,21px);color:var(--muted);max-width:560px;margin-top:22px}
+
+.hero .inner{max-width:940px}
+.hero h1 span{color:var(--brand)}
+.herobtns{display:flex;gap:16px;margin-top:38px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 30px;min-height:44px;border-radius:44px;font-family:'Poppins';font-weight:600;
+ font-size:15px;cursor:pointer;transition:.25s;border:1px solid transparent}
+.btn-primary{background:linear-gradient(120deg,var(--brand),var(--brand-2));color:var(--on-brand);
+ box-shadow:0 10px 40px rgba(106,144,230,0.35)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 16px 50px rgba(106,144,230,0.5)}
+.btn-ghost{border-color:var(--border);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--brand);color:var(--brand)}
+.herometa{display:flex;gap:30px;margin-top:52px;flex-wrap:wrap}
+.herometa .m{display:flex;flex-direction:column}
+.herometa .m b{font-family:'Poppins';font-size:24px;color:var(--ink)}
+.herometa .m span{font-size:12.5px;color:var(--muted);letter-spacing:.04em}
+
+/* giant poster word — bright, legible, sparse chapter only */
+.poster{position:absolute;z-index:-1;left:50%;top:44%;transform:translate(-50%,-50%);
+ font-family:'Poppins';font-weight:800;font-size:19vw;letter-spacing:-0.02em;line-height:.8;white-space:nowrap;
+ color:transparent;-webkit-text-stroke:2px rgba(138,164,236,0.55);pointer-events:none;user-select:none}
+
+.two{display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center}
+.two.flip{grid-template-columns:.95fr 1.05fr}
+@media(max-width:860px){.two,.two.flip{grid-template-columns:1fr;gap:36px}}
+
+.portal{position:relative;border:1px solid var(--border);border-radius:16px;background:rgba(12,15,24,0.96);
+ backdrop-filter:blur(10px);padding:20px;box-shadow:0 30px 70px rgba(0,0,0,0.6)}
+.portal .bar{display:flex;align-items:center;gap:7px;margin-bottom:16px}
+.portal .bar i{width:11px;height:11px;border-radius:50%;background:var(--border);display:block}
+.portal .bar i:first-child{background:var(--brand)}
+.portal .bar .lbl{margin-left:auto;font-family:'JetBrains Mono';font-size:10.5px;color:var(--muted);letter-spacing:.1em}
+.portal .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.portal .cell{background:rgba(244,245,247,0.045);border:1px solid var(--border);border-radius:10px;padding:14px}
+.portal .cell.big{grid-column:1/-1}
+.portal .cell h4{font-size:12px;color:var(--muted);font-weight:500;letter-spacing:.05em;margin-bottom:8px}
+.portal .cell .val{font-family:'Poppins';font-size:22px;color:var(--brand);font-weight:600}
+.portal .bars{display:flex;align-items:flex-end;gap:9px;height:56px;margin-top:6px}
+.portal .bars span{flex:1;background:linear-gradient(180deg,var(--brand),var(--brand-2));border-radius:4px 4px 0 0;opacity:.85}
+
+.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch;margin-top:44px}
+@media(max-width:860px){.bento{grid-template-columns:1fr}}
+.card{background:rgba(12,15,24,0.96);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:16px;
+ padding:28px;display:flex;flex-direction:column;transition:.28s}
+.card:hover{border-color:var(--brand);transform:translateY(-5px);box-shadow:0 20px 50px rgba(0,0,0,0.5)}
+.card .ic{width:48px;height:48px;border-radius:11px;background:rgba(106,144,230,0.12);display:flex;align-items:center;
+ justify-content:center;margin-bottom:18px}
+.card h3{font-size:19px;margin-bottom:9px}
+.card p{font-size:14.5px;color:var(--muted);line-height:1.6}
+.card .lnk{margin-top:auto;padding-top:16px;font-family:'Poppins';font-size:13px;font-weight:600;color:var(--brand);
+ display:inline-flex;align-items:center;gap:7px}
+
+.statband{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-top:20px}
+@media(max-width:860px){.statband{grid-template-columns:1fr 1fr}}
+.stat b{font-family:'Poppins';font-weight:700;font-size:clamp(30px,4vw,52px);color:var(--brand);display:block;line-height:1}
+.stat span{color:var(--muted);font-size:14px;margin-top:8px;display:block}
+
+.photo{border-radius:16px;overflow:hidden;border:1px solid var(--border);background:linear-gradient(135deg,#141826,#0d0f16);
+ aspect-ratio:4/3;box-shadow:0 30px 70px rgba(0,0,0,0.55)}
+.photo img{width:100%;height:100%;object-fit:cover}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px;align-items:stretch}
+@media(max-width:860px){.gallery{grid-template-columns:1fr}}
+.gallery .photo{aspect-ratio:3/2;margin:0}
+
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch;margin-top:44px}
+@media(max-width:860px){.quotes{grid-template-columns:1fr}}
+.quote{background:rgba(12,15,24,0.96);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:16px;padding:26px;
+ display:flex;flex-direction:column}
+.quote .stars{display:flex;gap:3px;margin-bottom:14px}
+.quote p{font-size:15px;color:var(--ink);line-height:1.65;font-style:italic}
+.quote .who{margin-top:auto;padding-top:18px;font-family:'Poppins';font-size:13.5px;font-weight:600}
+.quote .who span{display:block;color:var(--muted);font-weight:400;font-size:12.5px;font-family:'Open Sans'}
+
+.ctawrap{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+@media(max-width:860px){.ctawrap{grid-template-columns:1fr;gap:34px}}
+.form{background:rgba(12,15,24,0.97);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:18px;padding:32px}
+.form .row{margin-bottom:16px}
+.form label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:7px;letter-spacing:.04em}
+.form input,.form textarea{width:100%;background:rgba(244,245,247,0.045);border:1px solid var(--border);border-radius:10px;
+ padding:13px 15px;min-height:44px;color:var(--ink);font-family:inherit;font-size:16px;transition:.2s}
+.form input:focus,.form textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(106,144,230,0.25)}
+.form .btn-primary{width:100%;justify-content:center;margin-top:8px}
+.form .btn-primary[disabled]{opacity:.6;cursor:wait}
+.formmsg{margin-top:14px;font-size:13.5px;text-align:center;min-height:20px}
+.formmsg.ok{color:#7fe6a8}
+.contactlist{list-style:none;margin-top:26px}
+.contactlist li{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px;font-size:15px}
+.contactlist svg{flex:0 0 auto;margin-top:3px}
+.contactlist span{color:var(--muted)}
+.contactlist b{display:block;color:var(--ink);font-family:'Poppins';font-size:14.5px;font-weight:600}
+.contactlist a:hover b{color:var(--brand)}
+
+footer{position:relative;z-index:var(--z-content);background:rgba(5,6,11,0.94);backdrop-filter:blur(10px);border-top:1px solid var(--border);
+ padding:60px 5vw 34px}
+.foot{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px}
+@media(max-width:860px){.foot{grid-template-columns:1fr}}
+.foot h4{font-size:14px;letter-spacing:.05em;margin-bottom:16px;color:var(--ink)}
+.foot p,.foot a{font-size:14px;color:var(--muted);line-height:1.9}
+.foot a:hover{color:var(--brand)}
+.footbrand{display:flex;align-items:center;gap:11px;margin-bottom:16px;font-family:'Poppins';font-weight:700;font-size:19px}
+.footbot{max-width:1180px;margin:40px auto 0;padding-top:24px;border-top:1px solid var(--border);
+ display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:12.5px;color:var(--muted)}
+
+.hud{position:fixed;inset:0;z-index:var(--z-hud);pointer-events:none;opacity:0;transition:opacity .5s}
+.hud.show{opacity:1}
+.hud .brk{position:absolute;width:28px;height:28px}
+.hud .brk.tl{top:30%;left:34%;border-top:1.5px solid var(--brand);border-left:1.5px solid var(--brand)}
+.hud .brk.tr{top:30%;right:34%;border-top:1.5px solid var(--brand);border-right:1.5px solid var(--brand)}
+.hud .brk.bl{bottom:30%;left:34%;border-bottom:1.5px solid var(--brand);border-left:1.5px solid var(--brand)}
+.hud .brk.br{bottom:30%;right:34%;border-bottom:1.5px solid var(--brand);border-right:1.5px solid var(--brand)}
+.hud .reticle{position:absolute;top:50%;left:50%;width:150px;height:150px;transform:translate(-50%,-50%);opacity:.5}
+.hud .scanline{position:absolute;top:30%;left:34%;right:34%;height:1px;
+ background:linear-gradient(90deg,transparent,var(--brand),transparent);animation:scan 2.8s ease-in-out infinite}
+@keyframes scan{0%,100%{top:30%}50%{top:70%}}
+.hud .readout{position:absolute;top:33%;right:11%;background:rgba(var(--bg-rgb),0.85);border:1px solid var(--brand);
+ border-radius:8px;padding:12px 14px;backdrop-filter:blur(8px);font-family:'JetBrains Mono';font-size:11px;min-width:180px}
+.hud .readout .r{display:flex;justify-content:space-between;gap:20px;margin:5px 0;color:var(--muted);letter-spacing:.05em}
+.hud .readout .r b{color:var(--brand);font-weight:600}
+.hud .readout .dot{width:8px;height:8px;border-radius:50%;background:var(--brand);
+ box-shadow:0 0 8px var(--brand);animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@media(max-width:768px){.hud{display:none!important}}
+
+@media(prefers-reduced-motion:reduce){
+ #gl{display:none}
+ body{background:radial-gradient(ellipse at 50% 30%,#11162a,var(--bg) 70%)}
+ .hud{display:none}
+ .scanline,.pulse{animation:none}
+ html{scroll-behavior:auto}
+}
+</style>
+<style id="brand-lock">:root{--brand:#5c81d6;--brand-2:#7064d8;--accent:#5c81d6;--bg:#090b11;--ink:#f4f5f7;--muted:rgba(244,245,247,0.66);--border:rgba(244,245,247,0.14);--on-brand:#0a0a0f;--on-accent:#0a0a0f}</style></head>
+<body>
+<div class="pvbanner">Website Preview — concept mockup voor <b>Boekhoudkantoor ACCION Antwerpen</b></div>
+
+<div id="gl"></div>
+<div class="veil"></div>
+
+<div class="hud" id="hud" aria-hidden="true">
+ <div class="brk tl"></div><div class="brk tr"></div><div class="brk bl"></div><div class="brk br"></div>
+ <svg class="reticle" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="none" stroke="#6a90e6" stroke-width="0.6"/><circle cx="50" cy="50" r="30" fill="none" stroke="#6a90e6" stroke-width="0.6"/><line x1="50" y1="8" x2="50" y2="30" stroke="#6a90e6" stroke-width="0.6"/><line x1="50" y1="70" x2="50" y2="92" stroke="#6a90e6" stroke-width="0.6"/><line x1="8" y1="50" x2="30" y2="50" stroke="#6a90e6" stroke-width="0.6"/><line x1="70" y1="50" x2="92" y2="50" stroke="#6a90e6" stroke-width="0.6"/></svg>
+ <div class="scanline"></div>
+ <div class="readout">
+   <div class="r"><span>SCAN</span><b style="display:flex;align-items:center;gap:6px"><span class="dot"></span>ACTIEF</b></div>
+   <div class="r"><span>PORTAAL</span><b>ACCBOOKS</b></div>
+   <div class="r"><span>REALTIME</span><b>99.9%</b></div>
+ </div>
+</div>
+
+<nav class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="ACCION home">
+    <svg class="mk" viewBox="0 0 40 40" fill="none"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a90e6"/><stop offset="1" stop-color="#8a7bf0"/></linearGradient></defs><rect x="4" y="4" width="32" height="32" rx="8" stroke="url(#lg)" stroke-width="2"/><path d="M13 26 L13 18 M20 26 L20 13 M27 26 L27 21" stroke="url(#lg)" stroke-width="2.4" stroke-linecap="round"/></svg>
+    ACCION
+  </a>
+  <div class="links">
+    <a href="#diensten">Diensten</a>
+    <a href="#portaal">AccBooks</a>
+    <a href="#kantoor">Ons kantoor</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <a class="navcta" href="#contact">Plan kennismaking</a>
+</nav>
+
+<!-- CH1 hero — asymmetric -->
+<section class="chapter hero" id="top">
+  <div class="inner">
+    <span class="tag">Boekhoudkantoor · Antwerpen centrum</span>
+    <h1>Uw boekhouding, <span>helder</span> en altijd binnen handbereik.</h1>
+    <p class="lead">All-in boekhouding, fiscaliteit en advies tegen een vast, marktconform tarief — real-time raadpleegbaar via ons eigen AccBooks portaal.</p>
+    <div class="herobtns">
+      <a class="btn btn-primary" href="#contact">Plan een kennismaking
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a class="btn btn-ghost" href="#diensten">Bekijk onze diensten</a>
+    </div>
+    <div class="herometa">
+      <div class="m"><b>4.3★</b><span>Google-beoordeling</span></div>
+      <div class="m"><b>Vast tarief</b><span>Geen verrassingen</span></div>
+      <div class="m"><b>100% digitaal</b><span>AccBooks portaal</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CH2 portal push-in + hologram + HUD (precision-coded) -->
+<section class="chapter" id="portaal">
+  <div class="inner">
+    <div class="two">
+      <div>
+        <span class="tag">Uw boekhouding online</span>
+        <h2>Van papierwerk naar overzicht — real-time via AccBooks.</h2>
+        <p class="lead">Al uw documenten worden gedigitaliseerd, waardoor u uw boekhouding op elk moment kan raadplegen via ons unieke portaal. Geen dozen vol bonnetjes meer — enkel een helder beeld van uw cijfers, waar en wanneer u wil.</p>
+        <div class="herobtns">
+          <a class="btn btn-ghost" href="#contact">Ontdek het portaal</a>
+        </div>
+      </div>
+      <div class="portal" aria-hidden="true">
+        <div class="bar"><i></i><i></i><i></i><span class="lbl">ACCBOOKS · REALTIME</span></div>
+        <div class="grid">
+          <div class="cell"><h4>Omzet dit kwartaal</h4><div class="val">€ 84.200</div></div>
+          <div class="cell"><h4>Openstaand</h4><div class="val">€ 6.480</div></div>
+          <div class="cell big"><h4>Resultaatverloop</h4>
+            <div class="bars"><span style="height:38%"></span><span style="height:55%"></span><span style="height:47%"></span><span style="height:70%"></span><span style="height:62%"></span><span style="height:88%"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CH3 services bento -->
+<section class="chapter" id="diensten">
+  <div class="inner">
+    <span class="tag">Wat doen wij voor u?</span>
+    <h2>Van starter tot vennootschap — wij begeleiden elke ondernemer.</h2>
+    <p class="lead">Eén aanspreekpunt voor uw volledige boekhouding, fiscale optimalisatie en persoonlijk advies. Ontdek de dienst die bij uw situatie past.</p>
+    <div class="bento">
+      <div class="card">
+        <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><defs><linearGradient id="i1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a90e6"/><stop offset="1" stop-color="#8a7bf0"/></linearGradient></defs><rect x="3" y="4" width="18" height="16" rx="2.5" stroke="url(#i1)" stroke-width="1.7"/><path d="M3 9h18M8 4v16" stroke="url(#i1)" stroke-width="1.5"/><circle cx="15" cy="13" r="1.2" fill="#6a90e6"/></svg></div>
+        <h3>Online boekhouding</h3>
+        <p>Volledig gedigitaliseerd via AccBooks. Uw cijfers real-time raadpleegbaar, uw administratie automatisch verwerkt.</p>
+        <span class="lnk">Meer <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5h12a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H9l-4 3v-3a3 3 0 0 1-1-2V8a3 3 0 0 1 3-3Z" stroke="url(#i1)" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 10h8M8 13h5" stroke="#6a90e6" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <h3>Eerstelijnsadvies</h3>
+        <p>Een vraag over facturatie, btw of investeringen? U krijgt snel en helder antwoord van uw vaste contactpersoon.</p>
+        <span class="lnk">Meer <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l5.5 3v6c0 3.6-2.4 6.4-5.5 7.5C8.9 18.4 6.5 15.6 6.5 12V6L12 3Z" stroke="url(#i1)" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 12l1.8 1.8L15 10" stroke="#6a90e6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Starters</h3>
+        <p>Van businessplan tot uw eerste btw-aangifte. Wij loodsen u door de opstart met heldere begeleiding.</p>
+        <span class="lnk">Meer <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" stroke="url(#i1)" stroke-width="1.7"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7" stroke="url(#i1)" stroke-width="1.7" stroke-linecap="round"/></svg></div>
+        <h3>Eenmanszaken</h3>
+        <p>Een all-in aanpak voor de zelfstandige ondernemer: correcte boekhouding en fiscale optimalisatie, zonder zorgen.</p>
+        <span class="lnk">Meer <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6" stroke="url(#i1)" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+        <h3>Vennootschappen</h3>
+        <p>Jaarrekening, vennootschapsbelasting en strategisch advies — alles binnen één betrouwbaar kantoor.</p>
+        <span class="lnk">Meer <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 3h9l3 3v15H6z" stroke="url(#i1)" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 3v4h4M9 12h6M9 16h6" stroke="#6a90e6" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <h3>Vrije beroepen</h3>
+        <p>Specifieke fiscale regels vragen om specifieke kennis. Wij kennen de eigenheden van uw beroep.</p>
+        <span class="lnk">Meer <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CH4 stats + poster word (sparse chapter, no cards) -->
+<section class="chapter" style="min-height:80vh">
+  <div class="poster">HELDERHEID</div>
+  <div class="inner">
+    <span class="tag">Waarom ACCION</span>
+    <div class="two">
+      <div>
+        <h2>Kennis, expertise en een vast tarief waar u op kan rekenen.</h2>
+        <p class="lead">Uitgebreide en doordachte kennis, opgebouwd door jarenlange ervaring in allerhande sectoren. Een sterk geautomatiseerd kantoor waar kwaliteit hoog in het vaandel staat.</p>
+      </div>
+      <div class="statband">
+        <div class="stat"><b>Vast</b><span>Marktconform tarief</span></div>
+        <div class="stat"><b>2</b><span>Kantoren in Antwerpen</span></div>
+        <div class="stat"><b>24/7</b><span>Real-time inzage</span></div>
+        <div class="stat"><b>All-in</b><span>Boekhouding &amp; advies</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CH5 personal + photo + gallery (NO HUD — warm chapter) -->
+<section class="chapter" id="kantoor">
+  <div class="inner">
+    <div class="two flip">
+      <div class="photo"><img loading="lazy" src="http://www.accion.be/images/Ballaarstraat1.jpg" alt="Het ACCION kantoor aan de Ballaarstraat in Antwerpen centrum" onerror="this.parentNode.style.opacity=.4"></div>
+      <div>
+        <span class="tag">Ons kantoor</span>
+        <h2>De persoon achter de onderneming staat bij ons centraal.</h2>
+        <p class="lead">Buiten een correcte en up-to-date boekhouding en fiscale optimalisatie streven wij naar een zo aangename mogelijke samenwerking. Het mag er bij ons dus best ook een beetje gezellig en ongedwongen aan toe gaan — persoonlijk contact, dat maakt het verschil.</p>
+        <div class="herobtns"><a class="btn btn-ghost" href="#contact">Leer ons team kennen</a></div>
+      </div>
+    </div>
+    <div class="gallery">
+      <div class="photo"><img loading="lazy" src="http://www.accion.be/videoframes/frame1.png" alt="Sfeerbeeld van het digitale boekhoudkantoor ACCION" onerror="this.parentNode.style.opacity=.4"></div>
+      <div class="photo"><img loading="lazy" src="http://www.accion.be/images/Havn2.jpg" alt="Zicht op de haven van Antwerpen, de regio van ACCION" onerror="this.parentNode.style.opacity=.4"></div>
+      <div class="photo"><img loading="lazy" src="http://www.accion.be/images/emptyChair5.png" alt="Een plek voor u aan tafel bij ACCION — ontspannen en persoonlijk" onerror="this.parentNode.style.opacity=.4"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CH reviews -->
+<section class="chapter" id="reviews" style="min-height:80vh">
+  <div class="inner">
+    <span class="tag">Wat klanten zeggen · 4.3★ op Google</span>
+    <h2>Ondernemers die rust vonden bij ACCION.</h2>
+    <div class="quotes">
+      <div class="quote">
+        <div class="stars" aria-label="5 op 5 sterren">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#6a90e6" aria-hidden="true"><path d="M12 2l3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#6a90e6" aria-hidden="true"><path d="M12 2l3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#6a90e6" aria-hidden="true"><path d="M12 2l3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#6a90e6" aria-hidden="true"><path d="M12 2l3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#6a90e6" aria-hidden="true"><path d="M12 2l3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg>
+        </div>
+        <p>"Eindelijk een boekhouder waar ik terecht kan met al mijn vragen. Alles online, altijd overzicht en steeds vriendelijk antwoord."</p>
+        <div class="who">Els V.<span>Zaakvoerder eenmanszaak</span></div>
+      </div>
+      <div class="quote">
+        <div class="stars" aria-label="5 op 5 sterren">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#6a90e6" aria-hidden="true"><path d="M12 2l3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#6a90e6" aria-hidden="true"><path d="M12 2l3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#6a90e6" aria-hidden="true"><path d="M12 2l3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#6a90e6" aria-hidden="true"><path d="M12 2l3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#6a90e6" aria-hidden="true"><path d="M12 2l3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg>
+        </div>
+        <p>"Het AccBooks portaal is een verademing. Ik zie mijn cijfers in real time en weet precies waar ik sta — ideaal als starter."</p>
+        <div class="who">Karim B.<span>Starter · Antwerpen</span></div>
+      </div>
+      <div class="quote">
+        <div class="stars" aria-label="4 op 5 sterren">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#6a90e6" aria-hidden="true"><path d="M12 2l3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#6a90e6" aria-hidden="true"><path d="M12 2l3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#6a90e6" aria-hidden="true"><path d="M12 2l3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="#6a90e6" aria-hidden="true"><path d="M12 2l3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6a90e6" stroke-width="1.5" aria-hidden="true"><path d="M12 2l3 6.5 7 .6-5.3 4.6 1.6 6.8L12 17.3 5.7 20.5l1.6-6.8L2 9.1l7-.6z"/></svg>
+        </div>
+        <p>"Correct werk, een vast tarief zonder verrassingen en een echt persoonlijke aanpak. Precies wat je van je boekhouder verwacht."</p>
+        <div class="who">Sofie D.<span>Vennootschap · vrij beroep</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CH CTA -->
+<section class="chapter" id="contact">
+  <div class="inner">
+    <div class="ctawrap">
+      <div>
+        <span class="tag">Contact</span>
+        <h2>Klaar voor een boekhouding zonder zorgen?</h2>
+        <p class="lead">Plan een vrijblijvende kennismaking. We bespreken uw situatie, tonen u het AccBooks portaal en bezorgen u een helder voorstel tegen een vast tarief.</p>
+        <ul class="contactlist">
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z" stroke="#6a90e6" stroke-width="1.6"/><circle cx="12" cy="10" r="2.5" stroke="#6a90e6" stroke-width="1.6"/></svg><span><b>Ballaarstraat 68, 2018 Antwerpen</b>Jan Van Asperenpad 3 bus 202, 2000 Antwerpen</span></li>
+          <li><a href="tel:+3233377450" style="display:flex;gap:14px;align-items:flex-start"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5c0 8 7 15 15 15l-.5-4-4-1.5-2 2c-2.5-1.5-4.5-3.5-6-6l2-2L11 4.5 7 4Z" stroke="#6a90e6" stroke-width="1.6" stroke-linejoin="round"/></svg><span><b>+32 3 337 74 50</b>Bereikbaar op werkdagen</span></a></li>
+          <li><a href="mailto:Info@accion.be" style="display:flex;gap:14px;align-items:flex-start"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="#6a90e6" stroke-width="1.6"/><path d="M4 7l8 6 8-6" stroke="#6a90e6" stroke-width="1.6"/></svg><span><b>Info@accion.be</b>We antwoorden binnen één werkdag</span></a></li>
+        </ul>
+      </div>
+      <form class="form" id="contactForm" novalidate>
+        <div class="row"><label for="f-naam">Naam</label><input id="f-naam" name="naam" type="text" placeholder="Uw naam" required></div>
+        <div class="row"><label for="f-mail">E-mail</label><input id="f-mail" name="email" type="email" placeholder="u@voorbeeld.be" required></div>
+        <div class="row"><label for="f-tel">Telefoon</label><input id="f-tel" name="tel" type="tel" placeholder="+32 ..."></div>
+        <div class="row"><label for="f-vraag">Uw vraag</label><textarea id="f-vraag" name="vraag" rows="3" placeholder="Vertel ons kort over uw onderneming"></textarea></div>
+        <button class="btn btn-primary" type="submit" id="submitBtn">Verzend aanvraag
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="formmsg" id="formMsg" role="status" aria-live="polite"></div>
+        <p style="font-size:11.5px;color:var(--muted);margin-top:10px;text-align:center">Dit is een conceptformulier voor de preview.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot">
+    <div>
+      <div class="footbrand">
+        <svg width="34" height="34" viewBox="0 0 40 40" fill="none" aria-hidden="true"><rect x="4" y="4" width="32" height="32" rx="8" stroke="url(#lg)" stroke-width="2"/><path d="M13 26 L13 18 M20 26 L20 13 M27 26 L27 21" stroke="url(#lg)" stroke-width="2.4" stroke-linecap="round"/></svg>
+        ACCION
+      </div>
+      <p>Uw boekhouder te Antwerpen centrum. All-in boekhouding, fiscaliteit en advies tegen een vast, voordelig tarief — volledig digitaal via het AccBooks portaal.</p>
+    </div>
+    <div>
+      <h4>Diensten</h4>
+      <p><a href="#diensten">Online boekhouding</a><br><a href="#diensten">Eerstelijnsadvies</a><br><a href="#diensten">Starters</a><br><a href="#diensten">Eenmanszaken</a><br><a href="#diensten">Vennootschappen</a><br><a href="#diensten">Vrije beroepen</a></p>
+    </div>
+    <div>
+      <h4>Locaties</h4>
+      <p>Ballaarstraat 68<br>2018 Antwerpen</p>
+      <p>Jan Van Asperenpad 3 bus 202<br>2000 Antwerpen</p>
+      <p><a href="tel:+3233377450">Tel: +32 3 337 74 50</a><br><a href="mailto:Info@accion.be">Info@accion.be</a></p>
+    </div>
+  </div>
+  <div class="footbot">
+    <span>© ACCION BV 2024 · BE 0836.494.841 · ITAA 50.021.482</span>
+    <span>Concept mockup — geen officiële website</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+var nav=document.getElementById('nav');
+window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>40)});
+
+// form feedback
+var form=document.getElementById('contactForm');
+if(form){form.addEventListener('submit',function(e){
+ e.preventDefault();
+ var btn=document.getElementById('submitBtn'),msg=document.getElementById('formMsg');
+ var naam=document.getElementById('f-naam'),mail=document.getElementById('f-mail');
+ msg.className='formmsg';
+ if(!naam.value.trim()||!mail.value.trim()){msg.textContent='Vul uw naam en e-mailadres in.';msg.style.color='#ff9d9d';return;}
+ btn.disabled=true;btn.textContent='Versturen…';
+ setTimeout(function(){btn.disabled=false;btn.textContent='Verzend aanvraag';msg.className='formmsg ok';
+  msg.textContent='Bedankt! We nemen binnen één werkdag contact op.';form.reset();},900);
+});}
+
+var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function hasWebGL(){try{var c=document.createElement('canvas');return !!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl')))}catch(e){return false}}
+
+(function(){
+if(reduce||!hasWebGL()||!window.THREE)return;
+try{
+var BG=0x080a10, ACCENT=0x6a90e6, ACCENT2=0x8a7bf0;
+var mobile=innerWidth<768;
+var scene=new THREE.Scene();
+scene.background=new THREE.Color(BG);
+scene.fog=new THREE.FogExp2(BG,0.016);
+var camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,400);
+camera.position.set(0,2,46);
+
+var renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.setSize(innerWidth,innerHeight);
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.0;
+document.getElementById('gl').appendChild(renderer.domElement);
+
+function makeSprite(){var c=document.createElement('canvas');c.width=c.height=64;
+ var g=c.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);
+ r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(0.35,'rgba(255,255,255,.6)');r.addColorStop(1,'rgba(255,255,255,0)');
+ g.fillStyle=r;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c);}
+var sprite=makeSprite();
+
+function envTex(){var c=document.createElement('canvas');c.width=64;c.height=32;
+ var g=c.getContext('2d'),gr=g.createLinearGradient(0,0,0,32);
+ gr.addColorStop(0,'#aec4ff');gr.addColorStop(0.5,'#6a90e6');gr.addColorStop(1,'#080a10');
+ g.fillStyle=gr;g.fillRect(0,0,64,32);var t=new THREE.CanvasTexture(c);
+ t.mapping=THREE.EquirectangularReflectionMapping;return t;}
+var env=envTex(); scene.environment=env;
+
+scene.add(new THREE.HemisphereLight(0xffffff,BG,0.55));
+var key=new THREE.PointLight(ACCENT,2.0,140); key.position.set(9,11,15); scene.add(key);
+var rim=new THREE.PointLight(ACCENT2,1.4,140); rim.position.set(-11,-5,-9); scene.add(rim);
+
+// particle universe (documentdeeltjes)
+var N=mobile?4200:8500, SPREAD=60;
+var geo=new THREE.BufferGeometry(),pos=new Float32Array(N*3),col=new Float32Array(N*3);
+var ca=new THREE.Color(ACCENT),cb=new THREE.Color(ACCENT2),c=new THREE.Color();
+for(var i=0;i<N;i++){var r=SPREAD*Math.pow(Math.random(),0.5),th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+ pos[i*3]=r*Math.sin(ph)*Math.cos(th);pos[i*3+1]=r*Math.sin(ph)*Math.sin(th)*0.55;pos[i*3+2]=r*Math.cos(ph);
+ c.copy(ca).lerp(cb,Math.random());col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;}
+geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+var universe=new THREE.Points(geo,new THREE.PointsMaterial({size:0.55,map:sprite,vertexColors:true,transparent:true,opacity:0.9,depthWrite:false,blending:THREE.AdditiveBlending}));
+scene.add(universe);
+
+// helix strands
+function strand(rot,color){
+ var M=mobile?900:1600, TURNS=7, RADIUS=8, HEIGHT=42;
+ var g=new THREE.BufferGeometry(),p=new Float32Array(M*3);
+ for(var i=0;i<M;i++){var t=i/M,a=t*Math.PI*2*TURNS,w=0.35*Math.sin(t*40);
+  p[i*3]=Math.cos(a)*(RADIUS+w);p[i*3+1]=(t-0.5)*HEIGHT;p[i*3+2]=Math.sin(a)*(RADIUS+w);}
+ g.setAttribute('position',new THREE.BufferAttribute(p,3));
+ var pt=new THREE.Points(g,new THREE.PointsMaterial({size:0.42,map:sprite,color:color,transparent:true,opacity:0.85,depthWrite:false,blending:THREE.AdditiveBlending}));
+ pt.rotation.y=rot; return pt;
+}
+var strandGroup=new THREE.Group();
+strandGroup.add(strand(0,ACCENT)); strandGroup.add(strand(Math.PI,ACCENT2));
+scene.add(strandGroup);
+
+// centrepiece: AccBooks emblem
+var centre=new THREE.Group();
+var shell=new THREE.Mesh(new THREE.IcosahedronGeometry(3.4,1),new THREE.MeshBasicMaterial({color:ACCENT,wireframe:true,transparent:true,opacity:0.5}));
+centre.add(shell);
+var coreMat=new THREE.MeshStandardMaterial({color:0x0b0b12,metalness:0.85,roughness:0.22,envMap:env,envMapIntensity:1.1,emissive:new THREE.Color(ACCENT),emissiveIntensity:0.32});
+var core=new THREE.Mesh(new THREE.IcosahedronGeometry(1.9,0),coreMat);
+centre.add(core);
+var fres=new THREE.ShaderMaterial({transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,
+ uniforms:{c:{value:new THREE.Color(ACCENT2)},p:{value:2.8}},
+ vertexShader:'varying float vF;uniform float p;void main(){vec3 n=normalize(normalMatrix*normal);vec4 mv=modelViewMatrix*vec4(position,1.0);vec3 v=normalize(-mv.xyz);vF=pow(1.0-abs(dot(n,v)),p);gl_Position=projectionMatrix*mv;}',
+ fragmentShader:'varying float vF;uniform vec3 c;void main(){gl_FragColor=vec4(c*vF,vF);}'});
+var rimM=new THREE.Mesh(new THREE.IcosahedronGeometry(1.9,0),fres); rimM.scale.setScalar(1.06); centre.add(rimM);
+var ring=new THREE.Mesh(new THREE.TorusGeometry(5.2,0.03,8,120),new THREE.MeshBasicMaterial({color:ACCENT2}));
+ring.rotation.x=Math.PI/2.4; centre.add(ring);
+var barGroup=new THREE.Group();
+var bh=[1.6,2.6,3.6];
+for(var b=0;b<3;b++){
+ var bar=new THREE.Mesh(new THREE.BoxGeometry(0.5,bh[b],0.5),new THREE.MeshBasicMaterial({color:ACCENT,transparent:true,opacity:0.75}));
+ bar.position.set((b-1)*0.9,bh[b]/2-1.8,0);
+ barGroup.add(bar);
+}
+centre.add(barGroup);
+scene.add(centre);
+
+// hologram: AccBooks dashboard panel silhouette
+function roundedRectShape(w,h,r){
+ var s=new THREE.Shape();
+ s.moveTo(-w/2+r,-h/2);
+ s.lineTo(w/2-r,-h/2); s.quadraticCurveTo(w/2,-h/2,w/2,-h/2+r);
+ s.lineTo(w/2,h/2-r); s.quadraticCurveTo(w/2,h/2,w/2-r,h/2);
+ s.lineTo(-w/2+r,h/2); s.quadraticCurveTo(-w/2,h/2,-w/2,h/2-r);
+ s.lineTo(-w/2,-h/2+r); s.quadraticCurveTo(-w/2,-h/2,-w/2+r,-h/2);
+ return s;
+}
+var panelShape=roundedRectShape(11,7,0.9);
+var MP=mobile?2000:3600;
+var holoPos=new Float32Array(MP*3), holoTarget=new Float32Array(MP*3), holoStart=new Float32Array(MP*3);
+var shapeGeo=new THREE.ShapeGeometry(panelShape,24);
+var vArr=shapeGeo.attributes.position.array, idx=shapeGeo.index.array;
+var tris=[],areas=[],total=0;
+for(var ti=0;ti<idx.length;ti+=3){
+ var a=[vArr[idx[ti]*3],vArr[idx[ti]*3+1]], bb=[vArr[idx[ti+1]*3],vArr[idx[ti+1]*3+1]], cc=[vArr[idx[ti+2]*3],vArr[idx[ti+2]*3+1]];
+ var ar=Math.abs((bb[0]-a[0])*(cc[1]-a[1])-(cc[0]-a[0])*(bb[1]-a[1]))/2;
+ tris.push([a,bb,cc]); areas.push(ar); total+=ar;
+}
+function samplePanel(){
+ var pk=Math.random()*total,acc=0,ci=0;
+ for(var k=0;k<areas.length;k++){acc+=areas[k];if(pk<=acc){ci=k;break}}
+ var t=tris[ci], u=Math.random(),v=Math.random(); if(u+v>1){u=1-u;v=1-v;}
+ var x=t[0][0]+u*(t[1][0]-t[0][0])+v*(t[2][0]-t[0][0]);
+ var y=t[0][1]+u*(t[1][1]-t[0][1])+v*(t[2][1]-t[0][1]);
+ return [x,y];
+}
+for(var i=0;i<MP;i++){
+ var sp=samplePanel();
+ holoTarget[i*3]=sp[0]; holoTarget[i*3+1]=sp[1]; holoTarget[i*3+2]=(Math.random()-0.5)*1.2;
+ var rr=26+Math.random()*4, tt=Math.random()*Math.PI*2, pp=Math.acos(2*Math.random()-1);
+ holoStart[i*3]=rr*Math.sin(pp)*Math.cos(tt); holoStart[i*3+1]=rr*Math.sin(pp)*Math.sin(tt); holoStart[i*3+2]=rr*Math.cos(pp);
+ holoPos[i*3]=holoStart[i*3]; holoPos[i*3+1]=holoStart[i*3+1]; holoPos[i*3+2]=holoStart[i*3+2];
+}
+var holoGeo=new THREE.BufferGeometry(); holoGeo.setAttribute('position',new THREE.BufferAttribute(holoPos,3));
+var holo=new THREE.Points(holoGeo,new THREE.PointsMaterial({size:0.28,map:sprite,color:ACCENT,transparent:true,opacity:0.55,depthWrite:false,blending:THREE.AdditiveBlending}));
+holo.visible=false; scene.add(holo);
+var pts=panelShape.getPoints(240);
+var OL=mobile?900:1500;
+var olPos=new Float32Array(OL*3), olTarget=new Float32Array(OL*3), olStart=new Float32Array(OL*3);
+for(var i=0;i<OL;i++){
+ var p=pts[Math.floor(Math.random()*pts.length)];
+ olTarget[i*3]=p.x+(Math.random()-0.5)*0.24; olTarget[i*3+1]=p.y+(Math.random()-0.5)*0.24; olTarget[i*3+2]=(Math.random()-0.5)*0.5;
+ var rr=26+Math.random()*4, tt=Math.random()*Math.PI*2, pp=Math.acos(2*Math.random()-1);
+ olStart[i*3]=rr*Math.sin(pp)*Math.cos(tt); olStart[i*3+1]=rr*Math.sin(pp)*Math.sin(tt); olStart[i*3+2]=rr*Math.cos(pp);
+ olPos[i*3]=olStart[i*3]; olPos[i*3+1]=olStart[i*3+1]; olPos[i*3+2]=olStart[i*3+2];
+}
+var olGeo=new THREE.BufferGeometry(); olGeo.setAttribute('position',new THREE.BufferAttribute(olPos,3));
+var olMat=new THREE.PointsMaterial({size:0.42,map:sprite,color:0xaec4ff,transparent:true,opacity:0.95,depthWrite:false,blending:THREE.AdditiveBlending});
+var outline=new THREE.Points(olGeo,olMat); outline.visible=false; scene.add(outline);
+
+var morph={t:0};
+
+var composer=new THREE.EffectComposer(renderer);
+composer.addPass(new THREE.RenderPass(scene,camera));
+var bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.25,0.85,0.12);
+composer.addPass(bloom);
+
+var cam={x:0,y:2,z:46,ry:0};
+var mouse={x:0,y:0};
+if(!mobile){
+ window.addEventListener('mousemove',function(e){mouse.x=(e.clientX/innerWidth-0.5)*2;mouse.y=(e.clientY/innerHeight-0.5)*2;});
+}
+
+var hudEl=document.getElementById('hud');
+gsap.registerPlugin(ScrollTrigger);
+var tl=gsap.timeline({scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:1.1}});
+tl.to(cam,{z:26,y:1.5,ease:'power2.inOut',duration:1},0)
+  .to(cam,{z:18,y:0.5,ry:Math.PI*0.35,ease:'power2.inOut',duration:1},1)
+  .to(cam,{z:16,y:-0.6,ry:Math.PI*0.85,ease:'power2.inOut',duration:1},2)
+  .to(cam,{z:20,y:1,ry:Math.PI*1.1,ease:'power2.inOut',duration:1},3)
+  .to(strandGroup.rotation,{y:Math.PI*1.8,ease:'none',duration:4},0);
+
+var htl=gsap.timeline({scrollTrigger:{trigger:'#portaal',start:'top 70%',end:'bottom top',scrub:1.2}});
+htl.call(function(){holo.visible=true;outline.visible=true;centre.visible=false;if(!mobile)hudEl.classList.add('show');},null,0)
+   .to(morph,{t:1,ease:'power2.out',duration:0.8},0)
+   .to(morph,{t:1,duration:0.6},0.8)
+   .call(function(){hudEl.classList.remove('show');},null,1.4)
+   .to(morph,{t:0,ease:'power2.in',duration:0.7},1.5)
+   .call(function(){holo.visible=false;outline.visible=false;centre.visible=true;},null,2.3);
+
+function animate(){
+ requestAnimationFrame(animate);
+ var t=performance.now()*0.001;
+ universe.rotation.y+=0.0009; universe.rotation.x=Math.sin(t*0.15)*0.05;
+ strandGroup.rotation.y+=0.0016;
+ centre.rotation.y+=0.0022; centre.rotation.z=Math.sin(t*0.3)*0.08;
+ barGroup.children.forEach(function(bar,bi){bar.scale.y=1+Math.sin(t*0.8+bi)*0.08;});
+ bloom.strength=1.25+Math.sin(t*0.8)*0.12;
+
+ if(holo.visible||outline.visible){
+  var hp=holoGeo.attributes.position.array;
+  for(var k=0;k<MP*3;k++){hp[k]=holoStart[k]+(holoTarget[k]-holoStart[k])*morph.t;}
+  holoGeo.attributes.position.needsUpdate=true;
+  var op=olGeo.attributes.position.array;
+  for(var k=0;k<OL*3;k++){op[k]=olStart[k]+(olTarget[k]-olStart[k])*morph.t;}
+  olGeo.attributes.position.needsUpdate=true;
+  holo.quaternion.copy(camera.quaternion); outline.quaternion.copy(camera.quaternion);
+ }
+
+ camera.position.z+=(cam.z-camera.position.z)*0.08;
+ var px=mobile?0:mouse.x*2.2, py=mobile?0:mouse.y*1.6;
+ camera.position.x=Math.sin(cam.ry)*camera.position.z*0.35+px;
+ camera.position.y+=((cam.y-py)-camera.position.y)*0.06;
+ camera.lookAt(0,0,0);
+ composer.render();
+}
+animate();
+
+window.addEventListener('resize',function(){
+ camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix();
+ renderer.setSize(innerWidth,innerHeight); composer.setSize(innerWidth,innerHeight);
+});
+
+gsap.utils.toArray('.chapter .inner').forEach(function(el){
+ gsap.from(el,{opacity:0,y:60,duration:1,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 78%'}});
+});
+
+}catch(e){console.warn('3D scene failed:',e);}
+})();
+</script>
+</body>
+</html>
