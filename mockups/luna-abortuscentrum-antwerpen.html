@@ -1,486 +1,423 @@
 <!DOCTYPE html>
-<!-- CONCEPT: offering=vertrouwelijke, professionele zwangerschapsafbreking en onbevooroordeelde begeleiding in een veilige medische omgeving; feeling=kalm, gedragen, gerustgesteld; 3d-story=een zacht veld van drijvende deeltjes verzamelt zich tot een stabiele gloeiende halo van licht die een warm kernpunt koestert — een omhelzing, geen machine; hologram=beschermende open ring die een centraal lichtpunt cradelt; chapters=1 veilig&welkom (wide fade-in), 2 vertrouwelijke begeleiding (push-in), 3 halo vormt zich/jouw keuze (orbit+hologram), 4 deskundige zorg in Antwerpen (close approach), 5 contact (settle). NOTE: warm/casual-coded care trade — NO scan/targeting HUD. -->
+<!-- BUILD DIAG: style=cinematic scrapedChars=4000 brandSource=html colorSource=html logoFound=true brandColors=#abb8c3|#f78da7|#cf2e2e|#ff6900 paletteSource=brand palette=#f5893d/#f5893d archetype=service products=0 imagesFound=0 framesSeen=0 renderClean=true reviewRounds=1 directionUsed=false -->
+<!-- CONCEPT: offering=psychosociale begeleiding en medische abortuszorg bij ongeplande zwangerschap; feeling=veilig, zonder oordeel, kalm — de rust van tijd krijgen en serieus genomen worden; 3d-story=een zacht gloeiende bol geborgen in een open, beschermende geometrie (gekromde handen) met deeltjes die naar binnen bewegen en tot rust komen — warm, nooit klinisch; chapters=1 Ongepland zwanger? Wij nemen de tijd (wide establish), 2 Eerste consultatie zonder oordeel (push-in), 3 Behandelmethoden — handen vormen (soft orbit), 4 Nazorg & chathulp (close warm approach), 5 Afspraak/chat (settle), 6 Anticonceptie & noodanticonceptie (drift out) -->
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LUNA abortuscentrum Antwerpen — veilig, vertrouwelijk, zonder oordeel</title>
+<title>LUNA abortuscentrum Antwerpen — Ruimte om je eigen keuze te maken</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0a1f1c;
-  --bg-rgb:10,31,28;
-  --accent:#2DD4BF;
-  --accent2:#38BDF8;
-  --accent-light:#7FF0DE;
-  --primary:#0F766E;
-  --fg:#EDFBF7;
-  --muted:#B4D8D0;
-  --border:rgba(127,240,222,.24);
-  --z-veil:1;
-  --z-content:2;
-  --z-nav:50;
+  --brand:#f5893d;--brand-2:#f5d447;--accent:#f5893d;
+  --bg:#110c09;--bg-rgb:17,12,9;
+  --ink:#f4f5f7;--muted:rgba(244,245,247,0.68);--border:rgba(244,245,247,0.14);
+  --on-brand:#221206;--on-accent:#221206;
+  --z-canvas:0;--z-veil:1;--z-content:2;--z-hud:5;--z-nav:40;--z-banner:100;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{
-  font-family:'Open Sans',sans-serif;
-  background:var(--bg);
-  color:var(--fg);
-  overflow-x:hidden;
-  line-height:1.7;
-}
-h1,h2,h3,.pop{font-family:'Poppins',sans-serif;font-weight:600;line-height:1.15}
+body{font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden;line-height:1.65}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;font-weight:600;line-height:1.15}
+:focus-visible{outline:2px solid var(--brand-2);outline-offset:3px;border-radius:6px}
 
-.preview-banner{
-  position:fixed;top:0;left:0;right:0;z-index:var(--z-nav);
-  background:rgba(10,31,28,.94);
-  backdrop-filter:blur(10px);
-  border-bottom:1px solid var(--border);
-  color:var(--muted);
-  font-size:12.5px;letter-spacing:.04em;
-  text-align:center;padding:9px 14px;
-  font-family:'Poppins',sans-serif;
-}
-.preview-banner b{color:var(--accent-light);font-weight:600}
+.preview-banner{position:fixed;top:0;left:0;right:0;height:38px;background:rgba(10,7,5,0.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);z-index:var(--z-banner);display:flex;align-items:center;justify-content:center;font-size:12px;letter-spacing:.04em;color:var(--muted);font-family:'Poppins',sans-serif;text-align:center;padding:0 12px}
+.preview-banner b{color:var(--brand);font-weight:600;margin-left:6px}
 
-#gl{position:fixed;inset:0;z-index:0}
-.veil{
-  position:fixed;inset:0;z-index:var(--z-veil);pointer-events:none;
-  background:radial-gradient(ellipse at 50% 45%,transparent 28%,rgba(4,14,12,.5) 78%,rgba(4,14,12,.9) 100%);
-}
+#gl{position:fixed;inset:0;z-index:var(--z-canvas)}
+.veil{position:fixed;inset:0;z-index:var(--z-veil);pointer-events:none;background:radial-gradient(ellipse at 50% 42%,transparent 30%,rgba(var(--bg-rgb),0.55) 78%,rgba(var(--bg-rgb),0.9) 100%)}
 
-main{position:relative;z-index:var(--z-content)}
-.chapter{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  padding:120px 7vw 90px;
-  position:relative;
-}
+.topnav{position:fixed;top:38px;left:0;right:0;z-index:var(--z-nav);display:flex;align-items:center;justify-content:space-between;padding:16px 5vw;transition:background .4s,padding .4s}
+.topnav.scrolled{background:rgba(var(--bg-rgb),0.86);backdrop-filter:blur(12px);padding:10px 5vw;border-bottom:1px solid var(--border)}
+.topnav .logo{display:flex;align-items:center;gap:12px;font-family:'Poppins',sans-serif;font-weight:600;font-size:18px;color:var(--ink);text-decoration:none;letter-spacing:.02em}
+.topnav .logo svg{filter:drop-shadow(0 0 12px rgba(245,137,61,.45))}
+.topnav .navlinks{display:flex;gap:26px;align-items:center}
+.topnav .navlinks a{color:var(--muted);text-decoration:none;font-size:14px;transition:color .25s}
+.topnav .navlinks a:hover{color:var(--brand)}
+.nav-cta{background:var(--accent);color:var(--on-accent)!important;padding:10px 22px;border-radius:40px;font-weight:600;font-size:13px!important;box-shadow:0 4px 20px rgba(245,137,61,.4);min-height:44px;display:inline-flex;align-items:center}
+.nav-cta:hover{color:var(--on-accent)!important;transform:translateY(-1px)}
+@media(max-width:860px){.topnav .navlinks a:not(.nav-cta){display:none}}
+
+.content{position:relative;z-index:var(--z-content)}
+.chapter{min-height:100vh;display:flex;align-items:center;padding:120px 6vw;position:relative}
 .inner{position:relative;max-width:1180px;margin:0 auto;width:100%}
-.inner::before{
-  content:'';position:absolute;inset:-70px -90px;z-index:-1;
-  background:radial-gradient(closest-side,rgba(10,31,28,.84),rgba(10,31,28,.5) 60%,transparent);
-  filter:blur(4px);
-}
-h1,h2,p{text-shadow:0 2px 26px rgba(4,14,12,.78)}
+.inner::before{content:'';position:absolute;inset:-60px -80px;z-index:-1;background:radial-gradient(closest-side,rgba(var(--bg-rgb),0.84),rgba(var(--bg-rgb),0.5) 60%,transparent);filter:blur(6px)}
 
-.tag{
-  display:inline-block;
-  font-family:'Poppins',sans-serif;
-  font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--accent-light);
-  border:1px solid var(--border);
-  border-radius:40px;
-  padding:7px 18px;
-  margin-bottom:26px;
-  background:rgba(10,31,28,.55);
-}
+.tag{display:inline-block;font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--brand);margin-bottom:22px;font-weight:500}
+.tag::before{content:'';display:inline-block;width:28px;height:1px;background:var(--brand);vertical-align:middle;margin-right:12px}
 
-/* HERO — asymmetric */
-.hero .inner{max-width:1240px}
-.hero-grid{display:grid;grid-template-columns:1.5fr .9fr;gap:50px;align-items:center}
-.hero h1{
-  font-size:clamp(2.6rem,7vw,5.2rem);
-  font-weight:600;
-  letter-spacing:-.02em;
-  max-width:16ch;
-}
-.hero h1 span{color:var(--accent-light)}
-.hero p.lead{
-  margin-top:26px;font-size:clamp(1.05rem,2vw,1.3rem);
-  max-width:44ch;color:var(--muted);font-weight:300;
-}
-.hero-cta{margin-top:40px;display:flex;gap:16px;flex-wrap:wrap}
-.assure{
-  border-left:2px solid var(--border);
-  padding-left:24px;
-  display:flex;flex-direction:column;gap:22px;
-}
-.assure .a-item{display:flex;gap:14px;align-items:flex-start}
-.assure .a-item svg{width:30px;height:30px;flex:0 0 30px;margin-top:2px}
-.assure h4{font-family:'Poppins',sans-serif;font-size:1rem;font-weight:600;margin-bottom:2px}
-.assure p{font-size:.9rem;color:var(--muted);font-weight:300}
+.hero .inner{max-width:1200px}
+.hero h1{font-size:clamp(2.4rem,6vw,5rem);font-weight:600;letter-spacing:-.02em;text-shadow:0 4px 40px rgba(var(--bg-rgb),.95);max-width:16ch}
+.hero h1 em{font-style:normal;color:var(--brand-2)}
+.hero p.lead{font-size:clamp(1.05rem,1.7vw,1.35rem);color:var(--ink);max-width:52ch;margin-top:28px;text-shadow:0 2px 20px rgba(var(--bg-rgb),.95)}
+.hero-actions{display:flex;gap:16px;margin-top:40px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 30px;border-radius:44px;font-family:'Poppins',sans-serif;font-weight:600;font-size:15px;text-decoration:none;cursor:pointer;border:none;transition:transform .25s,box-shadow .25s;min-height:44px}
+.btn-primary{background:var(--accent);color:var(--on-accent);box-shadow:0 8px 34px rgba(245,137,61,.45)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(245,137,61,.6)}
+.btn-ghost{background:rgba(244,245,247,0.06);color:var(--ink);border:1px solid var(--border);backdrop-filter:blur(8px)}
+.btn-ghost:hover{border-color:var(--brand);transform:translateY(-2px)}
+.hero-note{margin-top:34px;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:10px}
 
-.btn{
-  cursor:pointer;
-  font-family:'Poppins',sans-serif;font-weight:500;font-size:15px;
-  padding:15px 30px;border-radius:44px;min-height:44px;
-  text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:10px;
-  transition:transform .25s ease,box-shadow .25s ease,background .25s ease;
-  border:1px solid transparent;
-}
-.btn:focus-visible{outline:3px solid var(--accent-light);outline-offset:3px}
-.btn-primary{
-  background:linear-gradient(120deg,var(--accent),var(--primary));
-  color:#04211d;box-shadow:0 6px 34px rgba(45,212,191,.35);font-weight:600;
-}
-.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 44px rgba(45,212,191,.5)}
-.btn-ghost{
-  background:rgba(10,31,28,.5);color:var(--fg);border-color:var(--border);
-  backdrop-filter:blur(8px);
-}
-.btn-ghost:hover{transform:translateY(-3px);border-color:var(--accent-light)}
+.poster-word{position:absolute;z-index:0;font-family:'Poppins',sans-serif;font-weight:700;font-size:clamp(6rem,18vw,20rem);line-height:.8;color:transparent;-webkit-text-stroke:2px rgba(245,212,71,.6);letter-spacing:-.02em;pointer-events:none;user-select:none;white-space:nowrap;opacity:.85}
 
-/* giant poster word — sparse chapter only, bright stroke */
-.poster-word{
-  position:absolute;
-  left:50%;top:38%;
-  transform:translate(-50%,-50%);
-  font-family:'Poppins',sans-serif;font-weight:700;
-  font-size:clamp(7rem,24vw,20rem);
-  letter-spacing:-.03em;
-  color:transparent;
-  -webkit-text-stroke:2px rgba(127,240,222,.55);
-  z-index:-2;
-  white-space:nowrap;
-  pointer-events:none;
-  user-select:none;
-}
+.two-col{display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center}
+.two-col.flip .col-text{order:2}
+@media(max-width:820px){.two-col{grid-template-columns:1fr;gap:40px}.two-col.flip .col-text{order:0}}
+.col-text h2{font-size:clamp(1.8rem,3.4vw,2.9rem);margin-bottom:22px;text-shadow:0 2px 24px rgba(var(--bg-rgb),.85)}
+.col-text p{color:var(--muted);font-size:1.05rem;margin-bottom:16px}
+.col-text p strong{color:var(--ink);font-weight:600}
 
-/* two-column layout */
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
-.two-col.flip .colB{order:-1}
-h2{font-size:clamp(1.9rem,4vw,3rem);letter-spacing:-.01em}
-.section-lead{color:var(--muted);font-size:1.08rem;margin-top:20px;font-weight:300;max-width:46ch}
+.svg-panel{background:rgba(var(--bg-rgb),0.78);border:1px solid var(--border);border-radius:24px;padding:40px;backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;min-height:340px;position:relative;overflow:hidden}
+.svg-panel::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(245,137,61,.1),transparent 70%)}
 
-/* cards — near-opaque */
-.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:34px}
-.card{
-  background:rgba(9,26,24,.94);
-  backdrop-filter:blur(14px);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:30px 26px;
-  transition:transform .3s ease,border-color .3s ease;
-}
-.card:hover{transform:translateY(-6px);border-color:var(--accent-light)}
-.card .ic{width:46px;height:46px;margin-bottom:18px;display:block}
-.card h3{font-size:1.18rem;margin-bottom:10px}
-.card p{color:var(--muted);font-size:.97rem;font-weight:300}
+.timeline{position:relative;padding-left:36px;margin-top:26px}
+.timeline::before{content:'';position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--brand),var(--brand-2),transparent)}
+.tl-step{position:relative;margin-bottom:34px}
+.tl-step:last-child{margin-bottom:0}
+.tl-step::before{content:'';position:absolute;left:-33px;top:6px;width:16px;height:16px;border-radius:50%;background:var(--bg);border:2px solid var(--brand);box-shadow:0 0 16px rgba(245,137,61,.6)}
+.tl-step h3{font-size:1.2rem;margin-bottom:6px;color:var(--ink)}
+.tl-step p{color:var(--muted);font-size:.98rem}
 
-/* feature rows */
-.rows{display:flex;flex-direction:column;gap:14px;margin-top:14px}
-.frow{
-  display:flex;gap:20px;align-items:flex-start;
-  background:rgba(9,26,24,.92);
-  border:1px solid var(--border);
-  border-radius:16px;padding:22px 24px;
-  backdrop-filter:blur(12px);
-}
-.frow .ic{width:40px;height:40px;flex:0 0 40px}
-.frow h3{font-size:1.1rem;margin-bottom:5px}
-.frow p{color:var(--muted);font-size:.95rem;font-weight:300}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch;margin-top:26px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:rgba(var(--bg-rgb),0.9);border:1px solid var(--border);border-radius:20px;padding:32px;backdrop-filter:blur(12px);display:flex;flex-direction:column;transition:transform .3s,border-color .3s}
+.card:hover{transform:translateY(-6px);border-color:var(--brand)}
+.card .icon{width:56px;height:56px;border-radius:14px;background:rgba(245,137,61,.12);display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.card h3{font-size:1.25rem;margin-bottom:12px}
+.card p{color:var(--muted);font-size:.98rem;flex:1}
+.card .learn{margin-top:18px;color:var(--brand);font-size:.9rem;font-weight:600;font-family:'Poppins',sans-serif;display:inline-flex;align-items:center;gap:6px}
 
-/* stat band */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:34px}
-.stat{
-  text-align:center;
-  background:rgba(9,26,24,.9);border:1px solid var(--border);
-  border-radius:20px;padding:34px 20px;backdrop-filter:blur(12px);
-}
-.stat .num{font-family:'Poppins',sans-serif;font-weight:700;font-size:clamp(2rem,4.6vw,3.2rem);color:var(--accent-light)}
-.stat .lbl{color:var(--muted);font-size:.92rem;margin-top:6px}
+/* bento nazorg */
+.bento{display:grid;grid-template-columns:1.3fr 1fr;grid-template-rows:auto auto;gap:22px}
+@media(max-width:820px){.bento{grid-template-columns:1fr}}
+.bento-cell{background:rgba(var(--bg-rgb),0.9);border:1px solid var(--border);border-radius:20px;padding:34px;backdrop-filter:blur(12px)}
+.bento-cell.tall{grid-row:span 2;display:flex;flex-direction:column;justify-content:center}
+.bento-cell h3{font-size:1.3rem;margin-bottom:12px}
+.bento-cell p{color:var(--muted);font-size:.98rem}
+.bento-cell .lil{width:48px;height:48px;border-radius:12px;background:rgba(245,212,71,.13);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
 
-/* quote */
-.pullquote{max-width:900px}
-.pullquote blockquote{
-  font-family:'Poppins',sans-serif;font-weight:500;
-  font-size:clamp(1.5rem,3.6vw,2.5rem);line-height:1.35;
-  letter-spacing:-.01em;
-}
-.pullquote blockquote span{color:var(--accent-light)}
-.pullquote cite{display:block;margin-top:26px;color:var(--muted);font-style:normal;font-size:1rem}
+.stat-band{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;text-align:center}
+@media(max-width:820px){.stat-band{grid-template-columns:1fr;gap:36px}}
+.stat .num{font-family:'Poppins',sans-serif;font-weight:700;font-size:clamp(2.6rem,6vw,4.2rem);color:var(--brand);line-height:1;text-shadow:0 0 40px rgba(245,137,61,.4)}
+.stat .lbl{color:var(--muted);font-size:1rem;margin-top:12px;max-width:24ch;margin-left:auto;margin-right:auto}
 
-/* contact */
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start}
-.form{
-  background:rgba(9,26,24,.95);border:1px solid var(--border);
-  border-radius:22px;padding:34px;backdrop-filter:blur(16px);
-}
-.form label{display:block;font-size:.85rem;color:var(--fg);margin:16px 0 6px;font-family:'Poppins',sans-serif;letter-spacing:.02em}
-.form input,.form textarea{
-  width:100%;background:rgba(255,255,255,.06);
-  border:1px solid var(--border);border-radius:12px;
-  padding:13px 15px;color:var(--fg);font-family:inherit;font-size:16px;min-height:44px;
-}
-.form input:focus,.form textarea:focus{outline:3px solid var(--accent-light);outline-offset:1px;border-color:var(--accent-light)}
-.form .btn{margin-top:24px;width:100%}
-.form .btn:disabled{opacity:.6;cursor:progress}
-.form-status{margin-top:14px;font-size:.9rem;min-height:1.2em}
-.form-status.ok{color:var(--accent-light)}
-.form-status.err{color:#FCA5A5}
-.contact-info h3{font-size:1.3rem;margin-bottom:18px}
-.ci-item{display:flex;gap:16px;align-items:flex-start;margin-bottom:22px}
-.ci-item .ic{width:34px;height:34px;flex:0 0 34px;margin-top:2px}
-.ci-item .lbl{font-size:.8rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
-.ci-item .val{font-size:1.08rem;color:var(--fg);font-family:'Poppins',sans-serif}
-.ci-item a{color:var(--accent-light);text-decoration:none}
-.ci-item a:hover{text-decoration:underline}
-.big-phone{
-  display:inline-flex;align-items:center;gap:14px;margin-top:8px;min-height:44px;
-  font-family:'Poppins',sans-serif;font-weight:600;
-  font-size:clamp(1.6rem,4vw,2.4rem);color:var(--accent-light);text-decoration:none;
-}
-.big-phone:focus-visible{outline:3px solid var(--accent-light);outline-offset:4px;border-radius:8px}
+.quote-wrap{max-width:900px;margin:0 auto;text-align:center}
+.quote-wrap .qmark{font-family:'Poppins',sans-serif;font-size:6rem;color:var(--brand);line-height:.5;opacity:.55}
+.quote-wrap blockquote{font-family:'Poppins',sans-serif;font-weight:400;font-size:clamp(1.4rem,3vw,2.2rem);line-height:1.4;margin:20px 0 26px;text-shadow:0 2px 30px rgba(var(--bg-rgb),.95)}
+.quote-wrap cite{color:var(--muted);font-style:normal;font-size:.95rem}
 
-.divider{position:relative;z-index:var(--z-content);line-height:0}
-.divider svg{width:100%;height:80px;display:block}
+.cta-card{background:rgba(var(--bg-rgb),0.92);border:1px solid var(--border);border-radius:28px;padding:52px;backdrop-filter:blur(16px);max-width:960px;margin:0 auto}
+@media(max-width:640px){.cta-card{padding:34px 24px}}
+.cta-card h2{font-size:clamp(2rem,4vw,3.2rem);margin-bottom:16px;text-align:center}
+.cta-card>p{color:var(--muted);text-align:center;max-width:52ch;margin:0 auto 36px;font-size:1.05rem}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:640px){.form-grid{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1/-1}
+.field label{font-size:.85rem;color:var(--ink);font-family:'Poppins',sans-serif;letter-spacing:.02em}
+.field input,.field select,.field textarea{background:rgba(244,245,247,0.06);border:1px solid var(--border);border-radius:12px;padding:14px 15px;color:var(--ink);font-family:'Open Sans',sans-serif;font-size:16px;transition:border-color .25s;min-height:44px}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(245,137,61,.2)}
+.form-grid .btn-primary{grid-column:1/-1;justify-content:center;margin-top:8px}
+.form-grid .btn-primary[disabled]{opacity:.6;cursor:progress}
+.form-msg{grid-column:1/-1;text-align:center;font-size:.95rem;color:var(--brand-2);min-height:1.2em}
+.cta-alt{text-align:center;margin-top:22px;color:var(--muted);font-size:.9rem}
+.cta-alt a{color:var(--brand);text-decoration:none;font-weight:600}
+.cta-alt a:hover{text-decoration:underline}
 
-footer{
-  position:relative;z-index:var(--z-content);
-  border-top:1px solid var(--border);
-  padding:50px 7vw;
-  background:rgba(4,14,12,.82);
-  backdrop-filter:blur(12px);
-}
-.foot-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px}
-footer h4{font-family:'Poppins',sans-serif;font-size:1.1rem;margin-bottom:14px}
-footer p,footer a{color:var(--muted);font-size:.92rem;font-weight:300;text-decoration:none;display:block;margin-bottom:6px}
-footer a:hover{color:var(--accent-light)}
-footer a:focus-visible{outline:2px solid var(--accent-light);outline-offset:2px}
-.foot-note{max-width:1180px;margin:36px auto 0;padding-top:22px;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem}
+footer{position:relative;z-index:var(--z-content);background:rgba(10,7,5,0.94);border-top:1px solid var(--border);padding:70px 6vw 40px;backdrop-filter:blur(14px)}
+.foot-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+@media(max-width:820px){.foot-grid{grid-template-columns:1fr;gap:34px}}
+.foot-grid h4{font-size:1rem;margin-bottom:18px;color:var(--ink)}
+.foot-grid p,.foot-grid a{color:var(--muted);font-size:.94rem;text-decoration:none;display:block;margin-bottom:9px}
+.foot-grid a:hover{color:var(--brand)}
+.foot-brand p{max-width:34ch}
+.foot-brand .logo-row{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.foot-bottom{max-width:1180px;margin:46px auto 0;padding-top:26px;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:.82rem}
 
-@media(max-width:900px){
-  .hero-grid,.two-col,.contact-grid{grid-template-columns:1fr;gap:34px}
-  .two-col.flip .colB{order:0}
-  .bento{grid-template-columns:1fr 1fr}
-  .foot-grid{grid-template-columns:1fr}
-}
-@media(max-width:600px){
-  .chapter{padding:104px 6vw 66px}
-  .bento,.stats{grid-template-columns:1fr}
-  .poster-word{font-size:36vw}
-}
+.divider{position:relative;z-index:var(--z-content);height:80px;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.divider svg{width:min(600px,80vw);opacity:.5}
+
+.reassure-strip{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+.reassure-strip span{display:inline-flex;align-items:center;gap:8px;background:rgba(var(--bg-rgb),0.82);border:1px solid var(--border);border-radius:40px;padding:9px 18px;font-size:.85rem;color:var(--muted);backdrop-filter:blur(8px)}
+.reassure-strip span svg{flex-shrink:0}
+
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.float-svg{animation:floaty 6s ease-in-out infinite}
+
 @media(prefers-reduced-motion:reduce){
   #gl{display:none}
-  body{background:radial-gradient(ellipse at 50% 30%,#123d37,#0a1f1c 70%)}
   html{scroll-behavior:auto}
-  .poster-word{position:static;transform:none;display:block;text-align:center;margin:0 auto 20px}
+  body{background:radial-gradient(ellipse at 50% 30%,#241811,#110c09 70%)}
+  .float-svg{animation:none}
 }
 </style>
-</head>
+<style id="brand-lock">:root{--brand:#f5893d;--brand-2:#f5d447;--accent:#f5893d;--bg:#110c09;--ink:#f4f5f7;--muted:rgba(244,245,247,0.66);--border:rgba(244,245,247,0.14);--on-brand:#0a0a0f;--on-accent:#0a0a0f}</style></head>
 <body>
 
-<div class="preview-banner">Websitevoorbeeld — conceptontwerp voor <b>LUNA abortuscentrum Antwerpen</b></div>
+<div class="preview-banner">Website Preview — conceptontwerp voor <b>LUNA abortuscentrum Antwerpen</b></div>
 
-<div id="gl" aria-hidden="true"></div>
+<div id="gl"></div>
 <div class="veil"></div>
 
-<main>
-  <!-- CH1 HERO — asymmetric -->
-  <section class="chapter hero" id="ch1">
+<nav class="topnav" id="topnav">
+  <a href="#hero" class="logo" aria-label="LUNA Antwerpen, naar boven">
+    <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="15" cy="15" r="13" stroke="var(--brand)" stroke-width="1.5"/>
+      <path d="M15 3a12 12 0 1 0 8 20.8A9 9 0 0 1 15 3z" fill="var(--brand)"/>
+    </svg>
+    LUNA <span style="color:var(--muted);font-weight:400">Antwerpen</span>
+  </a>
+  <div class="navlinks">
+    <a href="#consultatie">Eerste gesprek</a>
+    <a href="#behandeling">Behandelingen</a>
+    <a href="#nazorg">Nazorg</a>
+    <a href="#anticonceptie">Anticonceptie</a>
+    <a href="#afspraak" class="nav-cta">Maak een afspraak</a>
+  </div>
+</nav>
+
+<div class="content">
+
+  <!-- CH1 HERO -->
+  <section class="chapter hero" id="hero">
+    <div class="poster-word" style="top:6%;left:-3%" aria-hidden="true">RUIMTE</div>
     <div class="inner">
-      <div class="hero-grid">
-        <div>
-          <span class="tag">LUNA · Antwerpen</span>
-          <h1>Je bent hier <span>veilig</span> en welkom.</h1>
-          <p class="lead">Bij LUNA vind je een luisterend oor, deskundige zorg en alle tijd die je nodig hebt. Geen oordeel — alleen rust, respect en ruimte voor jouw keuze.</p>
-          <div class="hero-cta">
-            <a href="#ch5" class="btn btn-primary">Neem vrijblijvend contact op</a>
-            <a href="#ch2" class="btn btn-ghost">Ontdek hoe we je helpen</a>
+      <span class="tag">Ongepland zwanger?</span>
+      <h1>Hier is de <em>ruimte</em> om je eigen keuze te maken.</h1>
+      <p class="lead">Bij LUNA in Antwerpen nemen we de tijd voor jou. In alle rust, zonder oordeel, en helemaal in jouw tempo. We luisteren, we leggen uit, en we ondersteunen je om de keuze te maken die voor jou de juiste is.</p>
+      <div class="hero-actions">
+        <a href="#afspraak" class="btn btn-primary">Maak een afspraak</a>
+        <a href="#nazorg" class="btn btn-ghost">Chat met LUNA</a>
+      </div>
+      <div class="reassure-strip">
+        <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 8.6 8 11 4.6-2.4 8-6 8-11V5l-8-3z" stroke="var(--brand)" stroke-width="1.6"/></svg>Volledig vertrouwelijk</span>
+        <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 6v6l4 2" stroke="var(--brand)" stroke-width="1.6"/><circle cx="12" cy="12" r="9" stroke="var(--brand)" stroke-width="1.6"/></svg>We nemen de tijd</span>
+        <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6 9 17l-5-5" stroke="var(--brand)" stroke-width="1.8"/></svg>Zonder oordeel</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true">
+    <svg viewBox="0 0 600 40" fill="none"><path d="M0 20h240c14 0 20-14 60-14s46 14 60 14c14 0 20-14 60-14s46 14 60 14h60" stroke="var(--brand)" stroke-width="1.5" opacity=".7"/><circle cx="300" cy="20" r="4" fill="var(--brand)"/></svg>
+  </div>
+
+  <!-- CH2 EERSTE CONSULTATIE — offset columns + timeline -->
+  <section class="chapter" id="consultatie">
+    <div class="inner">
+      <div class="two-col">
+        <div class="col-text">
+          <span class="tag">De eerste consultatie</span>
+          <h2>Een gesprek zonder oordeel</h2>
+          <p>Je hoeft niets voorbereid te hebben. Tijdens de eerste consultatie <strong>nemen we rustig de tijd</strong> om te luisteren naar jouw verhaal en jouw situatie.</p>
+          <p>We geven je alle informatie die je nodig hebt over je keuzemogelijkheden, en beantwoorden elke vraag. Er is geen enkele verplichting: jij bepaalt wat er gebeurt en wanneer.</p>
+          <div class="timeline">
+            <div class="tl-step"><h3>Je neemt contact op</h3><p>Bellen, mailen of chatten — wat voor jou het meest comfortabel voelt.</p></div>
+            <div class="tl-step"><h3>Het eerste gesprek</h3><p>Rustig kennismaken, jouw situatie bespreken en samen kijken naar de mogelijkheden.</p></div>
+            <div class="tl-step"><h3>De verplichte wachttijd</h3><p>De wet voorziet een wachttijd van 6 dagen. Wij begeleiden je erdoorheen, je staat er niet alleen voor.</p></div>
           </div>
         </div>
-        <div class="assure">
-          <div class="a-item">
-            <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7FF0DE"/><stop offset="1" stop-color="#38BDF8"/></linearGradient></defs><path d="M24 6l14 6v10c0 9-6 15-14 18-8-3-14-9-14-18V12z" stroke="url(#g1)" stroke-width="2" stroke-linejoin="round"/><path d="M18 24l4 4 8-9" stroke="url(#g1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <div><h4>Volledig vertrouwelijk</h4><p>Alles blijft tussen jou en LUNA.</p></div>
-          </div>
-          <div class="a-item">
-            <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 40c-9-6-16-11-16-19a9 9 0 0116-5 9 9 0 0116 5c0 8-7 13-16 19z" stroke="url(#g1)" stroke-width="2" stroke-linejoin="round"/></svg>
-            <div><h4>Zonder oordeel</h4><p>Wat je ook voelt — het mag er zijn.</p></div>
-          </div>
-          <div class="a-item">
-            <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="15" stroke="url(#g1)" stroke-width="2"/><path d="M24 15v9l6 4" stroke="url(#g1)" stroke-width="2" stroke-linecap="round"/></svg>
-            <div><h4>Jouw tempo</h4><p>Zoveel tijd als je nodig hebt.</p></div>
+        <div class="col-text">
+          <div class="svg-panel float-svg">
+            <svg width="260" height="260" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Twee handen die een zacht gloeiende bol beschermen">
+              <defs>
+                <radialGradient id="glowA" cx="50%" cy="45%" r="55%">
+                  <stop offset="0%" stop-color="var(--brand-2)" stop-opacity=".9"/>
+                  <stop offset="60%" stop-color="var(--brand)" stop-opacity=".35"/>
+                  <stop offset="100%" stop-color="var(--brand)" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <circle cx="130" cy="118" r="90" fill="url(#glowA)"/>
+              <path d="M60 150c-6-24 8-58 18-70 8-9 16-4 12 8-3 9-6 18-6 26" stroke="var(--brand)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+              <path d="M200 150c6-24-8-58-18-70-8-9-16-4-12 8 3 9 6 18 6 26" stroke="var(--brand)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+              <path d="M78 128c0-18 8-30 20-34 10-3 18 2 18 12v42" stroke="var(--brand)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+              <path d="M182 128c0-18-8-30-20-34-10-3-18 2-18 12v42" stroke="var(--brand)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+              <circle cx="130" cy="118" r="26" fill="var(--brand-2)" opacity=".85"/>
+              <circle cx="130" cy="118" r="26" stroke="var(--brand)" stroke-width="1.5" fill="none" opacity=".6"/>
+              <path d="M70 168q60 30 120 0" stroke="var(--brand)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+            </svg>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CH2 offset two-column -->
-  <section class="chapter" id="ch2">
+  <!-- CH3 BEHANDELMETHODEN — staggered card grid -->
+  <section class="chapter" id="behandeling">
+    <div class="inner">
+      <span class="tag">Behandelmethoden</span>
+      <h2 style="font-size:clamp(1.8rem,3.6vw,3rem);margin-bottom:14px;text-shadow:0 2px 24px rgba(var(--bg-rgb),.85)">Twee zorgvuldige methoden, altijd in overleg</h2>
+      <p style="color:var(--muted);max-width:60ch">Welke behandeling het beste bij jou past, hangt af van hoe ver je zwanger bent en van jouw voorkeur. We leggen alles rustig uit en beslissen samen.</p>
+      <div class="grid">
+        <div class="card">
+          <div class="icon">
+            <svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true"><defs><linearGradient id="ic1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--brand-2)"/><stop offset="1" stop-color="var(--brand)"/></linearGradient></defs><rect x="12" y="4" width="8" height="13" rx="4" stroke="url(#ic1)" stroke-width="2"/><path d="M14 8h4M14 12h4" stroke="url(#ic1)" stroke-width="1.6"/><circle cx="16" cy="24" r="6" stroke="url(#ic1)" stroke-width="2"/><path d="M16 21v6M13 24h6" stroke="url(#ic1)" stroke-width="1.6"/></svg>
+          </div>
+          <h3>Medicamenteuze abortus</h3>
+          <p>Een behandeling met medicatie, mogelijk tot een bepaald aantal weken. In een vertrouwde omgeving en met heldere begeleiding over wat je kan verwachten.</p>
+          <span class="learn">Meer over deze methode →</span>
+        </div>
+        <div class="card">
+          <div class="icon">
+            <svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true"><defs><linearGradient id="ic2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--brand-2)"/><stop offset="1" stop-color="var(--brand)"/></linearGradient></defs><path d="M16 4c-6 0-11 5-11 12s5 12 11 12 11-5 11-12S22 4 16 4z" stroke="url(#ic2)" stroke-width="2" fill="none"/><circle cx="16" cy="16" r="4" stroke="url(#ic2)" stroke-width="2"/><path d="M16 16v8" stroke="url(#ic2)" stroke-width="1.6"/></svg>
+          </div>
+          <h3>De zuigcurettage</h3>
+          <p>Een korte medische ingreep, met de mogelijkheid van sedatie voor je comfort. Ons team zorgt ervoor dat je je op je gemak voelt — voor, tijdens en na de behandeling.</p>
+          <span class="learn">Meer over deze methode →</span>
+        </div>
+        <div class="card">
+          <div class="icon">
+            <svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true"><defs><linearGradient id="ic3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--brand-2)"/><stop offset="1" stop-color="var(--brand)"/></linearGradient></defs><path d="M16 27c-4-2-8-6-8-11a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 5-4 9-8 11z" stroke="url(#ic3)" stroke-width="2" fill="none" stroke-linejoin="round"/><path d="M20 12l2 2 3-4" stroke="url(#ic3)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Controle na de behandeling</h3>
+          <p>Na de behandeling volgt een controle om te bevestigen dat alles goed verlopen is. We blijven bereikbaar voor al je vragen, ook nadien.</p>
+          <span class="learn">Wat te verwachten →</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true">
+    <svg viewBox="0 0 600 40" fill="none"><circle cx="300" cy="20" r="5" fill="var(--brand-2)"/><path d="M300 20c-40 0-60 12-140 12M300 20c40 0 60 12 140 12M300 20c-30 0-50-12-120-12M300 20c30 0 50-12 120-12" stroke="var(--brand)" stroke-width="1.2" opacity=".6"/></svg>
+  </div>
+
+  <!-- CH4 NAZORG — bento layout -->
+  <section class="chapter" id="nazorg">
+    <div class="inner">
+      <span class="tag">Psychosociale nazorg</span>
+      <h2 style="font-size:clamp(1.8rem,3.4vw,2.9rem);margin-bottom:26px;text-shadow:0 2px 24px rgba(var(--bg-rgb),.85);max-width:20ch">We zijn er ook na je keuze</h2>
+      <div class="bento">
+        <div class="bento-cell tall">
+          <div class="lil">
+            <svg width="26" height="26" viewBox="0 0 32 32" fill="none" aria-hidden="true"><defs><linearGradient id="bn1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--brand-2)"/><stop offset="1" stop-color="var(--brand)"/></linearGradient></defs><path d="M6 8h20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H13l-6 5v-5H6a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z" stroke="url(#bn1)" stroke-width="2" stroke-linejoin="round"/><path d="M11 15h10M11 18h6" stroke="url(#bn1)" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Chathulpverlening</h3>
+          <p>Wil je liever anoniem praten? Via onze chathulpverlening neem je laagdrempelig contact op, in alle vertrouwelijkheid — geen naam, geen drempel, gewoon iemand die luistert.</p>
+          <a href="#afspraak" class="btn btn-ghost" style="margin-top:22px;align-self:flex-start">Chat met LUNA</a>
+        </div>
+        <div class="bento-cell">
+          <div class="lil">
+            <svg width="26" height="26" viewBox="0 0 32 32" fill="none" aria-hidden="true"><defs><linearGradient id="bn2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--brand-2)"/><stop offset="1" stop-color="var(--brand)"/></linearGradient></defs><path d="M16 27C9 23 5 18 5 13a5 5 0 0 1 11-2 5 5 0 0 1 11 2c0 5-4 10-11 14z" stroke="url(#bn2)" stroke-width="2" fill="none" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Een luisterend oor</h3>
+          <p>Een keuze over een ongeplande zwangerschap kan veel losmaken — voor, tijdens én lang nadien. Je kan bij ons terecht voor een gesprek wanneer je dat nodig hebt.</p>
+        </div>
+        <div class="bento-cell">
+          <div class="lil">
+            <svg width="26" height="26" viewBox="0 0 32 32" fill="none" aria-hidden="true"><defs><linearGradient id="bn3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--brand-2)"/><stop offset="1" stop-color="var(--brand)"/></linearGradient></defs><circle cx="16" cy="16" r="11" stroke="url(#bn3)" stroke-width="2"/><path d="M16 10v6l4 3" stroke="url(#bn3)" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Geen tijdslimiet</h3>
+          <p>Geen tijdsdruk, geen oordeel. Onze nazorg blijft beschikbaar zolang je die nodig hebt — ook maanden later ben je nog welkom.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH5 STAT BAND + QUOTE -->
+  <section class="chapter" id="proof">
+    <div class="inner">
+      <div class="stat-band" style="margin-bottom:70px">
+        <div class="stat"><div class="num">10.000+</div><div class="lbl">cliënten kwamen het afgelopen jaar bij LUNA voor een eerste consultatie</div></div>
+        <div class="stat"><div class="num">Zonder</div><div class="lbl">oordeel — je verhaal, jouw tempo, jouw keuze staan centraal</div></div>
+        <div class="stat"><div class="num">4★</div><div class="lbl">gewaardeerd door mensen die zich bij ons gehoord en geholpen voelden</div></div>
+      </div>
+      <div class="quote-wrap">
+        <div class="qmark" aria-hidden="true">“</div>
+        <blockquote>Een keuze hebben, is levensbepalend. Abortus is een keuze die je niet wil moeten maken, maar een keuze die je wél wil kunnen maken.</blockquote>
+        <cite>— De werking van LUNA</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH6 AFSPRAAK / CTA -->
+  <section class="chapter" id="afspraak">
+    <div class="inner">
+      <div class="cta-card">
+        <span class="tag" style="display:block;text-align:center">Maak contact</span>
+        <h2>Zet de eerste stap in jouw tempo</h2>
+        <p>Vul dit formulier in of neem telefonisch contact op. We nemen zo snel mogelijk contact met je op, discreet en zonder verplichtingen.</p>
+        <form class="form-grid" id="contactForm" novalidate>
+          <div class="field"><label for="vn">Voornaam</label><input id="vn" name="vn" type="text" placeholder="Je voornaam" autocomplete="given-name"></div>
+          <div class="field"><label for="tel">Telefoon</label><input id="tel" name="tel" type="tel" placeholder="Waar we je kunnen bereiken" autocomplete="tel"></div>
+          <div class="field full"><label for="em">E-mail</label><input id="em" name="em" type="email" placeholder="je@voorbeeld.be" autocomplete="email"></div>
+          <div class="field full"><label for="hulp">Waarmee kunnen we helpen?</label>
+            <select id="hulp" name="hulp">
+              <option>Een eerste gesprek plannen</option>
+              <option>Vragen over de behandelmethoden</option>
+              <option>Psychosociale nazorg</option>
+              <option>Informatie over anticonceptie</option>
+              <option>Iets anders</option>
+            </select>
+          </div>
+          <div class="field full"><label for="msg">Je bericht (optioneel)</label><textarea id="msg" name="msg" rows="3" placeholder="Alles wat je met ons wil delen — in vertrouwen."></textarea></div>
+          <button class="btn btn-primary" type="submit" id="submitBtn">Verstuur mijn vraag</button>
+          <p class="form-msg" id="formMsg" role="status" aria-live="polite"></p>
+        </form>
+        <p class="cta-alt">Liever bellen? <a href="tel:032262525">03 226 25 25</a> &nbsp;·&nbsp; Liever anoniem? <a href="#nazorg">Chat met LUNA</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH7 ANTICONCEPTIE — offset columns flipped -->
+  <section class="chapter" id="anticonceptie">
     <div class="inner">
       <div class="two-col flip">
-        <div class="colA">
-          <span class="tag">Zonder oordeel</span>
-          <h2>Vertrouwelijke begeleiding en een luisterend oor.</h2>
-          <p class="section-lead">Wat je ook voelt of denkt — je mag het hier delen. Onze hulpverleners nemen de tijd voor je verhaal en helpen je rustig alles op een rij te zetten. In alle vertrouwen, in jouw tempo, en altijd met respect voor jouw beslissing.</p>
+        <div class="col-text">
+          <span class="tag">Anticonceptie</span>
+          <h2>Ook voor de toekomst denken we met je mee</h2>
+          <p>Naast begeleiding bij een ongeplande zwangerschap informeren we je graag over <strong>anticonceptie</strong> die bij jou past — zodat je met een gerust gevoel verder kan.</p>
+          <p>Heb je onbeschermde seks gehad? Er bestaat ook <strong>noodanticonceptie</strong>, zoals de morningafterpil of de noodspiraal. Hoe sneller je erbij bent, hoe beter ze werkt. We geven je duidelijke, betrouwbare informatie.</p>
+          <a href="#afspraak" class="btn btn-ghost" style="margin-top:8px">Stel je vraag</a>
         </div>
-        <div class="colB">
-          <div class="rows">
-            <div class="frow">
-              <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 40c-9-6-16-11-16-19a9 9 0 0116-5 9 9 0 0116 5c0 8-7 13-16 19z" stroke="var(--accent-light)" stroke-width="2" stroke-linejoin="round"/></svg>
-              <div><h3>Warm en menselijk onthaal</h3><p>Je wordt ontvangen door mensen die luisteren zonder te oordelen.</p></div>
-            </div>
-            <div class="frow">
-              <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="9" y="14" width="30" height="22" rx="4" stroke="var(--accent-light)" stroke-width="2"/><path d="M16 14v-3a8 8 0 0116 0v3" stroke="var(--accent-light)" stroke-width="2"/><circle cx="24" cy="25" r="3" fill="var(--accent-light)"/></svg>
-              <div><h3>Volledig vertrouwelijk</h3><p>Alles wat je met ons deelt blijft strikt tussen jou en LUNA.</p></div>
-            </div>
-            <div class="frow">
-              <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="15" stroke="var(--accent-light)" stroke-width="2"/><path d="M24 15v9l6 4" stroke="var(--accent-light)" stroke-width="2" stroke-linecap="round"/></svg>
-              <div><h3>Jouw tempo, jouw ruimte</h3><p>Niets moet. We gaan pas verder wanneer jij er klaar voor bent.</p></div>
-            </div>
+        <div class="col-text">
+          <div class="svg-panel float-svg">
+            <svg width="230" height="230" viewBox="0 0 230 230" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Symbool voor bescherming en zonlicht">
+              <defs><radialGradient id="glowC" cx="50%" cy="50%" r="55%"><stop offset="0%" stop-color="var(--brand-2)" stop-opacity=".8"/><stop offset="70%" stop-color="var(--brand)" stop-opacity=".18"/><stop offset="100%" stop-color="var(--brand)" stop-opacity="0"/></radialGradient></defs>
+              <circle cx="115" cy="115" r="82" fill="url(#glowC)"/>
+              <circle cx="115" cy="115" r="60" stroke="var(--brand)" stroke-width="2" fill="none" opacity=".55"/>
+              <path d="M115 55v18M115 157v18M55 115h18M157 115h18M74 74l12 12M156 156l-12-12M156 74l-12 12M74 156l12-12" stroke="var(--brand)" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="115" cy="115" r="24" fill="var(--brand-2)" opacity=".85"/>
+              <path d="M105 115l7 7 13-14" stroke="var(--bg)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="divider"><svg viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 C360,10 720,70 1080,40 1440,10 1440,10 1440,10" stroke="rgba(127,240,222,.28)" stroke-width="1.5" fill="none"/><circle cx="720" cy="52" r="3" fill="var(--accent-light)"/></svg></div>
-
-  <!-- CH3 bento services -->
-  <section class="chapter" id="ch3">
-    <div class="inner">
-      <span class="tag">Jouw keuze, jouw tempo</span>
-      <h2>Deskundige zorg, van begeleiding tot behandeling.</h2>
-      <p class="section-lead">Bij LUNA kun je terecht voor het volledige traject — van een eerste, vrijblijvend gesprek tot zorgvuldige medische begeleiding en nazorg.</p>
-      <div class="bento">
-        <div class="card">
-          <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><defs><linearGradient id="c1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7FF0DE"/><stop offset="1" stop-color="#38BDF8"/></linearGradient></defs><path d="M10 34V16a4 4 0 014-4h20a4 4 0 014 4v14a4 4 0 01-4 4H20l-8 6v-6z" stroke="url(#c1)" stroke-width="2" stroke-linejoin="round"/><circle cx="19" cy="24" r="1.6" fill="#7FF0DE"/><circle cx="24" cy="24" r="1.6" fill="#7FF0DE"/><circle cx="29" cy="24" r="1.6" fill="#7FF0DE"/></svg>
-          <h3>Onbevooroordeeld gesprek</h3>
-          <p>Een rustig gesprek waarin je alle vragen kunt stellen en alle opties kunt bekijken — zonder druk.</p>
-        </div>
-        <div class="card">
-          <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 8c-6 6-11 10-11 18a11 11 0 0022 0c0-8-5-12-11-18z" stroke="url(#c1)" stroke-width="2" stroke-linejoin="round"/><path d="M20 27a4 4 0 004 4" stroke="#7FF0DE" stroke-width="2" stroke-linecap="round"/></svg>
-          <h3>Medische begeleiding</h3>
-          <p>Veilige, professionele zwangerschapsafbreking door een ervaren, zorgzaam team.</p>
-        </div>
-        <div class="card">
-          <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="14" stroke="url(#c1)" stroke-width="2"/><path d="M17 24l5 5 10-11" stroke="#7FF0DE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <h3>Zorgvuldige nazorg</h3>
-          <p>Ook ná je behandeling staan we voor je klaar met een gesprek of extra begeleiding.</p>
-        </div>
-        <div class="card">
-          <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 30c-7-4-12-8-12-14a6 6 0 0112-3 6 6 0 0112 3c0 6-5 10-12 14z" stroke="url(#c1)" stroke-width="2" stroke-linejoin="round"/><path d="M14 36h20" stroke="#7FF0DE" stroke-width="2" stroke-linecap="round"/></svg>
-          <h3>Anticonceptie-advies</h3>
-          <p>Persoonlijk advies over de anticonceptie die het best bij jouw leven past.</p>
-        </div>
-        <div class="card">
-          <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="10" y="12" width="28" height="24" rx="3" stroke="url(#c1)" stroke-width="2"/><path d="M10 20h28" stroke="#7FF0DE" stroke-width="2"/><path d="M17 8v6M31 8v6" stroke="#7FF0DE" stroke-width="2" stroke-linecap="round"/></svg>
-          <h3>Snel een afspraak</h3>
-          <p>We plannen zo snel mogelijk een afspraak, zodat je niet onnodig hoeft te wachten.</p>
-        </div>
-        <div class="card">
-          <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="18" cy="18" r="6" stroke="url(#c1)" stroke-width="2"/><circle cx="32" cy="20" r="5" stroke="url(#c1)" stroke-width="2"/><path d="M8 38c0-6 4-10 10-10s10 4 10 10M28 38c0-4 3-7 7-7s7 3 7 7" stroke="#7FF0DE" stroke-width="2" stroke-linecap="round"/></svg>
-          <h3>Steun voor je omgeving</h3>
-          <p>Je partner, familie of vriend(in) mag mee — samen sta je er niet alleen voor.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CH4 stats + quote + poster word (sparse) -->
-  <section class="chapter" id="ch4">
-    <div class="poster-word" aria-hidden="true">RUST</div>
-    <div class="inner">
-      <span class="tag">In het hart van Antwerpen</span>
-      <h2>Deskundige medische zorg, dichtbij.</h2>
-      <p class="section-lead">Aan de Franklin Rooseveltplaats, midden in de stad en makkelijk bereikbaar — een plek waar deskundigheid en warmte samenkomen.</p>
-      <div class="stats">
-        <div class="stat"><div class="num">100%</div><div class="lbl">Vertrouwelijk &amp; zonder oordeel</div></div>
-        <div class="stat"><div class="num">4★</div><div class="lbl">Gewaardeerd door bezoekers</div></div>
-        <div class="stat"><div class="num">Jouw tempo</div><div class="lbl">Zoveel tijd als je nodig hebt</div></div>
-      </div>
-      <div class="pullquote" style="margin-top:70px">
-        <blockquote>"Hier telt niet wat wij vinden, maar <span>jouw</span> keuze — en die maak je in alle rust, met steun die je verdient."</blockquote>
-        <cite>— Het team van LUNA Antwerpen</cite>
-      </div>
-    </div>
-  </section>
-
-  <div class="divider"><svg viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 C360,70 720,10 1080,40 1440,70 1440,70 1440,70" stroke="rgba(127,240,222,.28)" stroke-width="1.5" fill="none"/><circle cx="720" cy="30" r="3" fill="var(--accent-light)"/></svg></div>
-
-  <!-- CH5 contact -->
-  <section class="chapter" id="ch5">
-    <div class="inner">
-      <span class="tag">Neem contact op</span>
-      <h2>Zet gerust de eerste stap.</h2>
-      <p class="section-lead">Bel ons of laat je gegevens achter — vrijblijvend en vertrouwelijk. We nemen rustig de tijd voor je.</p>
-      <div class="contact-grid" style="margin-top:40px">
-        <div class="contact-info">
-          <a href="tel:+3232262525" class="big-phone" aria-label="Bel LUNA Antwerpen op 03 226 25 25">
-            <svg width="34" height="34" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M14 8l6 2 2 8-4 3c2 5 6 9 11 11l3-4 8 2 2 6c0 3-2 5-5 5C24 41 7 24 7 12c0-3 2-4 5-4z" stroke="var(--accent-light)" stroke-width="2" stroke-linejoin="round"/></svg>
-            03 226 25 25
-          </a>
-          <div class="ci-item" style="margin-top:34px">
-            <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 42c8-9 13-15 13-22a13 13 0 10-26 0c0 7 5 13 13 22z" stroke="var(--accent-light)" stroke-width="2" stroke-linejoin="round"/><circle cx="24" cy="20" r="4.5" stroke="var(--accent-light)" stroke-width="2"/></svg>
-            <div><div class="lbl">Adres</div><div class="val">Franklin Rooseveltplaats 12<br>2060 Antwerpen</div></div>
-          </div>
-          <div class="ci-item">
-            <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="8" y="12" width="32" height="24" rx="3" stroke="var(--accent-light)" stroke-width="2"/><path d="M9 15l15 11 15-11" stroke="var(--accent-light)" stroke-width="2" stroke-linejoin="round"/></svg>
-            <div><div class="lbl">Website</div><div class="val"><a href="https://www.abortus.be/" target="_blank" rel="noopener">www.abortus.be</a></div></div>
-          </div>
-          <div class="ci-item">
-            <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="15" stroke="var(--accent-light)" stroke-width="2"/><path d="M24 15v9l6 4" stroke="var(--accent-light)" stroke-width="2" stroke-linecap="round"/></svg>
-            <div><div class="lbl">Bereikbaarheid</div><div class="val">Op werkdagen — bel ons voor een afspraak</div></div>
-          </div>
-        </div>
-        <form class="form" id="cform" novalidate>
-          <label for="n">Je naam (mag ook een voornaam zijn)</label>
-          <input id="n" name="naam" type="text" placeholder="Bijv. Sara" autocomplete="given-name">
-          <label for="t">Telefoonnummer</label>
-          <input id="t" name="tel" type="tel" placeholder="Waarop we je discreet kunnen bereiken" autocomplete="tel">
-          <label for="m">Je vraag of bericht</label>
-          <textarea id="m" name="bericht" rows="4" placeholder="Vertel gerust waar je mee zit — je hoeft nog niets te beslissen."></textarea>
-          <button class="btn btn-primary" type="submit" id="csubmit">Verstuur vertrouwelijk</button>
-          <p class="form-status" id="cstatus" role="status" aria-live="polite"></p>
-          <p style="font-size:.78rem;color:var(--muted);margin-top:8px;font-weight:300">Dit is een conceptformulier en verstuurt geen gegevens. Bel gerust rechtstreeks naar 03 226 25 25.</p>
-        </form>
-      </div>
-    </div>
-  </section>
-</main>
+</div>
 
 <footer>
   <div class="foot-grid">
-    <div>
-      <h4>LUNA abortuscentrum Antwerpen</h4>
-      <p>Een veilige, vertrouwelijke plek voor begeleiding en zorg — zonder oordeel, in jouw tempo.</p>
+    <div class="foot-brand">
+      <div class="logo-row">
+        <svg width="34" height="34" viewBox="0 0 30 30" fill="none" aria-hidden="true"><circle cx="15" cy="15" r="13" stroke="var(--brand)" stroke-width="1.5"/><path d="M15 3a12 12 0 1 0 8 20.8A9 9 0 0 1 15 3z" fill="var(--brand)"/></svg>
+        <span style="font-family:'Poppins',sans-serif;font-weight:600;font-size:20px">LUNA Antwerpen</span>
+      </div>
+      <p>Nederlandstalig abortuscentrum. We bieden psychosociale begeleiding en medische behandeling bij een ongewenste of ongeplande zwangerschap — in alle rust, en zonder oordeel.</p>
     </div>
     <div>
       <h4>Contact</h4>
-      <a href="tel:+3232262525">03 226 25 25</a>
-      <p>Franklin Rooseveltplaats 12</p>
-      <p>2060 Antwerpen</p>
+      <p>Franklin Rooseveltplaats 12<br>2060 Antwerpen, België</p>
+      <a href="tel:032262525">03 226 25 25</a>
+      <a href="https://www.abortus.be/" target="_blank" rel="noopener">www.abortus.be</a>
     </div>
     <div>
-      <h4>Meer info</h4>
-      <a href="https://www.abortus.be/" target="_blank" rel="noopener">www.abortus.be</a>
-      <a href="#ch2">Begeleiding</a>
-      <a href="#ch3">Onze zorg</a>
-      <a href="#ch5">Afspraak maken</a>
+      <h4>Hoe we helpen</h4>
+      <a href="#consultatie">De eerste consultatie</a>
+      <a href="#behandeling">Behandelmethoden</a>
+      <a href="#nazorg">Psychosociale nazorg</a>
+      <a href="#nazorg">Chathulpverlening</a>
+      <a href="#anticonceptie">Anticonceptie & noodanticonceptie</a>
     </div>
   </div>
-  <div class="foot-note">Conceptmockup ter illustratie · Geen officiële website. © LUNA abortuscentrum Antwerpen.</div>
+  <div class="foot-bottom">
+    <span>© LUNA abortuscentrum Antwerpen — conceptvoorbeeld</span>
+    <span>Vertrouwelijk · Zonder oordeel · Wij nemen de tijd voor jou</span>
+  </div>
 </footer>
 
-<script>
-// Concept-form: geen echte verzending — toont laad- en successtatus
-(function(){
-  var f=document.getElementById('cform');
-  if(!f)return;
-  f.addEventListener('submit',function(e){
-    e.preventDefault();
-    var btn=document.getElementById('csubmit'),st=document.getElementById('cstatus');
-    var naam=document.getElementById('n').value.trim();
-    if(!naam){st.className='form-status err';st.textContent='Vul minstens een naam of voornaam in.';document.getElementById('n').focus();return;}
-    btn.disabled=true;btn.textContent='Bezig met versturen…';st.className='form-status';st.textContent='';
-    setTimeout(function(){
-      btn.disabled=false;btn.textContent='Verstuur vertrouwelijk';
-      st.className='form-status ok';
-      st.textContent='Bedankt — in een echte site nemen we discreet contact op. Bel gerust naar 03 226 25 25.';
-      f.reset();
-    },900);
-  });
-})();
-</script>
-
-<!-- Three.js + GSAP -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/EffectComposer.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/RenderPass.js"></script>
@@ -491,194 +428,159 @@ footer a:focus-visible{outline:2px solid var(--accent-light);outline-offset:2px}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
+// nav scroll state
+var nav=document.getElementById('topnav');
+window.addEventListener('scroll',function(){if(window.scrollY>40)nav.classList.add('scrolled');else nav.classList.remove('scrolled');});
+
+// contact form (demo)
 (function(){
-  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var f=document.getElementById('contactForm');if(!f)return;
+  var btn=document.getElementById('submitBtn'),msg=document.getElementById('formMsg');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var em=document.getElementById('em').value.trim(),tel=document.getElementById('tel').value.trim();
+    if(!em&&!tel){msg.style.color='#ffb4a0';msg.textContent='Laat een e-mail of telefoonnummer achter zodat we je kunnen bereiken.';return;}
+    btn.disabled=true;btn.textContent='Versturen…';
+    setTimeout(function(){
+      btn.disabled=false;btn.textContent='Verstuur mijn vraag';
+      msg.style.color='var(--brand-2)';msg.textContent='Bedankt. We nemen discreet en zo snel mogelijk contact met je op.';
+      f.reset();
+    },1100);
+  });
+})();
+
+(function(){
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function hasWebGL(){try{var c=document.createElement('canvas');return !!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl')));}catch(e){return false;}}
   if(reduce||!hasWebGL()||!window.THREE)return;
 
   try{
-    var BG=0x0a1f1c, ACCENT=0x2DD4BF, ACCENT2=0x38BDF8, ACCENTL=0x7FF0DE;
-    var isMobile=innerWidth<768;
-
+    var BG=0x110c09, ACCENT=0xf5893d, ACCENT2=0xf5d447;
     var scene=new THREE.Scene();
     scene.background=new THREE.Color(BG);
-    scene.fog=new THREE.FogExp2(BG,0.016);
-
+    scene.fog=new THREE.FogExp2(BG,0.015);
     var camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,400);
     camera.position.set(0,2,46);
 
     var renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
     renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
     renderer.setSize(innerWidth,innerHeight);
+    renderer.toneMapping=THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure=1.05;
     document.getElementById('gl').appendChild(renderer.domElement);
 
-    function makeSprite(){var c=document.createElement('canvas');c.width=c.height=64;
-      var g=c.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);
-      r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(0.35,'rgba(255,255,255,.6)');r.addColorStop(1,'rgba(255,255,255,0)');
-      g.fillStyle=r;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c);}
+    function makeSprite(){var c=document.createElement('canvas');c.width=c.height=64;var g=c.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(0.35,'rgba(255,255,255,.6)');r.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=r;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c);}
     var sprite=makeSprite();
 
-    function envTex(){var c=document.createElement('canvas');c.width=64;c.height=32;
-      var g=c.getContext('2d'),gr=g.createLinearGradient(0,0,0,32);
-      gr.addColorStop(0,'#bff7ec');gr.addColorStop(0.5,'#2DD4BF');gr.addColorStop(1,'#0a1f1c');
-      g.fillStyle=gr;g.fillRect(0,0,64,32);var t=new THREE.CanvasTexture(c);
-      t.mapping=THREE.EquirectangularReflectionMapping;return t;}
+    function envTex(){var c=document.createElement('canvas');c.width=64;c.height=32;var g=c.getContext('2d'),gr=g.createLinearGradient(0,0,0,32);gr.addColorStop(0,'#fff0dc');gr.addColorStop(0.5,'#f5893d');gr.addColorStop(1,'#110c09');g.fillStyle=gr;g.fillRect(0,0,64,32);var t=new THREE.CanvasTexture(c);t.mapping=THREE.EquirectangularReflectionMapping;return t;}
     var env=envTex(); scene.environment=env;
-
     scene.add(new THREE.HemisphereLight(0xffffff,BG,0.5));
     var key=new THREE.PointLight(ACCENT,2.0,140); key.position.set(9,11,15); scene.add(key);
-    var rim=new THREE.PointLight(ACCENT2,1.4,140); rim.position.set(-11,-5,-9); scene.add(rim);
+    var rim=new THREE.PointLight(ACCENT2,1.3,140); rim.position.set(-11,-5,-9); scene.add(rim);
 
-    // particle universe
-    var N=isMobile?4200:9000, SPREAD=70;
-    var geo=new THREE.BufferGeometry(),pos=new Float32Array(N*3),col=new Float32Array(N*3);
-    var ca=new THREE.Color(ACCENT),cb=new THREE.Color(ACCENT2),c=new THREE.Color();
+    var isMobile=innerWidth<768;
+
+    // ===== particle universe (drifting inward warmth) =====
+    var N=isMobile?4000:8200, SPREAD=70;
+    var pg=new THREE.BufferGeometry(),pp=new Float32Array(N*3),pc=new Float32Array(N*3);
+    var ca=new THREE.Color(ACCENT),cb=new THREE.Color(ACCENT2),cc=new THREE.Color();
     for(var i=0;i<N;i++){var r=SPREAD*Math.pow(Math.random(),0.5),th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
-      pos[i*3]=r*Math.sin(ph)*Math.cos(th);pos[i*3+1]=r*Math.sin(ph)*Math.sin(th)*0.55;pos[i*3+2]=r*Math.cos(ph);
-      c.copy(ca).lerp(cb,Math.random());col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;}
-    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
-    var universe=new THREE.Points(geo,new THREE.PointsMaterial({size:0.55,map:sprite,vertexColors:true,transparent:true,opacity:0.9,depthWrite:false,blending:THREE.AdditiveBlending}));
+      pp[i*3]=r*Math.sin(ph)*Math.cos(th);pp[i*3+1]=r*Math.sin(ph)*Math.sin(th)*0.55;pp[i*3+2]=r*Math.cos(ph);
+      cc.copy(ca).lerp(cb,Math.random());pc[i*3]=cc.r;pc[i*3+1]=cc.g;pc[i*3+2]=cc.b;}
+    pg.setAttribute('position',new THREE.BufferAttribute(pp,3));
+    pg.setAttribute('color',new THREE.BufferAttribute(pc,3));
+    var universe=new THREE.Points(pg,new THREE.PointsMaterial({size:0.55,map:sprite,vertexColors:true,transparent:true,opacity:0.85,depthWrite:false,blending:THREE.AdditiveBlending}));
     scene.add(universe);
 
-    // soft spiral light-field (an embrace, not a machine)
-    var strandGroup=new THREE.Group();
-    function makeSpiral(rot){
-      var SN=isMobile?1400:2600, sp=new Float32Array(SN*3);
-      var TURNS=3.2, MAXR=15;
-      for(var i=0;i<SN;i++){var t=i/SN;var a=t*Math.PI*2*TURNS;var rr=MAXR*Math.pow(t,0.62);
-        var w=0.5*Math.sin(t*30);
-        sp[i*3]=Math.cos(a)*(rr+w);
-        sp[i*3+1]=(Math.random()-0.5)*0.9*(1-t*0.5);
-        sp[i*3+2]=Math.sin(a)*(rr+w);}
-      var sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.BufferAttribute(sp,3));
-      var pts=new THREE.Points(sg,new THREE.PointsMaterial({size:0.4,map:sprite,color:ACCENTL,transparent:true,opacity:0.65,depthWrite:false,blending:THREE.AdditiveBlending}));
-      pts.rotation.y=rot; return pts;
+    // ===== soft torus-knot light strand =====
+    function makeStrand(rot){
+      var SN=isMobile?1300:2400, sg=new THREE.BufferGeometry(), sp=new Float32Array(SN*3);
+      var p=2,q=3,R=8;
+      for(var i=0;i<SN;i++){var t=i/SN*Math.PI*2;
+        var cu=Math.cos(q*t), r=R*(2+cu)*0.5;
+        sp[i*3]=r*Math.cos(p*t);
+        sp[i*3+1]=r*Math.sin(p*t)*0.85;
+        sp[i*3+2]=R*Math.sin(q*t)*0.7;}
+      sg.setAttribute('position',new THREE.BufferAttribute(sp,3));
+      var m=new THREE.Points(sg,new THREE.PointsMaterial({size:0.34,map:sprite,color:rot?ACCENT2:ACCENT,transparent:true,opacity:0.78,depthWrite:false,blending:THREE.AdditiveBlending}));
+      if(rot)m.rotation.set(Math.PI,Math.PI/2,0);
+      return m;
     }
-    strandGroup.add(makeSpiral(0));
-    strandGroup.add(makeSpiral(Math.PI));
-    strandGroup.rotation.x=-0.35;
+    var strandGroup=new THREE.Group();
+    strandGroup.add(makeStrand(false)); strandGroup.add(makeStrand(true));
+    strandGroup.scale.set(1.5,1.5,1.5);
     scene.add(strandGroup);
 
-    // centrepiece — halo cradling a warm core
+    // ===== centrepiece: sheltered glowing sphere in cupped arcs =====
     var centre=new THREE.Group();
-    var shell=new THREE.Mesh(new THREE.IcosahedronGeometry(3.6,1),
-      new THREE.MeshBasicMaterial({color:ACCENT,wireframe:true,transparent:true,opacity:0.4}));
-    centre.add(shell);
-    var halo=new THREE.Mesh(new THREE.TorusGeometry(5.4,0.05,10,140),
-      new THREE.MeshBasicMaterial({color:ACCENTL,transparent:true,opacity:0.85}));
-    halo.rotation.x=Math.PI/2.3;
-    centre.add(halo);
-    var halo2=new THREE.Mesh(new THREE.TorusGeometry(4.6,0.03,10,140),
-      new THREE.MeshBasicMaterial({color:ACCENT2,transparent:true,opacity:0.6}));
-    halo2.rotation.x=Math.PI/2.1; halo2.rotation.y=0.4;
-    centre.add(halo2);
-    var core=new THREE.Mesh(new THREE.IcosahedronGeometry(1.5,1),
-      new THREE.MeshStandardMaterial({color:0x0b1a18,metalness:0.85,roughness:0.22,envMap:env,envMapIntensity:1.1,emissive:new THREE.Color(ACCENT),emissiveIntensity:0.36}));
-    centre.add(core);
-    var fres=new THREE.ShaderMaterial({transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,
-      uniforms:{c:{value:new THREE.Color(ACCENTL)},p:{value:2.6}},
+    var coreGeo=new THREE.IcosahedronGeometry(1.9,1);
+    var coreMat=new THREE.MeshStandardMaterial({color:0x1a0f08,metalness:0.82,roughness:0.24,envMap:env,envMapIntensity:1.1,emissive:new THREE.Color(ACCENT),emissiveIntensity:0.34});
+    var core=new THREE.Mesh(coreGeo,coreMat); centre.add(core);
+
+    var fres=new THREE.ShaderMaterial({transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,uniforms:{c:{value:new THREE.Color(ACCENT2)},p:{value:2.8}},
       vertexShader:'varying float vF;uniform float p;void main(){vec3 n=normalize(normalMatrix*normal);vec4 mv=modelViewMatrix*vec4(position,1.0);vec3 v=normalize(-mv.xyz);vF=pow(1.0-abs(dot(n,v)),p);gl_Position=projectionMatrix*mv;}',
       fragmentShader:'varying float vF;uniform vec3 c;void main(){gl_FragColor=vec4(c*vF,vF);}'});
-    var fresMesh=new THREE.Mesh(new THREE.IcosahedronGeometry(1.5,1),fres);
-    fresMesh.scale.setScalar(1.12);
-    centre.add(fresMesh);
+    var shell=new THREE.Mesh(coreGeo.clone(),fres); shell.scale.set(1.06,1.06,1.06); centre.add(shell);
+
+    var wire=new THREE.Mesh(new THREE.IcosahedronGeometry(3.4,1),new THREE.MeshBasicMaterial({color:ACCENT,wireframe:true,transparent:true,opacity:0.42}));
+    centre.add(wire);
+
+    // cupping "hands" — two open arcs sheltering the sphere
+    var arc=new THREE.Mesh(new THREE.TorusGeometry(5.2,0.035,8,120,Math.PI*1.35),new THREE.MeshBasicMaterial({color:ACCENT2,transparent:true,opacity:0.72}));
+    arc.rotation.x=Math.PI/2.4; arc.rotation.z=-Math.PI*0.18; centre.add(arc);
+    var arc2=new THREE.Mesh(new THREE.TorusGeometry(4.4,0.03,8,120,Math.PI*1.2),new THREE.MeshBasicMaterial({color:ACCENT,transparent:true,opacity:0.58}));
+    arc2.rotation.x=Math.PI/2.4; arc2.rotation.z=Math.PI*0.9; centre.add(arc2);
     scene.add(centre);
 
-    // hologram — cradling open ring around a central warm point
-    var holo=new THREE.Group();
-    scene.add(holo);
-    var HM=isMobile?2600:4600;
-    var cloud=new Float32Array(HM*3), target=new Float32Array(HM*3), hpos=new Float32Array(HM*3);
-    for(var i=0;i<HM;i++){
-      var rr=26+Math.random()*6, th=Math.random()*Math.PI*2, ph=Math.acos(2*Math.random()-1);
-      cloud[i*3]=rr*Math.sin(ph)*Math.cos(th);
-      cloud[i*3+1]=rr*Math.sin(ph)*Math.sin(th);
-      cloud[i*3+2]=rr*Math.cos(ph);
-      if(i<HM*0.14){
-        var cr=0.9*Math.pow(Math.random(),0.5), ca2=Math.random()*Math.PI*2;
-        target[i*3]=Math.cos(ca2)*cr; target[i*3+1]=Math.sin(ca2)*cr; target[i*3+2]=(Math.random()-0.5)*0.6;
-      } else {
-        var a=Math.random()*Math.PI*2;
-        var base=6.2, scal=0.55*Math.sin(a*8);
-        var band=(Math.random()-0.5)*0.9;
-        var R=base+scal+band;
-        target[i*3]=Math.cos(a)*R;
-        target[i*3+1]=Math.sin(a)*R;
-        target[i*3+2]=(Math.random()-0.5)*0.7;
-      }
-      hpos[i*3]=cloud[i*3];hpos[i*3+1]=cloud[i*3+1];hpos[i*3+2]=cloud[i*3+2];
-    }
-    var hgeo=new THREE.BufferGeometry();
-    hgeo.setAttribute('position',new THREE.BufferAttribute(hpos,3));
-    var hmat=new THREE.PointsMaterial({size:0.34,map:sprite,color:ACCENTL,transparent:true,opacity:0.0,depthWrite:false,blending:THREE.AdditiveBlending});
-    var holoPts=new THREE.Points(hgeo,hmat);
-    holo.add(holoPts);
-
-    // bloom
+    // ===== bloom =====
     var composer=new THREE.EffectComposer(renderer);
     composer.addPass(new THREE.RenderPass(scene,camera));
-    var bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.15,0.85,0.12);
+    var bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.2,0.85,0.14);
     composer.addPass(bloom);
 
+    // ===== camera choreography =====
     var cam={x:0,y:2,z:46,ry:0};
-    var morph={t:0};
-    var mouse={x:0,y:0};
-    if(!isMobile){
-      window.addEventListener('mousemove',function(e){
-        mouse.x=(e.clientX/innerWidth-0.5)*2;
-        mouse.y=(e.clientY/innerHeight-0.5)*2;
-      });
-    }
-
     gsap.registerPlugin(ScrollTrigger);
     var tl=gsap.timeline({scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:1.1}});
-    tl.to(cam,{z:30,y:1.4,ease:'power2.inOut',duration:1},0)
-      .to(cam,{z:24,y:0.6,ease:'power2.inOut',duration:1},1)
-      .to(cam,{ry:Math.PI*0.55,x:-4,z:22,ease:'power2.inOut',duration:1},2)
-      .to(morph,{t:1,ease:'power2.inOut',duration:1},2)
-      .to(hmat,{opacity:0.9,ease:'none',duration:0.5},2)
-      .to(centre.scale,{x:0.4,y:0.4,z:0.4,ease:'power2.inOut',duration:1},2)
-      .to(cam,{z:17,y:-0.8,ry:Math.PI*0.85,ease:'power2.inOut',duration:1},3)
-      .to(hmat,{opacity:0.4,ease:'none',duration:1},3)
-      .to(centre.scale,{x:1,y:1,z:1,ease:'power2.inOut',duration:1},3)
-      .to(cam,{z:20,y:0.2,ry:Math.PI*1.0,x:0,ease:'power2.inOut',duration:1},4)
-      .to(strandGroup.rotation,{y:Math.PI*1.4,ease:'none',duration:5},0)
-      .to(bloom,{strength:1.4,ease:'none',duration:1},3);
+    tl.to(cam,{z:24,y:1.4,ease:'none',duration:1},0)
+      .to(cam,{z:19,ry:Math.PI*0.35,x:-4,ease:'none',duration:1},1)
+      .to(cam,{z:16,y:-0.6,ry:Math.PI*0.75,ease:'none',duration:1},2)
+      .to(cam,{z:15,y:0.8,ry:Math.PI*0.95,ease:'none',duration:1},3)
+      .to(cam,{z:20,y:1.6,ry:Math.PI*1.15,ease:'none',duration:1},4)
+      .to(cam,{z:30,y:2.2,ry:Math.PI*1.4,ease:'none',duration:1},5)
+      .to(strandGroup.rotation,{y:Math.PI*1.6,ease:'none',duration:6},0)
+      .to(bloom,{strength:1.45,ease:'none',duration:1},2)
+      .to(bloom,{strength:1.1,ease:'none',duration:2},4);
 
     document.querySelectorAll('.chapter .inner').forEach(function(el){
-      gsap.from(el,{opacity:0,y:60,duration:1,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 78%'}});
+      gsap.from(el,{opacity:0,y:60,duration:1,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 80%'}});
     });
 
-    var baseBloom=1.15;
+    var mouse={x:0,y:0},tmouse={x:0,y:0};
+    if(!isMobile){window.addEventListener('mousemove',function(e){tmouse.x=(e.clientX/innerWidth-0.5)*2;tmouse.y=(e.clientY/innerHeight-0.5)*2;});}
+
     function animate(){
       requestAnimationFrame(animate);
       var t=performance.now()*0.001;
-      universe.rotation.y+=0.0008;
-      universe.rotation.x=Math.sin(t*0.14)*0.05;
+      mouse.x+=(tmouse.x-mouse.x)*0.05; mouse.y+=(tmouse.y-mouse.y)*0.05;
+      universe.rotation.y+=0.0008; universe.rotation.x=Math.sin(t*0.15)*0.05;
       strandGroup.rotation.y+=0.0014;
-      centre.rotation.y+=0.0020;
-      centre.rotation.z=Math.sin(t*0.3)*0.07;
-      halo.rotation.z+=0.0016;
-      halo2.rotation.z-=0.0012;
-      bloom.strength=baseBloom+Math.sin(t*0.8)*0.1;
-      var arr=hgeo.attributes.position.array;
-      for(var k=0;k<HM*3;k++){arr[k]=cloud[k]+(target[k]-cloud[k])*morph.t;}
-      hgeo.attributes.position.needsUpdate=true;
-      holoPts.quaternion.copy(camera.quaternion);
-      holo.position.y=Math.sin(t*0.5)*0.3;
-      camera.position.z+=(cam.z-camera.position.z)*0.08;
-      var tx=Math.sin(cam.ry)*camera.position.z*0.35+mouse.x*2.0;
-      camera.position.x+=(tx-camera.position.x)*0.08;
-      camera.position.y+=((cam.y-mouse.y*1.4)-camera.position.y)*0.06;
+      centre.rotation.y+=0.0020; centre.rotation.z=Math.sin(t*0.3)*0.07;
+      core.rotation.y-=0.004;
+      var pulse=1+Math.sin(t*1.1)*0.05; core.scale.set(pulse,pulse,pulse);
+      coreMat.emissiveIntensity=0.3+Math.sin(t*1.1)*0.08;
+      bloom.strength=Math.max(0.85,Math.min(1.55,bloom.strength+Math.sin(t*0.8)*0.004));
+      camera.position.z+=(cam.z-camera.position.z)*0.06;
+      camera.position.x=Math.sin(cam.ry)*camera.position.z*0.32+mouse.x*2.2;
+      camera.position.y+=((cam.y-mouse.y*1.4)-camera.position.y)*0.05;
       camera.lookAt(0,0,0);
       composer.render();
     }
     animate();
 
     window.addEventListener('resize',function(){
-      camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
-      renderer.setSize(innerWidth,innerHeight);
-      composer.setSize(innerWidth,innerHeight);
+      camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth,innerHeight); composer.setSize(innerWidth,innerHeight);
     });
   }catch(e){}
 })();
