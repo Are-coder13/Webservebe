@@ -36,7 +36,23 @@ function attr(tag, name) {
   return m ? (m[2] || m[3] || m[4] || '') : '';
 }
 
-// Keep only saturated, non-grey, non-near-white/black colours (brand hues).
+// Colours from embedded third-party widgets (Google Reviews/Maps, social
+// buttons, etc.) pollute a naive "most frequent hex" scan and get mistaken for
+// the brand. Reject the well-known ones so they never become the palette.
+const THIRD_PARTY = new Set([
+  '#4285f4', '#34a853', '#fbbc05', '#ea4335', '#db4437', '#0f9d58', '#f4b400', // Google
+  '#1877f2', '#1778f2', '#3b5998', '#0866ff',                                   // Facebook
+  '#1da1f2', '#1d9bf0', '#14171a',                                              // Twitter/X
+  '#25d366', '#075e54', '#128c7e',                                             // WhatsApp
+  '#0a66c2', '#0077b5',                                                        // LinkedIn
+  '#e1306c', '#c13584', '#833ab4', '#fd1d1d',                                  // Instagram
+  '#ff0000', '#cd201f',                                                        // YouTube
+  '#25d366', '#5865f2', '#7289da',                                             // Discord
+  '#ff4500', '#ff5700',                                                        // Reddit
+]);
+
+// Keep only saturated, non-grey, non-near-white/black colours (brand hues),
+// excluding known third-party widget colours.
 function keepBrandHex(hex) {
   const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
   if (!m) return null;
@@ -46,6 +62,7 @@ function keepBrandHex(hex) {
   if (mx > 236 && mn > 236) return null;   // near-white
   if (mx < 24) return null;                // near-black
   if (mx - mn < 16) return null;           // near-grey
+  if (THIRD_PARTY.has('#' + n.toLowerCase())) return null; // Google/FB/etc widget colour
   return '#' + n.toLowerCase();
 }
 

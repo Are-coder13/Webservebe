@@ -423,16 +423,11 @@ function businessBlock(place, branding, scraped) {
   if (place.phone) parts.push(`- Phone: ${place.phone}`);
   if (place.website) parts.push(`- Website: ${place.website}`);
   if (place.rating) parts.push(`- Google rating: ${place.rating}★ (${place.total_ratings || 0} reviews)`);
-  if (branding && (branding.logoUrl || (branding.colors && branding.colors.length))) {
+  if (branding && branding.logoUrl) {
     parts.push('', 'BRAND:');
-    if (branding.logoUrl) parts.push(`- Logo URL (you may use as <img>): ${branding.logoUrl}`);
-    if (branding.colors && branding.colors.length) {
-      parts.push(`- Brand colours (extracted from the real logo — these are the ACTUAL brand identity):`);
-      parts.push(`  ${branding.colors.join(', ')}`);
-      parts.push(`  ANCHOR the palette to these: adapt the dominant brand colour into the glow/accent of the`);
-      parts.push(`  dark cinematic scene, and echo a secondary brand colour, instead of defaulting to a generic`);
-      parts.push(`  candidate palette. The candidate palettes below are references for structure/contrast only.`);
-    }
+    parts.push(`- Logo URL (you may use as <img>): ${branding.logoUrl}`);
+    parts.push('- COLOUR: the exact palette is provided separately in the PALETTE block (already brand-derived).');
+    parts.push('  Use ONLY those CSS tokens — do NOT read colours off the logo or invent your own hexes.');
   }
   if (branding && branding.images && branding.images.length) {
     parts.push('', 'REAL PHOTOS from the client\'s own website (USE THESE — they are the actual brand imagery):');
@@ -558,6 +553,40 @@ function withCors(resp) {
 }
 function json(obj, status = 200) {
   return new Response(JSON.stringify(obj), { status, headers: { 'content-type': 'application/json' } });
+}
+
+// Deterministic palette enforcement: models often HARDCODE their chosen colours
+// (e.g. #4285f4 and rgba(66,133,244,…)) instead of using the var() tokens, which
+// defeats the brand-lock. Read the model's own :root brand/accent/bg hexes and
+// globally rewrite those exact values (and their rgb triplets) to the locked
+// palette — so the brand colour holds no matter how the model wrote it.
+function enforcePalette(html, pal) {
+  const m = html.match(/:root\s*\{([\s\S]*?)\}/i); // the model's first :root
+  if (!m) return html;
+  const root = m[1];
+  const readVar = (name) => {
+    const r = new RegExp('--' + name + '\\s*:\\s*(#[0-9a-fA-F]{6})', 'i').exec(root);
+    return r ? r[1].toLowerCase() : null;
+  };
+  const hexRgb = (h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+  const pairs = [
+    [readVar('brand'), pal.vars['--brand']],
+    [readVar('accent'), pal.vars['--accent']],
+    [readVar('accent2'), pal.vars['--brand-2']],
+    [readVar('brand-2'), pal.vars['--brand-2']],
+    [readVar('bg'), pal.vars['--bg']],
+  ];
+  let out = html;
+  const done = new Set();
+  for (const [from, to] of pairs) {
+    if (!from || !to || !/^#[0-9a-f]{6}$/i.test(to) || from === to.toLowerCase() || done.has(from)) continue;
+    done.add(from);
+    out = out.split(from).join(to.toLowerCase());              // #hex (all cases already lowered in root)
+    out = out.split(from.toUpperCase()).join(to.toLowerCase()); // #HEX
+    const [fr, fg, fb] = hexRgb(from), [tr, tg, tb] = hexRgb(to);
+    out = out.replace(new RegExp('\\b' + fr + '\\s*,\\s*' + fg + '\\s*,\\s*' + fb + '\\b', 'g'), tr + ',' + tg + ',' + tb);
+  }
+  return out;
 }
 
 export default {
@@ -697,6 +726,10 @@ export default {
       }
 
       const renderClean = (style === 'clean' ? true : diag.canvasOk) && (!diag.errors || diag.errors.length === 0);
+
+      // Rewrite any hardcoded brand/accent hexes the model used to the locked
+      // palette (guarantee the brand colour even when the model ignored tokens).
+      html = enforcePalette(html, pal);
 
       // BRAND LOCK — inject the computed palette as the LAST style in <head> so
       // the tokens hold the brand values regardless of what the model wrote in
