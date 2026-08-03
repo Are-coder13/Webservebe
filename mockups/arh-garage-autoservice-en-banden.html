@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<!-- BUILD DIAG: style=cinematic scrapedChars=3848 brandSource=html colorSource=html logoFound=true brandColors=#ffc803|#00d084|#0693e3|#493834 paletteSource=brand palette=#f5cd3d/#f5cd3d archetype=trade products=0 imagesFound=8 framesSeen=0 renderClean=true reviewRounds=1 directionUsed=false -->
+<!-- CONCEPT: offering=professioneel auto diagnose, reparatie & onderhoud; feeling=geruststelling en respect — een gloednieuwe garage die je nu al vertrouwt met je auto; 3d-story=een lissajous-lint van licht zwiept als een motor door zijn toerental; bij de diagnose-chapter convergeren de deeltjes tot een gloeiende wireframe remschijf met remklauw — precies de verborgen remfout die deze garage geprezen wordt om te vangen — draaiend onder een inspectielicht terwijl een HUD de metingen traceert; chapters=1 hero establishing sweep, 2 service-menu push-in, 3 brake disc hologram orbit + HUD, 4 reviews close approach, 5 afspraak settle, 6 werktijden & contact resolve -->
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARH Garage Autoservice en Banden — Betrouwbare autoreparatie in Antwerpen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brand:#f5cd3d;--brand-2:#d6f547;--accent:#f5cd3d;
+  --bg:#110f09;--bg-rgb:17,15,9;
+  --ink:#f4f5f7;--muted:rgba(244,245,247,0.66);--border:rgba(244,245,247,0.14);
+  --on-brand:#0a0a0f;--on-accent:#0a0a0f;
+  --z-canvas:0;--z-veil:1;--z-content:2;--z-hud:5;--z-nav:90;--z-banner:100;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Source Sans 3',sans-serif;font-weight:400;line-height:1.6;overflow-x:hidden}
+h1,h2,h3,h4{font-family:'Bebas Neue',sans-serif;font-weight:400;letter-spacing:.02em;line-height:.98}
+img{max-width:100%}
+.banner{position:fixed;top:0;left:0;right:0;z-index:var(--z-banner);background:rgba(10,10,15,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);color:var(--ink);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;text-align:center;padding:8px 12px}
+.banner b{color:var(--brand)}
+#gl{position:fixed;inset:0;z-index:var(--z-canvas)}
+.veil{position:fixed;inset:0;z-index:var(--z-veil);pointer-events:none;background:radial-gradient(ellipse at 50% 42%,transparent 30%,rgba(var(--bg-rgb),.55) 78%,rgba(var(--bg-rgb),.9) 100%)}
+.wrap{position:relative;z-index:var(--z-content)}
+.chapter{min-height:100vh;display:flex;align-items:center;padding:120px 6vw;position:relative}
+.inner{position:relative;max-width:1200px;margin:0 auto;width:100%}
+.inner::before{content:'';position:absolute;inset:-70px -90px;z-index:-1;background:radial-gradient(closest-side,rgba(var(--bg-rgb),.82),rgba(var(--bg-rgb),.48) 60%,transparent);filter:blur(4px)}
+.tag{display:inline-block;font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;color:var(--brand);border:1px solid var(--border);border-radius:40px;padding:7px 16px;margin-bottom:26px;font-weight:600}
+h1{font-size:clamp(3.4rem,9vw,7.5rem);text-shadow:0 4px 40px rgba(0,0,0,.6)}
+h2{font-size:clamp(2.6rem,6vw,5rem);text-shadow:0 4px 30px rgba(0,0,0,.6)}
+h3{font-size:1.5rem;letter-spacing:.04em}
+p{text-shadow:0 2px 14px rgba(0,0,0,.55)}
+.lead{font-size:clamp(1.05rem,1.7vw,1.3rem);color:var(--muted);max-width:620px}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:var(--on-accent);font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:.06em;padding:14px 34px;border-radius:6px;text-decoration:none;border:none;cursor:pointer;transition:transform .25s,box-shadow .25s;box-shadow:0 8px 30px rgba(245,205,61,.25);min-height:48px}
+.btn:hover{transform:translateY(-3px);box-shadow:0 14px 44px rgba(245,205,61,.4)}
+.btn:focus-visible{outline:3px solid var(--brand-2);outline-offset:3px}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--border);box-shadow:none}
+.btn.ghost:hover{border-color:var(--brand);color:var(--brand)}
+.btnrow{display:flex;gap:16px;flex-wrap:wrap;margin-top:38px}
+a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--brand-2);outline-offset:2px}
+
+.topnav{position:fixed;top:37px;left:0;right:0;z-index:var(--z-nav);display:flex;align-items:center;justify-content:space-between;padding:14px 6vw;transition:background .3s}
+.topnav.scrolled{background:rgba(var(--bg-rgb),.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.brandlogo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
+.brandlogo img{height:42px;width:auto}
+.brandlogo span{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.05em}
+.navlinks{display:flex;gap:28px;align-items:center}
+.navlinks a{color:var(--muted);text-decoration:none;font-size:.86rem;letter-spacing:.12em;text-transform:uppercase;transition:color .2s}
+.navlinks a:hover{color:var(--brand)}
+.navlinks .btn{font-size:1rem;padding:9px 20px}
+@media(max-width:900px){.navlinks a:not(.btn){display:none}}
+
+.hero-meta{display:flex;gap:26px;flex-wrap:wrap;margin-top:44px;align-items:center}
+.stars{color:var(--brand);font-size:1.1rem;letter-spacing:.1em}
+.metaitem{font-size:.9rem;color:var(--muted)}
+.metaitem b{color:var(--ink)}
+.hero-photo{margin-top:46px;border-radius:18px;overflow:hidden;border:1px solid var(--border);position:relative;aspect-ratio:21/8;background:linear-gradient(135deg,#1a1710,#0d0b06);max-width:100%}
+.hero-photo img{width:100%;height:100%;object-fit:cover;display:block;opacity:.9}
+.hero-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(var(--bg-rgb),.55),transparent 55%)}
+
+.poster{position:absolute;right:-1vw;top:-6vh;z-index:-1;font-family:'Bebas Neue',sans-serif;font-size:clamp(5rem,15vw,13rem);line-height:.8;color:transparent;-webkit-text-stroke:2px rgba(245,205,61,.55);white-space:nowrap;pointer-events:none;user-select:none;opacity:.85}
+
+.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px;align-items:stretch}
+.card{background:rgba(15,13,7,.94);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:14px;padding:28px;display:flex;flex-direction:column;transition:transform .3s,border-color .3s;position:relative;overflow:hidden}
+.card:hover{transform:translateY(-6px);border-color:rgba(245,205,61,.5)}
+.card svg{margin-bottom:18px}
+.card h3{margin-bottom:8px;color:var(--ink)}
+.card p{color:var(--muted);font-size:.95rem}
+.card .num{position:absolute;top:16px;right:20px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:rgba(245,205,61,.4)}
+@media(max-width:820px){.bento{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.bento{grid-template-columns:1fr}}
+
+.twocol{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center}
+@media(max-width:820px){.twocol{grid-template-columns:1fr;gap:36px}}
+.photo{border-radius:16px;overflow:hidden;border:1px solid var(--border);background:linear-gradient(135deg,#1a1710,#0d0b06);aspect-ratio:4/3}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.steplist{list-style:none;margin-top:30px}
+.steplist li{display:flex;gap:18px;padding:18px 0;border-bottom:1px solid var(--border)}
+.steplist .n{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--brand);line-height:1;min-width:44px}
+.steplist h4{font-size:1.35rem;margin-bottom:2px}
+.steplist p{color:var(--muted);font-size:.95rem}
+
+.statband{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:20px;align-items:stretch}
+@media(max-width:700px){.statband{grid-template-columns:1fr 1fr}}
+.stat{text-align:center;padding:20px;background:rgba(15,13,7,.7);border:1px solid var(--border);border-radius:12px}
+.stat .big{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,5rem);color:var(--brand);line-height:1}
+.stat .lbl{color:var(--muted);font-size:.9rem;letter-spacing:.06em;text-transform:uppercase;margin-top:6px}
+
+.testgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px;align-items:stretch}
+@media(max-width:820px){.testgrid{grid-template-columns:1fr}}
+.test{background:rgba(15,13,7,.94);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:14px;padding:28px;display:flex;flex-direction:column}
+.test:nth-child(2){transform:translateY(24px)}
+@media(max-width:820px){.test:nth-child(2){transform:none}}
+.test .q{font-size:1rem;color:var(--ink);flex:1;margin-bottom:20px}
+.test .who{display:flex;align-items:center;gap:12px;margin-top:auto}
+.test .who .av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;color:var(--on-brand);font-size:1.2rem}
+.test .who b{display:block;font-size:.95rem}
+.test .who span{font-size:.82rem;color:var(--muted)}
+.test .st{color:var(--brand);font-size:.95rem;margin-bottom:12px;letter-spacing:.1em}
+
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px}
+@media(max-width:700px){.gallery{grid-template-columns:1fr 1fr}}
+.gallery figure{margin:0;border-radius:14px;overflow:hidden;border:1px solid var(--border);aspect-ratio:4/3;background:linear-gradient(135deg,#1a1710,#0d0b06)}
+.gallery img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.gallery figure:hover img{transform:scale(1.06)}
+
+.formcard{background:rgba(15,13,7,.94);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:18px;padding:40px}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.field input,.field textarea,.field select{width:100%;background:rgba(244,245,247,.05);border:1px solid var(--border);border-radius:8px;padding:13px 15px;color:var(--ink);font-family:inherit;font-size:16px;min-height:48px}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--brand)}
+.formstatus{margin-top:14px;font-size:.9rem;min-height:1.2em}
+.formstatus.ok{color:var(--brand-2)}
+.formstatus.err{color:#ff8a8a}
+
+.hoursgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:50px;margin-top:20px}
+@media(max-width:820px){.hoursgrid{grid-template-columns:1fr;gap:30px}}
+.hourrow{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);font-size:.98rem}
+.hourrow .d{color:var(--muted)}
+.hourrow.closed .t{color:var(--brand)}
+.contactbox p{margin-bottom:14px;color:var(--muted)}
+.contactbox b{color:var(--ink)}
+.contactbox a{color:var(--brand);text-decoration:none}
+footer{position:relative;z-index:var(--z-content);border-top:1px solid var(--border);padding:40px 6vw;text-align:center;color:var(--muted);font-size:.85rem;background:rgba(10,9,5,.6)}
+
+.hud{position:fixed;inset:0;z-index:var(--z-hud);pointer-events:none;opacity:0;transition:opacity .5s}
+.hud.show{opacity:1}
+.hud .brk{position:absolute;width:26px;height:26px}
+.hud .brk.tl{top:26vh;left:34vw;border-top:1.5px solid var(--brand);border-left:1.5px solid var(--brand)}
+.hud .brk.tr{top:26vh;right:34vw;border-top:1.5px solid var(--brand);border-right:1.5px solid var(--brand)}
+.hud .brk.bl{bottom:26vh;left:34vw;border-bottom:1.5px solid var(--brand);border-left:1.5px solid var(--brand)}
+.hud .brk.br{bottom:26vh;right:34vw;border-bottom:1.5px solid var(--brand);border-right:1.5px solid var(--brand)}
+.hud .reticle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(30vw,340px);height:min(30vw,340px);opacity:.5}
+.hud .scanline{position:absolute;top:26vh;left:34vw;right:34vw;height:1px;background:linear-gradient(90deg,transparent,var(--brand),transparent);animation:scan 2.6s ease-in-out infinite}
+@keyframes scan{0%{transform:translateY(0)}50%{transform:translateY(48vh)}100%{transform:translateY(0)}}
+.hud .readout{position:absolute;top:28vh;right:12vw;background:rgba(10,9,5,.78);border:1px solid rgba(245,205,61,.4);backdrop-filter:blur(8px);border-radius:8px;padding:14px 18px;font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.06em}
+.hud .readout .r{display:flex;justify-content:space-between;gap:24px;padding:3px 0;color:var(--muted)}
+.hud .readout .r b{color:var(--brand)}
+.hud .dot{width:8px;height:8px;border-radius:50%;background:var(--brand);box-shadow:0 0 8px var(--brand);display:inline-block;animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@media(max-width:768px){.hud{display:none}}
+
+.sectlabel{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--brand);letter-spacing:.2em}
+
+@media(prefers-reduced-motion:reduce){
+  #gl{display:none}
+  body{background:radial-gradient(ellipse at 50% 30%,#1c1810,#110f09 70%)}
+  .hud{display:none!important}
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+<style id="brand-lock">:root{--brand:#f5cd3d;--brand-2:#d6f547;--accent:#f5cd3d;--bg:#110f09;--ink:#f4f5f7;--muted:rgba(244,245,247,0.66);--border:rgba(244,245,247,0.14);--on-brand:#0a0a0f;--on-accent:#0a0a0f}</style></head>
+<body>
+<div class="banner">Website Preview — concept mockup voor <b>ARH Garage Autoservice en Banden</b></div>
+
+<div id="gl"></div>
+<div class="veil"></div>
+
+<div class="hud" id="hud" aria-hidden="true">
+  <div class="brk tl"></div><div class="brk tr"></div><div class="brk bl"></div><div class="brk br"></div>
+  <div class="scanline"></div>
+  <svg class="reticle" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="none" stroke="#f5cd3d" stroke-width="0.5"/><circle cx="50" cy="50" r="30" fill="none" stroke="#f5cd3d" stroke-width="0.5"/><line x1="50" y1="4" x2="50" y2="96" stroke="#f5cd3d" stroke-width="0.4"/><line x1="4" y1="50" x2="96" y2="50" stroke="#f5cd3d" stroke-width="0.4"/></svg>
+  <div class="readout">
+    <div class="r"><span>SCAN</span><b>ACTIEF</b></div>
+    <div class="r"><span>DOEL</span><b>REMSCHIJF</b></div>
+    <div class="r"><span>SLIJTAGE</span><b>2.1 mm</b></div>
+    <div class="r"><span><span class="dot"></span> DIAGNOSE</span><b>OK</b></div>
+  </div>
+</div>
+
+<nav class="topnav" id="topnav">
+  <a class="brandlogo" href="#top">
+    <img src="http://www.arhgarage.be/wp-content/uploads/2024/03/cropped-logo.png" alt="ARH Garage logo" loading="lazy" onerror="this.style.display='none'">
+    <span>ARH Garage</span>
+  </a>
+  <div class="navlinks">
+    <a href="#diensten">Diensten</a>
+    <a href="#diagnose">Diagnose</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#contact">Contact</a>
+    <a href="#afspraak" class="btn">Maak een afspraak</a>
+  </div>
+</nav>
+
+<div class="wrap" id="top">
+
+  <!-- CH1 HERO -->
+  <section class="chapter hero" id="hero">
+    <div class="poster" aria-hidden="true">BETROUWBAAR</div>
+    <div class="inner">
+      <span class="tag">Autoservice &amp; Banden · Antwerpen</span>
+      <h1>Zet je op weg<br>naar betrouwbaarheid</h1>
+      <p class="lead" style="margin-top:26px">Welkom bij ARH — je gloednieuwe, betrouwbare autoreparatiebedrijf. Van remmen tot banden: het breedste scala aan onderhoudsdiensten, met een eerlijke diagnose en snelle hulp.</p>
+      <div class="btnrow">
+        <a href="#afspraak" class="btn">Plan een afspraak</a>
+        <a href="#diensten" class="btn ghost">Bekijk onze diensten</a>
+      </div>
+      <div class="hero-meta">
+        <div class="stars" aria-label="4,8 van 5 sterren">★★★★★</div>
+        <div class="metaitem"><b>4,8</b> op Google · 5 reviews</div>
+        <div class="metaitem">Vosseschijnstraat 11, 2030 Antwerpen</div>
+      </div>
+      <div class="hero-photo">
+        <img src="http://www.arhgarage.be/wp-content/uploads/2018/04/slider_1_1-copyright.jpg" alt="ARH Garage werkplaats in Antwerpen" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- CH2 SERVICES -->
+  <section class="chapter" id="diensten">
+    <div class="inner">
+      <span class="sectlabel">Onze diensten</span>
+      <h2 style="margin-top:14px">Wat we voor je auto herstellen</h2>
+      <p class="lead" style="margin-top:18px">We passen innovatieve methoden van autoreparatie en tuning toe — met nieuwe apparatuur voor elk type onderzoek, reparatie en maatwerkservice.</p>
+      <div class="bento">
+        <div class="card"><span class="num">01</span>
+          <svg width="40" height="40" viewBox="0 0 48 48" fill="none" aria-hidden="true"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5cd3d"/><stop offset="1" stop-color="#d6f547"/></linearGradient></defs><circle cx="24" cy="24" r="19" stroke="url(#g1)" stroke-width="2"/><circle cx="24" cy="24" r="8" stroke="url(#g1)" stroke-width="2"/><path d="M24 5v6M24 37v6M5 24h6M37 24h6M11 11l4 4M37 37l-4-4M37 11l-4 4M11 37l4-4" stroke="url(#g1)" stroke-width="2" stroke-linecap="round"/></svg>
+          <h3>Remmen</h3><p>Remschijven, remblokken en remleidingen — precies gecontroleerd, want een verborgen remfout vangen we op tijd.</p></div>
+        <div class="card"><span class="num">02</span>
+          <svg width="40" height="40" viewBox="0 0 48 48" fill="none" aria-hidden="true"><defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5cd3d"/><stop offset="1" stop-color="#d6f547"/></linearGradient></defs><path d="M24 8v14" stroke="url(#g2)" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="24" r="4" fill="url(#g2)"/><path d="M14 22c0-6 4-10 10-10s10 4 10 10M10 40c2-8 6-14 14-14s12 6 14 14" stroke="url(#g2)" stroke-width="2" stroke-linecap="round"/></svg>
+          <h3>Ophanging</h3><p>Schokdempers en veren die je comfort en grip teruggeven op elke Antwerpse weg.</p></div>
+        <div class="card"><span class="num">03</span>
+          <svg width="40" height="40" viewBox="0 0 48 48" fill="none" aria-hidden="true"><defs><linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5cd3d"/><stop offset="1" stop-color="#d6f547"/></linearGradient></defs><circle cx="24" cy="24" r="11" stroke="url(#g3)" stroke-width="2"/><path d="M24 13a11 11 0 0 1 9.5 5.5M24 35a11 11 0 0 1-9.5-5.5" stroke="url(#g3)" stroke-width="2" stroke-linecap="round"/><path d="M24 18l4 6-4 6-4-6z" fill="url(#g3)"/><path d="M40 20l4-2M4 28l4-2" stroke="url(#g3)" stroke-width="2" stroke-linecap="round"/></svg>
+          <h3>Turbo</h3><p>Diagnose en herstel van turbosystemen — voor prestaties zonder compromis.</p></div>
+        <div class="card"><span class="num">04</span>
+          <svg width="40" height="40" viewBox="0 0 48 48" fill="none" aria-hidden="true"><defs><linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5cd3d"/><stop offset="1" stop-color="#d6f547"/></linearGradient></defs><circle cx="15" cy="30" r="7" stroke="url(#g4)" stroke-width="2"/><circle cx="33" cy="18" r="7" stroke="url(#g4)" stroke-width="2"/><path d="M20 26l8-3M20 34l8 3" stroke="url(#g4)" stroke-width="2" stroke-linecap="round"/><path d="M15 30l4-8" stroke="url(#g4)" stroke-width="1.6" stroke-dasharray="2 2"/></svg>
+          <h3>Riemen</h3><p>Distributieriemen en aandrijfriemen tijdig vervangen, voordat er schade ontstaat.</p></div>
+        <div class="card"><span class="num">05</span>
+          <svg width="40" height="40" viewBox="0 0 48 48" fill="none" aria-hidden="true"><defs><linearGradient id="g5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5cd3d"/><stop offset="1" stop-color="#d6f547"/></linearGradient></defs><circle cx="24" cy="24" r="18" stroke="url(#g5)" stroke-width="2"/><circle cx="24" cy="24" r="7" stroke="url(#g5)" stroke-width="2"/><path d="M24 6v11M24 31v11M6 24h11M31 24h11M11 11l8 8M37 37l-8-8M37 11l-8 8M11 37l8-8" stroke="url(#g5)" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <h3>Wielen &amp; Banden</h3><p>Bandenwissel, uitlijning en balanceren — veilig de weg op, elk seizoen.</p></div>
+        <div class="card"><span class="num">06</span>
+          <svg width="40" height="40" viewBox="0 0 48 48" fill="none" aria-hidden="true"><defs><linearGradient id="g6" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5cd3d"/><stop offset="1" stop-color="#d6f547"/></linearGradient></defs><rect x="8" y="14" width="32" height="20" rx="3" stroke="url(#g6)" stroke-width="2"/><path d="M16 10v4M32 10v4" stroke="url(#g6)" stroke-width="2" stroke-linecap="round"/><path d="M15 24h6M18 21v6M28 24h6" stroke="url(#g6)" stroke-width="2" stroke-linecap="round"/></svg>
+          <h3>Batterijen</h3><p>Testen, opladen en vervangen — zodat je auto altijd start wanneer jij dat nodig hebt.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH3 DIAGNOSE HOLOGRAM -->
+  <section class="chapter" id="diagnose">
+    <div class="inner">
+      <div class="twocol">
+        <div>
+          <span class="sectlabel">De diagnose</span>
+          <h2 style="margin-top:14px">Wij zien wat anderen missen</h2>
+          <p class="lead" style="margin-top:18px">Een klant kwam voor een simpele oliewissel. Onze monteurs ontdekten een probleem met de remmen — en losten het meteen op. Dát is de zorg waarmee we elke auto behandelen.</p>
+          <ul class="steplist">
+            <li><span class="n">1</span><div><h4>Diagnose auto</h4><p>Volledige, deskundige controle met moderne apparatuur.</p></div></li>
+            <li><span class="n">2</span><div><h4>Reparatie en service</h4><p>We komen meteen met een heldere, eerlijke oplossing.</p></div></li>
+            <li><span class="n">3</span><div><h4>Auto terug bij jou</h4><p>Je auto weer op de weg — en jij op weg met een gerust hart.</p></div></li>
+          </ul>
+        </div>
+        <div class="photo"><img src="http://www.arhgarage.be/wp-content/uploads/2018/04/img-12-copyright.jpg" alt="Monteur van ARH Garage voert een diagnose uit" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH4 STATS + REVIEWS -->
+  <section class="chapter" id="reviews">
+    <div class="inner">
+      <span class="sectlabel">Waarom klanten voor ons kiezen</span>
+      <h2 style="margin-top:14px">Eerlijke diagnose. Snelle hulp.</h2>
+      <div class="statband">
+        <div class="stat"><div class="big">4,8★</div><div class="lbl">Google score</div></div>
+        <div class="stat"><div class="big">100%</div><div class="lbl">Eerlijk advies</div></div>
+        <div class="stat"><div class="big">6</div><div class="lbl">Kerndiensten</div></div>
+        <div class="stat"><div class="big">6/7</div><div class="lbl">Dagen open</div></div>
+      </div>
+      <div class="testgrid">
+        <div class="test">
+          <div class="st" aria-label="5 sterren">★★★★★</div>
+          <p class="q">Zoek je een goedkope maar kwalitatief hoogwaardige autoservice? Bezoek deze jongens voor een snelle controle. Ze stellen een deskundige diagnose en komen meteen met een oplossing!</p>
+          <div class="who"><div class="av" aria-hidden="true">W</div><div><b>William Sanders</b><span>Manager</span></div></div>
+        </div>
+        <div class="test">
+          <div class="st" aria-label="5 sterren">★★★★★</div>
+          <p class="q">Ik zou niet weten wat ik zonder jullie professionele hulp zou moeten! Mijn oude Corolla loopt gesmeerd dankzij de bekwame monteurs. Bedankt, ik waardeer het geweldige werk.</p>
+          <div class="who"><div class="av" aria-hidden="true">L</div><div><b>Linda Moore</b><span>Klant</span></div></div>
+        </div>
+        <div class="test">
+          <div class="st" aria-label="5 sterren">★★★★★</div>
+          <p class="q">Ik hoopte op een simpele oliewissel, maar ze vonden een probleem met de remmen. Zo dankbaar voor de snelle en effectieve hulp — de auto werkt weer prima!</p>
+          <div class="who"><div class="av" aria-hidden="true">J</div><div><b>Jeremy Watts</b><span>Klant</span></div></div>
+        </div>
+      </div>
+      <div class="gallery">
+        <figure><img src="http://www.arhgarage.be/wp-content/uploads/2018/04/slider_1_2-copyright.jpg" alt="Werkplaats van ARH Garage" loading="lazy"></figure>
+        <figure><img src="http://www.arhgarage.be/wp-content/uploads/2018/04/slider_1_3-copyright.jpg" alt="Auto in onderhoud bij ARH Garage" loading="lazy"></figure>
+        <figure><img src="https://www.arhgarage.be/wp-content/uploads/2018/04/img-9-copyright.jpg" alt="Detail van een reparatie bij ARH Garage" loading="lazy"></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH5 AFSPRAAK -->
+  <section class="chapter" id="afspraak">
+    <div class="inner">
+      <div class="twocol">
+        <div>
+          <span class="sectlabel">Maak een afspraak</span>
+          <h2 style="margin-top:14px">Vraag je afspraak aan</h2>
+          <p class="lead" style="margin-top:18px">Vul het formulier in en onze medewerker neemt contact met je op om een afspraak in te plannen. We staan voor je klaar op Vosseschijnstraat 11, 2030 Antwerpen.</p>
+          <div class="btnrow">
+            <a href="tel:+32472032710" class="btn">Bel +32 472 03 27 10</a>
+          </div>
+        </div>
+        <form class="formcard" id="afspraakform" novalidate>
+          <div class="field"><label for="f-naam">Naam</label><input id="f-naam" name="naam" type="text" placeholder="Je naam" required></div>
+          <div class="field"><label for="f-tel">Telefoon</label><input id="f-tel" name="tel" type="tel" placeholder="+32 ..." required></div>
+          <div class="field"><label for="f-dienst">Dienst</label>
+            <select id="f-dienst" name="dienst"><option>Remmen</option><option>Ophanging</option><option>Turbo</option><option>Riemen</option><option>Wielen &amp; Banden</option><option>Batterijen</option><option>Onderhoud / oliewissel</option></select>
+          </div>
+          <div class="field"><label for="f-bericht">Bericht</label><textarea id="f-bericht" name="bericht" rows="3" placeholder="Vertel ons kort wat er aan de hand is"></textarea></div>
+          <button class="btn" type="submit" id="f-submit" style="width:100%;justify-content:center">Afspraak aanvragen</button>
+          <p class="formstatus" id="f-status" role="status" aria-live="polite"></p>
+          <p style="font-size:.78rem;color:var(--muted);margin-top:6px">Ik ga ermee akkoord dat mijn gegevens worden verzameld en opgeslagen.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH6 CONTACT / HOURS -->
+  <section class="chapter" id="contact">
+    <div class="inner">
+      <span class="sectlabel">Werktijden &amp; contact</span>
+      <h2 style="margin-top:14px">Kom langs, we helpen je graag</h2>
+      <div class="hoursgrid">
+        <div>
+          <div class="hourrow"><span class="d">Maandag</span><span class="t">7:30 – 18:00</span></div>
+          <div class="hourrow"><span class="d">Dinsdag</span><span class="t">7:30 – 18:00</span></div>
+          <div class="hourrow"><span class="d">Woensdag</span><span class="t">7:30 – 18:00</span></div>
+          <div class="hourrow"><span class="d">Donderdag</span><span class="t">7:30 – 18:00</span></div>
+          <div class="hourrow"><span class="d">Vrijdag</span><span class="t">7:30 – 18:00</span></div>
+          <div class="hourrow"><span class="d">Zaterdag</span><span class="t">7:30 – 18:00</span></div>
+          <div class="hourrow closed"><span class="d">Zondag</span><span class="t">Gesloten</span></div>
+        </div>
+        <div class="contactbox">
+          <p><b>Adres</b><br>Vosseschijnstraat 11<br>2030 Antwerpen, België</p>
+          <p><b>Telefoon</b><br><a href="tel:+32472032710">+32 472 03 27 10</a></p>
+          <p><b>E-mail</b><br><a href="mailto:info@arhgarage.be">info@arhgarage.be</a></p>
+          <p><b>Website</b><br><a href="http://www.arhgarage.be/" target="_blank" rel="noopener">www.arhgarage.be</a></p>
+          <div class="btnrow"><a href="#afspraak" class="btn">Plan een afspraak</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p>ARH Garage Autoservice en Banden · Vosseschijnstraat 11, 2030 Antwerpen · +32 472 03 27 10</p>
+  <p style="margin-top:8px">Website Preview — concept mockup. Niet de officiële website.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+// nav scroll state
+var topnav=document.getElementById('topnav');
+window.addEventListener('scroll',function(){topnav.classList.toggle('scrolled',window.scrollY>40)},{passive:true});
+
+// form handling
+(function(){
+  var form=document.getElementById('afspraakform');
+  if(!form)return;
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var status=document.getElementById('f-status'),btn=document.getElementById('f-submit');
+    var naam=document.getElementById('f-naam'),tel=document.getElementById('f-tel');
+    status.className='formstatus';
+    if(!naam.value.trim()||!tel.value.trim()){
+      status.classList.add('err');status.textContent='Vul je naam en telefoonnummer in.';return;
+    }
+    btn.disabled=true;btn.textContent='Verzenden…';
+    setTimeout(function(){
+      btn.disabled=false;btn.textContent='Afspraak aanvragen';
+      status.classList.add('ok');status.textContent='Bedankt! We nemen snel contact met je op.';
+      form.reset();
+    },900);
+  });
+})();
+
+function hasWebGL(){try{var c=document.createElement('canvas');return !!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl')));}catch(e){return false;}}
+var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+(function(){
+if(reduce||!hasWebGL()||!window.THREE)return;
+try{
+var BG=0x110f09, ACCENT=0xf5cd3d, ACCENT2=0xd6f547;
+var scene=new THREE.Scene();
+scene.background=new THREE.Color(BG);
+scene.fog=new THREE.FogExp2(BG,0.015);
+var camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,400);
+camera.position.set(0,2,46);
+
+var renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.setSize(innerWidth,innerHeight);
+document.getElementById('gl').appendChild(renderer.domElement);
+
+var isMobile=innerWidth<768;
+
+function makeSprite(){var c=document.createElement('canvas');c.width=c.height=64;
+ var g=c.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);
+ r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(0.35,'rgba(255,255,255,.6)');r.addColorStop(1,'rgba(255,255,255,0)');
+ g.fillStyle=r;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c);}
+var sprite=makeSprite();
+
+function envTex(){var c=document.createElement('canvas');c.width=64;c.height=32;
+ var g=c.getContext('2d'),gr=g.createLinearGradient(0,0,0,32);
+ gr.addColorStop(0,'#fff2c0');gr.addColorStop(0.5,'#f5cd3d');gr.addColorStop(1,'#110f09');
+ g.fillStyle=gr;g.fillRect(0,0,64,32);var t=new THREE.CanvasTexture(c);
+ t.mapping=THREE.EquirectangularReflectionMapping;return t;}
+var env=envTex(); scene.environment=env;
+scene.add(new THREE.HemisphereLight(0xffffff,BG,0.55));
+var key=new THREE.PointLight(ACCENT,2.0,140);key.position.set(9,11,15);scene.add(key);
+var rim=new THREE.PointLight(ACCENT2,1.4,140);rim.position.set(-11,-5,-9);scene.add(rim);
+
+// particle universe (RECIPE B)
+var N=isMobile?4000:9000, SPREAD=90;
+var geo=new THREE.BufferGeometry(),pos=new Float32Array(N*3),col=new Float32Array(N*3);
+var ca=new THREE.Color(ACCENT),cb=new THREE.Color(ACCENT2),c=new THREE.Color();
+for(var i=0;i<N;i++){var r=SPREAD*Math.pow(Math.random(),0.5),th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+ pos[i*3]=r*Math.sin(ph)*Math.cos(th);pos[i*3+1]=r*Math.sin(ph)*Math.sin(th)*0.55;pos[i*3+2]=r*Math.cos(ph);
+ c.copy(ca).lerp(cb,Math.random());col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;}
+geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+var universe=new THREE.Points(geo,new THREE.PointsMaterial({size:0.55,map:sprite,vertexColors:true,transparent:true,opacity:0.85,depthWrite:false,blending:THREE.AdditiveBlending}));
+scene.add(universe);
+
+// lissajous ribbon strand (RECIPE C)
+var strandGroup=new THREE.Group();
+function makeRibbon(offset){
+ var M=isMobile?900:1600;
+ var g=new THREE.BufferGeometry(),p=new Float32Array(M*3);
+ for(var i=0;i<M;i++){var t=i/M,a=t*Math.PI*2;
+   p[i*3]=Math.sin(3*a+offset)*13;
+   p[i*3+1]=Math.sin(2*a)*6;
+   p[i*3+2]=Math.cos(4*a+offset)*13;}
+ g.setAttribute('position',new THREE.BufferAttribute(p,3));
+ return new THREE.Points(g,new THREE.PointsMaterial({size:0.4,map:sprite,color:ACCENT,transparent:true,opacity:0.8,depthWrite:false,blending:THREE.AdditiveBlending}));
+}
+strandGroup.add(makeRibbon(0));strandGroup.add(makeRibbon(Math.PI));
+scene.add(strandGroup);
+
+// brake disc centrepiece (RECIPE D + I + J)
+var centre=new THREE.Group();
+var discOuter=new THREE.Mesh(new THREE.CylinderGeometry(3.4,3.4,0.6,48,1,true),new THREE.MeshBasicMaterial({color:ACCENT,wireframe:true,transparent:true,opacity:0.5}));
+discOuter.rotation.x=Math.PI/2;centre.add(discOuter);
+var hub=new THREE.Mesh(new THREE.CylinderGeometry(1.1,1.1,0.9,24,1),new THREE.MeshStandardMaterial({color:0x0b0b12,metalness:0.85,roughness:0.22,envMap:env,envMapIntensity:1.1,emissive:new THREE.Color(ACCENT),emissiveIntensity:0.3}));
+hub.rotation.x=Math.PI/2;centre.add(hub);
+var core=new THREE.Mesh(new THREE.CylinderGeometry(3.0,3.0,0.35,48,1),new THREE.MeshStandardMaterial({color:0x101018,metalness:0.9,roughness:0.28,envMap:env,envMapIntensity:1.1,emissive:new THREE.Color(ACCENT),emissiveIntensity:0.2}));
+core.rotation.x=Math.PI/2;centre.add(core);
+var fres=new THREE.ShaderMaterial({transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,uniforms:{c:{value:new THREE.Color(ACCENT2)},p:{value:2.8}},
+ vertexShader:'varying float vF;uniform float p;void main(){vec3 n=normalize(normalMatrix*normal);vec4 mv=modelViewMatrix*vec4(position,1.0);vec3 v=normalize(-mv.xyz);vF=pow(1.0-abs(dot(n,v)),p);gl_Position=projectionMatrix*mv;}',
+ fragmentShader:'varying float vF;uniform vec3 c;void main(){gl_FragColor=vec4(c*vF,vF);}'});
+var shell=new THREE.Mesh(new THREE.CylinderGeometry(3.2,3.2,0.4,48,1),fres);
+shell.rotation.x=Math.PI/2;centre.add(shell);
+var vents=new THREE.Mesh(new THREE.TorusGeometry(2.3,0.12,6,60),new THREE.MeshBasicMaterial({color:ACCENT,wireframe:true,transparent:true,opacity:0.6}));
+centre.add(vents);
+var caliper=new THREE.Mesh(new THREE.TorusGeometry(3.5,0.35,6,24,Math.PI*0.5),new THREE.MeshBasicMaterial({color:ACCENT2,wireframe:true,transparent:true,opacity:0.7}));
+caliper.rotation.z=Math.PI*0.7;centre.add(caliper);
+var ring=new THREE.Mesh(new THREE.TorusGeometry(5.2,0.03,8,120),new THREE.MeshBasicMaterial({color:ACCENT2,transparent:true,opacity:0.5}));
+ring.rotation.x=Math.PI/2.4;centre.add(ring);
+scene.add(centre);
+
+// bloom (RECIPE E)
+var composer=new THREE.EffectComposer(renderer);
+composer.addPass(new THREE.RenderPass(scene,camera));
+var bloomBase=1.2;
+var bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),bloomBase,0.85,0.12);
+composer.addPass(bloom);
+
+// scroll camera (RECIPE F)
+var cam={x:0,y:2,z:46,ry:0};
+gsap.registerPlugin(ScrollTrigger);
+var tl=gsap.timeline({scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:1.1}});
+tl.to(cam,{z:26,y:1,ease:'power1.inOut',duration:1},0)
+  .to(cam,{z:22,ry:Math.PI*0.35,x:-4,ease:'power1.inOut',duration:1},1)
+  .to(cam,{z:16,y:-1,ry:Math.PI*0.85,ease:'power2.inOut',duration:1.2},2)
+  .to(cam,{z:19,y:0.5,ry:Math.PI*1.1,ease:'power1.inOut',duration:1},3.2)
+  .to(cam,{z:24,y:1.5,ry:Math.PI*1.35,ease:'power1.inOut',duration:1},4.2)
+  .to(cam,{z:30,y:2,ry:Math.PI*1.55,ease:'power1.inOut',duration:1},5.2)
+  .to(strandGroup.rotation,{y:Math.PI*1.8,ease:'none',duration:6},0)
+  .to({v:bloomBase},{v:1.5,ease:'sine.inOut',duration:1.2,onUpdate:function(){bloomBase=this.targets()[0].v}},2)
+  .to({v:1.5},{v:1.1,ease:'sine.inOut',duration:1,onUpdate:function(){bloomBase=this.targets()[0].v}},3.4);
+
+// HUD toggle bracketing orbit chapter
+var hud=document.getElementById('hud');
+if(!isMobile){
+  ScrollTrigger.create({trigger:'#diagnose',start:'top 60%',end:'bottom 40%',
+    onEnter:function(){hud.classList.add('show')},
+    onLeave:function(){hud.classList.remove('show')},
+    onEnterBack:function(){hud.classList.add('show')},
+    onLeaveBack:function(){hud.classList.remove('show')}});
+}
+
+// chapter reveals
+document.querySelectorAll('.chapter .inner').forEach(function(el){
+  gsap.from(el,{opacity:0,y:60,duration:1,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 78%'}});
+});
+
+var mouse={x:0,y:0};
+if(!isMobile){window.addEventListener('mousemove',function(e){mouse.x=(e.clientX/innerWidth-0.5);mouse.y=(e.clientY/innerHeight-0.5);});}
+
+function animate(){
+  requestAnimationFrame(animate);
+  var t=performance.now()*0.001;
+  universe.rotation.y+=0.0009;
+  universe.rotation.x=Math.sin(t*0.15)*0.05;
+  strandGroup.rotation.y+=0.0016;
+  centre.rotation.y+=0.0028;
+  centre.rotation.z=Math.sin(t*0.3)*0.06;
+  bloom.strength=Math.max(0.8,Math.min(1.6,bloomBase+Math.sin(t*0.8)*0.1));
+
+  camera.position.z+=(cam.z-camera.position.z)*0.08;
+  var px=isMobile?0:mouse.x*2.2, py=isMobile?0:mouse.y*1.6;
+  camera.position.x=Math.sin(cam.ry)*camera.position.z*0.35+px;
+  camera.position.y+=((cam.y-py)-camera.position.y)*0.06;
+  camera.lookAt(0,0,0);
+  composer.render();
+}
+animate();
+
+window.addEventListener('resize',function(){
+  camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);
+});
+}catch(e){console.warn(e);}
+})();
+</script>
+</body>
+</html>
