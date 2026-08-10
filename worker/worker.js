@@ -589,6 +589,15 @@ function enforcePalette(html, pal) {
   return out;
 }
 
+// Named exports so the async runner (see ../runner) can reuse the exact same
+// prompt builders + helpers with no duplication — worker and runner share one
+// brain. (The Worker entry point remains the default export below.)
+export {
+  designSystem, cleanSystem, conceptSystem, conceptBrief, reviewSystem,
+  businessBlock, extractJson, extractHtml, looksComplete, renderReport,
+  enforcePalette, scrape,
+};
+
 export default {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') return withCors(new Response(null, { status: 204 }));
