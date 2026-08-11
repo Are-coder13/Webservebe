@@ -32,11 +32,21 @@ Set `ANTHROPIC_API_KEY`, `SHARED_SECRET`, optional `CLAUDE_MODEL`, `PORT`.
 Dockerfile should `npx playwright install --with-deps chromium`.
 
 ## Status
-- ✅ Phase 1 core: async job model, orchestrator (mirrors the Worker pipeline),
-  Playwright rendering, retрy'd Claude calls, live plan/progress.
-- ⬜ Remaining Phase 1 wiring: Worker `POST /jobs` + `GET /jobs/:id` forward
-  endpoints, and `prospector.html` enqueue-then-poll (with the to-do checklist UI).
+- ✅ Phase 1 COMPLETE (end-to-end async path):
+  - async job model, orchestrator (mirrors the Worker pipeline), Playwright
+    rendering, retry'd Claude calls, live plan/progress;
+  - Worker proxies `POST /jobs` + `GET /jobs/:id` to the runner
+    (set `RUNNER_URL` + `SHARED_SECRET` on the Worker);
+  - `prospector.html` enqueues then polls, showing the live to-do checklist,
+    and falls back to the synchronous Worker pipeline when no runner is set.
 - ⬜ Phase 2 planner sub-agent · Phase 3 competitor `web_search` research ·
   Phase 4 parallel sub-agents · Phase 5 durable job store (Postgres/Redis).
+
+## Wiring it up
+1. Deploy this runner; note its URL + choose a `SHARED_SECRET`.
+2. On the Worker: set `RUNNER_URL` (wrangler.toml `[vars]`) and
+   `npx wrangler secret put SHARED_SECRET` (same value), then redeploy.
+3. The tool's Build Mockup now runs async with a live plan. No front-end config
+   change — it still points at the same Worker URL.
 
 See `../docs/manus-for-websites-plan.md` for the full plan.

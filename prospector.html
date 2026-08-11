@@ -1611,6 +1611,47 @@ async function designWithAgent(p, branding, direction = '', style = 'cinematic')
   return data; // { html } (generative mode) or { spec } (legacy)
 }
 
+// Async "Manus for websites" path: enqueue a job on the runner (via the Worker
+// proxy) and poll, reporting the live to-do plan. Throws NO_RUNNER if the async
+// backend isn't configured so the caller can fall back to the synchronous path.
+async function designWithAgentAsync(p, branding, direction, style, onUpdate) {
+  const base = Agent.url.replace(/\/$/, '');
+  const enq = await fetch(base + '/jobs', {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ place: p, branding, direction, style }),
+  });
+  const first = await enq.json().catch(() => ({}));
+  if (enq.status === 501 || (first && /runner not configured/i.test(first.error || ''))) throw new Error('NO_RUNNER');
+  if (!enq.ok || !first.jobId) throw new Error(first.error || ('Enqueue failed ' + enq.status));
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  for (let i = 0; i < 900; i++) {            // up to ~30 min at 2s
+    await sleep(2000);
+    const r = await fetch(base + '/jobs/' + first.jobId);
+    const job = await r.json().catch(() => ({}));
+    if (onUpdate) onUpdate(job);
+    if (job.status === 'done') return { html: job.resultHtml, diag: job.diag };
+    if (job.status === 'error') throw new Error(job.error || 'Job failed');
+  }
+  throw new Error('Job timed out');
+}
+
+// Render the live to-do checklist while the async job runs.
+function renderJobProgress(job) {
+  const body = document.getElementById('revBody');
+  if (!body || !job) return;
+  const items = (job.plan || []).map((s) => {
+    const icon = s.status === 'done' ? '✓' : s.status === 'active' ? '◐' : '○';
+    const col = s.status === 'done' ? 'var(--green)' : s.status === 'active' ? 'var(--accent)' : 'var(--dim)';
+    return `<div style="color:${col};font-family:var(--head);font-size:13px;letter-spacing:.5px;padding:4px 0">${icon} ${s.title}</div>`;
+  }).join('');
+  const last = (job.progress || []).slice(-1)[0];
+  body.innerHTML = `<div class="building-state"><div class="spin"></div>`
+    + `<div style="font-family:var(--head);font-size:12px;letter-spacing:2px;color:var(--accent);margin-bottom:6px">BUILDING — ${(job.status || '').toUpperCase()}</div>`
+    + `<div style="text-align:left;display:inline-block;margin-top:8px">${items}</div>`
+    + (last && last.note ? `<div style="margin-top:12px;font-size:11px;color:var(--dim)">${last.note}</div>` : '')
+    + `</div>`;
+}
+
 async function getBranding(website) {
   if (!website || !BF.configured) return null;
   try {
@@ -1755,7 +1796,15 @@ async function buildMockup(prospectId, direction = '', style = 'cinematic') {
   if (Agent.configured) {
     if (stepEl) stepEl.textContent = 'AI AGENT DESIGNING & REVIEWING...';
     try {
-      const data = await designWithAgent(p, branding, direction, style);
+      let data;
+      // Prefer the async "Manus for websites" runner (live to-do plan); fall
+      // back to the synchronous Worker pipeline if no runner is configured.
+      try {
+        data = await designWithAgentAsync(p, branding, direction, style, renderJobProgress);
+      } catch (e) {
+        if (e.message !== 'NO_RUNNER') throw e;
+        data = await designWithAgent(p, branding, direction, style);
+      }
       agentDiag = data;
       if (data.html) {
         agentHtml = data.html;

@@ -12,3 +12,10 @@ compatibility_flags = ["nodejs_compat"]
 # what actually appears on screen. Remove this binding to disable the vision
 # pass — the review then falls back to text-only and nothing else breaks.
 browser = { binding = "BROWSER" }
+
+# Async "Manus for websites" runner (Option C). When RUNNER_URL is set, the
+# Worker proxies POST /jobs and GET /jobs/:id to the persistent runner (see
+# ../runner). SHARED_SECRET must match the runner's; set it as a secret:
+#   npx wrangler secret put SHARED_SECRET
+[vars]
+# RUNNER_URL = "https://your-runner.example.com"

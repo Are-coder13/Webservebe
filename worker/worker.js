@@ -598,9 +598,36 @@ export {
   enforcePalette, scrape,
 };
 
+// ── Async job API → forward to the runner (Option C) ───────────────────────
+// The heavy multi-agent loop runs on the persistent runner (see ../runner);
+// the Worker just proxies enqueue/poll and adds CORS + hides the runner URL.
+async function forwardEnqueue(request, env) {
+  if (!env.RUNNER_URL) return withCors(json({ error: 'Runner not configured (set RUNNER_URL)' }, 501));
+  const body = await request.text().catch(() => '');
+  const r = await fetch(env.RUNNER_URL.replace(/\/$/, '') + '/jobs', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'x-runner-secret': env.SHARED_SECRET || '' },
+    body,
+  });
+  return withCors(new Response(await r.text(), { status: r.status, headers: { 'content-type': 'application/json' } }));
+}
+async function forwardStatus(jobId, env) {
+  if (!env.RUNNER_URL) return withCors(json({ error: 'Runner not configured (set RUNNER_URL)' }, 501));
+  const r = await fetch(env.RUNNER_URL.replace(/\/$/, '') + '/jobs/' + encodeURIComponent(jobId), {
+    headers: { 'x-runner-secret': env.SHARED_SECRET || '' },
+  });
+  return withCors(new Response(await r.text(), { status: r.status, headers: { 'content-type': 'application/json' } }));
+}
+
 export default {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') return withCors(new Response(null, { status: 204 }));
+
+    // Async "Manus for websites" job API (proxied to the runner).
+    const path = new URL(request.url).pathname;
+    if (request.method === 'POST' && path === '/jobs') return forwardEnqueue(request, env);
+    if (request.method === 'GET' && path.startsWith('/jobs/')) return forwardStatus(path.slice(6), env);
+
     // Diagnostic: GET the Worker URL in a browser to confirm the secret is bound.
     if (request.method === 'GET') return withCors(json({
       ok: true,
