@@ -1,1 +1,5 @@
 __pycache__/
+
+# Generated convenience bundle (single-file paste for the Cloudflare dashboard).
+# Canonical source is the modular worker/*.js — regenerate, do not hand-edit.
+worker/worker.bundled.js

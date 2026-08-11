@@ -110,6 +110,19 @@ camera.position.y+=((cam.y-mouse.y*1.6)-camera.position.y)*0.06;
 camera.lookAt(0,0,0); composer.render();
 Also gsap.from() each .chapter .inner (opacity 0, y:60) with its own ScrollTrigger at 'top 78%'.
 
+AMBIENT MOTION (MANDATORY — the scene must be visibly ALIVE the instant it loads,
+before any scroll or mouse movement; scroll-driven camera alone reads as a static
+image and is a failure). In animate() add a clock and drive continuous, autonomous
+motion every frame, independent of scroll:
+var t=performance.now()*0.001;
+- particle universe: points.rotation.y += 0.0009; points.rotation.x = Math.sin(t*0.15)*0.05;
+- light-strand group: strandGroup.rotation.y += 0.0016 (ADD to the scroll tween, don't replace it);
+- centrepiece: centre.rotation.y += 0.0022; centre.rotation.z = Math.sin(t*0.3)*0.08;
+- gentle bloom breathing: bloom.strength = base + Math.sin(t*0.8)*0.12 (keep within 0.8–1.6);
+- optional particle drift: bob a few systems with position.y = Math.sin(t*0.5)*0.4.
+This ambient layer runs ALWAYS (the scroll timeline adds camera moves on top). The
+page must never sit still. Keep speeds slow and weighty — this is a luxury idle, not a spin.
+
 RECIPE H — SCAN/TARGETING HUD (optional; use ONLY for precision/tech/security-coded
 trades — dental, auto diagnostics, legal, security, engineering, medical. Skip it
 entirely for warm/casual trades like restaurants, salons, cafes — it reads cold there):
@@ -136,6 +149,50 @@ positions bracketing the morph tween (add slightly before morph starts, remove s
 after it completes). Hide the whole .hud under prefers-reduced-motion and below 768px
 width (this is a decorative precision layer, not core content — never let it block
 touch targets, keep pointer-events:none on the whole block).
+
+═══ CRAFT UPGRADES — what separates "expensive" from "junior" (all asset-free) ═══
+(These use r128 API but adapt them carefully; the render→fix loop will catch any
+scene that fails to initialise, so prefer richness over timidity.)
+
+RECIPE I — REAL MATERIALS, LIGHTING & REFLECTIONS (lift the SOLID centrepiece out of
+flat glow; particles/wireframes stay MeshBasic — they glow via bloom):
+// procedural environment map (asset-free) so metal/glass actually reflects something:
+function envTex(){var c=document.createElement('canvas');c.width=64;c.height=32;
+ var g=c.getContext('2d'),gr=g.createLinearGradient(0,0,0,32);
+ gr.addColorStop(0,'LIGHT_TINT');gr.addColorStop(0.5,'ACCENT');gr.addColorStop(1,'BG');
+ g.fillStyle=gr;g.fillRect(0,0,64,32);var t=new THREE.CanvasTexture(c);
+ t.mapping=THREE.EquirectangularReflectionMapping;return t;}
+var env=envTex(); scene.environment=env;
+// subtle lights (bloom still supplies the glow — keep these low so nothing white-outs):
+scene.add(new THREE.HemisphereLight(0xffffff, BG, 0.55));
+var key=new THREE.PointLight(ACCENT,2.0,140); key.position.set(9,11,15); scene.add(key);
+var rim=new THREE.PointLight(ACCENT2,1.4,140); rim.position.set(-11,-5,-9); scene.add(rim);
+// centrepiece CORE: a solid, reflective, emissive-tinted inner form:
+var coreMat=new THREE.MeshStandardMaterial({color:0x0b0b12,metalness:0.85,roughness:0.22,
+ envMap:env,envMapIntensity:1.1,emissive:new THREE.Color(ACCENT),emissiveIntensity:0.32});
+Keep the glowing WIREFRAME (RECIPE D) as an OUTER shell over this solid core. The
+combination (reflective solid core + bloom wireframe + rim glow below) is the look.
+
+RECIPE J — FRESNEL RIM GLOW (GLSL — the single biggest "senior" tell; cheap, reliable):
+Wrap the core in a slightly larger transparent shell whose edges glow, so light appears
+to wrap the silhouette (dimensional even before bloom). ShaderMaterial, additive, no texture:
+var fres=new THREE.ShaderMaterial({transparent:true,blending:THREE.AdditiveBlending,
+ depthWrite:false,uniforms:{c:{value:new THREE.Color(ACCENT2)},p:{value:2.8}},
+ vertexShader:'varying float vF;uniform float p;void main(){vec3 n=normalize(normalMatrix*normal);'+
+  'vec4 mv=modelViewMatrix*vec4(position,1.0);vec3 v=normalize(-mv.xyz);'+
+  'vF=pow(1.0-abs(dot(n,v)),p);gl_Position=projectionMatrix*mv;}',
+ fragmentShader:'varying float vF;uniform vec3 c;void main(){gl_FragColor=vec4(c*vF,vF);}'});
+Apply fres to a clone of the core geometry scaled ~1.06. The rim intensifies at glancing
+angles — that gradient of light around the edge is what makes it read as lit, not painted.
+
+RECIPE K — DEPTH OF FIELD (optional; whisper-subtle cinematic focus). Adds one script
+AFTER the bloom scripts:
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/BokehPass.js"></script>
+var bokeh=new THREE.BokehPass(scene,camera,{focus:22.0,aperture:0.00016,maxblur:0.007,
+ width:innerWidth,height:innerHeight}); composer.addPass(bokeh); // add LAST, after UnrealBloom
+Keep aperture/maxblur TINY — only the far background and extreme edges soften; the hero
+stays crisp. Disable below 768px. If any frame looks blurred all over, drop maxblur to
+0.004 or remove this pass entirely (it is optional polish, not core).
 
 MANDATORY GUARDS (all of them, every time):
 - Wrap the whole scene in: if(reduce||!hasWebGL()||!window.THREE)return; try{...}catch(e){}

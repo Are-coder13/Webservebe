@@ -179,6 +179,27 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:13px; h
 .building-bar::after { content:''; display:block; height:100%; width:40%; background:var(--accent); border-radius:2px; animation:barpulse 1.2s ease-in-out infinite; }
 @keyframes barpulse { 0%,100%{transform:translateX(-100%)} 50%{transform:translateX(250%)} }
 .mockup-ready-icon { font-size:36px; margin-bottom:4px; }
+
+/* ── Workflow refit: progress panel, tabbed result, iframe, history ── */
+.rev2 { display:grid; grid-template-columns:1.35fr 1fr; gap:16px; }
+@media (max-width:760px){ .rev2 { grid-template-columns:1fr; } }
+.rev-frame-wrap { background:var(--bg2); border:1px solid var(--border); border-radius:var(--r); overflow:hidden; display:flex; flex-direction:column; }
+.rev-frame { width:100%; height:420px; border:0; background:#0a0a0a; display:block; }
+.rev-badges { display:flex; flex-wrap:wrap; gap:6px 10px; font-family:var(--head); font-size:10px; letter-spacing:.5px; line-height:1.6; color:var(--dim); padding:8px 12px; border-top:1px solid var(--border); }
+.rev-tabs { display:flex; gap:6px; margin-bottom:10px; }
+.rev-tab { flex:1; text-align:center; cursor:pointer; font-family:var(--head); font-size:11px; letter-spacing:1px; text-transform:uppercase; padding:9px 6px; border:1px solid var(--border); border-radius:var(--r); background:var(--bg2); color:var(--dim); }
+.rev-tab.active { color:var(--accent); border-color:var(--accent); background:rgba(0,180,255,.08); }
+.rev-panel { display:flex; flex-direction:column; gap:8px; }
+.rev-steps { display:flex; flex-direction:column; gap:2px; text-align:left; }
+.rev-step { font-family:var(--head); font-size:13px; letter-spacing:.4px; padding:5px 0; display:flex; align-items:center; gap:9px; }
+.rev-step .ic { width:16px; text-align:center; }
+.rev-step.pending { color:var(--dim); }
+.rev-step.active { color:var(--accent); }
+.rev-step.done { color:var(--green); }
+.rev-hist { display:flex; flex-direction:column; gap:6px; max-height:150px; overflow:auto; margin-bottom:4px; }
+.rev-hist-item { font-size:12px; color:var(--mid); padding:7px 10px; background:var(--bg2); border:1px solid var(--border); border-radius:var(--r); display:flex; gap:8px; align-items:flex-start; }
+.rev-hist-item .k { color:var(--green); flex-shrink:0; }
+.rev-hist-empty { font-size:12px; color:var(--dim); font-style:italic; padding:4px 0; }
 </style>
 </head>
 <body>
@@ -1600,15 +1621,122 @@ const Agent = {
   get configured() { return !!this.url; },
 };
 
-async function designWithAgent(p, branding) {
+async function designWithAgent(p, branding, direction = '', style = 'cinematic') {
   const res = await fetch(Agent.url, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ place: p, branding }),
+    body: JSON.stringify({ place: p, branding, direction, style }),
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok || (!data.html && !data.spec)) throw new Error(data.error || ('Agent error ' + res.status));
   return data; // { html } (generative mode) or { spec } (legacy)
+}
+
+// Async "Manus for websites" path: enqueue a job on the runner (via the Worker
+// proxy) and poll, reporting the live to-do plan. Throws NO_RUNNER if the async
+// backend isn't configured so the caller can fall back to the synchronous path.
+async function designWithAgentAsync(p, branding, direction, style, onUpdate) {
+  const base = Agent.url.replace(/\/$/, '');
+  const enq = await fetch(base + '/jobs', {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ place: p, branding, direction, style }),
+  });
+  const first = await enq.json().catch(() => ({}));
+  if (enq.status === 501 || (first && /runner not configured/i.test(first.error || ''))) throw new Error('NO_RUNNER');
+  if (!enq.ok || !first.jobId) throw new Error(first.error || ('Enqueue failed ' + enq.status));
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  for (let i = 0; i < 900; i++) {            // up to ~30 min at 2s
+    await sleep(2000);
+    const r = await fetch(base + '/jobs/' + first.jobId);
+    const job = await r.json().catch(() => ({}));
+    if (onUpdate) onUpdate(job);
+    if (job.status === 'done') return { html: job.resultHtml, diag: job.diag };
+    if (job.status === 'error') throw new Error(job.error || 'Job failed');
+  }
+  throw new Error('Job timed out');
+}
+
+// Live build progress panel: the to-do plan with per-step status + elapsed time.
+function renderJobProgress(job) {
+  const body = document.getElementById('revBody');
+  if (!body || !job) return;
+  const steps = (job.plan || []).map((s) => {
+    const ic = s.status === 'done' ? '✓' : s.status === 'active' ? '◐' : '○';
+    return `<div class="rev-step ${s.status}"><span class="ic">${ic}</span> ${s.title}</div>`;
+  }).join('');
+  const last = (job.progress || []).slice(-1)[0];
+  const secs = revJobStart ? Math.round((Date.now() - revJobStart) / 1000) : 0;
+  const elapsed = secs >= 60 ? `${Math.floor(secs / 60)}m ${secs % 60}s` : `${secs}s`;
+  body.innerHTML = `<div class="building-state">
+    <div class="spin"></div>
+    <div style="font-family:var(--head);font-size:12px;letter-spacing:2px;color:var(--accent)">WORKING — ${(job.status || 'queued').toUpperCase()} · ${elapsed}</div>
+    <div class="rev-steps" style="margin-top:10px">${steps}</div>
+    ${last && last.note ? `<div style="margin-top:10px;font-size:11px;color:var(--dim);max-width:360px">${last.note}</div>` : ''}
+  </div>`;
+}
+const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const LBL = 'font-family:var(--head);font-size:10px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;display:block;margin-bottom:6px';
+
+// Side-panel content for the active result tab (refine | email | rebuild).
+function panelHtml(tab) {
+  if (tab === 'email') {
+    return '<label style="' + LBL + '">Outreach email (includes preview link)</label>'
+      + '<textarea class="rev-etarea" id="revEmail" style="min-height:240px">' + esc(revEmailText) + '</textarea>'
+      + '<div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-g btn-s" onclick="RevModal.copyEmail()">Copy</button>'
+      + '<button class="btn btn-p btn-s" onclick="RevModal.send()">Send ↗</button><span class="cpfb" id="revCpfb">Copied!</span></div>';
+  }
+  if (tab === 'rebuild') {
+    return '<label style="' + LBL + '">Rebuild from scratch</label>'
+      + '<select id="revStyle" class="rev-etarea" style="min-height:0;height:38px;padding:8px 10px"><option value="cinematic">Cinematic 3D (immersive)</option><option value="clean">Clean Professional</option></select>'
+      + '<textarea id="revDirection" class="rev-etarea" style="min-height:80px;margin-top:8px" placeholder="e.g. dark luxury, gold accents, lead with implants"></textarea>'
+      + '<button class="btn btn-g btn-s" style="margin-top:8px" onclick="RevModal.rebuild()">↻ Rebuild</button>'
+      + '<div style="font-size:11px;color:var(--dim);margin-top:6px">Rebuild = start over. Refine = tweak the current one.</div>';
+  }
+  // refine (default)
+  let hist;
+  if (revEdits.length) {
+    hist = '<div class="rev-hist">' + revEdits.map((e) => '<div class="rev-hist-item"><span class="k">✓</span><span>' + esc(e) + '</span></div>').join('') + '</div>';
+  } else {
+    hist = '<div class="rev-hist-empty">No edits yet — describe a change and Apply.</div>';
+  }
+  return '<label style="' + LBL + '">Refine — edit the preview in place' + (revEngine === 'agent' ? '' : ' (needs agent + runner)') + '</label>'
+    + hist
+    + '<textarea id="revRefine" class="rev-etarea" style="min-height:70px" placeholder="e.g. make the hero headline bigger · swap stats for a testimonial · warmer gold accent"></textarea>'
+    + '<button class="btn btn-p btn-s" style="margin-top:8px" onclick="RevModal.refine()">✎ Apply edit</button>';
+}
+
+// Consolidated result view: inline iframe preview + Refine/Send/Rebuild tabs.
+function renderResult() {
+  const body = document.getElementById('revBody'); if (!body) return;
+  const badgeCol = (ok) => ok ? 'var(--green)' : 'var(--warn)';
+  let badges = '';
+  const d = revAgentDiag;
+  if (d) {
+    badges = '<div class="rev-badges">'
+      + '<span style="color:' + badgeCol(d.scrapedChars > 200) + '">content ' + (d.scrapedChars || 0) + '</span>'
+      + '<span style="color:' + badgeCol(d.brandColors && d.brandColors.length) + '">brand ' + (d.brandColors && d.brandColors.length ? d.brandColors.join(' ') : 'none') + '</span>'
+      + '<span style="color:' + badgeCol(d.logoFound) + '">logo ' + (d.logoFound ? '✓' : '✗') + '</span>'
+      + '<span style="color:' + badgeCol(d.imagesFound > 0) + '">photos ' + (d.imagesFound || 0) + '</span>'
+      + '<span>' + (d.archetype || '—') + '</span>'
+      + '<span style="color:' + (revEngine === 'agent' ? 'var(--green)' : 'var(--warn)') + '">' + (revEngine === 'agent' ? '⚡ agent' : revEngine) + '</span>'
+      + '</div>';
+  }
+  body.innerHTML = '<div class="rev2">'
+    + '<div class="rev-frame-wrap">'
+    + '<iframe id="revFrame" class="rev-frame" sandbox="allow-scripts allow-same-origin" title="preview"></iframe>'
+    + '<div class="rev-url-bar"><a href="' + revMockupUrl + '" target="_blank">' + revMockupUrl + '</a>'
+    + '<button class="btn btn-p btn-s" onclick="window.open(\'' + revMockupUrl + '\',\'_blank\')">Open ↗</button></div>'
+    + badges
+    + '</div>'
+    + '<div><div class="rev-tabs">'
+    + '<div class="rev-tab" id="tab-refine" onclick="RevModal.tab(\'refine\')">✎ Refine</div>'
+    + '<div class="rev-tab" id="tab-email" onclick="RevModal.tab(\'email\')">✉ Send</div>'
+    + '<div class="rev-tab" id="tab-rebuild" onclick="RevModal.tab(\'rebuild\')">↻ Rebuild</div>'
+    + '</div><div class="rev-panel" id="revPanel"></div></div>'
+    + '</div>';
+  const f = document.getElementById('revFrame'); if (f) f.srcdoc = revCurrentHtml || '';
+  RevModal.tab(revTab);
+  const foot = document.getElementById('revFoot'); if (foot) foot.style.display = 'none';
 }
 
 async function getBranding(website) {
@@ -1715,13 +1843,23 @@ async function scanWebsite(website) {
 // ── Build mockup flow ─────────────────────────────────────────────────────
 let revProspect = null;
 let revMockupUrl = null;
+let revCurrentHtml = null;  // current mockup HTML (for in-place refine)
+let revPath = null;         // GitHub path of the current mockup
+let revStyleUsed = 'cinematic';
+let revEngine = 'template', revEngineNote = '';
+let revAgentDiag = null;    // last agent diagnostics {scrapedChars, brandColors, ...}
+let revEmailText = '';      // draft outreach email
+let revEdits = [];          // applied refine instructions (history)
+let revTab = 'refine';      // active side tab: refine | email | rebuild
+let revJobStart = 0;        // async build start time (for elapsed)
 
-async function buildMockup(prospectId) {
+async function buildMockup(prospectId, direction = '', style = 'cinematic') {
   if (!GH.configured) { Settings.open(); toast('Set up GitHub first', 'err'); return; }
   const p = Store.getAll().find(x => x.id === prospectId);
   if (!p) return;
 
   revProspect = p;
+  revJobStart = Date.now();
   revMockupUrl = null;
   document.getElementById('revName').textContent = p.name;
   document.getElementById('revBody').innerHTML = '<div class="building-state"><div class="spin"></div><div class="building-bar"></div><span id="buildStep">SCANNING WEBSITE...</span>'
@@ -1747,6 +1885,7 @@ async function buildMockup(prospectId) {
   let scan = null;
   let spec = null;
   let agentHtml = null;
+  let agentDiag = null;
   // Engine provenance — surfaced in the result modal so it is always obvious
   // which pipeline produced the mockup (no more silent template fallbacks).
   let engine = 'template';
@@ -1754,7 +1893,16 @@ async function buildMockup(prospectId) {
   if (Agent.configured) {
     if (stepEl) stepEl.textContent = 'AI AGENT DESIGNING & REVIEWING...';
     try {
-      const data = await designWithAgent(p, branding);
+      let data;
+      // Prefer the async "Manus for websites" runner (live to-do plan); fall
+      // back to the synchronous Worker pipeline if no runner is configured.
+      try {
+        data = await designWithAgentAsync(p, branding, direction, style, renderJobProgress);
+      } catch (e) {
+        if (e.message !== 'NO_RUNNER') throw e;
+        data = await designWithAgent(p, branding, direction, style);
+      }
+      agentDiag = data;
       if (data.html) {
         agentHtml = data.html;
         engine = 'agent';
@@ -1788,6 +1936,7 @@ async function buildMockup(prospectId) {
     const path = `mockups/${slug}.html`;
     const url = await GH.pushFile(path, html);
     revMockupUrl = url;
+    revCurrentHtml = html; revPath = path; revStyleUsed = (agentDiag && agentDiag.style) || style;
 
     // Build email with link
     const emailWithLink = buildEmail(p).replace(
@@ -1795,29 +1944,11 @@ async function buildMockup(prospectId) {
       `\n\nI've put together a preview of what your new website could look like:\n👉 ${url}\n\nTake a look and let me know what you think. Happy to adjust anything.\n\nBest,`
     );
 
-    document.getElementById('revBody').innerHTML = `
-      <div class="rev-grid">
-        <div class="rev-preview">
-          <div class="rev-preview-top">
-            <div style="text-align:center">
-              <div class="mockup-ready-icon">🌐</div>
-              <div style="font-family:var(--head);font-size:11px;letter-spacing:2px;color:var(--accent);margin-bottom:8px">LIVE PREVIEW</div>
-              <div style="display:inline-block;font-family:var(--head);font-size:10px;letter-spacing:2px;padding:6px 14px;border-radius:var(--r);margin-bottom:10px;${engine==='agent' ? 'background:rgba(0,255,136,.1);border:1px solid var(--green);color:var(--green)' : 'background:rgba(255,170,0,.1);border:1px solid var(--warn);color:var(--warn)'}">${engine==='agent' ? '⚡ AI DESIGN AGENT' : engine==='legacy' ? '⚠ OLD WORKER — REDEPLOY' : '⚠ TEMPLATE MODE'}</div>
-              <div style="font-size:12px;color:${engine==='agent' ? 'var(--mid)' : 'var(--warn)'};margin-bottom:10px;line-height:1.5;max-width:340px;margin-left:auto;margin-right:auto">${engineNote}</div>
-              <div style="font-size:13px;color:var(--mid);margin-bottom:16px">Your mockup is live on GitHub Pages.<br>It may take 1-2 min to appear if Pages was just enabled.</div>
-            </div>
-          </div>
-          <div class="rev-url-bar">
-            <a href="${url}" target="_blank" id="revUrl">${url}</a>
-            <button class="btn btn-p btn-s" onclick="window.open('${url}','_blank')">Open ↗</button>
-          </div>
-        </div>
-        <div class="rev-email-wrap">
-          <label>Draft Email (includes mockup link)</label>
-          <textarea class="rev-etarea" id="revEmail">${emailWithLink}</textarea>
-        </div>
-      </div>`;
-    document.getElementById('revFoot').style.display = 'flex';
+    // Store result state; the consolidated view (iframe preview + Refine/Send/
+    // Rebuild tabs) renders from these.
+    revEngine = engine; revEngineNote = engineNote; revAgentDiag = agentDiag;
+    revEmailText = emailWithLink; revEdits = []; revTab = 'refine';
+    renderResult();
 
     Store.patch(prospectId, { mockup_url: url });
     toast(`Mockup live: ${p.name}`, 'ok');
@@ -1827,9 +1958,69 @@ async function buildMockup(prospectId) {
   }
 }
 
+// Refine loop ("Bob"): edit the current mockup in place via the async runner.
+async function refineMockup(instruction) {
+  const base = Agent.url.replace(/\/$/, '');
+  revJobStart = Date.now();
+  try {
+    const enq = await fetch(base + '/jobs', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ mode: 'refine', html: revCurrentHtml, instruction, place: revProspect, branding: null, style: revStyleUsed }),
+    });
+    const first = await enq.json().catch(() => ({}));
+    if (enq.status === 501 || /runner not configured/i.test(first.error || '')) {
+      toast('Refine needs the async runner (set RUNNER_URL on the Worker)', 'err'); return;
+    }
+    if (!enq.ok || !first.jobId) throw new Error(first.error || ('Enqueue failed ' + enq.status));
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    let job = null;
+    for (let i = 0; i < 900; i++) {
+      await sleep(2000);
+      const r = await fetch(base + '/jobs/' + first.jobId);
+      job = await r.json().catch(() => ({}));
+      renderJobProgress(job);
+      if (job.status === 'done') break;
+      if (job.status === 'error') throw new Error(job.error || 'Refine failed');
+    }
+    if (!job || job.status !== 'done' || !job.resultHtml) throw new Error('Refine timed out');
+    revCurrentHtml = job.resultHtml;
+    if (revPath) await GH.pushFile(revPath, revCurrentHtml);
+    Store.patch(revProspect.id, { mockup_url: revMockupUrl });
+    revEdits.push(instruction);
+    revTab = 'refine';
+    toast('Refined ✓ — preview updated (Pages may take ~1 min)', 'ok');
+    renderResult();
+  } catch (e) { toast('Refine failed: ' + e.message, 'err'); renderResult(); }
+}
+
 const RevModal = {
   close() { document.getElementById('revModal').classList.remove('show'); },
   openPreview() { if (revMockupUrl) window.open(revMockupUrl, '_blank'); },
+  tab(name) {
+    revTab = name;
+    const p = document.getElementById('revPanel'); if (!p) return;
+    p.innerHTML = panelHtml(name);
+    ['refine', 'email', 'rebuild'].forEach((t) => {
+      const el = document.getElementById('tab-' + t); if (el) el.classList.toggle('active', t === name);
+    });
+    if (name === 'rebuild') { const s = document.getElementById('revStyle'); if (s) s.value = revStyleUsed; }
+  },
+  rebuild() {
+    const dEl = document.getElementById('revDirection');
+    const sEl = document.getElementById('revStyle');
+    const direction = dEl ? dEl.value.trim() : '';
+    const style = sEl ? sEl.value : 'cinematic';
+    if (!Agent.configured) { toast('Rebuild needs the AI agent — set the Worker URL in ⚙ Settings', 'err'); return; }
+    if (revProspect) buildMockup(revProspect.id, direction, style);
+  },
+  async refine() {
+    const el = document.getElementById('revRefine');
+    const instruction = el ? el.value.trim() : '';
+    if (!Agent.configured) { toast('Refine needs the AI agent — set the Worker URL in ⚙ Settings', 'err'); return; }
+    if (!revCurrentHtml || !revProspect) { toast('Build a mockup first, then refine it', 'err'); return; }
+    if (!instruction) { toast('Describe the edit you want', 'err'); return; }
+    await refineMockup(instruction);
+  },
   async copyEmail() {
     const ta = document.getElementById('revEmail');
     if (!ta) return;

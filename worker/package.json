@@ -1,0 +1,17 @@
+{
+  "name": "designerprospector",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Prospector design agent — Cloudflare Worker (generative + vision-in-the-loop review)",
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "dependencies": {
+    "@cloudflare/puppeteer": "^0.0.14"
+  },
+  "devDependencies": {
+    "wrangler": "^3.90.0"
+  }
+}

@@ -16,8 +16,14 @@
  * Deploy: see README.md.
  */
 
-import { designBrief, qaChecklist } from './design-knowledge.js';
+import { designBrief, qaChecklist, classifyDomain } from './design-knowledge.js';
 import { threeRecipes } from './three-recipes.js';
+import { captureFrames, extractSiteBrand } from './screenshot.js';
+import { exemplarBlock } from './exemplars.js';
+import { motifBlock } from './motifs.js';
+import { cleanBrief } from './sections.js';
+import { fetchSiteHtml, extractFromHtml } from './extract.js';
+import { buildPalette, paletteBrief } from './palette.js';
 
 const MODEL = 'claude-opus-4-8';
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
@@ -51,18 +57,31 @@ function designSystem() {
     '- NEVER use unicode symbols (◈ ◆ ◉ ✦ ▸ ● ■) as icons. NEVER use emoji as icons.',
     '',
     'COLOUR & TYPOGRAPHY:',
+    '- PALETTE IS DECIDED: a PALETTE block gives you the exact CSS custom properties to use. Put it in',
+    '  :root verbatim and reference ONLY those tokens for every colour (var(--brand), var(--accent), …).',
+    '  Never hardcode a hex/rgb outside :root. This palette is already brand-matched — do not substitute.',
+    '- BRAND COLOURS WIN (hard rule): if the BUSINESS/BRAND block gives brand colours, they are the',
+    '  identity — you MUST build the palette from them. Set --accent (and the scene glow) to the',
+    '  dominant brand colour, lightened/saturated as needed to glow on near-black; echo a second brand',
+    '  colour as --accent2. Do NOT substitute a generic candidate-palette hue (e.g. do not default to',
+    '  teal/blue when the brand is gold). The 3D glow, CTAs, links, card borders and the editorial word',
+    '  must all read in the brand hue. The candidate palettes below are ONLY a fallback when no brand',
+    '  colours are given, and references for structure/contrast (bg/fg/neutrals).',
     '- A DESIGN INTELLIGENCE section below provides curated palette and font options matched to',
-    '  this business type. Pick the palette and font pairing that best fit the brand mood,',
-    '  or blend elements from multiple candidates. Define everything as CSS custom properties in :root.',
+    '  this business type. When no brand colours exist, pick the palette and font pairing that best fit',
+    '  the brand mood, or blend candidates. Define everything as CSS custom properties in :root.',
     '- Use two typefaces maximum (heading + body), loaded via Google Fonts.',
     '- Dark text on light backgrounds must have 4.5:1 contrast minimum (WCAG AA).',
     '',
     'THE EXPERIENCE — the whole page is the wow moment (a flat brochure will NOT sell):',
     '- Build an IMMERSIVE CINEMATIC page in the style of award-winning studio sites: ONE fixed full-viewport WebGL scene behind everything, with the content scrolling over it as "chapters" while a scroll-driven camera flies through the 3D world.',
-    '- The 3D world is procedural and asset-free: a two-tone particle universe + a signature parametric light-strand + a glowing wireframe centrepiece, all glowing via UnrealBloom. Tune every colour to the brand palette; pick strand/centrepiece shapes that evoke the trade.',
+    '- The 3D world is procedural and asset-free: a two-tone particle universe + a signature parametric light-strand + a centrepiece, all glowing via UnrealBloom. Tune every colour to the brand palette; pick strand/centrepiece shapes that evoke the trade.',
+    '- MATERIAL CRAFT (this is what separates expensive from junior): the SOLID centrepiece must NOT be flat MeshBasicMaterial. Give it real materials, lighting and reflections (RECIPE I) plus a GLSL fresnel rim glow (RECIPE J) so it looks lit and dimensional — a reflective solid core inside the glowing wireframe shell. Optionally add whisper-subtle depth of field (RECIPE K). Particles/wireframes stay MeshBasic (they glow via bloom).',
     '- Choreograph 3-5 camera chapters across the scroll (push-in, orbit, close approach, settle on CTA). Motion must feel weighty and smooth: scrubbed timeline + eased camera + mouse parallax.',
+    '- ALIVE ON LOAD: the scene MUST have continuous ambient motion (slow rotation, particle drift, bloom breathing) that runs the instant the page opens, WITHOUT any scroll or mouse input — see the AMBIENT MOTION recipe. A page that only moves when you scroll reads as a static image and fails. This is non-negotiable.',
+    '- CINEMATIC MOTION DISCIPLINE (senior vs junior): motion is slow and weighty. Long eases (power2/power3.inOut, ~1.2-2s per beat); give the hero ONE signature moment and let it breathe with a hold, rather than filling every second with movement. Add slight anticipation before big camera moves. Keep the ambient idle subtle — the scroll beats carry the drama. Restraint reads as expensive; constant fast spinning reads as junior.',
     '- Follow the tested recipes below for ALL Three.js code. They are proven to render correctly — adapt parameters and shapes creatively, but keep the architecture, guards, and API usage exactly as shown. DO NOT use Vanta.js, particles.js, or any other pre-built background effect library.',
-    '- Within chapters, vary the content layout (offset columns, bento, timeline, icon-left rows — not always centred stacks), and keep the bespoke SVG iconography rules above.',
+    '- LAYOUT VARIETY (mandatory — repeated centred stacks are the #1 thing that makes these pages look boring and templated): every chapter must use a DISTINCT layout, and no two consecutive chapters may share one. Draw from: full-bleed asymmetric hero; offset two-column (text left / visual right, then flip); bento grid of cards; vertical timeline with connector line; icon-left feature rows; big-number stat band; overlapping/staggered cards; a wide editorial pull-quote. At MOST one centred-stack chapter in the whole page. Vary alignment, column counts and rhythm deliberately.',
     '',
     'DESIGN PROCESS (do these steps IN ORDER — the concept comes before any code):',
     'STEP 1 — ANALYZE. From the scraped website, category, and reviews answer: What does this business actually sell? What is its ONE flagship product or service? Who is the customer and what do they feel (fear at the dentist, pride in their car, appetite, stress in a legal fight)? What are the brand colours, tone, language, and city?',
@@ -77,14 +96,18 @@ function designSystem() {
     '',
     '- Self-contained: all CSS in a <style> tag, all JS in a <script> tag.',
     '- You MAY use CDN <link>/<script> for Google Fonts and the exact Three.js/GSAP scripts listed in the recipes. Nothing else.',
-    '- DO NOT reference any external image or photo files — none exist. Besides the WebGL scene, use CSS gradients, CSS shapes, and inline SVG. You may use the business LOGO URL if one is provided (as an <img>).',
-    '- Editorial poster moments: at 1-2 chapters, set a single giant display word (10-18vw, heavyweight, brand colour or outlined text) BEHIND the 3D/content layer, product-film style. It must relate to the trade (e.g. FRESH, PRECISION, SHINE) and stay partially cropped/clipped for tension.',
+    '- USE THE CLIENT\'S REAL PHOTOS: if the BUSINESS block lists REAL PHOTOS, use them (as <img> or CSS background-image) in content chapters — product/collection cards, a gallery, an about strip — to make the page genuinely branded; the fixed WebGL scene itself stays procedural behind them. For a product brand, show the actual product photos. Do NOT invent or hotlink any OTHER external images. For everything else use CSS gradients/shapes + inline SVG. You may use the business LOGO URL (as an <img>). Give every real image a graceful colour/gradient behind it and loading="lazy" in case one fails.',
+    '- Editorial poster moments: at 1-2 chapters, set a single giant display word (10-18vw, heavyweight) product-film style, partially cropped/clipped for tension, relating to the trade (e.g. FRESH, PRECISION, SHINE). CRITICAL LEGIBILITY: on the near-black background it MUST be clearly visible — use EITHER a bright outlined treatment (transparent fill + 2px stroke via -webkit-text-stroke in a LIGHTENED brand/accent colour at 0.35-0.6 opacity) OR a solid fill in a light or accent tint at >=0.5 opacity. NEVER a dark-on-dark watermark, never opacity below 0.2 — if it is barely visible it is wrong.',
+    '- PLACEMENT of the giant word (critical — it must NEVER collide with readable content): put it ONLY in a SPARSE chapter (the hero, or a short transition with one line of text). NEVER place it behind a card grid, a dense paragraph block, or any chapter with multiple text elements. Its z-index sits BELOW all chapter content, and the content above it must have opaque backgrounds (see card rule) so the word can never bleed through text. If a chapter has cards or lots of copy, do not put the giant word there.',
     '- For product-led trades you may add an "exploded diagram" chapter: a layered inline SVG of the flagship product (5-8 stacked parts you draw yourself) whose parts translate apart on scroll (GSAP scrub), with thin leader lines labelling REAL services from the scrape.',
     '- For precision/tech-coded trades (dental, auto diagnostics, legal, security, medical, engineering — NOT restaurants/salons/cafes) you may frame the hologram moment (RECIPE G) with the scan/targeting HUD overlay (RECIPE H): corner brackets, reticle, scanline, and a small readout panel naming a real detail (a service, a precision stat) — fades in only while that hologram forms.',
     '- Ground all content in the scraped website: real service names, real tone, real city. No lorem ipsum, no generic filler ("Quality You Can Trust", "Your satisfaction is our priority").',
     '- Dark, deep backgrounds work best under bloom — keep the page near-black with the brand colour as the glow accent.',
     '- Chapters to include (adapt to the business): cinematic hero with name + tagline; services/offerings; a why-us or stats moment; testimonials; and a final CTA chapter with a (non-functional) contact form or booking button. Footer with real address/phone.',
     '- Text must stay readable over the 3D at every scroll position: scrims + text-shadows per the recipes, WCAG AA contrast.',
+    '- CARDS / PANELS MUST BE OPAQUE ENOUGH TO MASK WHAT IS BEHIND THEM: any card, panel, or content box sitting over the 3D scene (or over the giant editorial word) must have a near-solid background — background: rgba(<bg>, 0.80) or higher, plus backdrop-filter: blur(10px) and a 1px border. NEVER ship fully transparent cards: the particle field or the giant poster word bleeding through card text is a bug that makes it unreadable. Each card is its own clean surface.',
+    '- CARD ALIGNMENT (non-negotiable): any multi-card row uses CSS grid with EQUAL columns (grid-template-columns: repeat(N, 1fr); align-items: stretch) so cards are the SAME size and align on both axes; make each card display:flex; flex-direction:column with CTAs pushed down (margin-top:auto) so content lines up across cards regardless of text length. No ragged heights.',
+    '- PRODUCT BRANDS: if the concept archetype is product-brand, the PRODUCTS are the hero — showcase each as a crafted, spotlit artefact (a detailed bespoke inline SVG of the actual item), grouped by collection, flagship largest. In cinematic mode the flagship product is the hologram (RECIPE G). Do not bury products in a generic feature grid.',
     '- Fully mobile-responsive (375px, 768px, 1024px, 1440px breakpoints); reduce particle counts and disable parallax on small screens.',
     '- Use cursor:pointer on all clickable elements.',
     '- Respect prefers-reduced-motion: disable animations, parallax, and the 3D scene under that media query (CSS gradient fallback per the recipes).',
@@ -97,22 +120,271 @@ function designSystem() {
   ].join('\n');
 }
 
-function reviewSystem() {
+// CLEAN / PROFESSIONAL design system — the "Webild-quality" path. Produces a
+// polished, modern, conversion-focused conventional business site composed from
+// the section blueprints (no WebGL). This is the reliable, high-end look most
+// service businesses actually want.
+function cleanSystem() {
+  return [
+    'You are an award-winning web designer and front-end developer at a top studio.',
+    'You build clean, modern, high-converting marketing sites for real businesses — the kind a',
+    'premium agency ships: confident typography, generous whitespace, a restrained brand-led palette,',
+    'tasteful motion, flawless on mobile. Think Webild / Framer / Relume quality, not a template.',
+    '',
+    'Produce a COMPLETE, self-contained, single-file HTML5 landing page for the specific local business.',
+    '',
+    'OUTPUT RULES (critical):',
+    '- Output ONLY the HTML document. Start with <!DOCTYPE html> and end with </html>.',
+    '- No markdown, no code fences, no commentary before or after.',
+    '',
+    'HOW TO BUILD (compose, do not free-invent):',
+    '- Assemble the page from the SECTION BLUEPRINTS provided below, filled with the real business',
+    '  content and brand. Follow the MODERN DESIGN PRINCIPLES and COMPOSITION RULES in that brief.',
+    '- Define one design system in :root (CSS custom properties): colours, type scale, spacing, radius, shadows.',
+    '',
+    'PALETTE IS DECIDED: a PALETTE block gives you the exact CSS custom properties to use. Put it in :root',
+    'verbatim and reference ONLY those tokens for every colour (var(--brand), var(--accent), var(--bg), …).',
+    'Never hardcode a hex/rgb outside :root. The palette is already brand-matched and scheme-appropriate —',
+    'do not substitute a generic hue.',
+    '',
+    'VISUALS: USE the CLIENT\'S REAL PHOTOS listed in the BUSINESS block (their own images) as hero',
+    'backgrounds, product/collection cards, and gallery — real imagery is what makes it convincing, and for',
+    'a product brand the products SHOULD be shown as real photos. Give each a graceful colour/gradient behind',
+    'it + loading="lazy". Do NOT invent or hotlink any OTHER external images. Where no photo fits, use',
+    'tasteful CSS gradients/mesh, soft shadows,',
+    'rounded cards, and BESPOKE inline <svg> artwork — a custom SVG icon per service (via <path>, brand',
+    'accent), and at least one substantial hero/section SVG illustration relevant to the trade. NEVER',
+    'unicode symbols or emoji as icons. You MAY use the business LOGO url (as <img>) if provided, and CDN',
+    'Google Fonts (two typefaces max: a distinctive display heading + a clean body).',
+    '',
+    'MOTION: subtle, tasteful micro-interactions only — fade/slide-up reveals on scroll via',
+    'IntersectionObserver (150–300ms), hover lifts on cards/buttons, a count-up on the stats band.',
+    'Respect prefers-reduced-motion (disable transforms/animations under it). No WebGL, no heavy libraries;',
+    'plain CSS + a little vanilla JS. You may load NO external JS libraries.',
+    '',
+    'QUALITY BAR: bold oversized display headlines; deliberate type-scale contrast; roomy section padding;',
+    'a clear max-width container; strong visual hierarchy; real trust/social-proof (stats, ratings, years);',
+    'clear hover + focus states; cursor:pointer on clickables; a prominent primary CTA (book/call/quote).',
+    '- Fully responsive (375 / 768 / 1024 / 1440), mobile-first, 16px+ body, 44px+ touch targets, no h-scroll.',
+    '- CARD ALIGNMENT: multi-card rows use CSS grid with equal columns (repeat(N,1fr); align-items:stretch) and each card is a flex column (CTAs pushed down with margin-top:auto) so all cards are the same size and align on both axes.',
+    '- PRODUCT BRANDS: if the strategy archetype is product-brand, lead with a product/collection showcase where each product is a crafted, spotlit artefact (detailed bespoke inline SVG of the item), flagship largest — not a generic icon grid.',
+    '- Ground everything in the scrape: real service names, real tone, real city. No lorem, no generic filler.',
+    '- Add a fixed top banner: "Website Preview — concept mockup for <business name>"; offset the page so it does not overlap.',
+    '',
+    'LANGUAGE RULE: detect the language of the scraped content. If Dutch, write ALL visible text in Dutch;',
+    'if French, in French; English only if the site is English or nothing was scraped. Never mix languages.',
+    'VOICE: infer the brand tone from the scraped copy (formal vs warm vs playful; for Dutch, the "u" vs',
+    '"je" form) and write EVERY line in that voice. Echo the business\'s own phrases where natural.',
+    '',
+    'If a USER ART DIRECTION block is provided, it OVERRIDES your inferred palette/mood/layout/copy choices',
+    'wherever they conflict (still honour real brand colours and scraped facts).',
+    '',
+    'Aim for the reaction: "this looks like a real, expensive, professionally-built website."',
+  ].join('\n');
+}
+
+// STRATEGY pass — pure design thinking, no code. First the expert-designer
+// questions (what IS this business, what must the page make the hero, how do we
+// showcase it), then the mode-specific creative direction. Run for BOTH styles
+// so the build always executes a considered decision, not a fixed template.
+function conceptSystem(style) {
+  const cinematic = style !== 'clean';
+  const threeD = cinematic ? [
+    '  "3d_story": "how a procedural, asset-free 3D world visualises the hero_subject — the 3D is the pitch, not decoration",',
+    '  "silhouette": "the hologram subject as a single 2D shape. If archetype is product-brand, this MUST be the FLAGSHIP PRODUCT itself. Otherwise choose from the MOTIF SELECTION angles to reflect THIS client\'s specific specialty, never the generic trade default.",',
+    '  "silhouette_rationale": "one line: why THIS shape for THIS client",',
+    '  "strand_curve": "one of: helix | torus-knot | flat-spiral-galaxy | lissajous-ribbon (by brand mood)",',
+    '  "centrepiece": "the glowing wireframe hero geometry the camera flies around",',
+    '  "use_hud": true or false — true ONLY for precision/tech trades (dental, auto diagnostics, legal, medical, engineering); false for warm trades",',
+    '  "editorial_word": "the giant display word behind the scene, in the site language",',
+    '  "chapters": ["4-5 items \'<message> — <camera move>\' naming REAL services/products from the scrape; include a dedicated product/collection chapter if archetype is product-brand"],',
+  ] : [
+    '  "sections": ["the ordered section blueprints to use (see SECTION BLUEPRINTS), chosen for THIS business; if archetype is product-brand a product/collection showcase MUST be near the top"],',
+  ];
+  return [
+    'You are an award-winning creative director. Think like an EXPERT DESIGNER: before any layout, decide',
+    'WHAT this business is and WHAT the page must make the hero. Think hard about STRATEGY ONLY — no code.',
+    'Ground every decision in the scraped website, category, reviews and city — no generic filler.',
+    'If a USER ART DIRECTION block is provided, it TAKES PRECEDENCE over your inferred choices (still honour real brand colours and scraped facts).',
+    '',
+    'FIRST ask yourself (this is the thinking that separates expert from generic):',
+    '- What ARCHETYPE is this? product-brand (sells named products/collections) · service · practice · hospitality · retail · portfolio · trade.',
+    '- What is the ONE thing the visitor must remember — and what deserves to be the visual HERO?',
+    '- If they sell their OWN products/collections, the PRODUCTS are the story: they must be showcased as crafted artefacts (a detailed, spotlit rendering of each), the flagship product given the hero treatment — not buried in a generic feature grid.',
+    '',
+    'Output ONLY a single JSON object (no prose, no fences) with EXACTLY these keys:',
+    '{',
+    '  "archetype": "product-brand | service | practice | hospitality | retail | portfolio | trade",',
+    '  "hero_subject": "the ONE thing the page makes the star (e.g. \'the fragrance collection\' for a product brand; \'the signature treatment/outcome\' for a service)",',
+    '  "products": ["REAL product or collection names found in the scrape; [] if none"],',
+    '  "showcase": "how to feature the hero_subject concretely (e.g. \'artefact gallery: each product a crafted spotlit SVG card grouped by collection; flagship product as the centrepiece\')",',
+    '  "offering": "the ONE flagship product or service",',
+    '  "feeling": "the core emotion the visitor should feel",',
+    ...threeD,
+    '  "palette": "one line on the brand-matched palette direction",',
+    '  "fonts": "which font pairing and why",',
+    '  "language": "the ONE language all visible text must use (Dutch, French, or English), detected from the scrape",',
+    '  "voice": "tone for ALL copy from the scrape — e.g. \'warm, Dutch je-form\' / \'formal, Dutch u-form\'; include pronoun form"',
+    '}',
+  ].join('\n');
+}
+
+// Pull the first balanced JSON object out of the model's text.
+function extractJson(t) {
+  if (!t) return null;
+  const start = t.indexOf('{');
+  if (start < 0) return null;
+  let depth = 0, inStr = false, esc = false;
+  for (let i = start; i < t.length; i++) {
+    const c = t[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (c === '\\') esc = true;
+      else if (c === '"') inStr = false;
+    } else if (c === '"') inStr = true;
+    else if (c === '{') depth++;
+    else if (c === '}') { depth--; if (depth === 0) { try { return JSON.parse(t.slice(start, i + 1)); } catch { return null; } } }
+  }
+  return null;
+}
+
+// Render the approved strategy as a locked brief for the build pass.
+function conceptBrief(c, style) {
+  if (!c) return '';
+  const cinematic = style !== 'clean';
+  const products = Array.isArray(c.products) && c.products.length ? c.products.join(', ') : '(none found)';
+  const lines = [
+    'APPROVED STRATEGY — a creative director has already locked the thinking below.',
+    'BUILD TO IT FAITHFULLY. Do not re-invent it; spend your effort on flawless execution.',
+    (cinematic ? 'Reproduce it verbatim in the required <!-- CONCEPT: ... --> comment.' : ''),
+    '',
+    `- archetype: ${c.archetype || ''}`,
+    `- HERO (make this the star of the page): ${c.hero_subject || c.offering || ''}`,
+    `- products/collections (REAL — feature these): ${products}`,
+    `- showcase (how to feature the hero): ${c.showcase || ''}`,
+    (c.archetype === 'product-brand'
+      ? '  → This is a PRODUCT BRAND: the products ARE the story. Showcase each as a crafted, spotlit artefact (a detailed bespoke SVG rendering), grouped by collection, with the flagship given the hero treatment. Do NOT bury them in a generic feature grid.'
+      : ''),
+    `- offering: ${c.offering || ''}`,
+    `- feeling: ${c.feeling || ''}`,
+  ];
+  if (cinematic) {
+    const chapters = Array.isArray(c.chapters) ? c.chapters.map((x, i) => `    ${i + 1}. ${x}`).join('\n') : '';
+    lines.push(
+      `- 3d story: ${c['3d_story'] || ''}`,
+      `- hologram silhouette (RECIPE G): ${c.silhouette || ''}`,
+      c.silhouette_rationale ? `  (why this shape: ${c.silhouette_rationale})` : '',
+      `- light-strand curve (RECIPE C): ${c.strand_curve || ''}`,
+      `- centrepiece geometry (RECIPE D): ${c.centrepiece || ''}`,
+      `- scan/targeting HUD (RECIPE H): ${c.use_hud ? 'YES — precision/tech trade' : 'NO — warm/casual trade, do not use it'}`,
+      `- editorial poster word: ${c.editorial_word || ''}`,
+      '- chapters (pair each message with its camera move):',
+      chapters,
+    );
+  } else if (Array.isArray(c.sections) && c.sections.length) {
+    lines.push('- section order to build: ' + c.sections.join(' → '));
+  }
+  lines.push(
+    `- palette: ${c.palette || ''}`,
+    `- fonts: ${c.fonts || ''}`,
+    `- language for ALL visible text: ${c.language || 'match the scraped content'}`,
+    `- voice — write EVERY line of copy in this tone: ${c.voice || 'match the scraped content'}`,
+  );
+  return lines.filter((x) => x !== '').join('\n');
+}
+
+// Art-director review for CLEAN / PROFESSIONAL mode (no 3D checks).
+function cleanReviewSystem(hasFrames) {
+  const visual = hasFrames ? [
+    '═══ VISUAL EVIDENCE — YOU CAN SEE THE RENDERED PAGE ═══',
+    'Attached are real screenshots of this HTML rendered in a browser: several desktop scroll',
+    'positions and one mobile hero at 390px. TRUST YOUR EYES over the code. Look for and FIX:',
+    '- Weak/cramped layout: not enough whitespace, timid typography, everything the same size.',
+    '  Push display headlines bigger and bolder; open up section padding; create real hierarchy.',
+    '- Bleed-through / low contrast: text over a busy background with no clean surface; unreadable copy.',
+    '- Repetitive/templated feel: identical centred stacks section after section. Vary layouts.',
+    '- Broken mobile: overflow, overlap, collapsed hero, tiny text, banner overlapping content.',
+    '- Wrong brand hue: if brand colours were provided, the page must read in them.',
+    '- Flat/cheap visuals: default single-colour icons, no gradients/shadows/SVG craft.',
+    '',
+  ] : [];
+  return [
+    'You are a senior art director and front-end lead reviewing a clean, professional business',
+    'landing page' + (hasFrames ? ' AND screenshots of it rendered' : '') + ' before it goes to a paying prospect.',
+    'Critique it hard against the rubric, then RETURN AN IMPROVED, COMPLETE HTML document.',
+    '',
+    ...visual,
+    '═══ REVIEW RUBRIC (fix every violation) ═══',
+    '1. TYPOGRAPHY & HIERARCHY — bold oversized display headlines, deliberate type-scale contrast, clean readable body. If it looks timid or uniform, raise it.',
+    '2. WHITESPACE & RHYTHM — generous, calm section padding and a clear max-width container. Fix crowding.',
+    '3. LAYOUT VARIETY — distinct, well-composed sections (hero, services, features, stats, testimonials/FAQ, CTA, footer); no repeated identical centred stacks; vary alignment/columns.',
+    '4. BRAND & COLOUR — anchored to real brand colours; ONE accent used sparingly for CTAs; committed light OR dark scheme; WCAG AA contrast. Re-tint if it drifted to a generic hue.',
+    '5. LEGIBILITY / NO BLEED — every text block on a clean surface; cards opaque enough; nothing unreadable.',
+    '6. VISUAL CRAFT — bespoke inline SVG icons (not unicode/emoji), tasteful gradients/mesh, soft shadows, rounded cards; at least one substantial hero SVG illustration.',
+    '7. MOTION — tasteful reveals on scroll + hover states + focus rings; 150–300ms; prefers-reduced-motion respected; nothing janky; NO WebGL / no external JS libraries.',
+    '8. TRUST & COPY — real stats/ratings/credentials surfaced; a prominent primary CTA; copy specific to THIS business (kill generic filler); language consistent (one language, matching the content).',
+    '9. TECHNICAL & IMAGERY — responsive 375–1440 mobile-first, no horizontal scroll, 44px+ touch targets, 16px+ body; the client\'s REAL photos SHOULD be used (hero/products/gallery) — if they were provided but the page shows none, add them; do NOT invent other external images; CSS/SVG for everything else; cursor:pointer on clickables; valid, complete, not truncated.',
+    '10. CARD ALIGNMENT — cards in any row must be EQUAL size and aligned on both axes (grid repeat(N,1fr) + align-items:stretch + flex-column cards with CTAs pushed down). Fix any ragged/unequal cards.',
+    '11. HERO FIT — the page makes the right thing the star. If archetype is product-brand, the products must be showcased as crafted artefacts (detailed SVG, spotlit, grouped by collection), flagship largest — NOT a generic icon grid. If products are missing/generic, rebuild that section.',
+    '',
+    'OUTPUT RULES: Output ONLY the improved HTML document. Start with <!DOCTYPE html>, end with </html>. No markdown, no commentary.',
+    'Keep what works; raise everything else. It should look like a different, better agency built it.',
+  ].join('\n');
+}
+
+function reviewSystem(hasFrames, style) {
+  if (style === 'clean') return cleanReviewSystem(hasFrames);
+  const visual = hasFrames ? [
+    '═══ VISUAL EVIDENCE — YOU CAN SEE THE RENDERED PAGE ═══',
+    '',
+    'Attached are real screenshots of this exact HTML rendered in a headless browser:',
+    'several desktop scroll positions (0% = hero, through to 100% = final CTA) and one',
+    'mobile hero at 390px wide. This is the actual output, not a mockup. TRUST YOUR EYES',
+    'over the code — judge what genuinely appears on screen, then fix it in the HTML.',
+    '',
+    'Look critically for, and FIX, anything the screenshots reveal:',
+    '- White-out / blown-out frames: bloom too strong, or the camera flew inside/through',
+    '  the geometry. If any frame is mostly white or washed out, lower bloom (0.8–1.4) and',
+    '  push the camera back (closest approach z >= 14) so the scene reads as glowing shapes.',
+    '- Text that is unreadable: low contrast against the 3D, missing/weak scrim, headings',
+    '  lost in the glow. Every text block visible in a frame must be crisply legible.',
+    '- An empty, dead, or black hero: the 0% frame must already show the signature 3D world',
+    '  plus the business name and promise — not a blank void waiting to load.',
+    '- Broken mobile: overflow, cramped or overlapping text, a hero that collapses, the',
+    '  preview banner overlapping content. The 390px frame must look intentional.',
+    '- Concept mismatch: the shapes on screen do not evoke THIS trade (see the CONCEPT comment).',
+    '- Flat / generic frames: if it looks like a plain brochure rather than a cinematic',
+    '  immersive scene, rebuild the immersion using the recipes.',
+    '- Runtime errors: if a RENDER DIAGNOSTICS section below lists JavaScript/console errors',
+    '  or reports that the 3D canvas did not initialise, FIX EVERY ONE first — they mean the',
+    '  scene is broken or half-rendered, which no amount of visual polish can compensate for.',
+    'If a frame looks broken, that is the FIRST thing to fix — a beautiful codebase that',
+    'renders as a white rectangle is a failure. Prioritise fixes by what the eyes see.',
+    '',
+  ] : [];
   return [
     'You are a senior art director and front-end lead reviewing a cinematic WebGL landing page before it is sent to a paying prospect.',
-    'You receive a complete HTML landing page. Critique it hard against the rubric below, then RETURN AN IMPROVED, COMPLETE HTML document.',
+    'You receive a complete HTML landing page' + (hasFrames ? ' AND screenshots of it rendered' : '') + '. Critique it hard against the rubric below, then RETURN AN IMPROVED, COMPLETE HTML document.',
     '',
+    ...visual,
     '═══ REVIEW RUBRIC (check each, fix every violation) ═══',
     '',
     '1. IMMERSION — is it a true full-page 3D experience (fixed WebGL canvas, scroll-driven camera chapters, bloom glow), or a flat page with a decorative header? If the latter, rebuild it as the former using the recipes below.',
     '2. CONCEPT COHERENCE — read the <!-- CONCEPT --> comment at the top. Does the 3D actually visualize THIS business\'s flagship offering (hologram silhouette, strand shape, centrepiece), or is it generic decoration? If generic, re-theme the shapes to the concept. Does each chapter pair a real service with its camera move? If a scan/HUD overlay (RECIPE H) was used on a warm/casual trade (restaurant, salon, cafe), remove it — it only belongs on precision/tech-coded trades.',
     '3. LEGIBILITY & EXPOSURE — every text block sits on a scrim with text-shadow and stays readable at EVERY scroll position; bloom strength within 0.8-1.6; the camera never passes inside geometry (no white-out frames).',
+    '3b. NO BLEED-THROUGH (common bug) — cards/panels must have near-opaque backgrounds (rgba(bg,>=0.80)+blur) so NOTHING behind them shows through their text. If the particle field or the giant editorial word bleeds through card text (letters overlapping copy), FIX IT: give cards a solid surface and move the giant word out of any chapter that has cards or dense text into a sparse chapter.',
+    '3c. BRAND COLOUR FIDELITY — if the BUSINESS/BRAND block provided brand colours, the page MUST read in that hue (glow, CTAs, borders, accents). If it uses an unrelated generic hue instead (e.g. teal when the brand is gold), RE-TINT the whole palette to the brand colours — set --accent to the real brand colour and propagate it.',
     '4. 3D CORRECTNESS — Three.js r128 API only (no CapsuleGeometry, no THREE.Geometry); one renderer; geometry created once, never in animate(); composer.render() when bloom is used; WebGL + prefers-reduced-motion guards with a CSS fallback; resize updates camera, renderer AND composer. If the page loads Vanta.js, particles.js, or any pre-built effect library, REMOVE it and rebuild the effect from the recipes.',
     '5. SVG ARTWORK — every service/feature card uses a custom SVG icon via <path>, NOT a unicode character (◈ ◆ ◉ ✦ ▸ ● ■) and NOT an emoji; replace any you find with hand-drawn SVG icons relevant to that service. SVGs use gradients, filters, or animation — not flat single-colour shapes.',
     '6. LANGUAGE CONSISTENCY — all visible text in ONE language matching the business content. If the business content is Dutch, every heading, button, section tag, and label must be Dutch — no "Our Services" or "Get In Touch" on a Dutch page. Fix any mixed-language text.',
-    '7. MOTION QUALITY — scrubbed camera timeline with eased follow + mouse parallax; chapter content reveals on scroll; transitions 150-300ms; nothing janky or gratuitous.',
+    '7. MOTION QUALITY & ALIVE-ON-LOAD — the scene MUST visibly move the instant it loads, with NO scroll and NO mouse input: continuous ambient rotation/drift/bloom-breathing per the AMBIENT MOTION recipe. If the only motion is scroll-driven or mouse-parallax (i.e. it sits still on load), ADD ambient motion in animate() — this is the most common failure. Camera: scrubbed timeline, eased follow; content reveals on scroll; nothing janky.',
+    '8a. EDITORIAL WORD LEGIBILITY — if a giant display word is used, it MUST be clearly visible on the dark background (bright outlined stroke or a light/accent fill at >=0.5 opacity). If it is a dark-on-dark, barely-visible watermark, FIX IT: brighten the stroke/fill and raise opacity until it reads as an intentional poster word.',
+    '8b. LAYOUT VARIETY — if chapters are mostly centred stacks or look repetitive/templated, REBUILD them with distinct layouts (asymmetric hero, offset columns, bento, timeline, stat band, staggered cards). No two consecutive chapters share a layout; at most one centred stack total.',
     '8. HIERARCHY, BRAND & COPY — clear type-scale contrast; deliberate spacing rhythm; max 2 accent colours plus neutrals; hover states and focus rings on interactive elements; copy specific to this business — kill generic filler ("Quality You Can Trust", "We are committed to excellence").',
-    '9. TECHNICAL — fully responsive 375px-1440px with no horizontal scroll and reduced particle counts on mobile; NO external image/photo files (only CSS/SVG/canvas/logo); cursor:pointer on clickables; prefers-reduced-motion respected; valid, complete, not truncated.',
+    '9. TECHNICAL & IMAGERY — fully responsive 375px-1440px, no horizontal scroll, reduced particle counts on mobile; the client\'s REAL photos SHOULD appear in content chapters (products/gallery) if they were provided — add them if missing; the WebGL scene stays procedural; no OTHER invented external images; cursor:pointer on clickables; prefers-reduced-motion respected; valid, complete, not truncated.',
+    '10. MATERIAL & LIGHT CRAFT (expensive vs junior) — the SOLID centrepiece should use real materials + lighting + reflections and a GLSL fresnel rim (RECIPE I/J), so it looks lit and dimensional, NOT flat single-colour MeshBasicMaterial. Motion should feel weighty and restrained (long eases, one signature hero beat with holds), not busy/uniform junior spinning. If the centrepiece is flat-shaded or the motion is constant and shallow, upgrade it. (Particles/wireframes stay MeshBasic — that is correct.)',
+    '11. CARD ALIGNMENT — cards in any row must be EQUAL size and aligned on both axes (grid repeat(N,1fr) + align-items:stretch + flex-column cards). Fix any ragged/unequal-height cards.',
+    '12. HERO FIT — the page must make the right thing the star. If the concept archetype is product-brand, the products must be showcased as crafted artefacts (detailed SVG, spotlit, grouped by collection) with the flagship as hero — not buried in a generic grid. If products are missing or generic, rebuild that section.',
     '',
     'A UX CHECKLIST follows the HTML — verify each item.',
     '',
@@ -124,6 +396,60 @@ function reviewSystem() {
   ].join('\n');
 }
 
+// PLANNER sub-agent — produces a job-specific to-do plan + adaptive effort,
+// so the orchestrator's steps reflect THIS business (Manus "plan first").
+function planSystem() {
+  return [
+    'You are the planning agent for a bespoke website-build. Given a business, produce a short plan.',
+    'Think about what THIS business needs to win the client, then output ONLY a JSON object:',
+    '{',
+    '  "steps": ["EXACTLY 5 short imperative step titles tailored to this business, in build order: (1) research, (2) strategy, (3) design/build, (4) review, (5) deliver — name the real trade/specialty, e.g. \'Research the implant clinic & its reviews\'"],',
+    '  "reviewRounds": 1-3 (how many QA passes this job likely needs — more for complex, product-led, or precision trades),',
+    '  "focus": "one sentence — what matters MOST for this specific mockup to beat the client\'s current site"',
+    '}',
+    'Ground the titles in the real business. No code, no prose outside the JSON.',
+  ].join('\n');
+}
+
+// REFINE pass — the "Bob" copilot. Edits an EXISTING full HTML document in
+// place per a natural-language instruction, preserving everything else.
+function refineSystem(style) {
+  return [
+    'You are a senior front-end designer editing an EXISTING single-file HTML landing page IN PLACE.',
+    'You receive the full current HTML and a short EDIT INSTRUCTION from the operator.',
+    'Apply ONLY that change (plus anything strictly necessary to make it look right and stay valid).',
+    'PRESERVE EVERYTHING ELSE EXACTLY — layout, copy, imagery, and the design system in :root.',
+    style === 'clean'
+      ? '(This is a clean/professional site — no WebGL. Keep it that way.)'
+      : '(This is a cinematic WebGL site — keep the Three.js scene working: r128 API only, keep the guards, do not remove the canvas or break the animation loop.)',
+    'Honour the existing colour tokens (var(--brand)/--accent/…) — do not introduce new hardcoded hexes.',
+    'Keep the document COMPLETE and valid: start <!DOCTYPE html>, end </html>. If the instruction is',
+    'ambiguous, make the smallest sensible change. Do not add or remove the preview banner.',
+    'A screenshot of the current page may be attached — use it to locate the change precisely.',
+    '',
+    'OUTPUT RULES: Output ONLY the full updated HTML document. No markdown, no code fences, no commentary.',
+  ].join('\n');
+}
+
+// Format render diagnostics (runtime errors + canvas health) for the repair
+// pass. Empty string when the page wasn't rendered (Browser Rendering off).
+function renderReport(diag, style) {
+  if (!diag || !diag.rendered) return '';
+  const lines = ['', 'RENDER DIAGNOSTICS (from actually running this HTML in a headless browser):'];
+  if (style !== 'clean' && !diag.canvasOk) {
+    lines.push('- ⚠ The 3D <canvas> did NOT initialise — the WebGL scene is missing or the script threw ' +
+      'before creating the renderer. Fix this FIRST: the page must render its cinematic scene, not a blank background.');
+  }
+  if (diag.errors && diag.errors.length) {
+    lines.push('- ⚠ JavaScript/console errors captured at runtime — FIX EVERY ONE (they usually mean the scene is broken):');
+    for (const e of diag.errors) lines.push('    • ' + e);
+  }
+  if (diag.canvasOk && (!diag.errors || !diag.errors.length)) {
+    lines.push('- No runtime errors and the 3D canvas initialised cleanly. Focus on visual/aesthetic refinement from the screenshots.');
+  }
+  return lines.join('\n');
+}
+
 function businessBlock(place, branding, scraped) {
   const parts = ['BUSINESS:'];
   parts.push(`- Name: ${place.name || '(unknown)'}`);
@@ -132,10 +458,19 @@ function businessBlock(place, branding, scraped) {
   if (place.phone) parts.push(`- Phone: ${place.phone}`);
   if (place.website) parts.push(`- Website: ${place.website}`);
   if (place.rating) parts.push(`- Google rating: ${place.rating}★ (${place.total_ratings || 0} reviews)`);
-  if (branding && (branding.logoUrl || (branding.colors && branding.colors.length))) {
+  if (branding && branding.logoUrl) {
     parts.push('', 'BRAND:');
-    if (branding.logoUrl) parts.push(`- Logo URL (you may use as <img>): ${branding.logoUrl}`);
-    if (branding.colors && branding.colors.length) parts.push(`- Brand colours: ${branding.colors.join(', ')}`);
+    parts.push(`- Logo URL (you may use as <img>): ${branding.logoUrl}`);
+    parts.push('- COLOUR: the exact palette is provided separately in the PALETTE block (already brand-derived).');
+    parts.push('  Use ONLY those CSS tokens — do NOT read colours off the logo or invent your own hexes.');
+  }
+  if (branding && branding.images && branding.images.length) {
+    parts.push('', 'REAL PHOTOS from the client\'s own website (USE THESE — they are the actual brand imagery):');
+    branding.images.forEach((u, i) => parts.push(`  ${i + 1}. ${u}`));
+    parts.push('  Use these real images in the mockup (hero background, product/collection cards, gallery, about).');
+    parts.push('  The FIRST is usually the strongest hero/product shot. Add loading="lazy" and a graceful');
+    parts.push('  background/colour behind each in case one fails to load. Prefer real photos over abstract');
+    parts.push('  fillers wherever a photo tells the story better — especially product/collection imagery.');
   }
   parts.push('', 'SCRAPED WEBSITE CONTENT (may be empty or noisy — extract what is useful):');
   parts.push(scraped ? scraped.slice(0, 6000) : '(nothing scraped — design from the business name, category and city)');
@@ -143,47 +478,75 @@ function businessBlock(place, branding, scraped) {
 }
 
 // ── Anthropic streaming call (raw HTTP SSE; returns assembled text) ──────────
-async function callClaudeStream(env, system, userText) {
-  const res = await fetch(ANTHROPIC_URL, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'x-api-key': env.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      max_tokens: MAX_TOKENS,
-      stream: true,
-      output_config: { effort: 'high' },
-      system,
-      messages: [{ role: 'user', content: userText }],
-    }),
-  });
-  if (!res.ok || !res.body) {
-    const detail = await res.text().catch(() => '');
-    throw new Error(`Anthropic ${res.status}: ${detail.slice(0, 300)}`);
-  }
-  const reader = res.body.getReader();
-  const dec = new TextDecoder();
-  let buf = '', out = '', stop = null;
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buf += dec.decode(value, { stream: true });
-    let nl;
-    while ((nl = buf.indexOf('\n')) >= 0) {
-      const line = buf.slice(0, nl); buf = buf.slice(nl + 1);
-      if (!line.startsWith('data:')) continue;
-      const data = line.slice(5).trim();
-      if (!data || data === '[DONE]') continue;
-      let ev; try { ev = JSON.parse(data); } catch { continue; }
-      if (ev.type === 'content_block_delta' && ev.delta && ev.delta.type === 'text_delta') out += ev.delta.text;
-      else if (ev.type === 'message_delta' && ev.delta && ev.delta.stop_reason) stop = ev.delta.stop_reason;
+// `frames` (optional) is an array of { label, data(base64 jpeg) } — when present
+// they are attached as image blocks before the text so the model critiques what
+// it can SEE, not just the code.
+async function callClaudeStream(env, system, userText, frames, maxTokens) {
+  let content;
+  if (frames && frames.length) {
+    content = [];
+    for (const f of frames) {
+      content.push({ type: 'text', text: `Screenshot — ${f.label}:` });
+      content.push({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: f.data } });
     }
+    content.push({ type: 'text', text: userText });
+  } else {
+    content = userText;
   }
-  if (stop === 'refusal') throw new Error('Model refused this request.');
-  return out;
+  const body = JSON.stringify({
+    model: MODEL,
+    max_tokens: maxTokens || MAX_TOKENS,
+    stream: true,
+    output_config: { effort: 'high' },
+    system,
+    messages: [{ role: 'user', content }],
+  });
+  // Retry transient failures (overload/rate-limit/5xx/network). With up to four
+  // Claude calls per mockup, a single 429/529 would otherwise fail the whole
+  // build and drop the client to the template. 3 attempts, 1s→2s backoff.
+  const transient = (s) => s === 408 || s === 409 || s === 425 || s === 429 || s === 500 || s === 502 || s === 503 || s === 529;
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  let lastErr = null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    if (attempt) await sleep(1000 * attempt);
+    let res;
+    try {
+      res = await fetch(ANTHROPIC_URL, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'x-api-key': env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+        body,
+      });
+    } catch (e) { lastErr = e; continue; } // network error → retry
+    if (!res.ok || !res.body) {
+      const detail = await res.text().catch(() => '');
+      lastErr = new Error(`Anthropic ${res.status}: ${detail.slice(0, 300)}`);
+      if (transient(res.status)) continue;  // retry transient
+      throw lastErr;                         // permanent (400/401/403/…) → fail fast
+    }
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let buf = '', out = '', stop = null;
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += dec.decode(value, { stream: true });
+        let nl;
+        while ((nl = buf.indexOf('\n')) >= 0) {
+          const line = buf.slice(0, nl); buf = buf.slice(nl + 1);
+          if (!line.startsWith('data:')) continue;
+          const data = line.slice(5).trim();
+          if (!data || data === '[DONE]') continue;
+          let ev; try { ev = JSON.parse(data); } catch { continue; }
+          if (ev.type === 'content_block_delta' && ev.delta && ev.delta.type === 'text_delta') out += ev.delta.text;
+          else if (ev.type === 'message_delta' && ev.delta && ev.delta.stop_reason) stop = ev.delta.stop_reason;
+        }
+      }
+    } catch (e) { lastErr = e; continue; } // mid-stream drop → retry
+    if (stop === 'refusal') throw new Error('Model refused this request.');
+    return out;
+  }
+  throw lastErr || new Error('Anthropic request failed after retries');
 }
 
 // Pull a clean HTML document out of the model's text (handles any stray preamble/fences)
@@ -227,9 +590,79 @@ function json(obj, status = 200) {
   return new Response(JSON.stringify(obj), { status, headers: { 'content-type': 'application/json' } });
 }
 
+// Deterministic palette enforcement: models often HARDCODE their chosen colours
+// (e.g. #4285f4 and rgba(66,133,244,…)) instead of using the var() tokens, which
+// defeats the brand-lock. Read the model's own :root brand/accent/bg hexes and
+// globally rewrite those exact values (and their rgb triplets) to the locked
+// palette — so the brand colour holds no matter how the model wrote it.
+function enforcePalette(html, pal) {
+  const m = html.match(/:root\s*\{([\s\S]*?)\}/i); // the model's first :root
+  if (!m) return html;
+  const root = m[1];
+  const readVar = (name) => {
+    const r = new RegExp('--' + name + '\\s*:\\s*(#[0-9a-fA-F]{6})', 'i').exec(root);
+    return r ? r[1].toLowerCase() : null;
+  };
+  const hexRgb = (h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+  const pairs = [
+    [readVar('brand'), pal.vars['--brand']],
+    [readVar('accent'), pal.vars['--accent']],
+    [readVar('accent2'), pal.vars['--brand-2']],
+    [readVar('brand-2'), pal.vars['--brand-2']],
+    [readVar('bg'), pal.vars['--bg']],
+  ];
+  let out = html;
+  const done = new Set();
+  for (const [from, to] of pairs) {
+    if (!from || !to || !/^#[0-9a-f]{6}$/i.test(to) || from === to.toLowerCase() || done.has(from)) continue;
+    done.add(from);
+    out = out.split(from).join(to.toLowerCase());              // #hex (all cases already lowered in root)
+    out = out.split(from.toUpperCase()).join(to.toLowerCase()); // #HEX
+    const [fr, fg, fb] = hexRgb(from), [tr, tg, tb] = hexRgb(to);
+    out = out.replace(new RegExp('\\b' + fr + '\\s*,\\s*' + fg + '\\s*,\\s*' + fb + '\\b', 'g'), tr + ',' + tg + ',' + tb);
+  }
+  return out;
+}
+
+// Named exports so the async runner (see ../runner) can reuse the exact same
+// prompt builders + helpers with no duplication — worker and runner share one
+// brain. (The Worker entry point remains the default export below.)
+export {
+  designSystem, cleanSystem, conceptSystem, conceptBrief, reviewSystem, refineSystem, planSystem,
+  businessBlock, extractJson, extractHtml, looksComplete, renderReport,
+  enforcePalette, scrape,
+};
+
+// ── Async job API → forward to the runner (Option C) ───────────────────────
+// The heavy multi-agent loop runs on the persistent runner (see ../runner);
+// the Worker just proxies enqueue/poll and adds CORS + hides the runner URL.
+async function forwardEnqueue(request, env) {
+  if (!env.RUNNER_URL) return withCors(json({ error: 'Runner not configured (set RUNNER_URL)' }, 501));
+  const body = await request.text().catch(() => '');
+  const r = await fetch(env.RUNNER_URL.replace(/\/$/, '') + '/jobs', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'x-runner-secret': env.SHARED_SECRET || '' },
+    body,
+  });
+  return withCors(new Response(await r.text(), { status: r.status, headers: { 'content-type': 'application/json' } }));
+}
+async function forwardStatus(jobId, env) {
+  if (!env.RUNNER_URL) return withCors(json({ error: 'Runner not configured (set RUNNER_URL)' }, 501));
+  const r = await fetch(env.RUNNER_URL.replace(/\/$/, '') + '/jobs/' + encodeURIComponent(jobId), {
+    headers: { 'x-runner-secret': env.SHARED_SECRET || '' },
+  });
+  return withCors(new Response(await r.text(), { status: r.status, headers: { 'content-type': 'application/json' } }));
+}
+
 export default {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') return withCors(new Response(null, { status: 204 }));
+
+    // Async "Manus for websites" job API (proxied to the runner).
+    const path = new URL(request.url).pathname;
+    if (request.method === 'POST' && path === '/jobs') return forwardEnqueue(request, env);
+    if (request.method === 'GET' && path.startsWith('/jobs/')) return forwardStatus(path.slice(6), env);
+
     // Diagnostic: GET the Worker URL in a browser to confirm the secret is bound.
     if (request.method === 'GET') return withCors(json({
       ok: true,
@@ -243,34 +676,179 @@ export default {
     let body;
     try { body = await request.json(); } catch { return withCors(json({ error: 'Invalid JSON body' }, 400)); }
     const place = body.place || {};
-    const branding = body.branding || null;
+    let branding = body.branding || null;
+    // Optional operator-supplied art direction. Blank = full auto (default).
+    const direction = (typeof body.direction === 'string' ? body.direction : '').trim().slice(0, 600);
+    // Design style: 'cinematic' (immersive WebGL, default) or 'clean' (Webild-style pro site).
+    const style = body.style === 'clean' ? 'clean' : 'cinematic';
+    const directionBlock = direction
+      ? 'USER ART DIRECTION (an explicit brief from the operator — this OVERRIDES the ' +
+        "agent's inferred palette, mood, motif and copy choices wherever they conflict. Still " +
+        'honour the real brand colours and the scraped facts; do not invent services that are not ' +
+        'in the scrape):\n' + direction
+      : '';
     if (!place.name) return withCors(json({ error: 'place.name is required' }, 400));
 
     try {
-      const scraped = await scrape(place.website);
+      // ── Resolve brand + content from ALL sources (browser-free first) ──
+      // Order of preference. None of these require Browser Rendering except the
+      // last (pixel-accurate logo colours), which is a pure enhancement.
+      const baseUrl = place.website
+        ? (place.website.startsWith('http') ? place.website : 'https://' + place.website)
+        : '';
+      let scraped = await scrape(place.website);                   // Jina markdown (handles JS/SPAs)
+      const rawHtml = await fetchSiteHtml(place.website);          // raw HTML — works on any plan
+      const fromHtml = extractFromHtml(rawHtml, baseUrl);          // logo + theme/CSS colours + text
+      const fromBrowser = await extractSiteBrand(env, place.website).catch(() => ({})); // pixel colours (paid, optional)
+
+      branding = branding || {};
+      let colorSource = (branding.colors && branding.colors.length) ? 'client' : 'none';
+      // logo: client → raw-HTML → browser
+      if (!branding.logoUrl) branding.logoUrl = fromHtml.logoUrl || (fromBrowser && fromBrowser.logoUrl) || null;
+      // colours: client → raw-HTML (theme-color / CSS vars) → browser pixel sampling
+      if (!branding.colors || !branding.colors.length) {
+        if (fromHtml.colors && fromHtml.colors.length) { branding.colors = fromHtml.colors; colorSource = 'html'; }
+        else if (fromBrowser && fromBrowser.colors && fromBrowser.colors.length) { branding.colors = fromBrowser.colors; colorSource = 'browser'; }
+      }
+      // content/voice: use the richest text available so the scrape is never empty
+      // when the site is reachable (drives real services + tone in both modes).
+      for (const t of [fromHtml.voiceText, fromBrowser && fromBrowser.voiceText]) {
+        if ((t || '').length > (scraped || '').length) scraped = t;
+      }
+      // real photos from the client's site — used in the mockup (hero, products, gallery)
+      if (!branding.images || !branding.images.length) branding.images = (fromHtml.images || []);
+      const brandSource = (branding.colors && branding.colors.length) ? colorSource : 'none';
+
       const ctx = businessBlock(place, branding, scraped);
       // Curated design intelligence (palettes/fonts/patterns/styles) matched to
       // the business type — extracted from the ui-ux-pro-max skill data.
       const brief = designBrief(place, branding);
+      // Worked concept exemplar matched to the same domain the brief uses — a
+      // few-shot taste anchor for the strategic decisions (offering, feeling,
+      // 3D story, chapters) before any code is written.
+      const domain = classifyDomain(
+        [place.name, place.category, branding && (branding.notes || '')].filter(Boolean).join(' ')
+      );
+      const exemplar = exemplarBlock(domain);
+      const dirPrefix = directionBlock ? directionBlock + '\n\n' : '';
 
-      // DESIGN pass
-      let html = extractHtml(await callClaudeStream(
-        env, designSystem(),
-        ctx + '\n\n' + brief + '\n\nNow build the complete website.'
-      ));
+      // Deterministic palette: computed in code from the real brand colour (or a
+      // domain-correct default — beauty=rose, never blue), handed to the model as
+      // the only colours it may use, and locked into the output below.
+      const pal = buildPalette(branding.colors, domain, style);
+      const palBlock = paletteBrief(pal);
+
+      // STRATEGY pass (BOTH modes) — expert design thinking: archetype, what to
+      // feature (products vs service), how to showcase it — locked before build.
+      let concept = null, conceptBriefText = '';
+      try {
+        concept = extractJson(await callClaudeStream(
+          env, conceptSystem(style),
+          dirPrefix + ctx + '\n\n' + brief + '\n\n' +
+            (style === 'clean' ? cleanBrief(domain) : (exemplar + '\n\n' + motifBlock(domain))) +
+            '\n\nNow decide the strategy. Output only the JSON object.',
+          null, 2200
+        ));
+        conceptBriefText = conceptBrief(concept, style);
+      } catch { /* strategy optional — build reasons inline if it fails */ }
+
+      let html;
+      if (style === 'clean') {
+        const cleanText = dirPrefix + ctx + '\n\n' + palBlock + '\n\n' +
+          (conceptBriefText ? conceptBriefText + '\n\n' : '') + brief + '\n\n' + cleanBrief(domain) +
+          '\n\nNow build the complete website.';
+        html = extractHtml(await callClaudeStream(env, cleanSystem(), cleanText));
+      } else {
+        const buildText = conceptBriefText
+          ? dirPrefix + ctx + '\n\n' + palBlock + '\n\n' + brief + '\n\n' + conceptBriefText + '\n\nNow build the complete website to this concept.'
+          : dirPrefix + ctx + '\n\n' + palBlock + '\n\n' + brief + '\n\n' + exemplar + '\n\nNow build the complete website.';
+        html = extractHtml(await callClaudeStream(env, designSystem(), buildText));
+      }
       if (!looksComplete(html)) throw new Error('Design pass produced incomplete HTML.');
 
-      // ART-DIRECTOR review/refine pass
-      try {
-        const reviewed = extractHtml(await callClaudeStream(
-          env, reviewSystem(),
-          businessBlock(place, branding, scraped) + '\n\n' + qaChecklist() +
-            '\n\nHTML TO IMPROVE:\n' + html
-        ));
-        if (looksComplete(reviewed) && reviewed.length > html.length * 0.6) html = reviewed;
-      } catch { /* keep design-pass HTML if review fails */ }
+      // ITERATIVE RENDER → REVIEW LOOP — the pattern agentic site builders use:
+      // render the page, capture frames AND runtime errors, let the art director
+      // fix what it sees plus any errors, then RE-RENDER to verify. Stops early
+      // once a render is clean; capped at MAX_REVIEWS fix passes to bound cost.
+      // When Browser Rendering is off it collapses to a single text-only review.
+      const MAX_REVIEWS = 2;
+      let frames = [], reviews = 0;
+      let diag = { frames: [], errors: [], canvasOk: true, rendered: false };
+      for (let i = 0; i <= MAX_REVIEWS; i++) {
+        try { diag = await captureFrames(env, html); }
+        catch { diag = { frames: [], errors: [], canvasOk: true, rendered: false }; }
+        frames = diag.frames;
+        // Clean mode has no WebGL canvas, so canvasOk is irrelevant there.
+        const canvasOk = style === 'clean' ? true : diag.canvasOk;
+        const renderOk = canvasOk && (!diag.errors || diag.errors.length === 0);
+        if (i > 0 && renderOk) break;     // already fixed once and now renders clean → done
+        if (i === MAX_REVIEWS) break;     // out of fix budget; return the last render's HTML
+        try {
+          const reviewed = extractHtml(await callClaudeStream(
+            env, reviewSystem(frames.length > 0, style),
+            businessBlock(place, branding, scraped) + '\n\n' + qaChecklist() +
+              renderReport(diag, style) + '\n\nHTML TO IMPROVE:\n' + html,
+            frames
+          ));
+          if (looksComplete(reviewed) && reviewed.length > html.length * 0.6) html = reviewed;
+          reviews++;
+        } catch { break; /* keep last good html */ }
+        if (!diag.rendered) break;        // can't verify without rendering → one review only
+      }
 
-      return withCors(json({ html, scrapedChars: scraped.length }));
+      const renderClean = (style === 'clean' ? true : diag.canvasOk) && (!diag.errors || diag.errors.length === 0);
+
+      // Rewrite any hardcoded brand/accent hexes the model used to the locked
+      // palette (guarantee the brand colour even when the model ignored tokens).
+      html = enforcePalette(html, pal);
+
+      // BRAND LOCK — inject the computed palette as the LAST style in <head> so
+      // the tokens hold the brand values regardless of what the model wrote in
+      // :root. Anything referencing the tokens now renders in brand colour.
+      const brandLock = '<style id="brand-lock">' + pal.css + '</style>';
+      html = /<\/head>/i.test(html)
+        ? html.replace(/<\/head>/i, brandLock + '</head>')
+        : html.replace(/(<body[^>]*>)/i, brandLock + '$1');
+
+      // Embed a self-documenting diagnostics comment so every mockup reveals
+      // exactly what the pipeline captured (paste this one line for instant
+      // triage). framesSeen>0 also confirms Browser Rendering is enabled.
+      const diagComment = '<!-- BUILD DIAG: style=' + style +
+        ' scrapedChars=' + scraped.length +
+        ' brandSource=' + brandSource +
+        ' colorSource=' + colorSource +
+        ' logoFound=' + (!!branding.logoUrl) +
+        ' brandColors=' + ((branding.colors || []).join('|') || 'none') +
+        ' paletteSource=' + pal.source +
+        ' palette=' + pal.vars['--brand'] + '/' + pal.vars['--accent'] +
+        ' archetype=' + ((concept && concept.archetype) || 'n/a') +
+        ' products=' + ((concept && Array.isArray(concept.products) && concept.products.length) || 0) +
+        ' imagesFound=' + ((branding.images && branding.images.length) || 0) +
+        ' framesSeen=' + frames.length +
+        ' renderClean=' + renderClean +
+        ' reviewRounds=' + reviews +
+        ' directionUsed=' + (!!direction) + ' -->';
+      html = /<!doctype html>/i.test(html)
+        ? html.replace(/<!doctype html>/i, (m) => m + '\n' + diagComment)
+        : diagComment + '\n' + html;
+
+      return withCors(json({
+        html, scrapedChars: scraped.length,
+        framesSeen: frames.length, conceptLocked: !!conceptBriefText,
+        reviewRounds: reviews,
+        renderClean,
+        renderErrors: (diag.errors || []).length,
+        brandSource, colorSource,
+        paletteSource: pal.source,
+        palette: { brand: pal.vars['--brand'], accent: pal.vars['--accent'], bg: pal.vars['--bg'] },
+        archetype: (concept && concept.archetype) || null,
+        productCount: (concept && Array.isArray(concept.products) && concept.products.length) || 0,
+        imagesFound: (branding && branding.images && branding.images.length) || 0,
+        logoFound: !!(branding && branding.logoUrl),
+        brandColors: (branding && branding.colors) || [],
+        directionUsed: !!direction,
+        style,
+      }));
     } catch (err) {
       return withCors(json({ error: String((err && err.message) || err) }, 502));
     }

@@ -1,0 +1,17 @@
+{
+  "name": "prospector-runner",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Async orchestrator (\"Manus for websites\") — persistent Node service that runs the multi-agent website-build loop off the Cloudflare Worker's time limit.",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.0",
+    "express": "^4.19.2",
+    "playwright": "^1.47.0"
+  },
+  "engines": { "node": ">=18" }
+}
