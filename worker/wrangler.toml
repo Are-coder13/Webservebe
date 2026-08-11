@@ -12,4 +12,4 @@ browser = { binding = "BROWSER" }
 # SHARED_SECRET must match the secret configured on Railway.
 
 [vars]
-RUNNER_URL = "https://webservebe-production.up.railway.app"
+RUNNER_URL="https://webservebe-production.up.railway.app"
