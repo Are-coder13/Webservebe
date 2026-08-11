@@ -18,4 +18,4 @@ browser = { binding = "BROWSER" }
 # ../runner). SHARED_SECRET must match the runner's; set it as a secret:
 #   npx wrangler secret put SHARED_SECRET
 [vars]
-# RUNNER_URL = "https://your-runner.example.com"
+# RUNNER_URL = "https://webservebe-production.up.railway.app/"
