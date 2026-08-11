@@ -66,6 +66,28 @@ function keepBrandHex(hex) {
   return '#' + n.toLowerCase();
 }
 
+// Same-site internal links worth crawling for deeper research (about, services,
+// products, menu, contact…). Returns a prioritized, deduped absolute-URL list.
+const LINK_PRIORITY = /(about|over-?ons|wie-zijn|dienst|service|product|collectie|collection|assortiment|menu|kaart|work|portfolio|gallerij|gallery|prijz|pricing|team|praktijk|behandeling|contact)/i;
+export function extractLinks(html, baseUrl) {
+  if (!html || !baseUrl) return [];
+  let host; try { host = new URL(baseUrl).host; } catch { return []; }
+  const seen = new Set(), scored = [];
+  for (const m of html.matchAll(/<a\b[^>]*href\s*=\s*("([^"]*)"|'([^']*)'|([^\s>]+))/gi)) {
+    const raw = m[2] || m[3] || m[4] || '';
+    if (!raw || /^(#|mailto:|tel:|javascript:)/i.test(raw)) continue;
+    if (/\.(pdf|jpg|jpeg|png|gif|svg|webp|zip|mp4|doc|docx)(\?|$)/i.test(raw)) continue;
+    let u; try { u = new URL(raw, baseUrl); } catch { continue; }
+    if (u.host !== host) continue;
+    u.hash = '';
+    const key = u.href.replace(/\/$/, '');
+    if (seen.has(key) || key === baseUrl.replace(/\/$/, '')) continue;
+    seen.add(key);
+    scored.push({ url: u.href, score: LINK_PRIORITY.test(u.pathname) ? 2 : (u.pathname.split('/').filter(Boolean).length <= 1 ? 1 : 0) });
+  }
+  return scored.sort((a, b) => b.score - a.score).slice(0, 6).map((x) => x.url);
+}
+
 /**
  * Parse raw HTML → { logoUrl, colors[], voiceText }. Regex-based, no deps, safe
  * in a Worker. Best-effort: returns whatever it can find.

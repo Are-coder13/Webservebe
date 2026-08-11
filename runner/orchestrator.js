@@ -16,7 +16,7 @@ import { buildPalette, paletteBrief } from '../worker/palette.js';
 import { exemplarBlock } from '../worker/exemplars.js';
 import { motifBlock } from '../worker/motifs.js';
 import { cleanBrief } from '../worker/sections.js';
-import { fetchSiteHtml, extractFromHtml } from '../worker/extract.js';
+import { fetchSiteHtml, extractFromHtml, extractLinks } from '../worker/extract.js';
 import { callClaude } from './claude.js';
 import { renderAndCapture } from './render.js';
 import { setStatus, setPlan, stepStart, stepDone, stepAt, fail } from './jobs.js';
@@ -63,14 +63,29 @@ export async function runJob(job) {
     if (!branding.colors || !branding.colors.length) {
       if (fromHtml.colors && fromHtml.colors.length) { branding.colors = fromHtml.colors; colorSource = 'html'; }
     }
-    if (!branding.images || !branding.images.length) branding.images = fromHtml.images || [];
-    // TODO Phase 3: web_search competitors + fetch several site pages, in parallel.
+    let images = (branding.images && branding.images.length) ? branding.images : (fromHtml.images || []);
+
+    // Phase 3a: crawl a few internal pages (about/services/products/…) for a
+    // fuller picture — real service/product names, more copy, more imagery.
+    let pagesRead = 1;
+    const links = rawHtml ? extractLinks(rawHtml, baseUrl).slice(0, 3) : [];
+    if (links.length) {
+      const extra = await Promise.all(links.map((u) => fetchSiteHtml(u).then((h) => extractFromHtml(h, u)).catch(() => null)));
+      for (const e of extra) {
+        if (!e) continue;
+        pagesRead++;
+        if (e.voiceText) scraped = ((scraped || '') + '\n\n' + e.voiceText).slice(0, 14000);
+        for (const im of (e.images || [])) if (images.length < 12 && !images.includes(im)) images.push(im);
+      }
+    }
+    branding.images = images;
+    // TODO Phase 3b: competitor web_search (needs a search API key).
     const ctx = businessBlock(place, branding, scraped);
     const domain = classifyDomain([place.name, place.category].filter(Boolean).join(' '));
     const brief = designBrief(place, branding);
     const pal = buildPalette(branding.colors, domain, style);
     const palBlock = paletteBrief(pal);
-    stepAt(job, 0, 'done', `domain=${domain} colors=${colorSource} images=${branding.images.length}`);
+    stepAt(job, 0, 'done', `pages=${pagesRead} domain=${domain} colors=${colorSource} images=${branding.images.length}`);
 
     // ── Strategy ──
     setStatus(job, 'designing'); stepAt(job, 1, 'active');
@@ -127,7 +142,7 @@ export async function runJob(job) {
     job.diag = {
       style, archetype: concept?.archetype || null, paletteSource: pal.source,
       palette: pal.vars['--brand'] + '/' + pal.vars['--accent'], colorSource,
-      imagesFound: branding.images.length, reviewRounds: reviews, focus: planFocus,
+      imagesFound: branding.images.length, pagesRead, reviewRounds: reviews, focus: planFocus,
       renderClean: diag.canvasOk && !diag.errors.length, framesSeen: diag.frames.length,
     };
     job.resultHtml = html;
