@@ -1756,6 +1756,9 @@ async function scanWebsite(website) {
 // ── Build mockup flow ─────────────────────────────────────────────────────
 let revProspect = null;
 let revMockupUrl = null;
+let revCurrentHtml = null;  // current mockup HTML (for in-place refine)
+let revPath = null;         // GitHub path of the current mockup
+let revStyleUsed = 'cinematic';
 
 async function buildMockup(prospectId, direction = '', style = 'cinematic') {
   if (!GH.configured) { Settings.open(); toast('Set up GitHub first', 'err'); return; }
@@ -1839,6 +1842,7 @@ async function buildMockup(prospectId, direction = '', style = 'cinematic') {
     const path = `mockups/${slug}.html`;
     const url = await GH.pushFile(path, html);
     revMockupUrl = url;
+    revCurrentHtml = html; revPath = path; revStyleUsed = (agentDiag && agentDiag.style) || style;
 
     // Build email with link
     const emailWithLink = buildEmail(p).replace(
@@ -1887,6 +1891,14 @@ async function buildMockup(prospectId, direction = '', style = 'cinematic') {
           <textarea id="revDirection" class="rev-etarea" style="min-height:58px;flex:1" placeholder="e.g. dark luxury, gold accents, editorial type, lead with implants"></textarea>
           <button class="btn btn-g btn-s" onclick="RevModal.rebuild()">↻ Rebuild</button>
         </div>
+      </div>
+      <div class="rev-refine" style="margin-top:12px;border-top:1px solid var(--border,#222);padding-top:14px">
+        <label style="display:block;font-family:var(--head);font-size:11px;letter-spacing:1px;color:var(--dim);margin-bottom:6px">REFINE — edit this mockup in place${engine==='agent' ? '' : ' (needs the AI agent + runner)'}</label>
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <textarea id="revRefine" class="rev-etarea" style="min-height:46px;flex:1" placeholder="e.g. make the hero headline bigger · swap the stats section for a testimonial · warmer gold accent"></textarea>
+          <button class="btn btn-p btn-s" onclick="RevModal.refine()">✎ Apply edit</button>
+        </div>
+        <div style="font-size:11px;color:var(--dim);margin-top:6px">Keeps everything else; changes only what you ask. Rebuild = start over; Refine = tweak.</div>
       </div>`;
     const dEl = document.getElementById('revDirection'); if (dEl) dEl.value = direction;
     const sEl = document.getElementById('revStyle'); if (sEl) sEl.value = style;
@@ -1900,6 +1912,60 @@ async function buildMockup(prospectId, direction = '', style = 'cinematic') {
   }
 }
 
+// Refine loop ("Bob"): edit the current mockup in place via the async runner.
+async function refineMockup(instruction) {
+  const base = Agent.url.replace(/\/$/, '');
+  try {
+    const enq = await fetch(base + '/jobs', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ mode: 'refine', html: revCurrentHtml, instruction, place: revProspect, branding: null, style: revStyleUsed }),
+    });
+    const first = await enq.json().catch(() => ({}));
+    if (enq.status === 501 || /runner not configured/i.test(first.error || '')) {
+      toast('Refine needs the async runner (set RUNNER_URL on the Worker)', 'err'); return;
+    }
+    if (!enq.ok || !first.jobId) throw new Error(first.error || ('Enqueue failed ' + enq.status));
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    let job = null;
+    for (let i = 0; i < 900; i++) {
+      await sleep(2000);
+      const r = await fetch(base + '/jobs/' + first.jobId);
+      job = await r.json().catch(() => ({}));
+      renderJobProgress(job);
+      if (job.status === 'done') break;
+      if (job.status === 'error') throw new Error(job.error || 'Refine failed');
+    }
+    if (!job || job.status !== 'done' || !job.resultHtml) throw new Error('Refine timed out');
+    revCurrentHtml = job.resultHtml;
+    if (revPath) await GH.pushFile(revPath, revCurrentHtml);
+    Store.patch(revProspect.id, { mockup_url: revMockupUrl });
+    toast('Refined ✓ — preview updated (Pages may take ~1 min)', 'ok');
+    renderRefineResult(revMockupUrl);
+  } catch (e) { toast('Refine failed: ' + e.message, 'err'); renderRefineResult(revMockupUrl, 'Last edit failed: ' + e.message); }
+}
+
+// Compact result view after a refine, with the box ready for the next edit.
+function renderRefineResult(url, note) {
+  const body = document.getElementById('revBody'); if (!body) return;
+  body.innerHTML = `
+    <div class="rev-grid">
+      <div class="rev-preview">
+        <div class="rev-preview-top"><div style="text-align:center">
+          <div class="mockup-ready-icon">✎</div>
+          <div style="font-family:var(--head);font-size:11px;letter-spacing:2px;color:var(--green);margin-bottom:8px">REFINED</div>
+          <div style="font-size:12px;color:var(--mid);max-width:340px;margin:0 auto">${note || 'Edit applied. Preview updated — GitHub Pages may take ~1 min.'}</div>
+        </div></div>
+        <div class="rev-url-bar"><a href="${url}" target="_blank">${url}</a><button class="btn btn-p btn-s" onclick="window.open('${url}','_blank')">Open ↗</button></div>
+      </div>
+      <div class="rev-email-wrap">
+        <label>Another edit?</label>
+        <textarea id="revRefine" class="rev-etarea" style="min-height:90px" placeholder="e.g. make the CTA sticky · remove the FAQ · brighter hero"></textarea>
+        <button class="btn btn-p btn-s" style="margin-top:8px" onclick="RevModal.refine()">✎ Apply edit</button>
+      </div>
+    </div>`;
+  document.getElementById('revFoot').style.display = 'flex';
+}
+
 const RevModal = {
   close() { document.getElementById('revModal').classList.remove('show'); },
   openPreview() { if (revMockupUrl) window.open(revMockupUrl, '_blank'); },
@@ -1910,6 +1976,14 @@ const RevModal = {
     const style = sEl ? sEl.value : 'cinematic';
     if (!Agent.configured) { toast('Rebuild needs the AI agent — set the Worker URL in ⚙ Settings', 'err'); return; }
     if (revProspect) buildMockup(revProspect.id, direction, style);
+  },
+  async refine() {
+    const el = document.getElementById('revRefine');
+    const instruction = el ? el.value.trim() : '';
+    if (!Agent.configured) { toast('Refine needs the AI agent — set the Worker URL in ⚙ Settings', 'err'); return; }
+    if (!revCurrentHtml || !revProspect) { toast('Build a mockup first, then refine it', 'err'); return; }
+    if (!instruction) { toast('Describe the edit you want', 'err'); return; }
+    await refineMockup(instruction);
   },
   async copyEmail() {
     const ta = document.getElementById('revEmail');

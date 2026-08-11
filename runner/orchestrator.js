@@ -8,7 +8,7 @@
 // with TODO below).
 
 import {
-  designSystem, cleanSystem, conceptSystem, conceptBrief, reviewSystem,
+  designSystem, cleanSystem, conceptSystem, conceptBrief, reviewSystem, refineSystem,
   businessBlock, extractJson, extractHtml, looksComplete, renderReport, enforcePalette, scrape,
 } from '../worker/worker.js';
 import { designBrief, classifyDomain, qaChecklist } from '../worker/design-knowledge.js';
@@ -24,6 +24,7 @@ import { setStatus, setPlan, stepStart, stepDone, fail } from './jobs.js';
 const MAX_REVIEWS = 3; // no longer time-boxed to a Worker, so allow more rounds
 
 export async function runJob(job) {
+  if (job.input.mode === 'refine') return runRefine(job);
   const { place, branding: bIn, direction: dIn, style: sIn } = job.input;
   const style = sIn === 'clean' ? 'clean' : 'cinematic';
   const direction = (typeof dIn === 'string' ? dIn : '').trim().slice(0, 600);
@@ -118,6 +119,54 @@ export async function runJob(job) {
       imagesFound: branding.images.length, reviewRounds: reviews,
       renderClean: diag.canvasOk && !diag.errors.length, framesSeen: diag.frames.length,
     };
+    job.resultHtml = html;
+    stepDone(job, 'Deliver');
+    setStatus(job, 'done');
+  } catch (e) {
+    fail(job, e);
+  }
+}
+
+// REFINE — the "Bob" copilot: edit the existing mockup in place per an instruction.
+export async function runRefine(job) {
+  const { place = {}, branding = {}, style: sIn, html: current, instruction } = job.input;
+  const style = sIn === 'clean' ? 'clean' : 'cinematic';
+  setPlan(job, ['Apply edit', 'Review', 'Deliver']);
+  try {
+    if (!current || !instruction) throw new Error('refine needs { html, instruction }');
+    const domain = classifyDomain([place.name, place.category].filter(Boolean).join(' '));
+    const pal = buildPalette(branding.colors, domain, style);
+
+    setStatus(job, 'designing'); stepStart(job, 'Apply edit');
+    let html = extractHtml(await callClaude(
+      refineSystem(style),
+      'EDIT INSTRUCTION:\n' + instruction + '\n\nCURRENT HTML:\n' + current,
+    ));
+    if (!looksComplete(html)) throw new Error('Refine produced incomplete HTML.');
+    stepDone(job, 'Apply edit');
+
+    // one render check; if the edit broke the scene, a single corrective pass
+    setStatus(job, 'reviewing'); stepStart(job, 'Review');
+    const diag = await renderAndCapture(html).catch(() => ({ frames: [], errors: [], canvasOk: true, rendered: false }));
+    const broken = style !== 'clean' && diag.rendered && (!diag.canvasOk || diag.errors.length);
+    if (broken) {
+      try {
+        const fixed = extractHtml(await callClaude(
+          reviewSystem(diag.frames.length > 0, style),
+          businessBlock(place, branding, '') + '\n\n' + qaChecklist() + renderReport(diag, style) +
+            '\n\n(Only fix what the edit broke; keep the requested change.)\n\nHTML TO IMPROVE:\n' + html,
+          { frames: diag.frames },
+        ));
+        if (looksComplete(fixed) && fixed.length > html.length * 0.6) html = fixed;
+      } catch { /* keep the edited html */ }
+    }
+    stepDone(job, 'Review', `renderClean=${diag.canvasOk && !diag.errors.length}`);
+
+    stepStart(job, 'Deliver');
+    html = enforcePalette(html, pal);
+    const brandLock = '<style id="brand-lock">' + pal.css + '</style>';
+    html = /<\/head>/i.test(html) ? html.replace(/<\/head>/i, brandLock + '</head>') : html.replace(/(<body[^>]*>)/i, brandLock + '$1');
+    job.diag = { mode: 'refine', style, renderClean: diag.canvasOk && !diag.errors.length };
     job.resultHtml = html;
     stepDone(job, 'Deliver');
     setStatus(job, 'done');

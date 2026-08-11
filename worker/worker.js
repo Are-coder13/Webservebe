@@ -396,6 +396,26 @@ function reviewSystem(hasFrames, style) {
   ].join('\n');
 }
 
+// REFINE pass — the "Bob" copilot. Edits an EXISTING full HTML document in
+// place per a natural-language instruction, preserving everything else.
+function refineSystem(style) {
+  return [
+    'You are a senior front-end designer editing an EXISTING single-file HTML landing page IN PLACE.',
+    'You receive the full current HTML and a short EDIT INSTRUCTION from the operator.',
+    'Apply ONLY that change (plus anything strictly necessary to make it look right and stay valid).',
+    'PRESERVE EVERYTHING ELSE EXACTLY — layout, copy, imagery, and the design system in :root.',
+    style === 'clean'
+      ? '(This is a clean/professional site — no WebGL. Keep it that way.)'
+      : '(This is a cinematic WebGL site — keep the Three.js scene working: r128 API only, keep the guards, do not remove the canvas or break the animation loop.)',
+    'Honour the existing colour tokens (var(--brand)/--accent/…) — do not introduce new hardcoded hexes.',
+    'Keep the document COMPLETE and valid: start <!DOCTYPE html>, end </html>. If the instruction is',
+    'ambiguous, make the smallest sensible change. Do not add or remove the preview banner.',
+    'A screenshot of the current page may be attached — use it to locate the change precisely.',
+    '',
+    'OUTPUT RULES: Output ONLY the full updated HTML document. No markdown, no code fences, no commentary.',
+  ].join('\n');
+}
+
 // Format render diagnostics (runtime errors + canvas health) for the repair
 // pass. Empty string when the page wasn't rendered (Browser Rendering off).
 function renderReport(diag, style) {
@@ -593,7 +613,7 @@ function enforcePalette(html, pal) {
 // prompt builders + helpers with no duplication — worker and runner share one
 // brain. (The Worker entry point remains the default export below.)
 export {
-  designSystem, cleanSystem, conceptSystem, conceptBrief, reviewSystem,
+  designSystem, cleanSystem, conceptSystem, conceptBrief, reviewSystem, refineSystem,
   businessBlock, extractJson, extractHtml, looksComplete, renderReport,
   enforcePalette, scrape,
 };
