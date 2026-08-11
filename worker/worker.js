@@ -396,6 +396,21 @@ function reviewSystem(hasFrames, style) {
   ].join('\n');
 }
 
+// PLANNER sub-agent — produces a job-specific to-do plan + adaptive effort,
+// so the orchestrator's steps reflect THIS business (Manus "plan first").
+function planSystem() {
+  return [
+    'You are the planning agent for a bespoke website-build. Given a business, produce a short plan.',
+    'Think about what THIS business needs to win the client, then output ONLY a JSON object:',
+    '{',
+    '  "steps": ["EXACTLY 5 short imperative step titles tailored to this business, in build order: (1) research, (2) strategy, (3) design/build, (4) review, (5) deliver — name the real trade/specialty, e.g. \'Research the implant clinic & its reviews\'"],',
+    '  "reviewRounds": 1-3 (how many QA passes this job likely needs — more for complex, product-led, or precision trades),',
+    '  "focus": "one sentence — what matters MOST for this specific mockup to beat the client\'s current site"',
+    '}',
+    'Ground the titles in the real business. No code, no prose outside the JSON.',
+  ].join('\n');
+}
+
 // REFINE pass — the "Bob" copilot. Edits an EXISTING full HTML document in
 // place per a natural-language instruction, preserving everything else.
 function refineSystem(style) {
@@ -613,7 +628,7 @@ function enforcePalette(html, pal) {
 // prompt builders + helpers with no duplication — worker and runner share one
 // brain. (The Worker entry point remains the default export below.)
 export {
-  designSystem, cleanSystem, conceptSystem, conceptBrief, reviewSystem, refineSystem,
+  designSystem, cleanSystem, conceptSystem, conceptBrief, reviewSystem, refineSystem, planSystem,
   businessBlock, extractJson, extractHtml, looksComplete, renderReport,
   enforcePalette, scrape,
 };

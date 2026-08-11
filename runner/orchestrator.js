@@ -8,7 +8,7 @@
 // with TODO below).
 
 import {
-  designSystem, cleanSystem, conceptSystem, conceptBrief, reviewSystem, refineSystem,
+  designSystem, cleanSystem, conceptSystem, conceptBrief, reviewSystem, refineSystem, planSystem,
   businessBlock, extractJson, extractHtml, looksComplete, renderReport, enforcePalette, scrape,
 } from '../worker/worker.js';
 import { designBrief, classifyDomain, qaChecklist } from '../worker/design-knowledge.js';
@@ -19,9 +19,7 @@ import { cleanBrief } from '../worker/sections.js';
 import { fetchSiteHtml, extractFromHtml } from '../worker/extract.js';
 import { callClaude } from './claude.js';
 import { renderAndCapture } from './render.js';
-import { setStatus, setPlan, stepStart, stepDone, fail } from './jobs.js';
-
-const MAX_REVIEWS = 3; // no longer time-boxed to a Worker, so allow more rounds
+import { setStatus, setPlan, stepStart, stepDone, stepAt, fail } from './jobs.js';
 
 export async function runJob(job) {
   if (job.input.mode === 'refine') return runRefine(job);
@@ -34,11 +32,24 @@ export async function runJob(job) {
   const dirPrefix = directionBlock ? directionBlock + '\n\n' : '';
   let branding = bIn || {};
 
-  setPlan(job, ['Research', 'Strategy', 'Design', 'Review', 'Deliver']);
+  // ── Planner sub-agent: a job-specific plan + adaptive review effort + focus ──
+  setStatus(job, 'planning');
+  let planFocus = '', MAX_REVIEWS = 2;
+  let planSteps = ['Research', 'Strategy', 'Design', 'Review', 'Deliver'];
+  try {
+    const pj = extractJson(await callClaude(planSystem(), businessBlock(place, branding, ''), { maxTokens: 800 }));
+    if (pj && Array.isArray(pj.steps) && pj.steps.length === 5) {
+      planSteps = pj.steps.map((s) => String(s).slice(0, 80));
+      MAX_REVIEWS = Math.max(1, Math.min(3, parseInt(pj.reviewRounds, 10) || 2));
+      planFocus = String(pj.focus || '').slice(0, 300);
+    }
+  } catch { /* fall back to the default plan */ }
+  setPlan(job, planSteps);
+  const focusBlock = planFocus ? 'PLANNER FOCUS (what matters most for this mockup): ' + planFocus + '\n\n' : '';
 
   try {
-    // ── Research (Phase 1: the client's own site; Phase 3 adds competitors) ──
-    setStatus(job, 'researching'); stepStart(job, 'Research');
+    // ── Research (the client's own site; Phase 3 adds competitors) ──
+    setStatus(job, 'researching'); stepAt(job, 0, 'active');
     const baseUrl = place.website ? (place.website.startsWith('http') ? place.website : 'https://' + place.website) : '';
     const [jinaText, rawHtml] = await Promise.all([
       scrape(place.website).catch(() => ''),
@@ -59,35 +70,35 @@ export async function runJob(job) {
     const brief = designBrief(place, branding);
     const pal = buildPalette(branding.colors, domain, style);
     const palBlock = paletteBrief(pal);
-    stepDone(job, 'Research', `domain=${domain} colors=${colorSource} images=${branding.images.length}`);
+    stepAt(job, 0, 'done', `domain=${domain} colors=${colorSource} images=${branding.images.length}`);
 
     // ── Strategy ──
-    setStatus(job, 'designing'); stepStart(job, 'Strategy');
+    setStatus(job, 'designing'); stepAt(job, 1, 'active');
     let concept = null, conceptBriefText = '';
     try {
       concept = extractJson(await callClaude(
         conceptSystem(style),
-        dirPrefix + ctx + '\n\n' + brief + '\n\n' +
+        dirPrefix + focusBlock + ctx + '\n\n' + brief + '\n\n' +
           (style === 'clean' ? cleanBrief(domain) : (exemplarBlock(domain) + '\n\n' + motifBlock(domain))) +
           '\n\nNow decide the strategy. Output only the JSON object.',
         { maxTokens: 2200 }
       ));
       conceptBriefText = conceptBrief(concept, style);
     } catch { /* strategy optional */ }
-    stepDone(job, 'Strategy', concept ? `archetype=${concept.archetype}` : 'inline');
+    stepAt(job, 1, 'done', concept ? `archetype=${concept.archetype}` : 'inline');
 
     // ── Design / build ──
-    stepStart(job, 'Design');
+    stepAt(job, 2, 'active');
     const sys = style === 'clean' ? cleanSystem() : designSystem();
     const buildText = style === 'clean'
-      ? dirPrefix + ctx + '\n\n' + palBlock + '\n\n' + (conceptBriefText ? conceptBriefText + '\n\n' : '') + brief + '\n\n' + cleanBrief(domain) + '\n\nNow build the complete website.'
-      : dirPrefix + ctx + '\n\n' + palBlock + '\n\n' + brief + '\n\n' + (conceptBriefText || exemplarBlock(domain)) + '\n\nNow build the complete website' + (conceptBriefText ? ' to this concept.' : '.');
+      ? dirPrefix + focusBlock + ctx + '\n\n' + palBlock + '\n\n' + (conceptBriefText ? conceptBriefText + '\n\n' : '') + brief + '\n\n' + cleanBrief(domain) + '\n\nNow build the complete website.'
+      : dirPrefix + focusBlock + ctx + '\n\n' + palBlock + '\n\n' + brief + '\n\n' + (conceptBriefText || exemplarBlock(domain)) + '\n\nNow build the complete website' + (conceptBriefText ? ' to this concept.' : '.');
     let html = extractHtml(await callClaude(sys, buildText));
     if (!looksComplete(html)) throw new Error('Design pass produced incomplete HTML.');
-    stepDone(job, 'Design');
+    stepAt(job, 2, 'done');
 
     // ── QA loop (render → review → re-render) ──
-    setStatus(job, 'reviewing'); stepStart(job, 'Review');
+    setStatus(job, 'reviewing'); stepAt(job, 3, 'active');
     let diag = { frames: [], errors: [], canvasOk: true, rendered: false }, reviews = 0;
     for (let i = 0; i <= MAX_REVIEWS; i++) {
       diag = await renderAndCapture(html).catch(() => ({ frames: [], errors: [], canvasOk: true, rendered: false }));
@@ -106,21 +117,21 @@ export async function runJob(job) {
       } catch { break; }
       if (!diag.rendered) break;
     }
-    stepDone(job, 'Review', `rounds=${reviews} renderClean=${diag.canvasOk && !diag.errors.length}`);
+    stepAt(job, 3, 'done', `rounds=${reviews} renderClean=${diag.canvasOk && !diag.errors.length}`);
 
     // ── Deliver ──
-    stepStart(job, 'Deliver');
+    stepAt(job, 4, 'active');
     html = enforcePalette(html, pal);
     const brandLock = '<style id="brand-lock">' + pal.css + '</style>';
     html = /<\/head>/i.test(html) ? html.replace(/<\/head>/i, brandLock + '</head>') : html.replace(/(<body[^>]*>)/i, brandLock + '$1');
     job.diag = {
       style, archetype: concept?.archetype || null, paletteSource: pal.source,
       palette: pal.vars['--brand'] + '/' + pal.vars['--accent'], colorSource,
-      imagesFound: branding.images.length, reviewRounds: reviews,
+      imagesFound: branding.images.length, reviewRounds: reviews, focus: planFocus,
       renderClean: diag.canvasOk && !diag.errors.length, framesSeen: diag.frames.length,
     };
     job.resultHtml = html;
-    stepDone(job, 'Deliver');
+    stepAt(job, 4, 'done');
     setStatus(job, 'done');
   } catch (e) {
     fail(job, e);

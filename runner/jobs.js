@@ -58,6 +58,13 @@ export function stepDone(job, title, note = '') {
   job.progress.push({ ts: Date.now(), step: title, status: 'done', note });
 }
 
+// Index-based advance — used when step titles are dynamic (planner-generated).
+export function stepAt(job, i, status, note = '') {
+  const s = job.plan[i];
+  if (s) s.status = status;
+  job.progress.push({ ts: Date.now(), step: (s && s.title) || ('step ' + i), status, note });
+}
+
 export function fail(job, err) {
   job.status = 'error';
   job.error = String((err && err.message) || err);
