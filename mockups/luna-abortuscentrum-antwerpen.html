@@ -1,384 +1,391 @@
 <!DOCTYPE html>
-<!-- CONCEPT: offering=psychosociale begeleiding en medische abortusbehandeling in een veilige, vertrouwelijke omgeving; feeling=relief — 'je bent hier veilig, je wordt niet beoordeeld, we nemen de tijd voor jou'; 3d-story=particles scattered in uneasy noise gradually settle and gather into a soft luminous shell that opens like sheltering hands, from anxious uncertainty to a calm held space; hologram=a pair of gently cupped open hands cradling a warm orb; strand=torus-knot; centrepiece=softly glowing wireframe of cupped hands around a gentle orb; HUD=none (warm trade); poster=VEILIG; chapters=1 Hoe kunnen wij helpen (push-in), 2 Ongepland zwanger wat nu (orbit), 3 We nemen de tijd (approach), 4 Vertrouwelijk zonder oordeel (close), 5 Chat/afspraak (settle) -->
+<!-- CONCEPT: offering=psychosociale begeleiding en medische abortusbehandeling, feeling=safe/unhurried/held — no judgment, complete confidentiality, room to breathe, 3d-story=a soft luminous crescent moon (LUNA) hovers in calm space; gentle particle streams resolve into a continuous supportive path — you are guided step by step; quiet dawn-light, never clinical. Hologram=soft waxing crescent cradling a small open circle (LUNA=moon, safe holding). Strand=flat-spiral-galaxy. Centrepiece=glowing wireframe crescent moon + orbiting ring. Poster word=RUST. NO scan/HUD (warm trade). chapters=1 Hoe wij helpen (wide fade-in), 2 Chat met LUNA (push-in), 3 Eerste consultatie (soft orbit), 4 Behandelmethoden + wachttijd (drift along path), 5 Psychosociale nazorg (pull back), 6 Maak afspraak / bel 03 226 25 25 (settle). -->
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LUNA abortuscentrum Antwerpen — veilige, vertrouwelijke zorg</title>
+<title>LUNA abortuscentrum Antwerpen — rustig, vertrouwelijk, zonder oordeel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
- --brand:#f5893d;--brand-2:#f5d447;--accent:#f5893d;
- --bg:#110c09;--bg-rgb:17,12,9;
- --ink:#f7f2ec;--muted:rgba(247,242,236,0.70);--border:rgba(247,242,236,0.16);
- --on-accent:#160d05;
- --z-canvas:0;--z-veil:1;--z-content:2;--z-nav:50;--z-banner:60;
+  --brand:#f5893d;--brand-2:#f5d447;--accent:#f5893d;--accent-2:#f5d447;
+  --bg:#110c09;--ink:#f4f5f7;--muted:rgba(244,245,247,0.68);--border:rgba(244,245,247,0.14);
+  --on-accent:#1a0f06;--surface:rgba(23,16,11,0.9);
+  --z-veil:10;--z-content:20;--z-nav:40;--z-banner:50;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden;line-height:1.65}
+body{font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden;line-height:1.7}
 h1,h2,h3,h4{font-family:'Poppins',sans-serif;font-weight:600;line-height:1.15}
 a{color:inherit;text-decoration:none}
-:focus-visible{outline:2px solid var(--brand-2);outline-offset:3px;border-radius:4px}
+:focus-visible{outline:2px solid var(--brand-2);outline-offset:3px;border-radius:6px}
 
-#banner{position:fixed;top:0;left:0;right:0;z-index:var(--z-banner);background:rgba(var(--bg-rgb),.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);color:var(--muted);font-size:12.5px;text-align:center;padding:8px 12px;letter-spacing:.3px}
-#banner b{color:var(--brand);font-weight:600}
+.preview-banner{position:fixed;top:0;left:0;right:0;height:34px;background:rgba(17,12,9,0.94);color:var(--muted);
+  font-size:12px;letter-spacing:.04em;display:flex;align-items:center;justify-content:center;z-index:var(--z-banner);
+  border-bottom:1px solid var(--border);backdrop-filter:blur(6px)}
+.preview-banner b{color:var(--brand);font-weight:600;margin-left:5px}
 
-#gl{position:fixed;inset:0;z-index:var(--z-canvas)}
-.veil{position:fixed;inset:0;z-index:var(--z-veil);pointer-events:none;background:radial-gradient(ellipse at 50% 42%,transparent 30%,rgba(var(--bg-rgb),.35) 68%,rgba(var(--bg-rgb),.82) 100%)}
+#gl{position:fixed;inset:0;z-index:0}
+.veil{position:fixed;inset:0;z-index:var(--z-veil);pointer-events:none;
+  background:radial-gradient(ellipse at 50% 40%,transparent 28%,rgba(17,12,9,0.5) 76%,rgba(17,12,9,0.92) 100%)}
 
-.wrap{position:relative;z-index:var(--z-content)}
-.chapter{min-height:100vh;display:flex;align-items:center;padding:120px 6vw 90px;position:relative}
-.inner{position:relative;max-width:1180px;width:100%;margin:0 auto}
-.inner::before{content:'';position:absolute;inset:-70px -90px;z-index:-1;background:radial-gradient(closest-side,rgba(var(--bg-rgb),.80),rgba(var(--bg-rgb),.46) 60%,transparent);filter:blur(4px)}
-h1,h2,p,.tag{text-shadow:0 2px 24px rgba(var(--bg-rgb),.7)}
+.nav{position:fixed;top:34px;left:0;right:0;z-index:var(--z-nav);display:flex;align-items:center;justify-content:space-between;
+  padding:15px 5vw;background:linear-gradient(to bottom,rgba(17,12,9,0.82),transparent);backdrop-filter:blur(5px)}
+.nav .logo{display:flex;align-items:center;gap:11px;font-family:'Poppins';font-weight:600;font-size:19px;letter-spacing:.03em}
+.nav .logo .moon{width:26px;height:26px;filter:drop-shadow(0 0 8px rgba(245,137,61,.5))}
+.nav-links{display:flex;gap:26px;align-items:center;font-size:14px}
+.nav-links a{color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav .cta-mini{background:var(--accent);color:var(--on-accent);padding:10px 20px;border-radius:30px;font-weight:600;font-size:13px;cursor:pointer;transition:transform .2s,box-shadow .2s;min-height:40px;display:inline-flex;align-items:center}
+.nav .cta-mini:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,137,61,.4)}
+@media(max-width:820px){.nav-links a:not(.cta-mini){display:none}}
 
-.tag{display:inline-block;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--brand);font-weight:600;margin-bottom:20px}
-.tag::before{content:'';display:inline-block;width:26px;height:1px;background:var(--brand);vertical-align:middle;margin-right:12px;opacity:.7}
+.chapter{position:relative;z-index:var(--z-content);min-height:100vh;display:flex;align-items:center;padding:130px 6vw 90px}
+.inner{position:relative;max-width:1180px;margin:0 auto;width:100%}
+.inner::before{content:'';position:absolute;inset:-70px -90px;z-index:-1;
+  background:radial-gradient(closest-side,rgba(17,12,9,0.8),rgba(17,12,9,0.44) 60%,transparent);filter:blur(4px)}
+.tag{display:inline-block;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--brand);
+  margin-bottom:20px;font-weight:600}
+.chapter h1,.chapter h2{text-shadow:0 2px 34px rgba(17,12,9,0.92)}
+.chapter p{text-shadow:0 1px 14px rgba(17,12,9,0.82)}
 
-.h-hero{font-size:clamp(2.6rem,6.4vw,5.2rem);letter-spacing:-.02em;margin-bottom:22px}
-.lead{font-size:clamp(1.05rem,1.7vw,1.32rem);color:var(--ink);max-width:640px;font-weight:300}
-.sub{color:var(--muted)}
-h2.big{font-size:clamp(2rem,4.4vw,3.4rem);letter-spacing:-.015em;margin-bottom:18px}
+/* hero */
+.hero .inner{max-width:920px}
+.hero h1{font-size:clamp(2.4rem,6vw,4.4rem);letter-spacing:-.01em;margin-bottom:22px}
+.hero h1 em{font-style:normal;color:var(--brand)}
+.hero .lede{font-size:clamp(1.05rem,2.2vw,1.35rem);color:var(--ink);max-width:640px;margin-bottom:34px;font-weight:300}
+.btn-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.btn{padding:15px 28px;border-radius:32px;font-family:'Poppins';font-weight:600;font-size:15px;cursor:pointer;
+  transition:transform .2s,box-shadow .2s;display:inline-flex;align-items:center;gap:10px;border:none;min-height:48px}
+.btn-primary{background:var(--accent);color:var(--on-accent);box-shadow:0 10px 40px rgba(245,137,61,0.32)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 14px 50px rgba(245,137,61,0.48)}
+.btn-ghost{background:rgba(244,245,247,0.06);color:var(--ink);border:1px solid var(--border)}
+.btn-ghost:hover{background:rgba(244,245,247,0.12);transform:translateY(-3px)}
+.reassure{margin-top:32px;display:flex;gap:26px;flex-wrap:wrap;font-size:13.5px;color:var(--muted)}
+.reassure span{display:flex;align-items:center;gap:8px}
 
-.btn{display:inline-flex;align-items:center;gap:10px;cursor:pointer;border:none;font-family:'Poppins',sans-serif;font-weight:600;font-size:15px;padding:15px 28px;border-radius:40px;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;min-height:44px}
-.btn-primary{background:var(--accent);color:var(--on-accent);box-shadow:0 8px 32px rgba(245,137,61,.32)}
-.btn-primary:hover{transform:translateY(-3px);box-shadow:0 14px 44px rgba(245,137,61,.5)}
-.btn-ghost{background:rgba(247,242,236,.06);color:var(--ink);border:1px solid var(--border)}
-.btn-ghost:hover{transform:translateY(-3px);border-color:var(--brand)}
-.btn-row{display:flex;gap:16px;flex-wrap:wrap;margin-top:38px}
+/* poster */
+.poster{position:relative;z-index:var(--z-content);min-height:74vh;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:60px 6vw}
+.poster .word{font-family:'Poppins';font-weight:700;font-size:clamp(6rem,26vw,20rem);line-height:.8;
+  color:rgba(245,212,71,0.16);-webkit-text-stroke:2.5px rgba(245,212,71,0.72);letter-spacing:.02em;user-select:none;
+  position:absolute;z-index:0;white-space:nowrap;text-shadow:0 0 60px rgba(245,137,61,.25)}
+.poster .over{position:relative;z-index:2;max-width:560px;text-align:center}
+.poster .over p{font-size:clamp(1.1rem,2.4vw,1.5rem);font-weight:300;color:var(--ink);text-shadow:0 2px 20px rgba(17,12,9,.95)}
+.poster .over .tag{display:block}
 
-.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
-.hero-art svg{width:100%;max-width:440px;display:block;margin:0 auto}
-.logo-line{display:flex;align-items:center;gap:14px;margin-bottom:30px;flex-wrap:wrap}
-.logo-line img{height:34px;filter:brightness(0) invert(1)}
-.reassure{margin-top:34px;display:flex;gap:22px;flex-wrap:wrap}
-.reassure span{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
-.reassure svg{flex:none}
+/* two-col */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.two-col.flip .col-visual{order:-1}
+@media(max-width:860px){.two-col{grid-template-columns:1fr;gap:36px}.two-col.flip .col-visual{order:0}}
+.col-text h2{font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:20px}
+.col-text p{color:var(--muted);margin-bottom:16px;font-size:1.05rem}
+.chat-card{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:30px;backdrop-filter:blur(12px);box-shadow:0 30px 70px rgba(0,0,0,.4)}
+.chat-bubble{background:rgba(244,245,247,0.07);border-radius:16px 16px 16px 4px;padding:14px 18px;margin-bottom:12px;font-size:14.5px;max-width:88%}
+.chat-bubble.me{background:rgba(245,137,61,0.2);border-radius:16px 16px 4px 16px;margin-left:auto;color:var(--ink)}
+.chat-status{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-bottom:18px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--brand-2);box-shadow:0 0 10px var(--brand-2);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 
-.poster{position:absolute;z-index:-1;left:-2vw;top:8%;font-family:'Poppins',sans-serif;font-weight:700;font-size:22vw;line-height:.8;color:transparent;-webkit-text-stroke:2px rgba(245,212,71,.55);white-space:nowrap;pointer-events:none;user-select:none;opacity:.9}
+/* timeline */
+.timeline{position:relative;padding-left:40px}
+.timeline::before{content:'';position:absolute;left:12px;top:8px;bottom:8px;width:2px;
+  background:linear-gradient(to bottom,var(--brand),var(--brand-2),transparent)}
+.tl-item{position:relative;margin-bottom:34px}
+.tl-item::before{content:'';position:absolute;left:-34px;top:4px;width:16px;height:16px;border-radius:50%;
+  background:var(--bg);border:3px solid var(--brand);box-shadow:0 0 14px rgba(245,137,61,0.5)}
+.tl-item h4{font-size:1.15rem;margin-bottom:6px}
+.tl-item p{color:var(--muted);font-size:.98rem}
+.tl-item .step{font-size:12px;letter-spacing:.15em;color:var(--brand);text-transform:uppercase;font-weight:600}
 
-.two{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
-.step-list{list-style:none;margin-top:26px}
-.step-list li{display:flex;gap:18px;padding:18px 0;border-bottom:1px solid var(--border)}
-.step-list li:last-child{border-bottom:none}
-.step-n{flex:none;width:42px;height:42px;border-radius:50%;border:1px solid var(--brand);display:flex;align-items:center;justify-content:center;font-family:'Poppins';font-weight:600;color:var(--brand)}
-.step-list h4{font-size:1.05rem;margin-bottom:3px}
-.step-list p{color:var(--muted);font-size:.95rem}
+/* bento */
+.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
+@media(max-width:860px){.bento{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;
+  backdrop-filter:blur(12px);display:flex;flex-direction:column;transition:transform .25s,border-color .25s;box-shadow:0 24px 60px rgba(0,0,0,.34)}
+.card:hover{transform:translateY(-6px);border-color:rgba(245,137,61,0.42)}
+.card .ic{width:48px;height:48px;margin-bottom:18px}
+.card h4{font-size:1.2rem;margin-bottom:10px}
+.card p{color:var(--muted);font-size:.96rem;flex-grow:1}
+.card a{margin-top:18px;color:var(--brand);font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:7px;transition:gap .2s}
+.card a:hover{gap:12px}
 
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
-.card{background:rgba(var(--bg-rgb),.90);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:18px;padding:30px 26px;display:flex;flex-direction:column;transition:transform .3s ease,border-color .3s ease}
-.card:hover{transform:translateY(-6px);border-color:var(--brand)}
-.card .ic{width:52px;height:52px;border-radius:14px;background:rgba(245,137,61,.12);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
-.card h4{font-size:1.18rem;margin-bottom:10px}
-.card p{color:var(--muted);font-size:.96rem;flex:1}
-.card a.more{margin-top:18px;color:var(--brand);font-weight:600;font-size:.92rem}
-.card a.more:hover{color:var(--brand-2)}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:26px 14px;backdrop-filter:blur(10px)}
+.stat .num{font-family:'Poppins';font-weight:700;font-size:clamp(1.8rem,4vw,2.6rem);color:var(--brand)}
+.stat .lbl{font-size:13px;color:var(--muted);margin-top:6px}
 
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;text-align:center;align-items:stretch}
-.stat{background:rgba(var(--bg-rgb),.88);border:1px solid var(--border);border-radius:16px;padding:34px 20px;display:flex;flex-direction:column;justify-content:center}
-.stat .n{font-family:'Poppins';font-weight:700;font-size:clamp(2.2rem,4vw,3.2rem);color:var(--brand);line-height:1}
-.stat .l{color:var(--muted);font-size:.9rem;margin-top:10px}
+/* quote */
+.quote-wrap .inner{max-width:840px;text-align:center}
+.quote-wrap blockquote{font-family:'Poppins';font-weight:400;font-size:clamp(1.4rem,3.5vw,2.3rem);line-height:1.35;margin-bottom:24px}
+.quote-wrap blockquote span{color:var(--brand)}
+.quote-wrap cite{color:var(--muted);font-style:normal;font-size:14px;letter-spacing:.08em}
+.stars{color:var(--brand-2);letter-spacing:4px;margin-bottom:22px;font-size:20px}
 
-.quotes{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;align-items:stretch}
-.quote{background:rgba(var(--bg-rgb),.90);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:18px;padding:32px;display:flex;flex-direction:column}
-.quote p{font-size:1.05rem;font-style:italic;color:var(--ink)}
-.quote .who{margin-top:18px;color:var(--brand);font-weight:600;font-size:.9rem}
-.stars{color:var(--brand-2);letter-spacing:2px;margin-bottom:14px;font-size:14px}
-.stars svg{vertical-align:middle}
+/* CTA */
+.cta-final .inner{max-width:760px;text-align:center}
+.cta-final h2{font-size:clamp(2rem,5vw,3.2rem);margin-bottom:18px}
+.cta-final p{color:var(--muted);margin-bottom:34px;font-size:1.1rem}
+.cta-box{background:var(--surface);border:1px solid var(--border);border-radius:26px;padding:38px 32px;backdrop-filter:blur(14px);text-align:left;box-shadow:0 30px 80px rgba(0,0,0,.44)}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:13px;color:var(--ink);margin-bottom:6px;font-weight:500}
+.field input,.field select,.field textarea{width:100%;background:rgba(244,245,247,0.06);border:1px solid var(--border);
+  border-radius:12px;padding:13px 15px;color:var(--ink);font-family:inherit;font-size:16px}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(245,137,61,.2)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:560px){.form-grid{grid-template-columns:1fr}}
+.form-note{margin-top:22px;font-size:14px;text-align:center;color:var(--muted)}
+.phone-big{font-family:'Poppins';font-weight:600;font-size:1.6rem;color:var(--brand);display:inline-block}
+.form-msg{margin-top:14px;font-size:14px;border-radius:10px;padding:12px 14px;display:none}
+.form-msg.show{display:block}
+.form-msg.ok{background:rgba(245,212,71,.14);border:1px solid rgba(245,212,71,.4);color:var(--ink)}
 
-.pullquote{max-width:900px}
-.pullquote h2{font-size:clamp(1.8rem,3.8vw,3rem);font-weight:400;line-height:1.35;letter-spacing:-.01em}
-.pullquote .mk{color:var(--brand);font-weight:600}
-
-.cta-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
-.form{background:rgba(var(--bg-rgb),.92);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:22px;padding:38px}
-.form label{display:block;font-size:13px;color:var(--muted);margin-bottom:7px;margin-top:18px}
-.form label:first-child{margin-top:0}
-.form input,.form select,.form textarea{width:100%;background:rgba(247,242,236,.06);border:1px solid var(--border);border-radius:10px;padding:13px 15px;color:var(--ink);font-family:inherit;font-size:16px;min-height:44px}
-.form input:focus,.form select:focus,.form textarea:focus{outline:none;border-color:var(--brand)}
-.form .btn-primary{width:100%;justify-content:center;margin-top:26px}
-.note{font-size:12.5px;color:var(--muted);margin-top:14px;text-align:center}
-
-footer{position:relative;z-index:var(--z-content);background:rgba(8,6,4,.94);backdrop-filter:blur(10px);border-top:1px solid var(--border);padding:60px 6vw 40px}
+footer{position:relative;z-index:var(--z-content);background:rgba(12,8,6,0.96);border-top:1px solid var(--border);
+  padding:56px 6vw 40px;backdrop-filter:blur(10px)}
 .foot-grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
-.foot-grid img{height:30px;filter:brightness(0) invert(1);margin-bottom:16px}
-.foot-grid h5{font-family:'Poppins';font-size:.95rem;margin-bottom:14px;color:var(--ink)}
-.foot-grid p,.foot-grid a{color:var(--muted);font-size:.92rem;display:block;margin-bottom:8px}
+@media(max-width:760px){.foot-grid{grid-template-columns:1fr;gap:28px}}
+.foot-grid h5{font-family:'Poppins';font-size:15px;margin-bottom:14px}
+.foot-grid p,.foot-grid a{color:var(--muted);font-size:14px;display:block;margin-bottom:8px}
 .foot-grid a:hover{color:var(--brand)}
-.foot-bottom{max-width:1180px;margin:40px auto 0;padding-top:24px;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.foot-bottom{max-width:1180px;margin:36px auto 0;padding-top:22px;border-top:1px solid var(--border);
+  font-size:12.5px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.confid-badge{display:inline-flex;align-items:center;gap:9px;background:rgba(245,137,61,0.1);border:1px solid rgba(245,137,61,0.3);
+  border-radius:30px;padding:9px 18px;font-size:13px;color:var(--ink);margin-bottom:24px}
 
-@media(max-width:900px){
- .hero-grid,.two,.cta-grid{grid-template-columns:1fr;gap:34px}
- .grid,.stats{grid-template-columns:1fr}
- .quotes{grid-template-columns:1fr}
- .foot-grid{grid-template-columns:1fr}
- .hero-art{order:-1}
- .poster{font-size:32vw;top:2%}
-}
 @media(prefers-reduced-motion:reduce){
- #gl{display:none}
- body{background:radial-gradient(ellipse at 50% 30%,rgba(245,137,61,.16),var(--bg) 60%)}
- *{animation:none!important;transition:none!important}
+  #gl{display:none}
+  html{scroll-behavior:auto}
+  body{background:radial-gradient(ellipse at 50% 26%,#2a1b11,#110c09 70%)}
+  .dot{animation:none}
 }
 </style>
 <style id="brand-lock">:root{--brand:#f5893d;--brand-2:#f5d447;--accent:#f5893d;--bg:#110c09;--ink:#f4f5f7;--muted:rgba(244,245,247,0.66);--border:rgba(244,245,247,0.14);--on-brand:#0a0a0f;--on-accent:#0a0a0f}</style></head>
 <body>
-<div id="banner">Website Preview — conceptmockup voor <b>LUNA abortuscentrum Antwerpen</b></div>
+
+<div class="preview-banner">Website Preview — conceptvoorstel voor <b>LUNA abortuscentrum Antwerpen</b></div>
 
 <div id="gl"></div>
 <div class="veil"></div>
 
-<div class="wrap">
+<nav class="nav">
+  <a class="logo" href="#top" aria-label="LUNA — naar boven">
+    <svg class="moon" viewBox="0 0 32 32" aria-hidden="true"><defs><radialGradient id="ng" cx="35%" cy="35%"><stop offset="0" stop-color="#f5d447"/><stop offset="1" stop-color="#f5893d"/></radialGradient></defs><path d="M22 4a12 12 0 1 0 0 24 9 9 0 0 1 0-24z" fill="url(#ng)"/></svg>
+    LUNA
+  </a>
+  <div class="nav-links">
+    <a href="#hulp">Hoe wij helpen</a>
+    <a href="#stappen">Zo verloopt het</a>
+    <a href="#nazorg">Nazorg</a>
+    <a href="#afspraak" class="cta-mini">Maak een afspraak</a>
+  </div>
+</nav>
 
-<!-- CHAPTER 1: HERO (asymmetric) -->
-<section class="chapter" id="ch1">
-  <div class="poster" aria-hidden="true">VEILIG</div>
+<!-- CH1 hero -->
+<section class="chapter hero" id="top">
   <div class="inner">
-    <div class="hero-grid">
-      <div>
-        <div class="logo-line">
-          <img src="https://abortus.be/wp-content/themes/luna-abortus/images/logo-luna.svg" alt="Logo LUNA abortuscentra">
-          <span style="color:var(--muted);font-size:13px;letter-spacing:.15em">ABORTUSCENTRUM ANTWERPEN</span>
-        </div>
-        <span class="tag">Hoe kunnen wij helpen?</span>
-        <h1 class="h-hero">Je bent hier veilig.<br>We nemen de tijd voor jou.</h1>
-        <p class="lead sub">Ben je ongepland of ongewenst zwanger? Bij LUNA vind je psychosociale begeleiding en medische zorg in een warme, vertrouwelijke omgeving — zonder oordeel, in jouw tempo.</p>
-        <div class="btn-row">
-          <a href="#cta" class="btn btn-primary">Maak een afspraak
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <a href="https://luna.sittool.net/" class="btn btn-ghost">Chat met LUNA</a>
-        </div>
-        <div class="reassure">
-          <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l7 3v6c0 5-3.5 8.5-7 9-3.5-.5-7-4-7-9V5l7-3z" stroke="var(--brand)" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="var(--brand)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Volledig vertrouwelijk</span>
-          <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="var(--brand)" stroke-width="1.6"/><path d="M12 7v5l3 2" stroke="var(--brand)" stroke-width="1.6" stroke-linecap="round"/></svg>Geen haast, jouw tempo</span>
-          <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.6-7 10-7 10z" stroke="var(--brand)" stroke-width="1.6" stroke-linejoin="round"/></svg>Zonder oordeel</span>
-        </div>
-      </div>
-      <div class="hero-art">
-        <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <radialGradient id="glow" cx="50%" cy="42%" r="55%">
-              <stop offset="0%" stop-color="#f5d447" stop-opacity=".95"/>
-              <stop offset="55%" stop-color="#f5893d" stop-opacity=".55"/>
-              <stop offset="100%" stop-color="#f5893d" stop-opacity="0"/>
-            </radialGradient>
-            <filter id="soft"><feGaussianBlur stdDeviation="3"/></filter>
-          </defs>
-          <circle cx="150" cy="128" r="46" fill="url(#glow)">
-            <animate attributeName="r" values="42;50;42" dur="6s" repeatCount="indefinite"/>
-          </circle>
-          <path d="M70 120 C60 160 78 210 128 224 L172 224 C222 210 240 160 230 120 C224 130 214 148 200 156 C204 132 200 108 190 96 C188 118 178 142 164 152 C168 128 166 100 156 86 C152 108 150 138 150 152 C150 138 148 108 144 86 C134 100 132 128 136 152 C122 142 112 118 110 96 C100 108 96 132 100 156 C86 148 76 130 70 120 Z"
-                stroke="#f5893d" stroke-width="1.6" fill="rgba(245,137,61,.05)" stroke-linejoin="round"/>
-          <circle cx="150" cy="118" r="17" fill="#f5d447" filter="url(#soft)" opacity=".9">
-            <animate attributeName="opacity" values=".65;1;.65" dur="4s" repeatCount="indefinite"/>
-          </circle>
-        </svg>
-      </div>
+    <span class="tag">Abortuscentrum Antwerpen · Nederlandstalig</span>
+    <h1>Ongepland zwanger?<br>Je hoeft dit <em>niet alleen</em> te doen.</h1>
+    <p class="lede">Bij LUNA nemen we de tijd voor een gesprek. We luisteren zonder oordeel en ondersteunen je om de keuze te maken die voor jóu de beste is. Rustig, vertrouwelijk, in jouw tempo.</p>
+    <div class="btn-row">
+      <a href="#afspraak" class="btn btn-primary">Maak een afspraak</a>
+      <a href="#hulp" class="btn btn-ghost">Chat met LUNA</a>
+    </div>
+    <div class="reassure">
+      <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f5893d" stroke-width="2" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.5 8 8 11 4.5-3 8-6 8-11V5z"/></svg> Volledig vertrouwelijk</span>
+      <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f5893d" stroke-width="2" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.5 8 8 11 4.5-3 8-6 8-11V5z"/></svg> Zonder oordeel</span>
+      <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f5893d" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> We nemen de tijd voor jou</span>
     </div>
   </div>
 </section>
 
-<!-- CHAPTER 2: offset two column -->
-<section class="chapter" id="ch2">
+<!-- CH2 chat two-col -->
+<section class="chapter" id="hulp">
   <div class="inner">
-    <div class="two">
+    <div class="two-col">
       <div class="col-text">
-        <span class="tag">Ongepland zwanger. Wat nu?</span>
-        <h2 class="big">Je hoeft dit niet alleen uit te zoeken.</h2>
-        <p class="lead sub">Er komt van alles op je af. Wij helpen je rustig alles op een rij te zetten, zodat je de keuze kan maken die voor jóu de beste is. We luisteren, geven eerlijke informatie en laten je nooit iets beslissen waar je niet klaar voor bent.</p>
-        <div class="btn-row">
-          <a href="https://abortus.be/ongepland-zwanger/watnu/" class="btn btn-ghost">Wat nu?</a>
-          <a href="https://abortus.be/over-ons/brochure/" class="btn btn-ghost">Brochure aanvragen</a>
+        <span class="tag">Meteen contact, wanneer jij dat wil</span>
+        <h2>Chat met LUNA — vertrouwelijk en direct</h2>
+        <p>Zit je met vragen en weet je nog niet waar je moet beginnen? Onze hulpverleners staan voor je klaar via chat. Je hoeft je naam niet te geven en niets is verplicht — je bepaalt zelf hoeveel je vertelt.</p>
+        <p>We geven je heldere informatie, luisteren naar jouw verhaal en helpen je op weg. Wat je ook beslist, je bent bij ons welkom.</p>
+        <div class="btn-row" style="margin-top:24px">
+          <a href="#afspraak" class="btn btn-primary">Start een gesprek</a>
         </div>
       </div>
       <div class="col-visual">
-        <ul class="step-list">
-          <li><span class="step-n">01</span><div><h4>Een luisterend gesprek</h4><p>We nemen de tijd om te horen waar je mee zit — geen haast, geen druk.</p></div></li>
-          <li><span class="step-n">02</span><div><h4>Heldere informatie</h4><p>Over anticonceptie, noodanticonceptie en al je mogelijkheden.</p></div></li>
-          <li><span class="step-n">03</span><div><h4>Jouw keuze, jouw tempo</h4><p>Wat je ook beslist, wij staan naast je — voor, tijdens en na.</p></div></li>
-        </ul>
+        <div class="chat-card">
+          <div class="chat-status"><span class="dot"></span> LUNA hulpverlener · online · anoniem</div>
+          <div class="chat-bubble">Hallo, fijn dat je er bent. Vertel gerust in je eigen woorden waar je mee zit — er is geen goed of fout.</div>
+          <div class="chat-bubble me">Ik denk dat ik zwanger ben en weet niet wat ik moet doen…</div>
+          <div class="chat-bubble">Dat is een moeilijk moment, en het is heel begrijpelijk dat je twijfelt. We nemen samen de tijd om alles rustig te bekijken. Wil je dat ik uitleg welke stappen er mogelijk zijn?</div>
+          <div class="chat-bubble me">Ja, graag.</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CHAPTER 3: services grid (bento-ish) -->
-<section class="chapter" id="ch3">
+<!-- poster -->
+<section class="poster">
+  <div class="word" aria-hidden="true">RUST</div>
+  <div class="over">
+    <span class="tag">Ademruimte</span>
+    <p>Er is geen haast. Bij LUNA krijg je de rust en de ruimte om na te denken, vragen te stellen en zelf te kiezen.</p>
+  </div>
+</section>
+
+<!-- CH3 timeline -->
+<section class="chapter" id="stappen">
   <div class="inner">
-    <div style="max-width:640px;margin-bottom:44px">
-      <span class="tag">We nemen de tijd voor een gesprek</span>
-      <h2 class="big">Onze zorg, van eerste vraag tot nazorg</h2>
-      <p class="sub">Alles gebeurt in één vertrouwde omgeving, begeleid door mensen die je met respect behandelen.</p>
+    <div class="two-col flip">
+      <div class="col-text">
+        <span class="tag">Zo verloopt het bij LUNA</span>
+        <h2>Stap voor stap, in jouw tempo</h2>
+        <p>Je hoeft niet alles op voorhand te weten. Wij begeleiden je door elke stap en leggen alles helder uit. Je beslist zelf, wij staan naast je.</p>
+      </div>
+      <div class="col-visual">
+        <div class="timeline">
+          <div class="tl-item">
+            <span class="step">Stap 1</span>
+            <h4>De eerste consultatie</h4>
+            <p>Een rustig gesprek waarin we luisteren, informatie geven en samen kijken naar jouw situatie. We nemen echt de tijd voor jou.</p>
+          </div>
+          <div class="tl-item">
+            <span class="step">Stap 2</span>
+            <h4>De verplichte wachttijd</h4>
+            <p>Tussen de eerste afspraak en de behandeling ligt een wettelijke bedenktijd. Ruimte om alles te laten bezinken — je staat er niet alleen voor.</p>
+          </div>
+          <div class="tl-item">
+            <span class="step">Stap 3</span>
+            <h4>De behandeling</h4>
+            <p>Medicamenteus of via zuigcurettage. We leggen elke methode helder uit zodat je weet wat je kan verwachten.</p>
+          </div>
+          <div class="tl-item">
+            <span class="step">Stap 4</span>
+            <h4>Controle &amp; nazorg</h4>
+            <p>Een controleafspraak na de behandeling en psychosociale nazorg wanneer jij daar behoefte aan hebt.</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="grid">
+  </div>
+</section>
+
+<!-- CH4 bento -->
+<section class="chapter">
+  <div class="inner">
+    <span class="tag">Behandelmethoden, helder uitgelegd</span>
+    <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:14px;max-width:640px">Duidelijke informatie, zodat je weet wat je kan verwachten</h2>
+    <p style="color:var(--muted);max-width:600px;margin-bottom:44px">Twee zorgvuldige behandelmethoden en alles wat daarbij hoort — praktisch, begrijpelijk en zonder verrassingen.</p>
+    <div class="bento">
       <div class="card">
-        <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5h16v11H8l-4 4V5z" stroke="var(--brand)" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 10h8M8 13h5" stroke="var(--brand)" stroke-width="1.6" stroke-linecap="round"/></svg></div>
-        <h4>De eerste consultatie</h4>
-        <p>Een rustig, vertrouwelijk gesprek waarin we luisteren en samen bekijken wat jij nodig hebt. Er is altijd tijd voor je vragen.</p>
-        <a class="more" href="https://abortus.be/hoe-verloopt-een-abortus/de-eerste-consultatie/">Lees meer →</a>
+        <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5d447"/><stop offset="1" stop-color="#f5893d"/></linearGradient></defs><rect x="16" y="5" width="16" height="30" rx="8" stroke="url(#g1)" stroke-width="2.2"/><path d="M20 13h8M20 19h8M20 25h8" stroke="url(#g1)" stroke-width="2.2" stroke-linecap="round"/><path d="M24 35v7" stroke="url(#g1)" stroke-width="2.2" stroke-linecap="round"/></svg>
+        <h4>Medicamenteuze abortus</h4>
+        <p>Met medicatie, zonder ingreep. We leggen stap voor stap uit hoe het verloopt en blijven bereikbaar met al je vragen.</p>
+        <a href="#afspraak">Meer weten <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
       <div class="card">
-        <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="4" width="8" height="16" rx="2" stroke="var(--brand)" stroke-width="1.6"/><path d="M12 8v4M10 10h4" stroke="var(--brand)" stroke-width="1.6" stroke-linecap="round"/></svg></div>
-        <h4>Medicamenteuze behandeling</h4>
-        <p>Een zachte, medicamenteuze abortusbehandeling met duidelijke begeleiding, zodat je precies weet wat er gebeurt.</p>
-        <a class="more" href="https://abortus.be/hoe-verloopt-een-abortus/de-medicamenteuze-behandeling/">Lees meer →</a>
-      </div>
-      <div class="card">
-        <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8" stroke="var(--brand)" stroke-width="1.6"/><path d="M12 4v4M12 16v4M4 12h4M16 12h4" stroke="var(--brand)" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+        <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5d447"/><stop offset="1" stop-color="#f5893d"/></linearGradient></defs><path d="M24 6a12 12 0 0 1 12 12c0 6-5 9-12 20C17 27 12 24 12 18A12 12 0 0 1 24 6z" stroke="url(#g2)" stroke-width="2.2" stroke-linejoin="round"/><circle cx="24" cy="18" r="4.5" stroke="url(#g2)" stroke-width="2.2"/></svg>
         <h4>Zuigcurettage</h4>
-        <p>Een veilige, professionele behandeling met alle zorg en aandacht die je verdient, in een geruststellende omgeving.</p>
-        <a class="more" href="https://abortus.be/hoe-verloopt-een-abortus/zuigcurettage/">Lees meer →</a>
+        <p>Een korte medische ingreep onder begeleiding van ons team. Je krijgt heldere uitleg vooraf en zorg tijdens en nadien.</p>
+        <a href="#afspraak">Meer weten <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
       <div class="card">
-        <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.6-7 10-7 10z" stroke="var(--brand)" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
-        <h4>Psychosociale nazorg</h4>
-        <p>Ook ná de behandeling zijn we er voor je. Praten helpt — en dat mag altijd, zonder tijdslimiet.</p>
-        <a class="more" href="https://abortus.be/hoe-verloopt-een-abortus/psychosociale-nazorg/">Lees meer →</a>
-      </div>
-      <div class="card">
-        <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16v10H10l-4 3V6z" stroke="var(--brand)" stroke-width="1.6" stroke-linejoin="round"/><circle cx="9" cy="11" r="1" fill="var(--brand)"/><circle cx="13" cy="11" r="1" fill="var(--brand)"/><circle cx="17" cy="11" r="1" fill="var(--brand)"/></svg></div>
-        <h4>Chathulpverlening</h4>
-        <p>Liever eerst anoniem chatten? Onze hulpverleners staan online voor je klaar met een luisterend oor.</p>
-        <a class="more" href="https://luna.sittool.net/">Start de chat →</a>
-      </div>
-      <div class="card">
-        <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v18M5 8l7-5 7 5M6 12h12" stroke="var(--brand)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <h4>Kostprijs &amp; info</h4>
-        <p>Duidelijkheid vooraf: wat kost een abortus, wat wordt terugbetaald en wat je nodig hebt. Geen verrassingen.</p>
-        <a class="more" href="https://abortus.be/ongepland-zwanger/kostprijs/">Lees meer →</a>
+        <svg class="ic" viewBox="0 0 48 48" fill="none" aria-hidden="true"><defs><linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5d447"/><stop offset="1" stop-color="#f5893d"/></linearGradient></defs><path d="M6 26h9l3.5-11 6 22 4-14 3 7h10" stroke="url(#g3)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h4>Controle na de behandeling</h4>
+        <p>Een nacontrole om zeker te zijn dat alles goed verloopt, plus advies over anticonceptie voor daarna.</p>
+        <a href="#afspraak">Meer weten <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CHAPTER 4: pullquote (sparse) -->
-<section class="chapter" id="ch4">
-  <div class="inner pullquote">
-    <span class="tag">Vertrouwelijk &amp; zonder oordeel</span>
-    <h2>“Wat je ook meemaakt of beslist — <span class="mk">bij ons word je niet beoordeeld.</span> Alles wat je vertelt, blijft binnen deze muren. We houden de tijd voor jou vast, zo lang je die nodig hebt.”</h2>
-  </div>
-</section>
-
-<!-- CHAPTER 5: stats + reviews band -->
-<section class="chapter" id="ch5" style="min-height:80vh">
+<!-- CH5 stats + nazorg -->
+<section class="chapter" id="nazorg">
   <div class="inner">
-    <div style="max-width:600px;margin-bottom:40px">
-      <span class="tag">Waarom mensen ons vertrouwen</span>
-      <h2 class="big">Ervaren, warm en discreet</h2>
-    </div>
+    <span class="tag">Psychosociale nazorg</span>
+    <h2 style="font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:14px;max-width:660px">Er is ruimte voor jou — ook daarna</h2>
+    <p style="color:var(--muted);max-width:620px;margin-bottom:44px">Een keuze maken is soms zwaar, en gevoelens mogen er zijn. Ook na de behandeling kan je bij ons terecht voor een gesprek. Zonder oordeel, in alle vertrouwen.</p>
     <div class="stats">
-      <div class="stat"><div class="n">4★</div><div class="l">Gemiddelde beoordeling — Google</div></div>
-      <div class="stat"><div class="n">100%</div><div class="l">Vertrouwelijk &amp; privacy gewaarborgd</div></div>
-      <div class="stat"><div class="n">NL·FR·EN</div><div class="l">Je kan bij ons terecht in jouw taal</div></div>
-    </div>
-    <div class="quotes" style="margin-top:36px">
-      <div class="quote">
-        <div class="stars" aria-label="5 van 5 sterren">★★★★★</div>
-        <p>“Ik werd meteen op mijn gemak gesteld. Er was echt tijd om te praten en ik voelde me op geen enkel moment veroordeeld.”</p>
-        <div class="who">— Bezoeker, Google-review</div>
-      </div>
-      <div class="quote">
-        <div class="stars" aria-label="4 van 5 sterren">★★★★☆</div>
-        <p>“Warme en professionele begeleiding. Ze legden alles rustig uit en gaven me de ruimte om zelf te beslissen.”</p>
-        <div class="who">— Bezoeker, Google-review</div>
-      </div>
+      <div class="stat"><div class="num">100%</div><div class="lbl">Vertrouwelijk</div></div>
+      <div class="stat"><div class="num">0</div><div class="lbl">Oordeel</div></div>
+      <div class="stat"><div class="num">4★</div><div class="lbl">Beoordeling · Google</div></div>
+      <div class="stat"><div class="num">NL</div><div class="lbl">Nederlandstalige begeleiding</div></div>
     </div>
   </div>
 </section>
 
-<!-- CHAPTER 6: CTA -->
-<section class="chapter" id="cta" style="min-height:100vh">
+<!-- quote -->
+<section class="chapter quote-wrap">
   <div class="inner">
-    <div class="cta-grid">
-      <div>
-        <span class="tag">Chat met LUNA of maak een afspraak</span>
-        <h2 class="big">Zet de eerste stap wanneer jij er klaar voor bent.</h2>
-        <p class="lead sub">Bel ons, kom langs of stuur onderstaand bericht. We plannen samen een eerste, rustig gesprek — vrijblijvend en vertrouwelijk.</p>
-        <div class="btn-row">
-          <a href="tel:032262525" class="btn btn-primary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 3h3l2 5-2 1.5a11 11 0 005.5 5.5L16 15l5 2v3a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-            03 226 25 25
-          </a>
-          <a href="https://luna.sittool.net/" class="btn btn-ghost">Chat met LUNA</a>
-        </div>
-        <div style="margin-top:34px;color:var(--muted);font-size:.95rem;display:flex;align-items:flex-start;gap:12px">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="flex:none;margin-top:2px" aria-hidden="true"><path d="M12 21s-7-5-7-11a7 7 0 0114 0c0 6-7 11-7 11z" stroke="var(--brand)" stroke-width="1.6"/><circle cx="12" cy="10" r="2.4" stroke="var(--brand)" stroke-width="1.6"/></svg>
-          Franklin Rooseveltplaats 12, 2060 Antwerpen
-        </div>
-      </div>
-      <form class="form" id="contactForm" novalidate>
-        <label for="f-naam">Je naam of voornaam (mag ook anoniem)</label>
-        <input id="f-naam" name="naam" type="text" placeholder="Bijv. Sara" autocomplete="given-name">
-        <label for="f-contact">Telefoon of e-mail waarop we je discreet kunnen bereiken</label>
-        <input id="f-contact" name="contact" type="text" placeholder="Zodat we je kunnen contacteren" autocomplete="off">
-        <label for="f-hulp">Waarmee kunnen we je helpen?</label>
-        <select id="f-hulp" name="hulp">
-          <option>Ik wil een eerste gesprek plannen</option>
-          <option>Ik heb een vraag over de behandeling</option>
-          <option>Ik wil info over de kostprijs</option>
-          <option>Iets anders</option>
-        </select>
-        <label for="f-bericht">Je bericht (optioneel)</label>
-        <textarea id="f-bericht" name="bericht" rows="3" placeholder="Alles wat je met ons deelt blijft vertrouwelijk."></textarea>
-        <button type="submit" class="btn btn-primary" id="submitBtn">Verstuur vertrouwelijk</button>
-        <div class="note">Dit is een conceptformulier. Bel ons gerust op 03 226 25 25.</div>
-        <div class="note" id="doneMsg" role="status" aria-live="polite" style="display:none;color:var(--brand);font-weight:600">Bedankt — we nemen zorgzaam en discreet contact met je op.</div>
-      </form>
-    </div>
+    <div class="stars" aria-label="4 van de 5 sterren">★★★★</div>
+    <blockquote>“Ik werd hier met veel <span>warmte en respect</span> ontvangen. Ze namen echt de tijd om te luisteren en legden alles rustig uit. Ik voelde me nergens veroordeeld.”</blockquote>
+    <cite>— Bezoeker · LUNA Antwerpen</cite>
   </div>
 </section>
 
-</div>
+<!-- CH6 CTA -->
+<section class="chapter cta-final" id="afspraak">
+  <div class="inner">
+    <div class="confid-badge">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f5893d" stroke-width="2" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+      Je gegevens blijven strikt vertrouwelijk
+    </div>
+    <h2>Maak een afspraak</h2>
+    <p>Vul je gegevens in of bel ons gerust. We plannen samen een moment dat voor jou past — rustig en zonder druk.</p>
+    <form class="cta-box" id="afspraakForm" novalidate>
+      <div class="form-grid">
+        <div class="field"><label for="fnaam">Voornaam (optioneel)</label><input id="fnaam" name="fnaam" type="text" placeholder="Hoe mogen we je noemen?"></div>
+        <div class="field"><label for="fcontact">Telefoon of e-mail</label><input id="fcontact" name="fcontact" type="text" placeholder="Zodat we je kunnen bereiken"></div>
+      </div>
+      <div class="field"><label for="fonderwerp">Waar kunnen we je mee helpen?</label>
+        <select id="fonderwerp" name="fonderwerp">
+          <option>Ik wil een eerste afspraak inplannen</option>
+          <option>Ik heb eerst een vraag / wil chatten</option>
+          <option>Ik wil informatie over de kostprijs</option>
+          <option>Ik wil een brochure aanvragen</option>
+        </select>
+      </div>
+      <div class="field"><label for="fbericht">Je bericht (optioneel)</label><textarea id="fbericht" name="fbericht" rows="3" placeholder="Vertel gerust waar je mee zit — je bepaalt zelf hoeveel je deelt."></textarea></div>
+      <div class="btn-row" style="justify-content:center;margin-top:8px">
+        <button type="submit" class="btn btn-primary" id="submitBtn">Verstuur mijn aanvraag</button>
+      </div>
+      <div class="form-msg ok" id="formMsg" role="status" aria-live="polite">Bedankt — je aanvraag is verstuurd. We nemen zo snel mogelijk contact met je op, in alle vertrouwen.</div>
+      <p class="form-note">Liever bellen? <a class="phone-big" href="tel:032262525">03 226 25 25</a></p>
+    </form>
+  </div>
+</section>
 
 <footer>
   <div class="foot-grid">
     <div>
-      <img src="https://abortus.be/wp-content/themes/luna-abortus/images/logo-luna.svg" alt="Logo LUNA abortuscentra">
-      <p>Psychosociale begeleiding en medische abortusbehandeling in een veilige, vertrouwelijke omgeving. Zonder oordeel, in jouw tempo.</p>
-      <p>Franklin Rooseveltplaats 12<br>2060 Antwerpen, België</p>
+      <a class="logo" href="#top" aria-label="LUNA — naar boven" style="display:flex;align-items:center;gap:10px;font-family:'Poppins';font-weight:600;font-size:19px;color:var(--ink);margin-bottom:14px">
+        <svg class="moon" width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><path d="M22 4a12 12 0 1 0 0 24 9 9 0 0 1 0-24z" fill="#f5893d"/></svg> LUNA
+      </a>
+      <p>LUNA abortuscentrum Antwerpen biedt psychosociale begeleiding en medische behandeling bij een ongeplande of ongewenste zwangerschap. In alle vertrouwen, zonder oordeel.</p>
     </div>
     <div>
       <h5>Contact</h5>
+      <p>Franklin Rooseveltplaats 12<br>2060 Antwerpen, België</p>
       <a href="tel:032262525">03 226 25 25</a>
       <a href="https://www.abortus.be/">www.abortus.be</a>
-      <a href="https://luna.sittool.net/">Chat met LUNA</a>
-      <a href="https://portaal.abortus.be/nl/login/">Cliëntenportaal</a>
     </div>
     <div>
-      <h5>Ontdek</h5>
-      <a href="https://abortus.be/ongepland-zwanger/watnu/">Ongepland zwanger. Wat nu?</a>
-      <a href="https://abortus.be/hoe-verloopt-een-abortus/">Hoe verloopt een abortus?</a>
-      <a href="https://abortus.be/veelgestelde-vragen/">Veelgestelde vragen</a>
-      <a href="https://abortus.be/ongepland-zwanger/privacy/">Privacy</a>
+      <h5>Informatie</h5>
+      <a href="#hulp">Chat met LUNA</a>
+      <a href="#stappen">Hoe verloopt een abortus?</a>
+      <a href="#nazorg">Psychosociale nazorg</a>
+      <a href="#afspraak">Kostprijs &amp; afspraak</a>
+      <a href="#stappen">Veelgestelde vragen</a>
     </div>
   </div>
   <div class="foot-bottom">
-    <span>© LUNA abortuscentra — Nederlandstalige abortuscentra</span>
-    <span>Conceptmockup — geen officiële website</span>
+    <span>© LUNA abortuscentrum Antwerpen · Conceptvoorstel</span>
+    <span>Vertrouwelijk · Nederlandstalig · Zonder oordeel</span>
   </div>
 </footer>
-
-<script>
-// form handling (loading -> success state)
-(function(){
-  var f=document.getElementById('contactForm');
-  if(!f)return;
-  f.addEventListener('submit',function(e){
-    e.preventDefault();
-    var btn=document.getElementById('submitBtn');
-    btn.disabled=true; var orig=btn.textContent; btn.textContent='Even geduld…';
-    setTimeout(function(){
-      btn.disabled=false; btn.textContent=orig;
-      document.getElementById('doneMsg').style.display='block';
-      f.reset();
-    },700);
-  });
-})();
-</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/postprocessing/EffectComposer.js"></script>
@@ -390,201 +397,221 @@ footer{position:relative;z-index:var(--z-content);background:rgba(8,6,4,.94);bac
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
+// form feedback
 (function(){
-  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var f=document.getElementById('afspraakForm');
+  if(!f)return;
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var btn=document.getElementById('submitBtn'),msg=document.getElementById('formMsg');
+    btn.disabled=true;btn.textContent='Versturen…';
+    setTimeout(function(){
+      msg.classList.add('show');
+      btn.textContent='Verstuurd ✓';
+      msg.focus&&msg.focus();
+    },700);
+  });
+})();
+</script>
+<script>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   function hasWebGL(){try{var c=document.createElement('canvas');return !!(c.getContext('webgl')||c.getContext('experimental-webgl'));}catch(e){return false;}}
   if(reduce||!hasWebGL()||!window.THREE)return;
   try{
-  var BG=0x110c09, ACCENT=0xf5893d, ACCENT2=0xf5d447;
-  var scene=new THREE.Scene();
-  scene.background=new THREE.Color(BG);
-  scene.fog=new THREE.FogExp2(BG,0.015);
-  var camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,400);
-  camera.position.set(0,2,46);
-  var renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-  renderer.setSize(innerWidth,innerHeight);
-  document.getElementById('gl').appendChild(renderer.domElement);
+    var BG=0x110c09, ACCENT=0xf5893d, ACCENT2=0xf5d447;
+    var mobile = window.innerWidth < 768;
 
-  function makeSprite(){var c=document.createElement('canvas');c.width=c.height=64;
-    var g=c.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);
-    r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(0.35,'rgba(255,255,255,.6)');r.addColorStop(1,'rgba(255,255,255,0)');
-    g.fillStyle=r;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c);}
-  var sprite=makeSprite();
+    var scene=new THREE.Scene();
+    scene.background=new THREE.Color(BG);
+    scene.fog=new THREE.FogExp2(BG,0.015);
+    var camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,400);
+    camera.position.set(0,2,46);
 
-  function envTex(){var c=document.createElement('canvas');c.width=64;c.height=32;
-    var g=c.getContext('2d'),gr=g.createLinearGradient(0,0,0,32);
-    gr.addColorStop(0,'#f5d447');gr.addColorStop(0.5,'#f5893d');gr.addColorStop(1,'#110c09');
-    g.fillStyle=gr;g.fillRect(0,0,64,32);var t=new THREE.CanvasTexture(c);
-    t.mapping=THREE.EquirectangularReflectionMapping;return t;}
-  var env=envTex(); scene.environment=env;
-  scene.add(new THREE.HemisphereLight(0xffffff,BG,0.55));
-  var key=new THREE.PointLight(ACCENT,2.0,140); key.position.set(9,11,15); scene.add(key);
-  var rim=new THREE.PointLight(ACCENT2,1.4,140); rim.position.set(-11,-5,-9); scene.add(rim);
+    var renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+    renderer.setSize(window.innerWidth,window.innerHeight);
+    document.getElementById('gl').appendChild(renderer.domElement);
 
-  var mobile=innerWidth<768;
+    function makeSprite(){var c=document.createElement('canvas');c.width=c.height=64;
+      var g=c.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);
+      r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(0.35,'rgba(255,255,255,.6)');r.addColorStop(1,'rgba(255,255,255,0)');
+      g.fillStyle=r;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c);}
+    var sprite=makeSprite();
 
-  // RECIPE B: particle universe
-  var N=mobile?3800:8000;
-  var geo=new THREE.BufferGeometry(),pos=new Float32Array(N*3),col=new Float32Array(N*3);
-  var ca=new THREE.Color(ACCENT),cb=new THREE.Color(ACCENT2),c=new THREE.Color();
-  var SPREAD=60;
-  for(var i=0;i<N;i++){var r=SPREAD*Math.pow(Math.random(),0.5),th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
-    pos[i*3]=r*Math.sin(ph)*Math.cos(th);pos[i*3+1]=r*Math.sin(ph)*Math.sin(th)*0.55;pos[i*3+2]=r*Math.cos(ph);
-    c.copy(ca).lerp(cb,Math.random());col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;}
-  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
-  var universe=new THREE.Points(geo,new THREE.PointsMaterial({size:0.5,map:sprite,vertexColors:true,transparent:true,opacity:0.85,depthWrite:false,blending:THREE.AdditiveBlending}));
-  scene.add(universe);
+    function envTex(){var c=document.createElement('canvas');c.width=64;c.height=32;
+      var g=c.getContext('2d'),gr=g.createLinearGradient(0,0,0,32);
+      gr.addColorStop(0,'#f8e6a8');gr.addColorStop(0.5,'#f5893d');gr.addColorStop(1,'#110c09');
+      g.fillStyle=gr;g.fillRect(0,0,64,32);var t=new THREE.CanvasTexture(c);
+      t.mapping=THREE.EquirectangularReflectionMapping;return t;}
+    var env=envTex(); scene.environment=env;
 
-  // RECIPE C: torus-knot light strand
-  var strandGroup=new THREE.Group();
-  function strand(color,rot){
-    var SN=mobile?1400:2600, sp=new Float32Array(SN*3);
-    for(var i=0;i<SN;i++){var t=i/SN,a=t*Math.PI*2;
-      var p=2,q=3, rr=6+2*Math.cos(q*a);
-      sp[i*3]=rr*Math.cos(p*a);
-      sp[i*3+1]=rr*Math.sin(p*a)*0.7;
-      sp[i*3+2]=2*Math.sin(q*a);}
-    var g2=new THREE.BufferGeometry();g2.setAttribute('position',new THREE.BufferAttribute(sp,3));
-    var pts=new THREE.Points(g2,new THREE.PointsMaterial({size:0.34,map:sprite,color:color,transparent:true,opacity:0.7,depthWrite:false,blending:THREE.AdditiveBlending}));
-    pts.rotation.y=rot; return pts;
-  }
-  strandGroup.add(strand(ACCENT,0));
-  strandGroup.add(strand(ACCENT2,Math.PI));
-  strandGroup.scale.set(1.5,1.5,1.5);
-  scene.add(strandGroup);
+    scene.add(new THREE.HemisphereLight(0xffffff, BG, 0.5));
+    var key=new THREE.PointLight(ACCENT,2.0,140); key.position.set(9,11,15); scene.add(key);
+    var rim=new THREE.PointLight(ACCENT2,1.4,140); rim.position.set(-11,-5,-9); scene.add(rim);
 
-  // RECIPE D + I + J: centrepiece — sheltering enclosure
-  var centre=new THREE.Group();
-  var coreMat=new THREE.MeshStandardMaterial({color:0x140d08,metalness:0.85,roughness:0.24,envMap:env,envMapIntensity:1.1,emissive:new THREE.Color(ACCENT),emissiveIntensity:0.34});
-  var coreGeo=new THREE.IcosahedronGeometry(1.7,0);
-  centre.add(new THREE.Mesh(coreGeo,coreMat));
-  var fres=new THREE.ShaderMaterial({transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,
-    uniforms:{c:{value:new THREE.Color(ACCENT2)},p:{value:2.8}},
-    vertexShader:'varying float vF;uniform float p;void main(){vec3 n=normalize(normalMatrix*normal);vec4 mv=modelViewMatrix*vec4(position,1.0);vec3 v=normalize(-mv.xyz);vF=pow(1.0-abs(dot(n,v)),p);gl_Position=projectionMatrix*mv;}',
-    fragmentShader:'varying float vF;uniform vec3 c;void main(){gl_FragColor=vec4(c*vF,vF);}'});
-  var shell=new THREE.Mesh(new THREE.IcosahedronGeometry(1.8,0),fres); centre.add(shell);
-  centre.add(new THREE.Mesh(new THREE.IcosahedronGeometry(3.4,1),new THREE.MeshBasicMaterial({color:ACCENT,wireframe:true,transparent:true,opacity:0.42})));
-  var arc=new THREE.Mesh(new THREE.TorusGeometry(5.0,0.03,8,120,Math.PI*1.4),new THREE.MeshBasicMaterial({color:ACCENT2,transparent:true,opacity:0.6}));
-  arc.rotation.x=Math.PI/2.4; arc.rotation.z=-Math.PI*0.3; centre.add(arc);
-  scene.add(centre);
+    // particle universe
+    var N = mobile?4200:9000, geo=new THREE.BufferGeometry();
+    var pos=new Float32Array(N*3),col=new Float32Array(N*3);
+    var ca=new THREE.Color(ACCENT),cb=new THREE.Color(ACCENT2),cc=new THREE.Color();
+    var SPREAD=70;
+    for(var i=0;i<N;i++){var r=SPREAD*Math.pow(Math.random(),0.5),th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+      pos[i*3]=r*Math.sin(ph)*Math.cos(th);pos[i*3+1]=r*Math.sin(ph)*Math.sin(th)*0.55;pos[i*3+2]=r*Math.cos(ph);
+      cc.copy(ca).lerp(cb,Math.random());col[i*3]=cc.r;col[i*3+1]=cc.g;col[i*3+2]=cc.b;}
+    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+    var universe=new THREE.Points(geo,new THREE.PointsMaterial({size:0.55,map:sprite,vertexColors:true,transparent:true,opacity:0.85,depthWrite:false,blending:THREE.AdditiveBlending}));
+    scene.add(universe);
 
-  // RECIPE G: hologram of cupped open hands
-  var holo=new THREE.Group(); scene.add(holo);
-  var shape=new THREE.Shape();
-  shape.moveTo(-6,0);
-  shape.bezierCurveTo(-6.5,3.4,-4.2,5.6,-1.6,6.0);
-  shape.lineTo(-1.6,3.2);
-  shape.bezierCurveTo(-1.6,2.2,-0.8,2.2,-0.8,3.2);
-  shape.lineTo(-0.8,6.1);
-  shape.bezierCurveTo(-0.4,6.2,0.4,6.2,0.8,6.1);
-  shape.lineTo(0.8,3.2);
-  shape.bezierCurveTo(0.8,2.2,1.6,2.2,1.6,3.2);
-  shape.lineTo(1.6,6.0);
-  shape.bezierCurveTo(4.2,5.6,6.5,3.4,6,0);
-  shape.bezierCurveTo(5.2,1.4,3.4,2.2,2.2,1.9);
-  shape.bezierCurveTo(3.0,-0.6,1.4,-2.2,0,-2.4);
-  shape.bezierCurveTo(-1.4,-2.2,-3.0,-0.6,-2.2,1.9);
-  shape.bezierCurveTo(-3.4,2.2,-5.2,1.4,-6,0);
-  var SCALE=1.5;
-
-  function makeHolo(count,color,size,op,outline){
-    var arr=new Float32Array(count*3), cloud=new Float32Array(count*3), target=new Float32Array(count*3);
-    if(outline){
-      var opts=shape.getPoints(260);
-      for(var i=0;i<count;i++){var pt=opts[Math.floor(Math.random()*opts.length)];
-        target[i*3]=pt.x*SCALE+(Math.random()-.5)*0.24;
-        target[i*3+1]=pt.y*SCALE+(Math.random()-.5)*0.24;
-        target[i*3+2]=(Math.random()-.5)*0.5;}
-    } else {
-      var sg=new THREE.ShapeGeometry(shape,24); var p=sg.attributes.position.array, idx=sg.index.array;
-      var tris=[],areas=[],cum=0;
-      for(var t=0;t<idx.length;t+=3){
-        var a=idx[t],b=idx[t+1],d=idx[t+2];
-        var ax=p[a*3],ay=p[a*3+1],bx=p[b*3],by=p[b*3+1],cx=p[d*3],cy=p[d*3+1];
-        var ar=Math.abs((bx-ax)*(cy-ay)-(cx-ax)*(by-ay))/2; cum+=ar; areas.push(cum);
-        tris.push([ax,ay,bx,by,cx,cy]);
-      }
-      for(var i=0;i<count;i++){
-        var rr=Math.random()*cum,ti=0; while(areas[ti]<rr)ti++;
-        var tr=tris[ti],u=Math.random(),v=Math.random(); if(u+v>1){u=1-u;v=1-v;}
-        target[i*3]=(tr[0]+u*(tr[2]-tr[0])+v*(tr[4]-tr[0]))*SCALE;
-        target[i*3+1]=(tr[1]+u*(tr[3]-tr[1])+v*(tr[5]-tr[1]))*SCALE;
-        target[i*3+2]=(Math.random()-.5)*1.2;
-      }
+    // flat spiral galaxy strand
+    var strandGroup=new THREE.Group();
+    function makeSpiral(color,off){
+      var SN = mobile?1100:2200, sg=new THREE.BufferGeometry(), sp=new Float32Array(SN*3);
+      for(var i=0;i<SN;i++){var t=i/SN, a=t*Math.PI*2*3 + off, rad=2+t*22;
+        var w=Math.sin(t*30)*0.5;
+        sp[i*3]=Math.cos(a)*(rad+w);
+        sp[i*3+1]=(Math.sin(t*8)*0.6)+ (Math.random()-0.5)*1.4;
+        sp[i*3+2]=Math.sin(a)*(rad+w);}
+      sg.setAttribute('position',new THREE.BufferAttribute(sp,3));
+      return new THREE.Points(sg,new THREE.PointsMaterial({size:0.4,map:sprite,color:color,transparent:true,opacity:0.75,depthWrite:false,blending:THREE.AdditiveBlending}));
     }
-    for(var i=0;i<count;i++){var r=27+Math.random()*4,th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
-      cloud[i*3]=r*Math.sin(ph)*Math.cos(th);cloud[i*3+1]=r*Math.sin(ph)*Math.sin(th);cloud[i*3+2]=r*Math.cos(ph);
-      arr[i*3]=cloud[i*3];arr[i*3+1]=cloud[i*3+1];arr[i*3+2]=cloud[i*3+2];}
-    var g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.BufferAttribute(arr,3));
-    var pts=new THREE.Points(g,new THREE.PointsMaterial({size:size,map:sprite,color:color,transparent:true,opacity:op,depthWrite:false,blending:THREE.AdditiveBlending}));
-    pts.userData={cloud:cloud,target:target,count:count};
-    holo.add(pts); return pts;
-  }
-  var hFill=makeHolo(mobile?1200:2400,ACCENT,0.24,0.5,false);
-  var hOut=makeHolo(mobile?900:1700,0xffd9a0,0.4,0.95,true);
-  holo.visible=false;
-  var morph={t:0};
+    strandGroup.add(makeSpiral(ACCENT,0));
+    strandGroup.add(makeSpiral(ACCENT2,Math.PI));
+    strandGroup.rotation.x=0.5;
+    scene.add(strandGroup);
 
-  // RECIPE E: bloom
-  var composer=new THREE.EffectComposer(renderer);
-  composer.addPass(new THREE.RenderPass(scene,camera));
-  var bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.2,0.85,0.14);
-  composer.addPass(bloom);
+    // centrepiece: wireframe crescent shell + reflective core + fresnel + orbiting ring
+    var centre=new THREE.Group();
+    var shell=new THREE.Mesh(new THREE.IcosahedronGeometry(3.4,1),new THREE.MeshBasicMaterial({color:ACCENT,wireframe:true,transparent:true,opacity:0.5}));
+    centre.add(shell);
+    var innerWire=new THREE.Mesh(new THREE.IcosahedronGeometry(1.9,0),new THREE.MeshBasicMaterial({color:0xfff0d0,wireframe:true,transparent:true,opacity:0.85}));
+    centre.add(innerWire);
+    var coreMat=new THREE.MeshStandardMaterial({color:0x140d08,metalness:0.85,roughness:0.22,envMap:env,envMapIntensity:1.15,emissive:new THREE.Color(ACCENT),emissiveIntensity:0.34});
+    var core=new THREE.Mesh(new THREE.IcosahedronGeometry(1.7,1),coreMat);
+    centre.add(core);
+    var fres=new THREE.ShaderMaterial({transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,
+      uniforms:{c:{value:new THREE.Color(ACCENT2)},p:{value:2.8}},
+      vertexShader:'varying float vF;uniform float p;void main(){vec3 n=normalize(normalMatrix*normal);vec4 mv=modelViewMatrix*vec4(position,1.0);vec3 v=normalize(-mv.xyz);vF=pow(1.0-abs(dot(n,v)),p);gl_Position=projectionMatrix*mv;}',
+      fragmentShader:'varying float vF;uniform vec3 c;void main(){gl_FragColor=vec4(c*vF,vF);}'});
+    var fresMesh=new THREE.Mesh(new THREE.IcosahedronGeometry(1.7,1),fres);
+    fresMesh.scale.setScalar(1.06);
+    centre.add(fresMesh);
+    var ring=new THREE.Mesh(new THREE.TorusGeometry(5.2,0.03,8,120),new THREE.MeshBasicMaterial({color:ACCENT2,transparent:true,opacity:0.8}));
+    ring.rotation.x=Math.PI/2.4;
+    centre.add(ring);
+    scene.add(centre);
 
-  // RECIPE F: camera chapters
-  var cam={x:0,y:2,z:46,ry:0};
-  var mouse={x:0,y:0};
-  if(!mobile){
-    window.addEventListener('mousemove',function(e){mouse.x=(e.clientX/innerWidth-.5)*2;mouse.y=(e.clientY/innerHeight-.5)*2;});
-  }
-  gsap.registerPlugin(ScrollTrigger);
-  var tl=gsap.timeline({scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:1.1}});
-  tl.to(cam,{z:26,y:1.5,ease:'power1.inOut',duration:1},0)
-    .to(cam,{ry:Math.PI*0.42,x:-5,ease:'power1.inOut',duration:1},1)
-    .to(cam,{z:20,y:0,ry:Math.PI*0.6,ease:'power2.inOut',duration:1},2)
-    .call(function(){holo.visible=true;},null,2.6)
-    .to(morph,{t:1,ease:'power2.inOut',duration:1.2},2.6)
-    .to(centre.scale,{x:0.001,y:0.001,z:0.001,ease:'power2.inOut',duration:1},2.6)
-    .to(cam,{z:17,y:-1,ry:Math.PI*0.9,ease:'power2.inOut',duration:1},3.8)
-    .to(cam,{z:24,y:1,ry:Math.PI*1.05,ease:'power2.inOut',duration:1},4.8)
-    .to(strandGroup.rotation,{y:Math.PI*1.6,ease:'none',duration:6},0)
-    .to(bloom,{strength:1.45,ease:'none',duration:1},2.6);
-
-  document.querySelectorAll('.chapter .inner').forEach(function(el){
-    gsap.from(el,{opacity:0,y:60,duration:1,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 80%'}});
-  });
-
-  function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
-    renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);}
-  window.addEventListener('resize',resize);
-
-  var baseBloom=1.2;
-  function animate(){
-    requestAnimationFrame(animate);
-    var t=performance.now()*0.001;
-    universe.rotation.y+=0.0008; universe.rotation.x=Math.sin(t*0.15)*0.05;
-    strandGroup.rotation.y+=0.0014; strandGroup.rotation.z=Math.sin(t*0.2)*0.06;
-    centre.rotation.y+=0.0020; centre.rotation.z=Math.sin(t*0.3)*0.07;
-    bloom.strength=baseBloom+Math.sin(t*0.8)*0.12;
-    if(holo.visible){
-      [hFill,hOut].forEach(function(p){
-        var a=p.geometry.attributes.position.array,cl=p.userData.cloud,tg=p.userData.target,ct=p.userData.count;
-        for(var k=0;k<ct*3;k++){a[k]=cl[k]+(tg[k]-cl[k])*morph.t;}
-        p.geometry.attributes.position.needsUpdate=true;
-        p.quaternion.copy(camera.quaternion);
-      });
-      holo.position.set(0,0,0);
+    // ===== hologram: crescent moon cradling small open circle =====
+    var moonShape=new THREE.Shape();
+    moonShape.absarc(0,0,4.2, Math.PI*0.42, Math.PI*1.58, false);
+    moonShape.absarc(2.0,0,3.6, Math.PI*1.58, Math.PI*0.42, true);
+    var HN = mobile?2600:4200;
+    var HFILL=Math.floor(HN*0.55);
+    var holoGeo=new THREE.ShapeGeometry(moonShape,32);
+    var vArr=holoGeo.attributes.position.array, idx=holoGeo.index?holoGeo.index.array:null;
+    var tris=[],areas=[],totA=0;
+    if(idx){for(var t=0;t<idx.length;t+=3){
+      var a=[vArr[idx[t]*3],vArr[idx[t]*3+1]],b=[vArr[idx[t+1]*3],vArr[idx[t+1]*3+1]],c2=[vArr[idx[t+2]*3],vArr[idx[t+2]*3+1]];
+      var ar=Math.abs((b[0]-a[0])*(c2[1]-a[1])-(c2[0]-a[0])*(b[1]-a[1]))/2;
+      tris.push([a,b,c2]);areas.push(ar);totA+=ar;}}
+    function sampleFill(){
+      var rr=Math.random()*totA,acc=0,ti=0;
+      for(var k=0;k<areas.length;k++){acc+=areas[k];if(rr<=acc){ti=k;break;}}
+      var T=tris[ti]||[[0,0],[0,0],[0,0]];var u=Math.random(),v=Math.random();if(u+v>1){u=1-u;v=1-v;}
+      var x=T[0][0]+u*(T[1][0]-T[0][0])+v*(T[2][0]-T[0][0]);
+      var y=T[0][1]+u*(T[1][1]-T[0][1])+v*(T[2][1]-T[0][1]);
+      return [x*1.5,y*1.5,(Math.random()-0.5)*1.2];
     }
-    camera.position.z+=(cam.z-camera.position.z)*0.08;
-    var tx=Math.sin(cam.ry)*camera.position.z*0.35+mouse.x*2.0;
-    camera.position.x+=(tx-camera.position.x)*0.08;
-    camera.position.y+=((cam.y-mouse.y*1.4)-camera.position.y)*0.06;
-    camera.lookAt(0,0,0);
-    composer.render();
-  }
-  animate();
-  }catch(e){var g=document.getElementById('gl');if(g)g.style.display='none';document.body.style.background='radial-gradient(ellipse at 50% 30%,rgba(245,137,61,.14),#110c09 60%)';}
+    var outlinePts=moonShape.getPoints(240);
+    function circlePt(){var a=Math.random()*Math.PI*2,r=1.1; return [3.0+Math.cos(a)*r*1.5,Math.sin(a)*r*1.5,(Math.random()-0.5)*0.5];}
+
+    var holoTotal=HN;
+    var hg=new THREE.BufferGeometry(),hpos=new Float32Array(holoTotal*3),hcloud=new Float32Array(holoTotal*3),htarget=new Float32Array(holoTotal*3),hcol=new Float32Array(holoTotal*3);
+    var cLight=new THREE.Color(0xfff2d8), cAcc=new THREE.Color(ACCENT);
+    for(var i=0;i<holoTotal;i++){
+      var tgt, isOut = i>=HFILL;
+      if(isOut){
+        if(Math.random()<0.28){tgt=circlePt();}
+        else{var pt=outlinePts[Math.floor(Math.random()*outlinePts.length)];tgt=[pt.x*1.5+(Math.random()-0.5)*0.24,pt.y*1.5+(Math.random()-0.5)*0.24,(Math.random()-0.5)*0.5];}
+        hcol[i*3]=cLight.r;hcol[i*3+1]=cLight.g;hcol[i*3+2]=cLight.b;
+      }else{
+        tgt=sampleFill();
+        hcol[i*3]=cAcc.r;hcol[i*3+1]=cAcc.g;hcol[i*3+2]=cAcc.b;
+      }
+      htarget[i*3]=tgt[0]-2.4;htarget[i*3+1]=tgt[1];htarget[i*3+2]=tgt[2];
+      var rr=26+Math.random()*6,th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+      hcloud[i*3]=rr*Math.sin(ph)*Math.cos(th);hcloud[i*3+1]=rr*Math.sin(ph)*Math.sin(th)*0.6;hcloud[i*3+2]=rr*Math.cos(ph);
+      hpos[i*3]=hcloud[i*3];hpos[i*3+1]=hcloud[i*3+1];hpos[i*3+2]=hcloud[i*3+2];
+    }
+    hg.setAttribute('position',new THREE.BufferAttribute(hpos,3));
+    hg.setAttribute('color',new THREE.BufferAttribute(hcol,3));
+    var holoMat=new THREE.PointsMaterial({size:0.34,map:sprite,vertexColors:true,transparent:true,opacity:0.25,depthWrite:false,blending:THREE.AdditiveBlending});
+    var holo=new THREE.Points(hg,holoMat);
+    scene.add(holo);
+    var morph={t:0};
+
+    // composer + bloom
+    var composer=new THREE.EffectComposer(renderer);
+    composer.addPass(new THREE.RenderPass(scene,camera));
+    var bloom=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.15,0.85,0.12);
+    composer.addPass(bloom);
+
+    // camera chapters
+    var cam={x:0,y:2,z:46,ry:0};
+    gsap.registerPlugin(ScrollTrigger);
+    var tl=gsap.timeline({scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:1.1}});
+    tl.to(cam,{z:26,y:1,ease:'power1.inOut',duration:1},0)
+      .to(cam,{ry:Math.PI*0.42,x:-5,z:22,ease:'power2.inOut',duration:1.2},1)
+      .to(morph,{t:1,ease:'power2.inOut',duration:1.4},1.4)
+      .to(centre.scale,{x:0.001,y:0.001,z:0.001,ease:'power2.inOut',duration:1},1.4)
+      .to(cam,{ry:Math.PI*0.9,x:6,z:24,y:-1,ease:'power2.inOut',duration:1.4},3)
+      .to(morph,{t:0.15,ease:'power1.inOut',duration:1},4)
+      .to(centre.scale,{x:1,y:1,z:1,ease:'power2.inOut',duration:1},4)
+      .to(cam,{z:40,y:2,ry:Math.PI*1.05,ease:'power2.inOut',duration:1.4},5)
+      .to(cam,{z:34,y:1,ry:Math.PI*1.15,ease:'power2.inOut',duration:1},6.4)
+      .to(strandGroup.rotation,{y:Math.PI*1.6,ease:'none',duration:7.4},0)
+      .to(bloom,{strength:1.4,ease:'sine.inOut',duration:2},1.4);
+
+    document.querySelectorAll('.chapter .inner, .poster .over').forEach(function(el){
+      gsap.from(el,{opacity:0,y:60,duration:1,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 80%'}});
+    });
+
+    var mouse={x:0,y:0};
+    if(!mobile){window.addEventListener('mousemove',function(e){mouse.x=(e.clientX/innerWidth-0.5)*2;mouse.y=(e.clientY/innerHeight-0.5)*2;});}
+
+    var baseBloom=1.15;
+    function animate(){
+      requestAnimationFrame(animate);
+      var t=performance.now()*0.001;
+      universe.rotation.y += 0.0009;
+      universe.rotation.x = Math.sin(t*0.15)*0.05;
+      strandGroup.rotation.y += 0.0016;
+      centre.rotation.y += 0.0022;
+      centre.rotation.z = Math.sin(t*0.3)*0.08;
+      ring.rotation.z += 0.004;
+      holo.position.y = Math.sin(t*0.5)*0.35;
+
+      var ha=hg.attributes.position.array;
+      for(var k=0;k<holoTotal*3;k++){ha[k]=hcloud[k]+(htarget[k]-hcloud[k])*morph.t;}
+      hg.attributes.position.needsUpdate=true;
+      holo.quaternion.copy(camera.quaternion);
+      holoMat.opacity = 0.25 + morph.t*0.7;
+
+      bloom.strength = baseBloom + Math.sin(t*0.8)*0.12;
+
+      camera.position.z += (cam.z-camera.position.z)*0.08;
+      camera.position.x = Math.sin(cam.ry)*camera.position.z*0.35 + mouse.x*2.2;
+      camera.position.y += ((cam.y-mouse.y*1.6)-camera.position.y)*0.06;
+      camera.lookAt(0,0,0);
+      composer.render();
+    }
+    animate();
+
+    window.addEventListener('resize',function(){
+      mobile = window.innerWidth < 768;
+      camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);
+    });
+  }catch(e){console.warn(e);}
 })();
 </script>
 </body>
