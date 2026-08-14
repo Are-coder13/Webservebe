@@ -2127,32 +2127,60 @@ async function buildMockup(prospectId, direction = '', style = 'cinematic') {
   }
 }
 
-// Refine loop ("Bob"): edit the current mockup in place via the async runner.
+// Refine loop ("Bob"): edit the current mockup in place. Prefers the async
+// runner (live progress); falls back to the Worker's synchronous refine so an
+// edit still works when no runner is wired up. A synchronous result is trusted
+// only when tagged mode:'refine' — an old Worker silently rebuilding from
+// scratch must NOT be mistaken for an edit.
 async function refineMockup(instruction) {
   const base = Agent.url.replace(/\/$/, '');
   revJobStart = Date.now();
+  const payload = { mode: 'refine', html: revCurrentHtml, instruction, place: revProspect, branding: null, style: revStyleUsed };
   try {
+    let refined = null;
+
+    // 1) Async runner via the Worker /jobs proxy (returns a jobId to poll).
     const enq = await fetch(base + '/jobs', {
       method: 'POST', headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ mode: 'refine', html: revCurrentHtml, instruction, place: revProspect, branding: null, style: revStyleUsed }),
+      body: JSON.stringify(payload),
     });
     const first = await enq.json().catch(() => ({}));
-    if (enq.status === 501 || /runner not configured/i.test(first.error || '')) {
-      toast('Refine needs the async runner (set RUNNER_URL on the Worker)', 'err'); return;
+    const noRunner = enq.status === 501 || /runner not configured/i.test(first.error || '');
+    if (first && first.jobId) {
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+      let job = null;
+      for (let i = 0; i < 900; i++) {
+        await sleep(2000);
+        const r = await fetch(base + '/jobs/' + first.jobId);
+        job = await r.json().catch(() => ({}));
+        renderJobProgress(job);
+        if (job.status === 'done') break;
+        if (job.status === 'error') throw new Error(job.error || 'Refine failed');
+      }
+      if (!job || job.status !== 'done' || !job.resultHtml) throw new Error('Refine timed out');
+      refined = job.resultHtml;
+    } else if (first && first.html && first.mode === 'refine') {
+      refined = first.html; // Worker handled it synchronously
+    } else if (!noRunner && !enq.ok) {
+      throw new Error(first.error || ('Enqueue failed ' + enq.status));
     }
-    if (!enq.ok || !first.jobId) throw new Error(first.error || ('Enqueue failed ' + enq.status));
-    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-    let job = null;
-    for (let i = 0; i < 900; i++) {
-      await sleep(2000);
-      const r = await fetch(base + '/jobs/' + first.jobId);
-      job = await r.json().catch(() => ({}));
-      renderJobProgress(job);
-      if (job.status === 'done') break;
-      if (job.status === 'error') throw new Error(job.error || 'Refine failed');
+
+    // 2) Fall back to the Worker's synchronous refine (root URL). Accept the
+    //    result only if it is tagged as a refine (mode:'refine').
+    if (!refined) {
+      const r = await fetch(base, {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d.error || ('Refine failed ' + r.status));
+      if (d.mode !== 'refine' || !d.html) {
+        throw new Error('This Worker cannot refine yet — redeploy the Worker (worker.bundled.js) to enable in-place edits.');
+      }
+      refined = d.html;
     }
-    if (!job || job.status !== 'done' || !job.resultHtml) throw new Error('Refine timed out');
-    revCurrentHtml = job.resultHtml;
+
+    revCurrentHtml = refined;
     if (revPath) await GH.pushFile(revPath, revCurrentHtml);
     Store.patch(revProspect.id, { mockup_url: revMockupUrl });
     revEdits.push(instruction);

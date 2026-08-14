@@ -681,6 +681,35 @@ export default {
     const direction = (typeof body.direction === 'string' ? body.direction : '').trim().slice(0, 600);
     // Design style: 'cinematic' (immersive WebGL, default) or 'clean' (Webild-style pro site).
     const style = body.style === 'clean' ? 'clean' : 'cinematic';
+
+    // ── Synchronous refine ("Bob"): edit an existing mockup in place ──────────
+    // Mirrors the async runner's refine so in-place edits work even when no
+    // runner is wired to this Worker (the front-end falls back here). Refine
+    // does NOT need place/scrape — it only edits the HTML it is given.
+    if (body.mode === 'refine') {
+      const current = typeof body.html === 'string' ? body.html : '';
+      const instruction = (typeof body.instruction === 'string' ? body.instruction : '').trim();
+      if (!current || !instruction) return withCors(json({ error: 'refine needs { html, instruction }' }, 400));
+      try {
+        let out = extractHtml(await callClaudeStream(
+          env, refineSystem(style),
+          'EDIT INSTRUCTION:\n' + instruction + '\n\nCURRENT HTML:\n' + current,
+          null, MAX_TOKENS
+        ));
+        if (!looksComplete(out)) throw new Error('Refine produced incomplete HTML.');
+        // Preserve the existing brand-lock so the palette never reverts on edit.
+        const lock = current.match(/<style id="brand-lock">[\s\S]*?<\/style>/i);
+        if (lock && !/<style id="brand-lock">/i.test(out)) {
+          out = /<\/head>/i.test(out)
+            ? out.replace(/<\/head>/i, lock[0] + '</head>')
+            : out.replace(/(<body[^>]*>)/i, lock[0] + '$1');
+        }
+        return withCors(json({ html: out, mode: 'refine' }));
+      } catch (err) {
+        return withCors(json({ error: String((err && err.message) || err) }, 500));
+      }
+    }
+
     const directionBlock = direction
       ? 'USER ART DIRECTION (an explicit brief from the operator — this OVERRIDES the ' +
         "agent's inferred palette, mood, motif and copy choices wherever they conflict. Still " +

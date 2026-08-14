@@ -161,7 +161,14 @@ export async function runRefine(job) {
   try {
     if (!current || !instruction) throw new Error('refine needs { html, instruction }');
     const domain = classifyDomain([place.name, place.category].filter(Boolean).join(' '));
-    const pal = buildPalette(branding.colors, domain, style);
+    // Preserve the palette the mockup was BUILT with: reuse the existing
+    // brand-lock from the current HTML rather than recomputing a domain-default
+    // one from (usually empty) branding — otherwise an edit silently reverts the
+    // real brand colours (e.g. LUNA's orange → generic teal).
+    const existingLock = (current.match(/<style id="brand-lock">([\s\S]*?)<\/style>/i) || [])[1] || '';
+    const pal = existingLock
+      ? { css: existingLock, vars: { '--brand': '', '--accent': '' }, source: 'preserved' }
+      : buildPalette(branding.colors, domain, style);
 
     setStatus(job, 'designing'); stepStart(job, 'Apply edit');
     let html = extractHtml(await callClaude(
@@ -189,9 +196,18 @@ export async function runRefine(job) {
     stepDone(job, 'Review', `renderClean=${diag.canvasOk && !diag.errors.length}`);
 
     stepStart(job, 'Deliver');
-    html = enforcePalette(html, pal);
-    const brandLock = '<style id="brand-lock">' + pal.css + '</style>';
-    html = /<\/head>/i.test(html) ? html.replace(/<\/head>/i, brandLock + '</head>') : html.replace(/(<body[^>]*>)/i, brandLock + '$1');
+    if (existingLock) {
+      // Preserve mode: keep the original palette. Only re-inject the lock if the
+      // edit accidentally dropped it; never recolour via enforcePalette.
+      if (!/<style id="brand-lock">/i.test(html)) {
+        const brandLock = '<style id="brand-lock">' + existingLock + '</style>';
+        html = /<\/head>/i.test(html) ? html.replace(/<\/head>/i, brandLock + '</head>') : html.replace(/(<body[^>]*>)/i, brandLock + '$1');
+      }
+    } else {
+      html = enforcePalette(html, pal);
+      const brandLock = '<style id="brand-lock">' + pal.css + '</style>';
+      html = /<\/head>/i.test(html) ? html.replace(/<\/head>/i, brandLock + '</head>') : html.replace(/(<body[^>]*>)/i, brandLock + '$1');
+    }
     job.diag = { mode: 'refine', style, renderClean: diag.canvasOk && !diag.errors.length };
     job.resultHtml = html;
     stepDone(job, 'Deliver');
