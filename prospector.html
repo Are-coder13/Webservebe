@@ -103,6 +103,24 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:13px; h
 .ssel { width:100%; background:var(--bg); border:1px solid var(--border2); color:var(--text); font-family:var(--body); font-size:12px; padding:4px 7px; border-radius:var(--r); margin-bottom:5px; cursor:pointer; outline:none; }
 .pact { display:flex; gap:4px; flex-wrap:wrap; }
 
+/* Mockup gallery */
+.mgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; padding:4px 2px 30px; }
+.mcard { background:var(--bg2); border:1px solid var(--border); border-radius:var(--r); overflow:hidden; display:flex; flex-direction:column; transition:.15s; }
+.mcard:hover { border-color:var(--border2); box-shadow:0 6px 24px rgba(0,0,0,.35); }
+.mthumb { position:relative; height:150px; overflow:hidden; background:var(--bg); border-bottom:1px solid var(--border); cursor:pointer; }
+.mthumb iframe { position:absolute; top:0; left:0; width:1200px; height:800px; border:0; transform:scale(.2); transform-origin:top left; pointer-events:none; }
+.mthumb .mthumb-ov { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; transition:.15s; background:rgba(3,3,8,.55); }
+.mthumb:hover .mthumb-ov { opacity:1; }
+.mthumb .mthumb-ov span { font-family:var(--head); font-size:10px; letter-spacing:2px; color:#fff; border:1px solid rgba(255,255,255,.5); padding:6px 12px; border-radius:var(--r); }
+.mcard-body { padding:10px 11px 11px; }
+.mcard-name { font-weight:700; font-size:13px; margin-bottom:4px; line-height:1.25; }
+.mcard-badges { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:9px; }
+.mbadge { font-family:var(--head); font-size:8px; letter-spacing:1px; text-transform:uppercase; padding:2px 6px; border-radius:9px; background:var(--border); color:var(--mid); }
+.mbadge.agent { background:rgba(0,255,136,.14); color:var(--green); }
+.mbadge.cinema { background:var(--accent-dim); color:var(--accent); }
+.mcard-meta { font-size:10px; color:var(--dim); margin-bottom:9px; }
+.mcard-act { display:flex; gap:5px; }
+
 /* Footer */
 .foot { display:flex; gap:18px; align-items:center; padding:9px 22px; border-top:1px solid var(--border); background:var(--bg2); font-size:12px; color:var(--dim); flex-shrink:0; letter-spacing:.5px; }
 .foot .gn { color:var(--green); }
@@ -250,6 +268,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:13px; h
     <div class="tabs">
       <div class="tab on" data-tab="info">How It Works</div>
       <div class="tab" data-tab="pipeline">Pipeline</div>
+      <div class="tab" data-tab="mockups">Mockups</div>
     </div>
     <div class="tcontent" data-content="info">
       <div style="max-width:520px;margin:30px auto;line-height:1.8;color:var(--mid);font-size:14px">
@@ -271,6 +290,9 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:13px; h
           <div class="eico">◈</div>No prospects yet.<br>Search and save businesses to start your pipeline.
         </div>
       </div>
+    </div>
+    <div class="tcontent hide" data-content="mockups">
+      <div class="mgrid" id="mgrid"></div>
     </div>
   </div>
 </div>
@@ -419,6 +441,14 @@ const Store = {
 
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 function now() { return new Date().toISOString(); }
+function timeAgo(ms) {
+  const s = Math.max(0, Math.floor((Date.now() - ms) / 1000));
+  if (s < 60) return 'just now';
+  const m = Math.floor(s / 60); if (m < 60) return m + 'm ago';
+  const h = Math.floor(m / 60); if (h < 24) return h + 'h ago';
+  const d = Math.floor(h / 24); if (d < 30) return d + 'd ago';
+  return new Date(ms).toLocaleDateString();
+}
 
 // ── Toast ─────────────────────────────────────────────────────────────────
 function toast(msg, type = 'inf') {
@@ -734,6 +764,7 @@ function setTab(name) {
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.tab === name));
   document.querySelectorAll('.tcontent').forEach(c => c.classList.toggle('hide', c.dataset.content !== name));
   if (name === 'pipeline') renderPipeline();
+  if (name === 'mockups') renderMockups();
 }
 
 document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => setTab(t.dataset.tab)));
@@ -822,6 +853,133 @@ const GH = {
     });
     if (!resp.ok) { const e = await resp.json(); throw new Error(e.message || 'GitHub push failed'); }
     return `${this.pagesBase}/${path}`;
+  },
+};
+
+// ── Mockup history ──────────────────────────────────────────────────────────
+// Every built/refined mockup is recorded here so it can be reopened, previewed,
+// refined or resent later from the Mockups gallery. Keyed by GitHub path (one
+// record per prospect slug — a rebuild/refine updates the same entry in place).
+const MockStore = {
+  key: 'prospector_mockups_v1',
+  all() { try { return JSON.parse(localStorage.getItem(this.key)) || []; } catch { return []; } },
+  write(list) {
+    try { localStorage.setItem(this.key, JSON.stringify(list)); }
+    catch (e) {
+      // localStorage full — drop the heaviest stored HTML (oldest first) and
+      // retry; the reopened mockup then re-fetches its HTML from Pages instead.
+      const trimmed = list.slice().sort((a, b) => (a.ts || 0) - (b.ts || 0));
+      for (const r of trimmed) { if (r.html) { r.html = null; break; } }
+      try { localStorage.setItem(this.key, JSON.stringify(list)); } catch {}
+    }
+  },
+  get(id) { return this.all().find(r => r.id === id) || null; },
+  save(rec) {
+    const list = this.all();
+    const i = list.findIndex(r => r.path === rec.path);
+    if (i >= 0) list[i] = { ...list[i], ...rec, ts: Date.now() };
+    else list.unshift({ id: uid(), ...rec, ts: Date.now() });
+    this.write(list);
+  },
+  patchByPath(path, fields) {
+    const list = this.all();
+    const r = list.find(x => x.path === path);
+    if (r) { Object.assign(r, fields, { ts: Date.now() }); this.write(list); }
+  },
+  remove(id) { this.write(this.all().filter(r => r.id !== id)); },
+  // Seed records for mockups built before this gallery existed: any prospect
+  // that already has a mockup_url but no gallery entry. HTML is left empty and
+  // lazily re-fetched from Pages when the card is opened.
+  backfill() {
+    const list = this.all();
+    const known = new Set(list.map(r => r.path));
+    let added = false;
+    for (const p of Store.getAll()) {
+      if (!p.mockup_url) continue;
+      const path = 'mockups/' + slugify(p.name) + '.html';
+      if (known.has(path)) continue;
+      list.push({ id: uid(), prospectId: p.id, name: p.name, website: p.website || '',
+        url: p.mockup_url, path, style: 'cinematic', engine: 'agent', html: null,
+        diag: null, email: '', editList: [], edits: 0, ts: 0 });
+      known.add(path); added = true;
+    }
+    if (added) this.write(list);
+  },
+};
+
+// ── UI: Mockups gallery ─────────────────────────────────────────────────────
+function renderMockups() {
+  const grid = document.getElementById('mgrid');
+  if (!grid) return;
+  MockStore.backfill();
+  const list = MockStore.all().sort((a, b) => (b.ts || 0) - (a.ts || 0));
+  if (!list.length) {
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1;margin-top:40px">'
+      + '<div class="eico">◈</div>No mockups yet.<br>Build one from the Pipeline to see it here.</div>';
+    return;
+  }
+  grid.innerHTML = list.map(r => {
+    const isAgent = r.engine === 'agent';
+    const isCinema = (r.style || '') === 'cinematic';
+    const when = r.ts ? timeAgo(r.ts) : '';
+    const edits = r.edits ? `${r.edits} edit${r.edits === 1 ? '' : 's'} · ` : '';
+    const thumb = r.html
+      ? '<iframe sandbox="" srcdoc="' + esc(r.html) + '"></iframe>'
+      : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--dim);font-size:11px">preview reloads on open</div>';
+    return '<div class="mcard">'
+      + '<div class="mthumb" onclick="MockGallery.open(\'' + r.id + '\')">' + thumb
+      + '<div class="mthumb-ov"><span>ADJUST</span></div></div>'
+      + '<div class="mcard-body">'
+      + '<div class="mcard-name">' + esc(r.name || 'Mockup') + '</div>'
+      + '<div class="mcard-badges">'
+      + '<span class="mbadge ' + (isAgent ? 'agent' : '') + '">' + (isAgent ? '⚡ agent' : (r.engine || 'template')) + '</span>'
+      + '<span class="mbadge ' + (isCinema ? 'cinema' : '') + '">' + (isCinema ? 'cinematic 3D' : 'clean') + '</span>'
+      + '</div>'
+      + '<div class="mcard-meta">' + edits + (when ? 'updated ' + when : '') + '</div>'
+      + '<div class="mcard-act">'
+      + '<button class="btn btn-p btn-s" style="flex:1" onclick="MockGallery.open(\'' + r.id + '\')">Adjust</button>'
+      + '<button class="btn btn-g btn-s" onclick="event.stopPropagation();window.open(\'' + r.url + '\',\'_blank\')">Open ↗</button>'
+      + '<button class="btn btn-d btn-s" onclick="event.stopPropagation();MockGallery.remove(\'' + r.id + '\')">✕</button>'
+      + '</div></div></div>';
+  }).join('');
+}
+
+const MockGallery = {
+  async open(id) {
+    const r = MockStore.get(id);
+    if (!r) { toast('Mockup not found', 'err'); return; }
+    // Restore the review-modal state from the stored record, then reuse the
+    // exact same result view (preview + Refine / Send / Rebuild tabs).
+    revProspect = Store.getAll().find(p => p.id === r.prospectId) || { id: r.prospectId, name: r.name, website: r.website || '' };
+    revMockupUrl = r.url;
+    revPath = r.path;
+    revStyleUsed = r.style || 'cinematic';
+    revEngine = r.engine || 'template';
+    revAgentDiag = r.diag || null;
+    revEmailText = r.email || (revProspect && revProspect.name ? buildEmail(revProspect) : '');
+    revEdits = Array.isArray(r.editList) ? r.editList.slice() : [];
+    revTab = 'refine';
+    document.getElementById('revName').textContent = r.name || '';
+    document.getElementById('revModal').classList.add('show');
+
+    revCurrentHtml = r.html || null;
+    if (!revCurrentHtml) {
+      // HTML was evicted to save space — pull the live copy back from Pages.
+      document.getElementById('revBody').innerHTML = '<div class="building-state"><div class="spin"></div><span>LOADING MOCKUP...</span></div>';
+      document.getElementById('revFoot').style.display = 'none';
+      try {
+        const resp = await fetch(r.url, { cache: 'no-store' });
+        if (resp.ok) revCurrentHtml = await resp.text();
+      } catch {}
+      if (revCurrentHtml) MockStore.patchByPath(r.path, { html: revCurrentHtml });
+    }
+    if (!revCurrentHtml) { toast('Could not load this mockup — try Open ↗', 'err'); return; }
+    renderResult();
+  },
+  remove(id) {
+    MockStore.remove(id);
+    renderMockups();
+    toast('Removed from gallery', 'ok');
   },
 };
 
@@ -1954,6 +2112,13 @@ async function buildMockup(prospectId, direction = '', style = 'cinematic') {
     revEmailText = emailWithLink; revEdits = []; revTab = 'refine';
     renderResult();
 
+    // Record in the Mockups gallery so it can be reopened / adjusted later.
+    MockStore.save({
+      prospectId, name: p.name, website: p.website || '',
+      url, path, style: revStyleUsed, engine,
+      html, diag: agentDiag, email: emailWithLink, editList: [], edits: 0,
+    });
+
     Store.patch(prospectId, { mockup_url: url });
     toast(`Mockup live: ${p.name}`, 'ok');
   } catch(err) {
@@ -1991,6 +2156,8 @@ async function refineMockup(instruction) {
     if (revPath) await GH.pushFile(revPath, revCurrentHtml);
     Store.patch(revProspect.id, { mockup_url: revMockupUrl });
     revEdits.push(instruction);
+    // Keep the gallery record in sync with the refined HTML + edit history.
+    if (revPath) MockStore.patchByPath(revPath, { html: revCurrentHtml, editList: revEdits.slice(), edits: revEdits.length });
     revTab = 'refine';
     toast('Refined ✓ — preview updated (Pages may take ~1 min)', 'ok');
     renderResult();
