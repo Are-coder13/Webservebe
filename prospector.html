@@ -1642,6 +1642,10 @@ async function designWithAgentAsync(p, branding, direction, style, onUpdate) {
     body: JSON.stringify({ place: p, branding, direction, style }),
   });
   const first = await enq.json().catch(() => ({}));
+  // If the Worker built it synchronously (it lacks the /jobs route, e.g. not yet
+  // redeployed), it returns {html} directly — use that AI result, don't discard it.
+  if (first && first.html) return { html: first.html, diag: first };
+  if (first && first.spec) throw new Error('NO_RUNNER'); // legacy spec → sync path
   if (enq.status === 501 || (first && /runner not configured/i.test(first.error || ''))) throw new Error('NO_RUNNER');
   if (!enq.ok || !first.jobId) throw new Error(first.error || ('Enqueue failed ' + enq.status));
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
